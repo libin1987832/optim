@@ -1,0 +1,9 @@
+function v=det2F(x,A,b,M)
+    B=A*x-b;
+    D=diag(B);
+    D(B>0)=1;
+    D(B<0)=0;
+    D0=diag(x);
+    D0(D0>0)=0;
+    D0(D0<0)=1;
+    v=A'*D*A+2*M*D0;
