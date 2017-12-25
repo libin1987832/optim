@@ -1,5 +1,6 @@
 function [x0,f1]=inexact(b,A,x0,belt,u)
 [msize,nsize]=size(x0);
+index=0;
 while 1
     y0=b-A*x0;
     y0(y0<=0)=0;
@@ -11,14 +12,28 @@ while 1
     alph=sN'*sN/((A*sN)'*(A*sN));
     mk=0;
     lamd=diag(ones(msize,1));
-%     s0=-1*s0;
     for i=1:msize
         if 0<x0(i) & s0(i)<0
             lamd(i,i)=-1*x0(i)/s0(i);
         end
     end
+%     %测试是否存在这样的系数
+%     xxxx=[];
+%     yyyy=[];
+%     for tt=1:1000
+%         x1=x0+1/100000*tt*s0;
+% %         x1(x1<0)=0;
+%         left=(b0-A*x1)'*(b0-A*x1);
+%         right=y0'*y0-2*u*s0'*(x1-x0);
+%         ff=left-right;
+%         xxxx=[xxxx,1/100000*tt];
+%         yyyy=[yyyy,ff];
+%     end
+%       plot(xxxx,yyyy);
+%       %%%%%%
     while 1
-        x1=x0+belt^mk*lamd*s0;
+        x1=x0+belt^mk*alph*s0;
+%         x1=x0+belt^mk*lamd*s0;
         x1(x1<0)=0;
         left=(b0-A*x1)'*(b0-A*x1);
         right=y0'*y0-2*u*s0'*(x1-x0);
@@ -33,9 +48,10 @@ while 1
     f1=b-A*x1;
     f1(f1<0)=0;
     f1=0.5*(f1'*f1);
-    fprintf('The mk is %f; x0,x1:%f,%f; f0,f1:%f,%f\n',mk,x0,x1,f0,f1);
+    fprintf('index:%d,The mk is %f; x0(%f,%f),x1(%f,%f); f0,f1:%f,%f\n',index,mk,x0,x1,f0,f1);
+    index=index+1;
     x0=x1;
-    if (f1-f0)'*(f1-f0)<0.00001
+    if norm(f1-f0)<0.00001
         break;
     end
 end

@@ -1,4 +1,5 @@
 function  a=fsearchaM(A,b,x0,p,M)
+%采用罚函数法
 t=0.5;
 a0=1;
 c1=0.01;
