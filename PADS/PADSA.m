@@ -25,8 +25,9 @@ for i=1:n
     end
 end
 f=0.5*x'*H*x+c'*x;
-z(z>0)=0;
+kz=z;
+kz(kz>0)=0;
 kktx=x;
 kktx(kktx<0)=0;
-kktz=norm(z);
+kktz=norm(kz);
 kkta=norm(kktx);

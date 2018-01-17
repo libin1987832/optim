@@ -13,14 +13,16 @@ gx=-1*inv(H)*c;
 I=1:n;
 realA=I(lx==0);
 sep=I(gx>0);
-nsep=setdiff(I,sep);
+%nsep=setdiff(I,sep);
 %disp(['globf:',num2str(-0.5*c'*inv(H)*c),' real active:',num2str(realA),' sep:',num2str(sep)]);
 allSet=cell(2^n,10);
-maxX=-inf;minX=inf;maxT=-inf;minT=inf;
 for i=0:2^n-1
     bb=bitget(uint8(i),1:1:n);
     A=I(bb>0);
     [x,z,Ak,nextA,f,kktz,kkta]=PADSA(H,c,A,n);
+    [y,r,h]=semismooth(H,c,x,z,n);
+    disp([i,num2str(i),' x:',num2str(x'),' z:',num2str(z'),' nextA:',num2str(nextA)]);
+    disp([i,num2str(i),' y:',num2str(y'),' r:',num2str(r')]);
     %x next iteration x .z dual variable,A input work set,Ak next work set 
     %f object function kkt KKT norm i current work set number(the binary number is work set index)
     %next next work set number
@@ -28,7 +30,7 @@ for i=0:2^n-1
 %     disp(['active set:', num2str(A) ,' next active set:' , num2str(Ak) , ...
 %         ' fun:' , num2str(f) , ' kkt:' , num2str(kktz+kkta),...
 %         ' kktz:',num2str(kktz),' kkta:',num2str(kkta)]);
-     disp(['kktz:',num2str(kktz),'       kkta:',num2str(kkta)]);
+%      disp(['kktz:',num2str(kktz),'       kkta:',num2str(kkta),' x:',num2str(x'),' z:',num2str(z')]);
 end
 %every step record link,first is number vector,second is whether is cycle,third
 %is string link. realcycle the same cycle only record once.
@@ -100,6 +102,7 @@ end
 for i=2:size(realcycle,1)
     disp(['cycle link:',realcycle{i,2}]);
 end
+% maxX=-inf;minX=inf;maxT=-inf;minT=inf;
 % maxf=max([allSet{:,5}])+0.0001;
 % minf=min([allSet{:,5}])-0.0001;
 % maxk=max([allSet{:,6}])+0.0001;
