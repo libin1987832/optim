@@ -2,7 +2,7 @@ function [y,r,h]=semismooth(H,c,y0,r0,n)
 A1=[H,diag(ones(n,1))];
 A2=zeros(n,2*n);
 diff=y0+r0;
-delt=0.6;
+delt=0;
 for i=1:n
     if diff(i)>0
         A2(i,i)=-1;
@@ -20,7 +20,7 @@ F2=r0-max(0,diff);
 h=-1*[A1;A2]\[F1;F2];
 y=y0+h(1:n);
 r=r0+h(n+1:2*n);
-
+[A1;A2];
 
 % E=diag(n,n);
 % Z=zeros(n,n);

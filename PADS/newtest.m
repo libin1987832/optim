@@ -8,6 +8,7 @@
 % n=3;
 
 function [allSet,cycle,realcycle,realA,sep]=newtest(H,c,lx)
+ format rat
 n=size(lx,1);
 gx=-1*inv(H)*c;
 I=1:n;
@@ -19,14 +20,38 @@ allSet=cell(2^n,10);
 for i=0:2^n-1
     bb=bitget(uint8(i),1:1:n);
     A=I(bb>0);
+format rat
     [x,z,Ak,nextA,f,kktz,kkta]=PADSA(H,c,A,n);
-    [y,r,h]=semismooth(H,c,x,z,n);
-    disp([i,num2str(i),' x:',num2str(x'),' z:',num2str(z'),' nextA:',num2str(nextA)]);
-    disp([i,num2str(i),' y:',num2str(y'),' r:',num2str(r')]);
+     [y,r,h]=semismooth(H,c,x,z,n);
+     hx=h(1:3);
+     hz=h(4:6);
+     tt=-1*(x+z)./(hx+hz);
+     tM=sort(tt')
+     ffx=[x;z]'
+     [fx,fz]=Hc(H,c,x,z);
+     fff=[fz;fx]'
+     for j=1:n
+         t=tM(j)
+         if t<0 || t>1
+             continue;
+         end
+         [fx,fz]=Hc(H,c,x+t*hx,z+t*hz);
+         ffx=[x+t*hx;z+t*hz]'
+         fff=[fz;fx]'
+     end
+     [fx,fz]=Hc(H,c,x+hx,z+hz);
+     t=1
+     ffx=[x+hx;z+hz]'
+     fff=[fz;fx]'
+      disp([i,num2str(i),' x:',num2str(x'),' z:',num2str(z'),' nextA:',num2str(nextA)]);
+%     disp([i,num2str(i),' y:',num2str(y'),' r:',num2str(r'),' ,h:',num2str(h')]);
+%     disp([' tt:',num2str(tt')]);
     %x next iteration x .z dual variable,A input work set,Ak next work set 
     %f object function kkt KKT norm i current work set number(the binary number is work set index)
     %next next work set number
     allSet(i+1,:)={x,z,A,Ak,f,kktz+kkta,i,nextA,kktz,kkta};
+%     disp([num2str(i),' x:',num2str(x(1)),' z:',num2str(z(1)),' next:',num2str(nextA)]);
+    
 %     disp(['active set:', num2str(A) ,' next active set:' , num2str(Ak) , ...
 %         ' fun:' , num2str(f) , ' kkt:' , num2str(kktz+kkta),...
 %         ' kktz:',num2str(kktz),' kkta:',num2str(kkta)]);
@@ -102,19 +127,19 @@ end
 for i=2:size(realcycle,1)
     disp(['cycle link:',realcycle{i,2}]);
 end
-% maxX=-inf;minX=inf;maxT=-inf;minT=inf;
-% maxf=max([allSet{:,5}])+0.0001;
-% minf=min([allSet{:,5}])-0.0001;
-% maxk=max([allSet{:,6}])+0.0001;
-% mink=min([allSet{:,6}])-0.0001;
-% axis([min([allSet{:,6}]),max([allSet{:,6}]),min([allSet{:,5}]),max([allSet{:,5}])]);
-% for i=1:2^n
+maxX=-inf;minX=inf;maxT=-inf;minT=inf;
+maxf=max([allSet{:,5}])+0.0001;
+minf=min([allSet{:,5}])-0.0001;
+maxk=max([allSet{:,6}])+0.0001;
+mink=min([allSet{:,6}])-0.0001;
+axis([min([allSet{:,6}]),max([allSet{:,6}]),min([allSet{:,5}]),max([allSet{:,5}])]);
+for i=1:2^n
 %    plot(allSet{i,5},allSet{i,6},'*');
-%    text(allSet{i,5},allSet{i,6},strcat('[ ',strcat(num2str(allSet{i,3}),' ]')));
+   text(allSet{i,5},allSet{i,6},strcat('[ ',strcat(num2str(allSet{i,3}),' ]')));
 %     arrowX=[allSet{i,5}-minf,allSet{allSet{i,8}+1,5}-minf]./(maxf-minf);
 %     arrowY=[allSet{i,6}-mink,allSet{allSet{i,8}+1,6}-mink]./(maxk-mink);
-%     %ah=annotation('arrow',arrowX,arrowY,'Color','r');
-%     arrow([allSet{i,5},allSet{i,6}],[allSet{allSet{i,8}+1,5},allSet{allSet{i,8}+1,6}]-[allSet{i,5},allSet{i,6}]);
-%    hold on
-% end
-% grid on;
+%     ah=annotation('arrow',arrowX,arrowY,'Color','r');
+    arrow([allSet{i,5},allSet{i,6}],[allSet{allSet{i,8}+1,5},allSet{allSet{i,8}+1,6}]-[allSet{i,5},allSet{i,6}]);
+   hold on
+end
+grid on;

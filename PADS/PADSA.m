@@ -24,6 +24,7 @@ for i=1:n
         end   
     end
 end
+
 f=0.5*x'*H*x+c'*x;
 kz=z;
 kz(kz>0)=0;
