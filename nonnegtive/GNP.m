@@ -1,6 +1,6 @@
 function x=GNP(x0,M,delt,e,A,b)
-%·£º¯Êý·½·¨
-    k=0;
+%ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+    k=0;  
     d1=det1F(x0,A,b,M);
     while(d1>e)
         AA=det2F(x0,A,b,M)+diag(size(A',1)).*delt;

@@ -1,3 +1,4 @@
+% 网上下载的一个wolf条件实现算法
 function [alpha, newxk, newfk, newfdetqk] = wolfe(A,b,xk, dk, t)
 alphaMin=t*min(-1.*xk./dk);
 rho = 0.25; sigma = 0.75;detAlpha=0.001;

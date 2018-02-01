@@ -1,3 +1,4 @@
+%IPG ¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿ ¿¿¿¿¿¿¿¿¿¿
 function x=fnewsearchx(A,b,x0,e,det)
 %Ê¹ÓÃ²»ËÑË÷²½³¤·½·¨£¬ÕÒ×îÓÅx
 g=fdetq(A,b,x0);

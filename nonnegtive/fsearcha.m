@@ -1,3 +1,5 @@
+%¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿
+% ¿¿¿¿¿¿¿wolf¿¿¿¿¿¿
 function  a=fsearchaM(A,b,x0,p,M)
 %²ÉÓÃ·£º¯Êý·¨
 t=0.5;
@@ -9,7 +11,7 @@ q0=fQ(A,b,x0,M);
 
 g1=det1F(x0+a0*p,A,b,M);
 g0=det1F(x0,A,b,M);
-
+% wolf¿¿¿¿¿¿¿¿
 %while x0+a0*p<0||q1>=q0+c1*a0*g0'*p||g1'*p<=c2*g0'*p;
 while q1>=q0+c1*a0*g0'*p||g1'*p<=c2*g0'*p;
    

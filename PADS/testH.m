@@ -1,3 +1,4 @@
+addpath('active-ml');
 H=[4 5 -5;5 9 -5;-5 -5 7];
 c=[2;1;-3];
 lx=[-0.5;0;0];
@@ -6,6 +7,8 @@ x0=-1*H\c;
 z0=[0,0,0]';
 x1=-1*H\c;
 z1=[0,0,0]';
+format rat
+[ x, s, iter, Aopt] = qp_bnd( H, c, [0,0,0]', [])
 % while norm(x1-x0)+norm(z1-z0)>1e-5
 % for i=0:5
 % x0=x1;
@@ -36,7 +39,7 @@ z1=[0,0,0]';
 % H = U' * X * U;
 % x=rand(N,1)-0.5;
 % c = -1*H*x;
-format rat
-% lx=quadprog(H,c,[],[],[],[],[],zeros(N,1))
-lx(lx>-1e-8)=0
-newtest(H,c,lx);
+% format rat
+% % lx=quadprog(H,c,[],[],[],[],[],zeros(N,1))
+% lx(lx>-1e-8)=0
+% newtest(H,c,lx);
