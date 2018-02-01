@@ -3,10 +3,11 @@
 % det2F=A'DA+2MD0
 function v=det2F(x,A,b,M)
     B=A*x-b;
+    B(B>0)=1;
+    B(B<0)=0;
     D=diag(B);
-    D(B>0)=1;
-    D(B<0)=0;
-    D0=diag(x);
-    D0(D0>0)=0;
-    D0(D0<0)=1;
+    x0=-1*x;
+    x0(x0>0)=1;
+    x0(x0<0)=0;
+    D0=diag(x0);
     v=A'*D*A+2*M*D0;

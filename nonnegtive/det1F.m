@@ -5,5 +5,5 @@ function v=det1F(x,A,b,M)
     B=A*x-b;
     B(B<0)=0;%(Ax-b)+
     x0=-x;
-    x0(X0<0)=0;%(-x)+
+    x0(x0<0)=0;%(-x)+
     v=A'*B-2*M*x0;
