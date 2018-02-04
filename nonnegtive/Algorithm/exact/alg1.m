@@ -1,9 +1,9 @@
 % 精确方法求解（中间使用MATLAB自带的算法求解带约束的最小二乘问题）
-% 将非负最小二乘问题转变成 普通的最小二乘问题
+% 将非负最小二乘问题转变成 普�?的最小二乘问�?
 function [x0,f0]=alg1(A,b,x0,e)
 [m,n]=size(x0);
 options = optimoptions('LSQLIN'); 
-options.OptimalityTolerance=e;
+% options.OptimalityTolerance=e;
 index=0;
 while 1
     y0=b-A*x0;
@@ -11,9 +11,9 @@ while 1
     %     z0=A*x0-b;
     %     z0(z0<0)=0;
     bk=y0+A*x0;
-	 %内置使用MATLAB自带的算法	
+	 %内置使用MATLAB自带的算�?
     [x1,f1,residual,exitflag]=lsqlin(A,bk,[],[],[],[],zeros(m,1),Inf*ones(m,1),x0,options);
-    fprintf('index:%d,exit %d!\n',index,exitflag);
+    fprintf('index:%d,exit %d,f:%f!\n',index,exitflag,f1);
     index=index+1;
     f0=b-A*x0;
     f0(f0<0)=0;
