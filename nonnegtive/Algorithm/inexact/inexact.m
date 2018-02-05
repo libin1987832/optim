@@ -1,17 +1,17 @@
-% 涓嶇簿纭殑鎼滅储绠楁硶
-% ||(b-Ax)+|| x0鍒濆? belt锛?.5锛?姝ラ暱缂╁皬姣斾緥 u锛?-1锛?涓嶇瓑寮忕殑涓?釜鍙傛暟 瓒婂ぇ涓嬮檷瓒婂ぇ 浣嗘槸瓒婇毦婊¤冻
+% 不精确的搜索算法
+% ||(b-Ax)+|| x0初值 belt（0.5）步长缩小比例 u（0-1）不等式的满足参数 越大下降越大 但是越难满足
 % x(k+1)=(xk+delt^m*a*s) ||bk-Ax(k+1)||<=||y||-2u*s*(x(k+1)-xk)
 function [x0,f1]=inexact(b,A,x0,belt,u)
 [msize,nsize]=size(x0);
 index=0;
 while 1
-	% 瀵瑰簲鍑芥暟鍊?	
+	% 对应函数值	
     y0=b-A*x0;
     y0(y0<=0)=0;
-    % 瀵瑰簲鐨勬搴?
+    % 对应的梯度值
     b0=y0+A*x0;
     s0=A'*y0;
-    % 绫讳技浜庢嫙鐗涢】娉曪紝淇姊害
+    % 类似于拟牛顿法，修正梯度
     sN=s0;
     alph=sN'*sN/((A*sN)'*(A*sN));
     mk=0;
@@ -21,7 +21,40 @@ while 1
             lamd(i,i)=-1*x0(i)/s0(i);
         end
     end
-%     %锟斤拷锟斤拷锟角凤拷锟斤拷锟斤拷锟斤拷锟斤拷系锟斤拷
+    % 在新方向下，如果满足不等式x(k+1)=(xk+delt^m*a*s)
+    % ||bk-Ax(k+1)||<=||y||-2u*s*(x(k+1)-xk)即可 不需要精确的步长
+    while 1
+	    % 步长缩小因子belt,belt^2,belt^3，...		
+%         x1=x0+belt^mk*alph*s0;
+        x1=x0+belt^mk*lamd*s0;
+        x1(x1<0)=0;
+        left=(b0-A*x1)'*(b0-A*x1);
+        right=y0'*y0-2*u*s0'*(x1-x0);
+		% 不等式满足
+        if left<=right
+            break;
+        end
+        mk=mk+1;
+    end
+	% 当前函数值
+    f0=b-A*x0;
+    f0(f0<0)=0;
+    f0=0.5*(f0'*f0);
+    % 下一步函数值
+    f1=b-A*x1;
+    f1(f1<0)=0;
+    f1=0.5*(f1'*f1);
+    fprintf('index:%d,The mk is %f; f0,f1:%f,%f\n',index,mk,f0,f1);
+    index=index+1;
+    x0=x1;
+    % 终止条件
+    if norm(f1-f0)<0.000000001
+        break;
+    end
+end
+
+
+%调试步长的值    
 %     xxxx=[];
 %     yyyy=[];
 %     for tt=1:1000
@@ -35,34 +68,3 @@ while 1
 %     end
 %       plot(xxxx,yyyy);
 %       %%%%%%
-    % 鍦ㄦ柊鏂瑰悜涓嬶紝濡傛灉婊¤冻涓嶇瓑寮弜(k+1)=(xk+delt^m*a*s)
-    % ||bk-Ax(k+1)||<=||y||-2u*s*(x(k+1)-xk)鍗冲彲 涓嶉渶瑕佺簿纭殑瑙?
-    while 1
-	    % 姝ラ暱缂╁皬鍥犲瓙belt,belt^2,belt^3锛屻?銆傘?		
-%         x1=x0+belt^mk*alph*s0;
-        x1=x0+belt^mk*lamd*s0;
-        x1(x1<0)=0;
-        left=(b0-A*x1)'*(b0-A*x1);
-        right=y0'*y0-2*u*s0'*(x1-x0);
-		% 涓嶇瓑寮忔弧瓒?
-        if left<=right
-            break;
-        end
-        mk=mk+1;
-    end
-	% 褰撳墠鍑芥暟鍊?
-    f0=b-A*x0;
-    f0(f0<0)=0;
-    f0=0.5*(f0'*f0);
-    % 涓嬩竴姝ュ嚱鏁板?
-    f1=b-A*x1;
-    f1(f1<0)=0;
-    f1=0.5*(f1'*f1);
-    fprintf('index:%d,The mk is %f; f0,f1:%f,%f\n',index,mk,f0,f1);
-    index=index+1;
-    x0=x1;
-    % 缁堟鏉′欢
-    if norm(f1-f0)<0.000000001
-        break;
-    end
-end

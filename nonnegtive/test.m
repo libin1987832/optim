@@ -1,24 +1,4 @@
 addpath(genpath(pwd));
-% A=[2,1;1,2];
-% b=[5;6];
-
-% ezplot('2*x+y-5',[0,10])
-% hold on 
-% ezplot('x+2*y-6',[0,10])
-% [x,fk]=fsearchx(A,b,[10;1],0.000001,0.0001);
-% A=-1*A;
-% b=-1*b;
-% % 绮剧‘绠楁硶 
-% [x,f0]=alg1(-1*A,-1*b,[0;10],0.0001);
-% % 涓嶇簿纭畻娉?
-%  [x,fk]=inexact(-1*b,-1*A,[10;1],0.5,0.6)
-% % 缃氬嚱鏁版柟娉?
-% M=1000000;% 鎯╃綒鍥犲瓙
-% delt=0.00001;% delt鏁板?璁＄畻鐨勮宸?
-% e=0.0001; %绉嶆鏉′欢 姊害鏉ュ垽鏂?
-% x=GNP([10;1],M,delt,e,A,b)
-% % [mm,vv]=minValue(x,0.1,100,A,b,@fq,@constrain);
-% % mm
 
 % % number test
 m1=500;m2=500;n=1000;density=0.1;cond=100;delt=1e-5;e=1e-4;
@@ -27,15 +7,17 @@ A2=sprand(m2,n,density,1/cond);
 b1=rand(m1,1);b2=rand(m2,1);
 A=[A1;-A2];
 b=[b1;-b2];
+% 输出零向量对应的函数值
 fqf(b,A,zeros(n,1))
-delt=0.00001;% delt鏁板?璁＄畻鐨勮宸?
-e=0.0001; %绉嶆鏉′欢 姊害鏉ュ垽鏂?
+delt=0.00001;% delt防止病态参数
+e=0.0001; %终止条件 梯度的范数小于这个值就终止
+
+% 精确搜索法
 % [x0,f0]=alg1(A,b,ones(n,1)*100,e);
 
-inexact(b,A,ones(n,1)*100,0.2,0.1); 
-%  [x,fk]=fsearchx(A,b,ones(n,1)*100,e,delt);
-% M=1000000;% 鎯╃綒鍥犲瓙
+% 非精确搜索法
+%inexact(b,A,ones(n,1)*100,0.2,0.1); 
 
-% [x,fk1]=GNP(ones(n,1)*100,M,delt,e,A,b);
-% fk
-% fk1
+ M=1000;% 惩罚因子
+% 罚函数法
+ [x,fk1]=GNP(ones(n,1)*100,M,delt,e,A,b);

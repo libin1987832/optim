@@ -1,5 +1,5 @@
-% 绮剧‘鏂规硶姹傝В锛堜腑闂翠娇鐢∕ATLAB鑷甫鐨勭畻娉曟眰瑙ｅ甫绾︽潫鐨勬渶灏忎簩涔橀棶棰橈級
-% 灏嗛潪璐熸渶灏忎簩涔橀棶棰樿浆鍙樻垚 鏅?鐨勬渶灏忎簩涔橀棶棰?
+% 精确方法求解（中间使用MATLAB自带的算法求解带约束的最小二乘问题）
+% 将非负最小二乘问题转变成 普通的最小二乘问题?
 function [x0,f0]=alg1(A,b,x0,e)
 [m,n]=size(x0);
 options = optimoptions('LSQLIN'); 
@@ -11,7 +11,7 @@ while 1
     %     z0=A*x0-b;
     %     z0(z0<0)=0;
     bk=y0+A*x0;
-	 %鍐呯疆浣跨敤MATLAB鑷甫鐨勭畻娉?
+	 %内置使用MATLAB自带的算法
     [x1,f1,residual,exitflag]=lsqlin(A,bk,[],[],[],[],zeros(m,1),Inf*ones(m,1),x0,options);
     fprintf('index:%d,exit %d,f:%f!\n',index,exitflag,f1);
     index=index+1;
@@ -23,3 +23,4 @@ while 1
         break;
     end
 end
+
