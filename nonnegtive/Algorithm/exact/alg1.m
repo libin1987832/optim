@@ -3,7 +3,7 @@
 function [x0,f0]=alg1(A,b,x0,e)
 [m,n]=size(x0);
 options = optimoptions('LSQLIN'); 
-% options.OptimalityTolerance=e;
+ options.OptimalityTolerance=e;
 index=0;
 while 1
     y0=b-A*x0;
