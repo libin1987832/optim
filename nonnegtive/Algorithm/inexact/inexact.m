@@ -1,9 +1,13 @@
 % 不精确的搜索算法
 % ||(b-Ax)+|| x0初值 belt（0.5）步长缩小比例 u（0-1）不等式的满足参数 越大下降越大 但是越难满足
 % x(k+1)=(xk+delt^m*a*s) ||bk-Ax(k+1)||<=||y||-2u*s*(x(k+1)-xk)
-function [x0,f1]=inexact(b,A,x0,belt,u)
+function [x0,f1]=inexact(b,A,x0,belt,u,e)
 [msize,nsize]=size(x0);
 index=0;
+y0=b-A*x0;
+y0(y0<=0)=0;
+res0=norm(min(x0,A'*A*y0));
+t=tic;
 while 1
 	% 对应函数值	
     y0=b-A*x0;
@@ -44,15 +48,28 @@ while 1
     f1=b-A*x1;
     f1(f1<0)=0;
     f1=0.5*(f1'*f1);
-    fprintf('index:%d,The mk is %f; f0,f1:%f,%f\n',index,mk,f0,f1);
-    index=index+1;
+    
+     
+    
+    
+    
     x0=x1;
-    % 终止条件
-    if norm(f1-f0)<0.000000001
+    y0=b-A*x0;
+    y0(y0<=0)=0;
+    res1=norm(min(x0,A'*A*y0));
+    
+    fprintf('index:%d,The mk is %f; f0,f1:%f,%f,res1:%f,res0:%f,ratio:%f\n',index,mk,f0,f1,res1,res0,res1/res0);
+    index=index+1;
+    if res1/res0<e
         break;
     end
+    
+    % 终止条件
+%     if norm(f1-f0)<0.000000001
+%         break;
+%     end
 end
-
+toc(t);
 
 %调试步长的值    
 %     xxxx=[];

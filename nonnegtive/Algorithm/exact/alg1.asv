@@ -8,7 +8,6 @@ index=0;
 y0=b-A*x0;
 y0(y0<0)=0;
 res0=norm(min(x0,A'*A*y0));
-t=tic;
 while 1
     y0=b-A*x0;
     y0(y0<0)=0;
@@ -26,7 +25,7 @@ while 1
     x0=x1;
     
     res1=norm(min(x0,A'*A*y0));
-     fprintf('index:%d,exit %d,f:%f,res1:%f,res0:%f,ratio:%f!\n',index,exitflag,f1,res1,res0,res1/res0);
+     fprintf('index:%d,exit %d,f:%f,res0:%f,res1:%f!\n',index,exitflag,f1);
     index=index+1;
     if res1/res0<e
         break;
@@ -35,5 +34,4 @@ while 1
 %         break;
 %     end
 end
-toc(t);
-% fprintf('exact run time cost:%f\n',etime(clock,t));
+
