@@ -46,7 +46,7 @@ while 1
     f0=0.5*(f0'*f0);
     % 下一步函数值
     f1=b-A*x1;
-    f1(f1<0)=0;
+    f1(f1<0)=0;     
     f1=0.5*(f1'*f1);
     
      
@@ -60,14 +60,14 @@ while 1
     
     fprintf('index:%d,The mk is %f; f0,f1:%f,%f,res1:%f,res0:%f,ratio:%f\n',index,mk,f0,f1,res1,res0,res1/res0);
     index=index+1;
-    if res1/res0<e
-        break;
-    end
-    
-    % 终止条件
-%     if norm(f1-f0)<0.000000001
+%     if res1/res0<e
 %         break;
 %     end
+    
+    % 终止条件
+    if norm(f1-f0)<0.000000001
+        break;
+    end
 end
 toc(t);
 

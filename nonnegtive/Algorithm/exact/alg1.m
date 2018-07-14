@@ -16,8 +16,8 @@ while 1
     %     z0(z0<0)=0;
     bk=y0+A*x0;
 	 %内置使用MATLAB自带的算法
-    [x1,f1,residual,exitflag]=lsqlin(A,bk,[],[],[],[],zeros(m,1),Inf*ones(m,1),x0,options);
-   
+%     [x1,f1,residual,exitflag]=lsqlin(A,bk,[],[],[],[],zeros(m,1),Inf*ones(m,1),x0,options);
+   [x1,f1,residual,exitflag]=lsqlin(A,bk,[],[],[],[],[],Inf*ones(m,1),x0,options);
     
     f0=b-A*x0;
     f0(f0<0)=0;

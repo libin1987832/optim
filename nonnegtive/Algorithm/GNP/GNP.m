@@ -10,6 +10,7 @@ function [x,fk]=GNP(x0,M,delt,e,A,b)
     t=tic;
 %     while(norm(d1,inf)>e)
     while(1)
+        fk=fq(A,b,x0);
         AA=det2F(x0,A,b,M)+diag(ones(size(A',1),1)).*delt;
         d1=det1F(x0,A,b,M);
         % º∆À„∑ΩœÚ
@@ -25,7 +26,9 @@ function [x,fk]=GNP(x0,M,delt,e,A,b)
         f=fQ(A,b,x0,M);
         fprintf('index:%d,f1:%f,res1:%f,res0:%f,ratio:%f\n',k,f,res1,res0,res1/res0);
          k=k+1;
-        if res1/res0<e
+        %if res1/res0<e
+        fk1=fq(A,b,x0);
+        if fk-fk1<e
             break;
         end
     end
