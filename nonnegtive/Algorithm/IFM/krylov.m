@@ -1,4 +1,4 @@
-function [xk,fk]=kyrlov(x0,y,b)
+function [xk,fk]=kyrlov(A,y,k)
 u1=0;  
 beta1=norm(y);q1=y/beta1;v1=A'*q1;alph1=norm(v1);v1=v1/alph1;
 
@@ -7,7 +7,7 @@ thgma_1=beta1;
 g1=v1;
 
 
-for i=0:3
+for i=1:k
     q2=A*v1-alph1*q1;beta2=norm(q2);q2=q2/beta2;
     
     ro1=norm([ro_1,beta2]);c1=ro_1/ro1;s1=beta2/ro1;
@@ -25,6 +25,7 @@ for i=0:3
     thgma_1=thgma_2;
     g1=g2;
 end
-    
-fk=b-A*x0; 
+ xk=u1;
+ fk=(A*xk-y)'*(A*xk-y);
+
     
