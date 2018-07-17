@@ -26,6 +26,6 @@ for i=1:k
     g1=g2;
 end
  xk=u1;
- fk=(A*xk-y)'*(A*xk-y);
+ fk=0.5*(A*xk-y)'*(A*xk-y);
 
     

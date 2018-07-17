@@ -4,13 +4,33 @@ A=[2,1;-3,-1];
 b=[5;-3];
 n=2;
 e=0.01;
- x=pda(A,b,2);
-% [x,f]=inexact(-1*b,-1*A,ones(n,1)*100,0.2,0.1,e);
-x
+
+% [x,f]=inexact(b,A,ones(n,1)*100,0.2,0.1,e);
+
 % % % number test
-% m1=600;m2=600;n=1200;density=0.1;cond=100;delt=1e-5;e=1e-4;
-% A1=sprand(m1,n,density,1/cond);
+m1=6;m2=600;n=3;density=1;cond=10;delt=1e-5;e=1e-4;
+A1=sprand(m1,n,density,1/cond); 
+b=sprand(m1,1,density,1/cond)-0.1;
+fb=b;
+fb(fb<0)=0;
+x0=zeros(n,1)+0.1;
+init=0.5*fb'*fb
+[Q,R]=qr(A1);
+[x1,f1]=FM(x0,Q,R,A1,b);
+f1
+
+[x1,f1]=IFM(x0,A1,b,2);
+f1
+
+y=b-A1*x0;
+All=1:m1;
+NE=All(y>=0)
+[x1,f1]=PAD(x0,A1,b,NE,2);
+f1
+
 % A2=sprand(m2,n,density,1/cond);
+
+
 % b1=rand(m1,1);b2=rand(m2,1);
 % A=[A1;-A2];
 % b=[b1;-b2];

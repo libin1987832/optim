@@ -65,7 +65,7 @@ while 1
 %     end
     
     % жуж╧лУ╪Ч
-    if norm(f1-f0)<0.000000001
+    if norm(f1-f0)<0.0000001
         break;
     end
 end
