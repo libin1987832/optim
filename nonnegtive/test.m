@@ -8,24 +8,37 @@ e=0.01;
 % [x,f]=inexact(b,A,ones(n,1)*100,0.2,0.1,e);
 
 % % % number test
-m1=6;m2=600;n=3;density=1;cond=10;delt=1e-5;e=1e-4;
-A1=sprand(m1,n,density,1/cond); 
-b=sprand(m1,1,density,1/cond)-0.1;
+% m1=6;m2=600;n=4;density=1;cond=10;delt=1e-5;e=1e-4;
+% A1=sprand(m1,n,density,1/cond); 
+% b=sprand(m1,1,density,1/cond)-0.2;
+% load matlab_test1.mat
+A1=[1 1;-1 -1];
+b=[1;2];
+m1=2;
+y=b-A1*[-sqrt(2)/4;-sqrt(2)/4];
+A1'*y;
+y(y<0)=0;
+gg=0.5*y'*y;
 fb=b;
 fb(fb<0)=0;
-x0=zeros(n,1)+0.1;
+x0=zeros(n,1)+1;
 init=0.5*fb'*fb
-[Q,R]=qr(A1);
+[Q,R]=qr(A1'*A1);
 [x1,f1]=FM(x0,Q,R,A1,b);
 f1
 
-[x1,f1]=IFM(x0,A1,b,2);
+[x1,f1]=IFM(x0,A1,b,3);
 f1
 
 y=b-A1*x0;
 All=1:m1;
 NE=All(y>=0)
-[x1,f1]=PAD(x0,A1,b,NE,2);
+[x1,f1]=PAD(x0,A1,b,NE,3)
+y=b-A1*x1;
+A1'*y
+y(y<0)=0;
+gg2=0.5*y'*y
+NE=All(y>=0)
 f1
 
 % A2=sprand(m2,n,density,1/cond);
