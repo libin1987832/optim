@@ -8,39 +8,59 @@ e=0.01;
 % [x,f]=inexact(b,A,ones(n,1)*100,0.2,0.1,e);
 
 % % % number test
-% m1=6;m2=600;n=4;density=1;cond=10;delt=1e-5;e=1e-4;
+m1=10;m2=600;n=3;density=1;cond=10;delt=1e-5;e=1e-4;
 % A1=sprand(m1,n,density,1/cond); 
 % b=sprand(m1,1,density,1/cond)-0.2;
+A1=[];
+b=[];
+iter=2;
 % load matlab_test1.mat
-A1=[1 1;-1 -1];
-b=[1;2];
-m1=2;
-y=b-A1*[-sqrt(2)/4;-sqrt(2)/4];
-A1'*y;
-y(y<0)=0;
-gg=0.5*y'*y;
+% A1=[1 1;-1 -1];
+% b=[1;2];
+% m1=2;
+% y=b-A1*[-sqrt(2)/4;-sqrt(2)/4];
+% A1'*y;
+% y(y<0)=0;
+% gg=0.5*y'*y;
+
 fb=b;
 fb(fb<0)=0;
 x0=zeros(n,1)+1;
 init=0.5*fb'*fb
 [Q,R]=qr(A1'*A1);
-[x1,f1]=FM(x0,Q,R,A1,b);
-f1
+x10=x0;
+x20=x0;
+x30=x0;
+fc1=[];
+fc2=[];
+fc3=[];
+nec=[];
+for k=1:20
+[x11,f1]=FM(x10,Q,R,A1,b);
+fc1=[fc1,f1];
 
-[x1,f1]=IFM(x0,A1,b,3);
-f1
+[x21,f2]=IFM(x20,A1,b,iter);
+fc2=[fc2,f2];
 
-y=b-A1*x0;
+y=b-A1*x30;
 All=1:m1;
-NE=All(y>=0)
-[x1,f1]=PAD(x0,A1,b,NE,3)
-y=b-A1*x1;
-A1'*y
-y(y<0)=0;
-gg2=0.5*y'*y
-NE=All(y>=0)
-f1
+NE=All(y>=0);
+All(NE)=0;
+nec=[nec;All];
+[x31,f3]=PAD(x30,A1,b,NE,iter);
+% y=b-A1*x1;
+% A1'*y
+% y(y<0)=0;
+% gg2=0.5*y'*y
+% NE=All(y>=0)
+fc3=[fc3,f3];
+x10=x11;
+x20=x21;
+x30=x31;
+end
 
+fcc=[fc1;fc2;fc3]
+nec
 % A2=sprand(m2,n,density,1/cond);
 
 
