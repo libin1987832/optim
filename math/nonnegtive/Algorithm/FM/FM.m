@@ -1,8 +1,7 @@
 function [xk,fk]=FM(x0,Q,R,A,b)
 r=b-A*x0;
 r(r<0)=0;
-%uk=R\(Q\(A'*r));
-uk=Q*r;
+uk=R\(Q\(A'*r));
 xk=x0+uk;
 fk=b-A*xk;
 fk(fk<0)=0;
