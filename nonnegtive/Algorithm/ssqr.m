@@ -1,0 +1,29 @@
+function [xk,rk,fk,f0,lambe]=ssqr(x0,A,b)
+r=b-A*x0;
+I=(r>=0);
+AI=A(I,:);
+[Q,R]=qr(AI);
+h=r(I);
+u=R\Q'*h;
+
+r(r<0)=0;
+f0=0.5*r'*r;
+
+lambe=1;
+xk=x0+lambe*u;
+r=b-A*xk;
+r(r<0)=0;
+fk=0.5*r'*r;
+
+while fk>f0
+    lambe=0.5*lambe;
+    xk=x0+lambe*u;
+    r=b-A*xk;
+    r(r<0)=0;
+    fk=0.5*r'*r;
+end
+rk=r;
+
+
+
+
