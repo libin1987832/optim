@@ -1,7 +1,0 @@
-Title		: Primal-dual active-set method with inexact subproblem solvers
-Language	: MATLAB
-Author		: Zheng Han
-Date		: 01/05/2013
-Description	: Temporarily designed to solve unilaterally bounded convex QOs of the form
-		  	      min 1/2x'Hx + c'x
-		  	      st   x <= u

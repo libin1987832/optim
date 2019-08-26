@@ -1,9 +1,0 @@
-function [xk,fk]=IFM(x0,A,b,k)
-r1=b-A*x0;
-y1=r1;
-y1(y1<0)=0;
-[uk,fk]=krylov(A,y1,k);
-xk=x0+uk;
-fk=b-A*xk;
-fk(fk<0)=0;
-fk=0.5*fk'*fk;
