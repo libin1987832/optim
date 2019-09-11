@@ -55,6 +55,6 @@ while Ar>delt*rn && rn>delt
     x0=xk;
 end
 fk=0.5*rk'*rk;
-disp(['AT(b-A*x)+:',num2str(Ar),' fk:',fk,' ssqr:',num2str(statSS),' FM:',num2str(statFM)]);
+disp(['AT(b-A*x)+:',num2str(Ar),' fk:',num2str(fk),' ssqr:',num2str(statSS),' FM:',num2str(statFM)]);
 
 

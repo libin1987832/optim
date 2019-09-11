@@ -31,9 +31,15 @@ while Ar>delt*rn && rn>delt
         face(ii)=isequal(IkN,Ik);
         x0=xk;
     end
-    
-    if all(face(2:end)) && ~isempty(IkN)
-        
+    [xk,fk,y,isP]=ssqr3(x0,A,b);
+    if isP
+        if y
+            disp("last step");
+        else
+            disp("FM may not reach the right face");
+        end
+    else
+       %  disp("face is not positon");
     end
     Ar=norm(A'*rk);
     rn=norm(rk);
@@ -41,4 +47,4 @@ while Ar>delt*rn && rn>delt
     x0=xk;
 end
 fk=0.5*rk'*rk;
-disp(['AT(b-A*x)+:',num2str(Ar),' fk:',fk,' ssqr:',num2str(statSS),' FM:',num2str(statFM)]);
+disp(['AT(b-A*x)+:',num2str(Ar),' fk:',num2str(fk),' ssqr:',num2str(statSS),' FM:',num2str(statFM)]);

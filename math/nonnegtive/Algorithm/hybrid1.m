@@ -35,7 +35,7 @@ while Ar>delt*rn && rn>delt
     rn=norm(rk);
     x0=xk;
 end 
-disp(['AT(b-A*x)+:',num2str(Ar),' fk:',fk,' ssqr:',num2str(statSS),' FM:',num2str(statFM)]);
+disp(['AT(b-A*x)+:',num2str(Ar),' fk:',num2str(fk),' ssqr:',num2str(statSS),' FM:',num2str(statFM)]);
 
     
 

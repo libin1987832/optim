@@ -1,0 +1,1 @@
+rsync -vzrtopgq --delete --progress  --exclude-from './exclude.txt' root@jp6.muzi198783.club::ftp ./
