@@ -34,9 +34,9 @@ while Ar>delt*rn && rn>delt
     [xk,fk,y,isP]=ssqr3(x0,A,b);
     if isP
         if y
-            disp("last step");
+            disp('last step');
         else
-            disp("FM may not reach the right face");
+            disp('FM may not reach the right face');
         end
     else
        %  disp("face is not positon");
