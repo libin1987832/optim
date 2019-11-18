@@ -40,7 +40,7 @@ while Ar>delt*rn && rn>delt
             statSS=statSS+1;
             [xk2,fk2,y]=ssqr2(xk,A,b);
             xkArr=[xkArr;[xk',fk1,1]];
-            if fk2<fk1
+            if abs(fk2 - fk1) < 1e-7 || fk2 < fk1 
                 xk=xk2;
                 rk2=b-A*xk2;
                 rk2(rk2<0)=0;

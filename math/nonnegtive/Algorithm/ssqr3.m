@@ -1,4 +1,5 @@
 function [xk,fk,y,isP]=ssqr3(x0,A,b)
+% 主要判断矩阵是否正定 不正定就继续利用固定迭代法求解
 tol=0;
 [m,n]=size(A);
 r=b-A*x0;
