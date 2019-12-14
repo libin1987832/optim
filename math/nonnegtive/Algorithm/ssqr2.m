@@ -25,7 +25,8 @@ rk=b-A*xk;
 I1=find(rk>=tol);
 y=isequal(I,I1);
 % 寻找最小的那个改变的值 -a'(y+ai*h)+c=0 (-Ay+c)(r)+ai*(dh)
-if ~y && rnkd<n
+% if ~y && rnkd<n
+if ~y    
     ai=r./dh;
     aa=min(ai(ai>tol));
     xk=x0+aa*hk;
