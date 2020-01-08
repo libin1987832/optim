@@ -13,18 +13,27 @@
 % b=[1,1,0.5,-0.5,0.5,-0.5]'
 % x0=zeros(2,1);
 
+x0=-10;
+A=[1;-1];
+b=[100;2];
+[Q,R]=qr(A);
+[xk,r0,rk,fk,fm,fr]=FM(x0,Q,R,A,b)
 
-x0 = [-11/20;11/50];
-A = [1,1;-1,-1;-1,0;-8,-3];
-b = [1;1;1/2;3];
-[xk,fk,y]=ssqr2(x0,A,b)
-b-A*xk
-[xk,fk,y]=ssqr2(xk,A,b)
-b-A*xk
-[xk,fk,y]=ssqr2(xk,A,b)
-b-A*xk
-[xk,fk,y]=ssqr2(xk,A,b)
-b-A*xk
+
+% x0 = [-11/20;11/50];
+% A = [1,1;-1,-1;-1,0;-8,-3];
+% b = [1;1;1/2;3];
+% [xk,fk,y]=ssqr2(x0,A,b)
+% b-A*xk
+% [xk,fk,y]=ssqr2(xk,A,b)
+% b-A*xk
+% [xk,fk,y]=ssqr2(xk,A,b)
+% b-A*xk
+% [xk,fk,y]=ssqr2(xk,A,b)
+% b-A*xk
+
+
+
 % A = [-1,-1;1,1;-1,0];
 % b = [1,1,0.5]';
 % x0 = [-10,-10]';
