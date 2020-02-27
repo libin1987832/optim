@@ -23,12 +23,13 @@ yy2=[];
 for x=-2:0.1:1
     for y=-1.5:0.2:3
         x0=[x;y];
-        for j=1:10
-        [xk,r0,rk,fkFM,fm,fr]=FM(x0,q,r,A,b);
-        x0=xk;
+        xF=x0;
+        for j=1:2
+        [xk,r0,rk,fkFM,fm,fr]=FM(xF,q,r,A,b);
+        xF=xk;
         end
         [xk,rk,fkssqr,f0,lambe]=ssqr(x0,A,b);
-    if  fkFM>fkssqr*1.0001
+    if  fkFM>fkssqr
         xx1=[xx1,x];
         yy1=[yy1,y];
     else
@@ -37,7 +38,9 @@ for x=-2:0.1:1
     end
     end
 end
-plot(xx1,yy1,'ro');
+% express neton's method good
+plot(xx1,yy1,'r*');
 hold on 
-plot(xx2,yy2,'b+');
+% express FM method good
+plot(xx2,yy2,'bo');
 
