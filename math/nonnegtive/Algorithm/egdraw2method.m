@@ -23,7 +23,10 @@ yy2=[];
 for x=-2:0.1:1
     for y=-1.5:0.2:3
         x0=[x;y];
+        for j=1:10
         [xk,r0,rk,fkFM,fm,fr]=FM(x0,q,r,A,b);
+        x0=xk;
+        end
         [xk,rk,fkssqr,f0,lambe]=ssqr(x0,A,b);
     if  fkFM>fkssqr*1.0001
         xx1=[xx1,x];
