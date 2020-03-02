@@ -1,5 +1,6 @@
+% Pinar method
 function [xk,fk,y]=ssqr2(x0,A,b)
-
+% Pinar method
 tol=0;
 [m,n]=size(A);
 r=b-A*x0;

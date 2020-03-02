@@ -1,4 +1,5 @@
-function [xk,fk,xkArr]=hybrid2(x0,A,b)
+% FM+exposed change 连续uIter FM 都没有改变则采用 牛顿法 
+function [xk,fk,xkArr,countFM,countNW,Q]=hybrid2(x0,A,b)
 tol=0;
 %compute hybrid uIter
 [m,n]=size(A);
@@ -17,6 +18,9 @@ statSS=0;
 uIter=3;
 face=zeros(1,uIter);
 xkArr=[];
+
+countFM=0;
+countNW=0;
 %||A'(r)+||<=delt||(r)+|| ||(r)+||<=de
 while Ar>delt*rn && rn>delt
     I=find(r>tol);
@@ -24,6 +28,7 @@ while Ar>delt*rn && rn>delt
     statFM=statFM+uIter;
     IkN=I;
     for ii=1:uIter
+        countFM=countFM+1;
         Ik=IkN;
         [xk,r0,rk,fk1,fm,fr]=FM(x0,Q,R,A,b);
         xkArr=[xkArr;[xk',fk1,0]];
@@ -38,6 +43,7 @@ while Ar>delt*rn && rn>delt
         y=1;
         while y
             statSS=statSS+1;
+            countNW=countNW+1;
             [xk2,fk2,y]=ssqr2(xk,A,b);
             xkArr=[xkArr;[xk',fk1,1]];
             if abs(fk2 - fk1) < 1e-7 || fk2 < fk1 

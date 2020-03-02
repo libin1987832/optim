@@ -1,5 +1,5 @@
 % Dax hybrid algorithm
-function [xk,fk,xkArr,countFM,countNW,Q]=hybrid1(x0,A,b)
+function [xk,fk,xkArr,countFM,countNW,Q]=hybrid4(x0,A,b)
 %compute hybrid uIter
 [m,n]=size(A);
 uIter=max(33,(m+n)/4);
@@ -20,14 +20,21 @@ xkArr=[];
 
 countFM=0;
 countNW=0;
+
+I=diag(ones(1,m));
 %||A'(r)+||<=delt||(r)+|| ||(r)+||<=de
 while Ar>delt*rn && rn>delt
-    if uIndex<uIter
+    r(r>0)=1;
+    rk=diag(r);
+    abs(norm(I-Q*Q') -1)
+    abs(norm(I-Q*Q'*rk) -1)
+    if 1
         countFM=countFM+1;
         %FM algorithm
         statFM=statFM+1;
         [xk,r0,rk,fk,fm,fr]=FM(x0,Q,R,A,b);
         xkArr=[xkArr;[xk',fk,0]];
+        norm(r0)/norm(rk)
     else
         countNW=countNW+1;
         uIndex=0;
@@ -36,13 +43,10 @@ while Ar>delt*rn && rn>delt
         [xk,rk,fk,f0,lambe]=ssqr(x0,A,b);
         xkArr=[xkArr;[xk',fk,1]];
     end
+    r=rk;
     uIndex=uIndex+1;
     Ar=norm(A'*rk);
     rn=norm(rk);
     x0=xk;
 end 
 disp(['AT(b-A*x)+:',num2str(Ar),' fk:',num2str(fk),' ssqr:',num2str(statSS),' FM:',num2str(statFM)]);
-
-    
-
-    

@@ -1,3 +1,4 @@
+% FM+exposed change 连续uIter FM 都没有改变则采用 若牛顿法非奇异则继续计算 否则直接不采用牛顿法
 function [xk,fk,xkArr]=hybrid3(x0,A,b)
 tol=0;
 %compute hybrid uIter
