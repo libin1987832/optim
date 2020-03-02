@@ -1,5 +1,6 @@
 % Dax hybrid algorithm
 function [xk,fk,xkArr,countFM,countNW,Q]=hybrid1(x0,A,b)
+t=clock;
 %compute hybrid uIter
 [m,n]=size(A);
 uIter=max(33,(m+n)/4);
@@ -41,7 +42,8 @@ while Ar>delt*rn && rn>delt
     rn=norm(rk);
     x0=xk;
 end 
-disp(['AT(b-A*x)+:',num2str(Ar),' fk:',num2str(fk),' ssqr:',num2str(statSS),' FM:',num2str(statFM)]);
+tf=etime(clock,t);
+disp(['m:',num2str(m),' n:',num2str(n),' AT(b-A*x)+:',num2str(Ar),' fk:',num2str(fk),' ssqr:',num2str(statSS),' FM:',num2str(statFM),' cpu:',num2str(tf)]);
 
     
 

@@ -1,5 +1,6 @@
 % FM+exposed change 连续uIter FM 都没有改变则采用 牛顿法 
 function [xk,fk,xkArr,countFM,countNW,Q]=hybrid2(x0,A,b)
+t=clock;
 tol=0;
 %compute hybrid uIter
 [m,n]=size(A);
@@ -61,6 +62,6 @@ while Ar>delt*rn && rn>delt
     x0=xk;
 end
 fk=0.5*rk'*rk;
-disp(['AT(b-A*x)+:',num2str(Ar),' fk:',num2str(fk),' ssqr:',num2str(statSS),' FM:',num2str(statFM)]);
-
+tf=etime(clock,t);
+disp(['m:',num2str(m),' n:',num2str(n),' AT(b-A*x)+:',num2str(Ar),' fk:',num2str(fk),' ssqr:',num2str(statSS),' FM:',num2str(statFM),' cpu:',num2str(tf)]);
 

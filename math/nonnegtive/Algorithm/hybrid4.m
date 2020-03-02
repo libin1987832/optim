@@ -1,4 +1,4 @@
-% Dax hybrid algorithm
+% Dax hybrid algorithm and r+
 function [xk,fk,xkArr,countFM,countNW,Q]=hybrid4(x0,A,b)
 %compute hybrid uIter
 [m,n]=size(A);
@@ -25,16 +25,16 @@ I=diag(ones(1,m));
 %||A'(r)+||<=delt||(r)+|| ||(r)+||<=de
 while Ar>delt*rn && rn>delt
     r(r>0)=1;
-    rk=diag(r);
-    abs(norm(I-Q*Q') -1)
-    abs(norm(I-Q*Q'*rk) -1)
+%     rk=diag(r);
+%     abs(norm(I-Q*Q') -1)
+%     abs(norm(I-Q*Q'*rk) -1)
     if 1
         countFM=countFM+1;
         %FM algorithm
         statFM=statFM+1;
         [xk,r0,rk,fk,fm,fr]=FM(x0,Q,R,A,b);
         xkArr=[xkArr;[xk',fk,0]];
-        norm(r0)/norm(rk)
+        norm(r0)/norm(rk);
     else
         countNW=countNW+1;
         uIndex=0;
