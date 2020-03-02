@@ -1,3 +1,4 @@
+function egdrawcontourNN()
 [X,Y] = meshgrid(-1:.05:0,0:.1:1);
 Z=der(X,Y);
 [C,h] = contour(X,Y,Z);
@@ -12,6 +13,7 @@ gn=newton(-0.5,1/3);
 line([-0.5,g(1)-0.5],[1/3,g(2)+1/3]);
 line([-0.5,gn(1)-0.5],[1/3,gn(2)+1/3]);
 der(-0.5,1/3)
+end
 function Z=der(X,Y)
 Z1=1-X-Y;
 Z1(Z1<0)=0;
