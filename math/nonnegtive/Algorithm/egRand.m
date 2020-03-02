@@ -1,6 +1,6 @@
 % paper rand [1,1] example
 m=300;
-ratio=0.5;
+ratio=0.2;
 n=ceil(ratio*m);
 A=2*rand(m,n)-1;
 b=2*rand(m,1)-1;

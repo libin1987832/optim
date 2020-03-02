@@ -41,10 +41,9 @@ while Ar>delt*rn && rn>delt
     Ar=norm(A'*rk);
     rn=norm(rk);
     x0=xk;
-    disp(['hybrid1 m:',num2str(m),' n:',num2str(n),' AT(b-A*x)+:',num2str(Ar),' fk:',num2str(fk),' ssqr:',num2str(statSS),' FM:',num2str(statFM)]);
 end 
 tf=etime(clock,t);
-disp(['hybrid1 m:',num2str(m),' n:',num2str(n),' AT(b-A*x)+:',num2str(Ar),' fk:',num2str(fk),' ssqr:',num2str(statSS),' FM:',num2str(statFM),' cpu:',num2str(tf)]);
+disp(['hybrid1 m:',num2str(m),' n:',num2str(n),' AT(b-A*x)+:',num2str(Ar),' fk:',num2str(fk),' ssqr:',num2str(statSS),' FM:',num2str(statFM),' cpu:',num2str(tf),' uIter:',num2str(uIter)]);
 
     
 
