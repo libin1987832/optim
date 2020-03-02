@@ -11,7 +11,7 @@ AII=AI'*AI;
 bII=AI'*(r(I));
 [U,S,V]=svd(AII);
 
-rnkd=length(find(diag(S) >= 1e-14));
+rnkd=length(find(diag(S) >= 1e-10));
 Udd=U(:,1:rnkd);
 Sdd=S(1:rnkd,1:rnkd);
 Vdd=V(:,1:rnkd);

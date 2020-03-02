@@ -32,6 +32,7 @@ while Ar>delt*rn && rn>delt
         countFM=countFM+1;
         Ik=IkN;
         [xk,r0,rk,fk1,fm,fr]=FM(x0,Q,R,A,b);
+         fk=fk1;
         xkArr=[xkArr;[xk',fk1,0]];
         IkN=find(rk>tol);
         face(ii)=isequal(IkN,Ik);
@@ -46,6 +47,7 @@ while Ar>delt*rn && rn>delt
             statSS=statSS+1;
             countNW=countNW+1;
             [xk2,fk2,y]=ssqr2(xk,A,b);
+             fk=fk2;
             xkArr=[xkArr;[xk',fk1,1]];
             if abs(fk2 - fk1) < 1e-7 || fk2 < fk1 
                 xk=xk2;
@@ -60,8 +62,10 @@ while Ar>delt*rn && rn>delt
     rn=norm(rk);
     r=rk;
     x0=xk;
+
+    disp(['hybrid2 m:',num2str(m),' n:',num2str(n),' AT(b-A*x)+:',num2str(Ar),' fk:',num2str(fk),' ssqr:',num2str(statSS),' FM:',num2str(statFM)]);
 end
 fk=0.5*rk'*rk;
 tf=etime(clock,t);
-disp(['m:',num2str(m),' n:',num2str(n),' AT(b-A*x)+:',num2str(Ar),' fk:',num2str(fk),' ssqr:',num2str(statSS),' FM:',num2str(statFM),' cpu:',num2str(tf)]);
+disp(['hybrid2 m:',num2str(m),' n:',num2str(n),' AT(b-A*x)+:',num2str(Ar),' fk:',num2str(fk),' ssqr:',num2str(statSS),' FM:',num2str(statFM),' cpu:',num2str(tf)]);
 

@@ -11,7 +11,7 @@ AII=AI'*AI;
 bII=AI'*(r(I));
 [U,S,V]=svd(AII);
 %找大于0的所有值 判断正定
-rnkd=length(find(diag(S) >= 1e-14));
+rnkd=length(find(diag(S) >= 1e-10));
 
 Udd=U(:,1:rnkd);
 Sdd=S(1:rnkd,1:rnkd);
