@@ -70,5 +70,5 @@ while Ar>delt*rn && rn>delt
 end
 fk=0.5*rk'*rk;
 tf=etime(clock,t);
-disp(['hybrid2 m:',num2str(m),' n:',num2str(n),' AT(b-A*x)+:',num2str(Ar),' fk:',num2str(fk),' ssqr:',num2str(statSS),' FM:',num2str(statFM),' cpu:',num2str(tf),' uIter:',num2str(beginNW)]);
-
+%disp(['hybrid2 m:',num2str(m),' n:',num2str(n),' AT(b-A*x)+:',num2str(Ar),' fk:',num2str(fk),' ssqr:',num2str(statSS),' FM:',num2str(statFM),' cpu:',num2str(tf),' uIter:',num2str(beginNW)]);
+disp(['$',num2str(m),'\times ',num2str(n),'$&FMEF&(',num2str(statFM),',',num2str(statSS),')&',num2str(tf),'&',num2str(fk),'&',num2str(Ar)]);
