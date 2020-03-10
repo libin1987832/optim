@@ -2,10 +2,11 @@
 
 A=[1,1;-1,-1;1,0;6,3];
 b=[1;1;-0.5;-2];
-x0=[-1/4;1/10];
+x0=[-1/2;1/3];
 [q,r]=qr(A);
-for i=1:10
-    [x1,f1]=FM(x0,q,r,A,b)
-    x0=x1;
-    norm(dFM(A,b,x1))
-end
+[xk,fk,y]=ssqr2(x0,A,b)
+% for i=1:10
+%     [x1,f1]=FM(x0,q,r,A,b)
+%     x0=x1;
+%     norm(dFM(A,b,x1))
+% end

@@ -1,4 +1,5 @@
 % paper rand [1,1] example
+<<<<<<< HEAD
 m=300;
 ratio=0.2;
 n=ceil(ratio*m);
@@ -25,6 +26,10 @@ plot(plx2(xkArr2(plx2,n+2)'==0),ply2(xkArr2(plx2,n+2)'==0),'b-');
 %     for ratio=0.1:0.3:0.7
 % % m=300;
 % % ratio=0.5;
+=======
+% m=300;
+% ratio=0.2;
+>>>>>>> a73cbedf22b6ac1a723380c9f9c07baa55399595
 % n=ceil(ratio*m);
 % A=2*rand(m,n)-1;
 % b=2*rand(m,1)-1;
@@ -32,7 +37,20 @@ plot(plx2(xkArr2(plx2,n+2)'==0),ply2(xkArr2(plx2,n+2)'==0),'b-');
 % 
 % [xk1,fk1,xkArr1,countF1,countN1]=hybrid1(x0,A,b);
 % [xk2,fk2,xkArr2,countF2,countN2]=hybrid2(x0,A,b);
-%     end
-% end
+
+
+for m=1000:2000:5000
+    for ratio=0.1:0.3:0.7
+% m=300;
+% ratio=0.5;
+n=ceil(ratio*m);
+A=2*rand(m,n)-1;
+b=2*rand(m,1)-1;
+x0=zeros(n,1);
+
+[xk1,fk1,xkArr1,countF1,countN1]=hybrid1(x0,A,b);
+[xk2,fk2,xkArr2,countF2,countN2]=hybrid2(x0,A,b);
+    end
+end
 % [xk2,fk2,xkArr2,countF2,countN2]=hybrid4(x0,A,b);
 

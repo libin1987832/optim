@@ -1,4 +1,5 @@
 function [xk,rk,fk,f0,lambe]=ssqr(x0,A,b)
+% take the binary search step length
 r=b-A*x0;
 I=(r>=0);
 AI=A(I,:);

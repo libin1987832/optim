@@ -27,7 +27,7 @@ I1=find(rk>=tol);
 y=isequal(I,I1);
 % 寻找最小的那个改变的值 -a'(y+ai*h)+c=0 (-Ay+c)(r)+ai*(dh)
 % if ~y && rnkd<n
-if ~y    
+if ~y && rnkd<n    
     ai=r./dh;
     aa=min(ai(ai>tol));
     xk=x0+aa*hk;
@@ -35,6 +35,12 @@ if ~y
     I1=find(rk>=tol);
     % I 中的元素是否在 I1中 如果在其中就是true 如果没有就是false 如果全是true则为1 否则全为0
     y=all(ismember(I,I1));
+else if ~y && rnkd==n
+        ai=r./dh;
+        aa=min(ai(ai>tol));
+        rt=r-aa*dh;
+        a=r(rt>0)'*dh/(dh'*dh);
+    end 
 end
 % 截取违背的不等式
 rk=rk(I1);
