@@ -1,5 +1,5 @@
 % paper rand [1,1] example
-<<<<<<< HEAD
+%<<<<<<< HEAD
 m=300;
 ratio=0.2;
 n=ceil(ratio*m);
@@ -26,10 +26,10 @@ plot(plx2(xkArr2(plx2,n+2)'==0),ply2(xkArr2(plx2,n+2)'==0),'b-');
 %     for ratio=0.1:0.3:0.7
 % % m=300;
 % % ratio=0.5;
-=======
+%=======
 % m=300;
 % ratio=0.2;
->>>>>>> a73cbedf22b6ac1a723380c9f9c07baa55399595
+%>>>>>>> a73cbedf22b6ac1a723380c9f9c07baa55399595
 % n=ceil(ratio*m);
 % A=2*rand(m,n)-1;
 % b=2*rand(m,1)-1;
