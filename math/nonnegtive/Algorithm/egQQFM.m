@@ -7,6 +7,7 @@ b=[1;1;0.5;2];
 x=[-3;1]/4;
 r0=b-A*x;
 r0A=r0;
+r0B=r0;
 r0A(r0A>0)=1;
 r0A(r0A<0)=0;
 % violate the constrain

@@ -7,6 +7,9 @@ Q=[q1,q2];
 Q1=qI1*qI1'*1131;
 Q2=qI2*qI2'*39;
 rT=diag([39*1131,39*1131,39*1131,39*1131])-(Q1+Q2);
-rts=sym(rT)
+rts=sym(rT/(39*1131))
 [v,j]=jordan(rts);
 v*j*inv(v)
+r=[3/2;1/2;-1/4;-7/4];
+rs=sym(r);
+inv(v)*rs
