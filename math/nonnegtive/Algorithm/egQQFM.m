@@ -1,9 +1,7 @@
 A=[1,1;-1,-1;-1,0;-6,-3];
 b=[1;1;0.5;2];
 % QR decomposition in the exact arithmetic
-q1=[1/sqrt(39);-1/sqrt(39);1/sqrt(39);6/sqrt(39)];
-q2=[19;-19;-20;-3]/sqrt(1131);
-Q=[q1,q2];
+
 
 % x=[-3;-1];
 x=[-3;1]/4;
