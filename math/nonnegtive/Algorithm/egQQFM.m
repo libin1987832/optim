@@ -1,7 +1,11 @@
 A=[1,1;-1,-1;-1,0;-6,-3];
 b=[1;1;0.5;2];
 % QR decomposition in the exact arithmetic
-
+qI1=[1;-1;1;6];
+q1=qI1/sqrt(39);
+qI2=[19;-19;-20;-3];
+q2=qI2/sqrt(1131);
+Q=[q1,q2];
 
 % x=[-3;-1];
 x=[-3;1]/4;
@@ -17,14 +21,14 @@ IQ=diag([1,1,1,1])-Q*Q'*NK;
 
 % matlab in inexact arithmetic
 [q,r]=qr(A);
-for i=1:10
+% for i=1:10
 [xk,r0,rk,fkFM,fm,fr]=FM(x,q,r,A,b);
-x=xk;
-end
+% x=xk;
+% end
 % % r_{k}
-% r0IQ=b-A*x;
+r0IQ=b-A*x;
 % % r_{k+1}
-% rkIQ=IQ*r0IQ;
+rkIQ=IQ*r0IQ;
 % rkIQS=rkIQ;
 % rkIQS(rkIQ>0)=1;
 % rkIQS(rkIQ<0)=0;
