@@ -1,7 +1,7 @@
 % test jordan
-qI1=[1;-1;1;6];
+qI1=[1;-1;-1;-6];
 q1=qI1/sqrt(39);
-qI2=[19;-19;-20;-3];
+qI2=[19;-19;20;-3];
 q2=qI2/sqrt(1131);
 Q=[q1,q2];
 Q1=qI1*qI1'*1131;
@@ -13,4 +13,4 @@ rts=sym(rT/(39*1131))
 rtsj=v*j*inv(v)
 r=[3/2;1/2;-1/4;-7/4];
 rs=sym(r);
-rst=v*j*inv(v)*rs
+rst=v*j^10*inv(v)*rs
