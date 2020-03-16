@@ -26,7 +26,6 @@ x0=[-29/50;12/25];
 for i = 1:2
 [xk,r0,rk,fk,fm,fr]=FM(x0,Q,R,A,b);
 x0=xk
-x0;r0;
 rk
 end
 % x0 = [-11/20;11/50];
