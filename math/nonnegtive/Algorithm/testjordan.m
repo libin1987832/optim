@@ -11,6 +11,7 @@ rts=sym(rT/(39*1131))
 % rtsn=diag([1,1,0,0])
 [v,j]=jordan(rts);
 rtsj=v*j*inv(v)
+v*diag([0,1,1,1])*inv(v)
 r=[3/2;1/2;-1/4;-7/4];
 rs=sym(r);
 rst=v*j^10*inv(v)*rs
