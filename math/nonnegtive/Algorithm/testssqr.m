@@ -11,7 +11,7 @@ x0=[0;0];
 addpath('FM');
 [m,n]=size(A);
 [xk1,fk1,xkArr1]=hybrid1(x0,A,b);
-[xk2,fk2,xkArr2]=hybrid2(x0,A,b);
+[xk2,fk2,xkArr2]=hybrid5(x0,A,b);
 
 % for ii=1:size(xkArr1,1)
 %     xkA1=xkArr1(ii,:);
