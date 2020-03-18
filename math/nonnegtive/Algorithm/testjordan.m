@@ -1,7 +1,7 @@
-% test jordan
+% test jordan A=[1,1;-1,-1;-1,0;-6,-3] b=[1;1;1/2;2];
 qI1=[1;-1;-1;-6];
 q1=qI1/sqrt(39);
-qI2=[19;-19;20;-3];
+qI2=[19;-19;20;3];
 q2=qI2/sqrt(1131);
 Q=[q1,q2];
 Q1=qI1*qI1'*1131;
@@ -14,4 +14,14 @@ rtsj=v*j*inv(v)
 v*diag([0,1,1,1])*inv(v)
 r=[3/2;1/2;-1/4;-7/4];
 rs=sym(r);
-rst=v*j^10*inv(v)*rs
+rst=v*j*inv(v)*rs
+v*diag([0,1,1,1])*inv(v)
+v*diag([0,1,1,1])*inv(v)*rs
+v*diag([0,1,1,1])*inv(v)*rst
+nn1=null(v*diag([0,1,1,1])*inv(v));
+nn1=nn1/norm(nn1);
+nn2=(rs-rst);
+nn2=nn2/norm(nn2);
+vpa(nn1)
+vpa(nn2)
+vpa(rst);
