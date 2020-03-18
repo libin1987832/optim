@@ -1,5 +1,5 @@
-% Dax hybrid algorithm and r+
-function [xk,fk,xkArr,countFM,countNW,Q]=hybrid4(x0,A,b)
+% Dax hybrid algorithm and our strategies
+function [xk,fk,xkArr,countFM,countNW,Q]=hybrid5(x0,A,b)
 %compute hybrid uIter
 [m,n]=size(A);
 uIter=max(33,(m+n)/4);
@@ -11,11 +11,8 @@ r(r<0)=0;
 Ar=norm(A'*r);
 rn=norm(r);
 am=max(max(A));
-am2=max(r);
 ee=1e-15;% computer floating point arithmetic
 delt=am*m*n*10*ee;
-delt2=delt*100;
-delt3=ee*max(b);
 uIndex=0;
 statFM=0;
 statSS=0;
@@ -26,39 +23,24 @@ countNW=0;
 
 I=diag(ones(1,m));
 %||A'(r)+||<=delt||(r)+|| ||(r)+||<=de
-% while Ar>delt*rn && rn>delt
-%     r(r>0)=1;
+while Ar>delt*rn && rn>delt
+    r(r>0)=1;
 %     rk=diag(r);
 %     abs(norm(I-Q*Q') -1)
 %     abs(norm(I-Q*Q'*rk) -1)
-while cont==1
+    if 1
         countFM=countFM+1;
         %FM algorithm
         statFM=statFM+1;
         [xk,r0,rk,fk,fm,fr]=FM(x0,Q,R,A,b);
-        u=xk-x0;
-        un=norm(u);
-        cont=1;
-    if norm(A(xk-x0))<delt2*un
-        rb=b-xk;
-        rbI=rb;
-        % 不满足约束
-        rbI(rb<=delt3)=0;
-        rbI(rb>delt3)=1;
+        xkArr=[xkArr;[xk',fk,0]];
+        norm(r0)/norm(rk);
+    else
         countNW=countNW+1;
         uIndex=0;
         %newtonalgorithm
         statSS=statSS+1;
         [xk,rk,fk,f0,lambe]=ssqr(x0,A,b);
-        rb2=b-xk;
-        rbI2=rb2;
-        % 不满足约束
-        rbI2(rb2<=delt3)=0;
-        rbI2(rb2>delt3)=1;
-        srb=sum(rbI-rb2);
-        if srb == 0
-            cont=0;
-        end
         xkArr=[xkArr;[xk',fk,1]];
     end
     r=rk;
