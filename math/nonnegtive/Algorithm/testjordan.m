@@ -12,7 +12,12 @@ rts=sym(rT/(39*1131))
 [v,j]=jordan(rts);
 rtsj=v*j*inv(v)
 v*diag([0,1,1,1])*inv(v)
-r=[3/2;1/2;-1/4;-7/4];
+x0=[-3/4;1/4+1/4];
+% x0=[-3/4;1/4];
+A=[1,1;-1,-1;-1,0;-6,-3];
+b=[1;1;1/2;2];
+r=b-A*x0;
+% r=[3/2;1/2;-1/4;-7/4];
 rs=sym(r);
 rst=v*j*inv(v)*rs
 v*diag([0,1,1,1])*inv(v)
@@ -22,6 +27,6 @@ nn1=null(v*diag([0,1,1,1])*inv(v));
 nn1=nn1/norm(nn1);
 nn2=(rs-rst);
 nn2=nn2/norm(nn2);
-vpa(nn1)
-vpa(nn2)
+% vpa(nn1)
+% vpa(nn2)
 vpa(rst);
