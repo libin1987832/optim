@@ -52,18 +52,15 @@ while Ar>delt*rn && rn>delt
                 beginNW=countFM;
             end
             [xk2,fk2,y]=ssqr2(xk,A,b);
-            xk=xk2;
-             rk=b-A*xk2;
-             fk=fk2;
-             xkArr=[xkArr;[xk',fk2,1]];
+            xkArr=[xkArr;[xk2',fk2,1]];
 %             xkArr=[xkArr;[xk',fk1,1]];
-%             if abs(fk2 - fk1) < 1e-7 || fk2 < fk1 
-%                 xk=xk2;
-%                 rk2=b-A*xk2;
-%                 rk2(rk2<0)=0;
-%                 rk=rk2;
-%                 break;
-%             end
+            if abs(fk2 - fk1) < 1e-7 || fk2 < fk1 
+                xk=xk2;
+                rk2=b-A*xk2;
+                rk2(rk2<0)=0;
+                rk=rk2;
+                break;
+            end
         end
     end
     Ar=norm(A'*rk);
