@@ -9,7 +9,7 @@ I=find(r>=tol);
 AI=A(I,:);
 AII=AI'*AI;
 bII=AI'*(r(I));
-[U,S,V]=svd(AII);
+[U,S,V]=svds(AII);
 %找大于0的所有值 判断正定
 rnkd=length(find(diag(S) >= 1e-10));
 
