@@ -3,10 +3,10 @@
 m=300;
 ratio=0.6;
 n=ceil(ratio*m);
- A=2*rand(m,n)-1;
- b=2*rand(m,1)-1;
-% load('ddf.mat')
-save('ddf.mat','A','b')
+%  A=2*rand(m,n)-1;
+%  b=2*rand(m,1)-1;
+load('ddf.mat')
+% save('ddf.mat','A','b')
 x0=zeros(n,1);
 
 [xk1,fk1,xkArr1,countF1,countN1]=hybrid1(x0,A,b);

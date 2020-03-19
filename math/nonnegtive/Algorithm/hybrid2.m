@@ -40,7 +40,9 @@ while Ar>delt*rn && rn>delt
         face(ii)=isequal(IkN,Ik);
         x0=xk;
     end
-    
+  
+    ArN=norm(A'*rk);
+    rnN=norm(rk);
     if all(face(2:end)) && ~isempty(IkN)
         %     if isequal(I,Ik1)
         %newtonalgorithm

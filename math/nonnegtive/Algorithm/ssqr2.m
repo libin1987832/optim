@@ -6,6 +6,7 @@ tol=0;
 r=b-A*x0;
 r0=r;
 r0(r0<0)=0;
+Ar0=norm(A'*r0);
 I=find(r>=tol);
 %提取子矩阵判断是否正定
 AI=A(I,:);
@@ -52,6 +53,7 @@ if ~y && isposdef
     rk=b-A*xk;
     rkk=rk;
     rkk(rkk<0)=0;
+    Arkk=norm(A'*rkk);
     I1=find(rk>=tol);
     % I 中的元素是否在 I1中 如果在其中就是true 如果没有就是false 如果全是true则为1 否则全为0
     y=all(ismember(I,I1));
