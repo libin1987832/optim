@@ -41,30 +41,32 @@ while Ar>delt*rn && rn>delt
         x0=xk;
     end
   
-    ArN=norm(A'*rk);
-    rnN=norm(rk);
-    if all(face(2:end)) && ~isempty(IkN)
+     ArN=norm(A'*rk);
+     rnN=norm(rk);
+    if all(face(2:end)) && ~isempty(IkN) && ArN>delt*rn && rnN>delt
         %     if isequal(I,Ik1)
         %newtonalgorithm
-        y=0;
-        while ~y
-            statSS=statSS+1;
+%         y=0;
+%         while ~y
+%             statSS=statSS+1;
             countNW=countNW+1;
-            if beginNW <1
-                beginNW=countFM;
-            end
-            [xk2,fk2,y]=ssqr2(xk,A,b);
-            xkArr=[xkArr;[xk2',fk2,1]];
+%             if beginNW <1
+%                 beginNW=countFM;
+%             end
+%             [xk2,fk2,y]=ssqr2(xk,A,b);
+              [xk,rk,fk2,f0,lambe]=ssqr(xk,A,b);
+            xkArr=[xkArr;[xk',fk2,1]];
 %             xkArr=[xkArr;[xk',fk1,1]];
-            if abs(fk2 - fk1) < 1e-7 || fk2 < fk1 
-                xk=xk2;
-                rk2=b-A*xk2;
-                rk2(rk2<0)=0;
-                rk=rk2;
-                break;
-            end
+%             if abs(fk2 - fk1) < 1e-7 || fk2 < fk1 
+%                 xk=xk2;
+%                 rk2=b-A*xk2;
+%                 rk2(rk2<0)=0;
+%                 rk=rk2;
+%                 ArF=norm(A'*rk);
+%              %   break;
+%             end
         end
-    end
+%     end
     Ar=norm(A'*rk);
     rn=norm(rk);
     r=rk;

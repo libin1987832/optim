@@ -1,12 +1,13 @@
 % paper rand [1,1] example
 %<<<<<<< HEAD
 m=300;
-ratio=0.6;
+ratio=0.8;
 n=ceil(ratio*m);
-%  A=2*rand(m,n)-1;
-%  b=2*rand(m,1)-1;
-load('ddf.mat')
-% save('ddf.mat','A','b')
+ A=2*rand(m,n)-1;
+ b=2*rand(m,1)-1;
+save('ddf.mat','A','b')
+% load('ddf.mat')
+
 x0=zeros(n,1);
 
 [xk1,fk1,xkArr1,countF1,countN1]=hybrid1(x0,A,b);
