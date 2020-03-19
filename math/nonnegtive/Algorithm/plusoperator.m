@@ -1,5 +1,4 @@
 function a=plusoperator(A,b,h,x)
-A=-1*A;
 a=1;
 [m,n]=size(A);
 xc=A*h;
@@ -9,10 +8,10 @@ compareAr=unique(sort([ar;0;1]));
 M=zeros(m,1);
 for i=1:n+2
     if compareAr(i)<1.0000001 && compareAr(i)>0.0000001
-        tar=logical(ar<compareAr(i));
-        M(logical(xc(tar)>-0.0001))=1;
-        tar=logical(ar>compareAr(i));
-        M(logical(xc(tar)<0))=1;
+        tar=logical(ar<=compareAr(i-1))&logical(xc<0);
+        M(tar)=1;
+        tar=logical(ar>=compareAr(i))&logical(xc>0);
+        M(tar)=1;
         M=diag(M);
         at=(xc'*M*bc)/(xc'*M*xc);
         if at<compareAr(i) && at>compareAr(i-1)
