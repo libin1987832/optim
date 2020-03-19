@@ -1,5 +1,10 @@
-function c=bisect(A,B,p,x,a,b)
+function c=bisect(A,B,p,x)
 TOL = 1e-10;
+a=0;
+b=1;
+while f(A,B,p,x,b)>0
+    b=b/2;
+end
 while (b-a)/2>TOL
     c=(a+b)/2;
     if f(A,B,p,x,c) == 0
