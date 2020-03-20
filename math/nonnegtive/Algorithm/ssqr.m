@@ -10,7 +10,7 @@ AI=A(I,:);
 
 AII=AI'*AI;
 bII=AI'*(r(I));
-[U,S,V]=svd(AII);
+[U,S,V]=svds(AII);
 
 rnkd=length(find(diag(S) >= 1e-10));
 Udd=U(:,1:rnkd);

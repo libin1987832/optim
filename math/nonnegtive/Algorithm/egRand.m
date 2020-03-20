@@ -1,7 +1,8 @@
 % paper rand [1,1] example
 %<<<<<<< HEAD
+addpath('FM')
 m=300;
-ratio=0.8;
+ratio=0.1;
 n=ceil(ratio*m);
  A=2*rand(m,n)-1;
  b=2*rand(m,1)-1;
