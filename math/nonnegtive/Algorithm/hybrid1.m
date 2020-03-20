@@ -21,6 +21,9 @@ xkArr=[];
 
 countFM=0;
 countNW=0;
+if Ar<delt*rn || rn<delt
+    error('input x is satisfied all constrain!(Ar<delt*rn|| rn<delt)') %ceases execution
+end
 %||A'(r)+||<=delt||(r)+|| ||(r)+||<=de
 while Ar>delt*rn && rn>delt
     if uIndex<uIter

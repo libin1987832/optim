@@ -24,7 +24,7 @@ while (b-a)/2>TOL
     end
     va=f(r,p,a);
     vb=f(r,p,c);
-    if vb*va<0
+    if sign(va)*sign(vb)<0
      b=c;
     else
         a=c;

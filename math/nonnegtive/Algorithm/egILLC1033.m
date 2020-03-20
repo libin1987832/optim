@@ -1,8 +1,8 @@
 addpath('FM');
 addpath('util');
-[A,rows,cols,entries,rep,field,symm]=mmread('./util/well1033.mtx');
+[A,rows,cols,entries,rep,field,symm]=mmread('./util/illc1033.mtx');
 b=ones(rows,1);
-x0=zeros(cols,1)+123;
+x0=zeros(cols,1);
 
 % [m,n]=size(A);
 [xk1,fk1,xkArr1]=hybrid1(x0,A,b);
