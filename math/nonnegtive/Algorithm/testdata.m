@@ -22,7 +22,8 @@
 A=[1,1;-1,-1;-1,0;-6,-3];
 b=[1;1;0.5;2];
 % x0=[-57/100;47/100];
-x0=[-3/4;1/4];
+%  x0=[-3/4;-1/4];
+x0=[-3/4;-100];
 [Q,R]=qr(A);
 [xk,r0,rk,fk,fm,fr]=FM(x0,Q,R,A,b);
 r=b-A*xk;
@@ -31,7 +32,8 @@ Nk(Nk>0)=1;
 Nk(Nk<0)=0;
 for i = 1:20
 %     [xk,r0,rk,fk,fm,fr]=FM(x0,Q,R,A,b);
-    [xk,r0,rk,fk,fr,fu,fz,fd]=FMTD(x0,Q,R,A,b);
+    [xk,r0,rk,z,fk,fr,fu,fz,fd]=FMTD(x0,Q,R,A,b);
+    fu/fk
     x0=xk;
     r=b-A*xk;
     Nk2=r;
