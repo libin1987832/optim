@@ -23,27 +23,60 @@ A=[1,1;-1,-1;-1,0;-6,-3];
 b=[1;1;0.5;2];
 % x0=[-57/100;47/100];
 %  x0=[-3/4;-1/4];
-x0=[-3/4;-100];
+% x0=[-3/4;-100];
+% [Q,R]=qr(A);
+% [xk,r0,rk,fk,fm,fr]=FM(x0,Q,R,A,b);
+% r=b-A*xk;
+% Nk=r;
+% Nk(Nk>0)=1;
+% Nk(Nk<0)=0;
+% tt.mat have feasible solution but the change very ...
+addpath('FM')
+m=1000;
+ratio=0.1;
+n=ceil(ratio*m);
+A=2*rand(m,n)-1;
+b=2*rand(m,1)-1;
+save('tt1.mat','A','b','m','n')
+% load('tt1.mat')
 [Q,R]=qr(A);
-[xk,r0,rk,fk,fm,fr]=FM(x0,Q,R,A,b);
-r=b-A*xk;
+x0=zeros(n,1)    ;
+r=b-A*x0;
 Nk=r;
 Nk(Nk>0)=1;
 Nk(Nk<0)=0;
-for i = 1:20
+out=[];
+fkO=[];
+for i = 1:100
 %     [xk,r0,rk,fk,fm,fr]=FM(x0,Q,R,A,b);
     [xk,r0,rk,z,fk,fr,fu,fz,fd]=FMTD(x0,Q,R,A,b);
-    fu/fk
-    x0=xk;
+    
+%     fu/fk
+r0=b-A*x0;
+Nk=r0;
+Nk(Nk>0)=1;
+Nk(Nk<0)=0;
+ 
+
+
+
     r=b-A*xk;
     Nk2=r;
     Nk2(Nk2>0)=1;
     Nk2(Nk2<0)=0;
-    if sum(Nk2==Nk) < 4
-        disp(['fd']);
+    fkO=[fkO,[i;fk;sum(Nk2)]];
+    
+    nkk=logical(Nk2==Nk);
+    if sum(nkk) < m
+        
+        out=[out,[i;fk]];
+%         break;
     end
+       x0=xk;
 end
-r
+out
+fkO;
+% r
 % diag(ones(4,1))-Q(:,[1,2])*Q(:,[1,2])'*diag([1,1,0,0])
 % for i = 1:20
 %     [xk,r0,rk,fk,fm,fr]=FM(x0,Q,R,A,b);
