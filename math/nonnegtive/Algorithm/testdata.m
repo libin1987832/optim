@@ -33,7 +33,7 @@
 % Nk(Nk<0)=0;
 % tt.mat have feasible solution but the change very ...
 addpath('FM')
-m=1000;
+m=100;
 ratio=0.1;
 n=ceil(ratio*m);
 A=2*rand(m,n)-1;
@@ -59,7 +59,18 @@ Nk(Nk>0)=1;
 Nk(Nk<0)=0;
 QB=Q(:,1:n);
 B=diag(ones(m,1))-QB*QB'*diag(Nk);
-    rb=B*r0;
+[lambda,s]=eig(B);
+s=diag(s);
+less1=logical(s>1+eps*100);
+less2=logical(s<-eps*100);
+if sum(less1)>0 
+    error("lambda grt 1");
+end
+if sum(less2)>0
+    error("lambda grt 0 ");
+end
+
+rb=B*r0;
     r=b-A*xk;
     Nk2=r;
     Nk2(Nk2>0)=1;
@@ -69,7 +80,7 @@ B=diag(ones(m,1))-QB*QB'*diag(Nk);
     nkk=logical(Nk2==Nk);
     if sum(nkk) < m
         
-        out=[out,[i;fk]];
+            out=[out,[i;fk]];
 %         break;
     end
        x0=xk;
