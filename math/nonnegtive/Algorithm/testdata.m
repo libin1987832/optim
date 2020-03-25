@@ -33,13 +33,13 @@
 % Nk(Nk<0)=0;
 % tt.mat have feasible solution but the change very ...
 addpath('FM')
-m=100;
-ratio=0.1;
+m=10;
+ratio=0.3;
 n=ceil(ratio*m);
 A=2*rand(m,n)-1;
 b=2*rand(m,1)-1;
-save('tt1.mat','A','b','m','n')
-% load('tt1.mat')
+% save('tt1.mat','A','b','m','n')
+load('tt1.mat')
 [Q,R]=qr(A);
 x0=zeros(n,1)    ;
 r=b-A*x0;
