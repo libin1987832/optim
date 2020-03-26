@@ -15,8 +15,6 @@ am=max(max(A));
 ee=1e-15;% computer floating point arithmetic
 delt=am*m*n*10*ee;
 uIndex=0;
-statFM=0;
-statSS=0;
 xkArr=[];
 
 countFM=0;
@@ -30,7 +28,6 @@ while Ar>delt*rn && rn>delt
     if uIndex<uIter
         countFM=countFM+1;
         %FM algorithm
-        statFM=statFM+1;
         [xk,r0,rk,fk,fm,fr]=FM(x0,Q,R,A,b);
         xkArr=[xkArr;[xk',fk,0]];
     else
@@ -39,8 +36,6 @@ while Ar>delt*rn && rn>delt
             beginNW=countFM;
         end
         uIndex=0;
-        %newtonalgorithm
-        statSS=statSS+1;
         [xk,rk,fk,f0,lambe]=ssqr(x0,A,b);
         xkArr=[xkArr;[xk',fk,1]];
     end
@@ -51,9 +46,9 @@ while Ar>delt*rn && rn>delt
 end 
 tf=etime(clock,t);
 vk=sum(sign(rk));
-disp(['%hybrid1 m:',num2str(m),' n:',num2str(n),' AT(b-A*x)+:',num2str(Ar),' fk:',num2str(fk),' ssqr:',num2str(statSS),' FM:',num2str(statFM),' cpu:',num2str(tf),' uIter:',num2str(uIter)]);
-disp(['$',num2str(m),'\times ',num2str(n),'$&FM&(',num2str(statFM),',',num2str(statSS),')&',num2str(tf),'&',num2str(fk),'&',num2str(Ar)]);
-disp(['well1033&Daxs&',num2str(vk),'&',num2str(rn),'&',num2str(Ar),'&(',num2str(statFM),',',num2str(statSS),')&',num2str(beginNW)]);
+disp(['%hybrid1 m:',num2str(m),' n:',num2str(n),' AT(b-A*x)+:',num2str(Ar),' fk:',num2str(fk),' ssqr:',num2str(countNW),' FM:',num2str(countFM),' cpu:',num2str(tf),' beginSS:',num2str(beginNW)]);
+disp(['$',num2str(m),'\times ',num2str(n),'$&FM&(',num2str(countFM),',',num2str(countNW),')&',num2str(tf),'&',num2str(fk),'&',num2str(Ar)]);
+disp(['well1033&Daxs&',num2str(vk),'&',num2str(rn),'&',num2str(Ar),'&(',num2str(countFM),',',num2str(countNW),')&',num2str(beginNW)]);
     
 
     

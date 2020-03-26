@@ -39,31 +39,43 @@ n=ceil(ratio*m);
 A=2*rand(m,n)-1;
 b=2*rand(m,1)-1;
 % save('tt1.mat','A','b','m','n')
-load('tt1.mat')
+% load('tt1.mat')
+ load('ddf.mat');
 [Q,R]=qr(A);
-x0=zeros(n,1)    ;
+x0=zeros(n,1);
 r=b-A*x0;
 Nk=r;
 Nk(Nk>0)=1;
 Nk(Nk<0)=0;
 out=[];
 fkO=[];
+QB=Q(:,1:n);
+x10=x0;
 for i = 1:100
 %     [xk,r0,rk,fk,fm,fr]=FM(x0,Q,R,A,b);
-    [xk,r0,rk,z,fk,fr,fu,fz,fd]=FMTD(x0,Q,R,A,b);
-    
+[xk,r0,rk,z,fk,fr,fu,fz,fd]=FMTD(x0,Q,R,A,b);
+
+
+
+if mod(i,10)==0
 %     fu/fk
-r0=b-A*x0;
-Nk=r0;
+r10=b-A*x10;
+Nk=r10;
 Nk(Nk>0)=1;
 Nk(Nk<0)=0;
-QB=Q(:,1:n);
-if i==8
+ % groundtrue
+rk=b-A*xk;
+sum(sign(r10.*rb))
+% if exposed face there is
 B=diag(ones(m,1))-QB*QB'*diag(Nk);
-B33=B*B*B;
-B3=diag(ones(m,1))-3*QB*QB'*diag(Nk);
+B33=B^10;
 r33=B33*r0;
+sum(sign(r33.*r10))
+% the approxim
+B3=diag(ones(m,1))-10*QB*QB'*diag(Nk);
 r3=B3*r0;
+sum(sign(r3.*r10))
+    x10=xk;
 end
 % [lambda,s]=eig(B);
 % s=diag(s);
@@ -76,7 +88,7 @@ end
 %     error("lambda grt 0 ");
 % end
 
-rb=B*r0;
+
     r=b-A*xk;
     Nk2=r;
     Nk2(Nk2>0)=1;
@@ -90,8 +102,9 @@ rb=B*r0;
 %         break;
     end
        x0=xk;
+            
 end
-out
+out;
 fkO;
 % r
 % diag(ones(4,1))-Q(:,[1,2])*Q(:,[1,2])'*diag([1,1,0,0])
