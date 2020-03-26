@@ -58,17 +58,23 @@ Nk=r0;
 Nk(Nk>0)=1;
 Nk(Nk<0)=0;
 QB=Q(:,1:n);
+if i==8
 B=diag(ones(m,1))-QB*QB'*diag(Nk);
-[lambda,s]=eig(B);
-s=diag(s);
-less1=logical(s>1+eps*100);
-less2=logical(s<-eps*100);
-if sum(less1)>0 
-    error("lambda grt 1");
+B33=B*B*B;
+B3=diag(ones(m,1))-3*QB*QB'*diag(Nk);
+r33=B33*r0;
+r3=B3*r0;
 end
-if sum(less2)>0
-    error("lambda grt 0 ");
-end
+% [lambda,s]=eig(B);
+% s=diag(s);
+% less1=logical(s>1+eps*100);
+% less2=logical(s<-eps*100);
+% if sum(less1)>0 
+%     error("lambda grt 1");
+% end
+% if sum(less2)>0
+%     error("lambda grt 0 ");
+% end
 
 rb=B*r0;
     r=b-A*xk;

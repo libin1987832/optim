@@ -1,11 +1,12 @@
 % Dax hybrid algorithm and r+
-function [xk,fk,xkArr,countFM,countNW,Q]=hybrid5(x0,A,b)
+function [xk,fk,xkArr,countFM,countNW,Q]=hybrid6(x0,A,b)
 t=clock;
 %compute hybrid uIter
 [m,n]=size(A);
 uIter=max(33,(m+n)/4);
 %FM need a qr decompose
 [Q,R]=qr(A);
+QQ=Q*Q';
 r=b-A*x0;
 r(r<0)=0;
 %condition for terminate
@@ -28,14 +29,6 @@ countNW=0;
 I=diag(ones(1,m));
 cont=1;
 while cont==1
-    if uIndex<uIter
-        countFM=countFM+1;
-        %FM algorithm
-        statFM=statFM+1;
-        [xk,r0,rk,fk,fm,fr]=FM(x0,Q,R,A,b);
-        xkArr=[xkArr;[xk',fk,0]];
-    else 
-        
     countFM=countFM+1;
     %FM algorithm
     statFM=statFM+1;
