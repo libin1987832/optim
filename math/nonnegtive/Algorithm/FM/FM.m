@@ -9,15 +9,15 @@ r0=r;
 fr=0.5*r'*r;
 % compute min increase
 uk=R\(Q'*r);
-mm=A*uk-r;
-fm=0.5*mm'*mm;
+% mm=A*uk-r;
+% fm=0.5*mm'*mm;
 
 xk=x0+uk;
 fk=b-A*xk;
+fm=fk;
 fk(fk<0)=0;
 rk=fk;
 fk=0.5*fk'*fk;
-
 % z0=A*x0-b;
 % z0(z0<0)=0;
 % u0=A*x0-z0
