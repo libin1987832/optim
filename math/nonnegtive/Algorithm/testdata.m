@@ -53,6 +53,13 @@ fkO=[];
 active=[];
 QB=Q(:,1:n);
 x10=x0;
+n=2;
+B=diag(ones(m,1))-QB*QB'*diag(Nk);
+        B33=B^n;
+       B3=diag(ones(m,1))-n*QB*QB'*diag(Nk);
+       Bd=B33-B3;
+        norm(Bd*r)
+       return;
 for i = 1:100
     %[xk,r0,rk,fk,fm,fr]=FM(x0,Q,R,A,b);
     [xk,r0,rk,z,fk,fr,fu,fz,fd]=FMTD(x0,Q,R,A,b);
