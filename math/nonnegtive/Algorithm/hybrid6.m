@@ -7,7 +7,7 @@ uIter=max(33,(m+n)/4);
 nIter=10;
 %FM need a qr decompose
 [Q,R]=qr(A);
-Qn=Q(:,n);
+Qn=Q(:,1:n);
 QQ=Qn*Qn';
 r=b-A*x0;
 r(r<0)=0;
@@ -34,7 +34,8 @@ while Ar>delt*rn && rn>delt
         %FM algorithm
         [xk,r0,rk,fk,fm,fr]=FM(x0,Q,R,A,b);
         xkArr=[xkArr;[xk',fk,0]];
-    else
+    end
+    if mod(uIndex,10)==0 && uIndex >0
         % check if exposed face by r=B^n*r0
         uIndex=0;
         rk=b-A*xk;
@@ -45,8 +46,9 @@ while Ar>delt*rn && rn>delt
         rkn=Bn*rk;
         % by corresponding compontent great zero
         signkn=sign(rkn.*rk);
+        ssign=sum(signkn);
         % if all great zeros mean same sign
-        if sum(signkn)==m
+        if ssign==m
             %newtonalgorithm
             countNW=countNW+1;
             % record begin newtron type iteratror

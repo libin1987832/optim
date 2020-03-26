@@ -52,30 +52,31 @@ fkO=[];
 QB=Q(:,1:n);
 x10=x0;
 for i = 1:100
-%     [xk,r0,rk,fk,fm,fr]=FM(x0,Q,R,A,b);
+%[xk,r0,rk,fk,fm,fr]=FM(x0,Q,R,A,b);
 [xk,r0,rk,z,fk,fr,fu,fz,fd]=FMTD(x0,Q,R,A,b);
 
-
-
 if mod(i,10)==0
-%     fu/fk
+% groundtrue
 r10=b-A*x10;
+% fu/fk
+rk=b-A*xk;
 Nk=r10;
 Nk(Nk>0)=1;
 Nk(Nk<0)=0;
- % groundtrue
-rk=b-A*xk;
-sum(sign(r10.*rb))
+groundtrue1=sum(sign(r10.*rk));
+
 % if exposed face there is
 B=diag(ones(m,1))-QB*QB'*diag(Nk);
 B33=B^10;
-r33=B33*r0;
-sum(sign(r33.*r10))
+r33=B33*r10;
+groundtrue2=sum(sign(r33.*r10));
+
 % the approxim
 B3=diag(ones(m,1))-10*QB*QB'*diag(Nk);
-r3=B3*r0;
-sum(sign(r3.*r10))
-    x10=xk;
+r3=B3*r10;
+groundtrue3=sum(sign(r3.*r10));
+disp(['i:',num2str(i),'   g1:',num2str(groundtrue1),'   r1:',num2str(groundtrue2),'  a:',num2str(groundtrue3)])
+x10=xk;
 end
 % [lambda,s]=eig(B);
 % s=diag(s);
