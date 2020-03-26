@@ -1,18 +1,19 @@
 % paper rand [1,1] example
 %<<<<<<< HEAD
 addpath('FM')
-m=100;
+m=1000;
 ratio=0.3;
 n=ceil(ratio*m);
  A=2*rand(m,n)-1;
  b=2*rand(m,1)-1;
-% save('ddf.mat','A','b','m','n')
+save('ddf1.mat','A','b','m','n')
 %  load('tt1.mat')
-load('ddf.mat')
+% load('ddf.mat')
 x0=zeros(n,1);
 
-[xk1,fk1,xkArr1,countF1,countN1]=hybrid1(x0,A,b);
-[xk2,fk2,xkArr2,countF2,countN2]=hybrid6(x0,A,b);
+[xk1,fk1,xkArr1,countF1,countN1]=hybrid6(x0,A,b);
+[xk1,fk1,xkArr1,countF1,countN1]=hybrid2(x0,A,b);
+[xk2,fk2,xkArr2,countF2,countN2]=hybrid1(x0,A,b);
 % [xkArr1m,xkArr1n]=size(xkArr1);
 % [xkArr2m,xkArr2n]=size(xkArr2);
 % beginRow=18;

@@ -1,6 +1,7 @@
 % Dax hybrid algorithm and r=B*r Nr==N
 function [xk,fk,xkArr,countFM,countNW,Q]=hybrid6(x0,A,b)
-load('baseActive.mat');
+% test baseActive.mat
+% load('baseActive.mat');
 t=clock;
 %compute hybrid uIter
 [m,n]=size(A);
@@ -36,18 +37,18 @@ while Ar>delt*rn && rn>delt
         %FM algorithm
         [xk,r0,rk,fk,fm,fr]=FM(x0,Q,R,A,b);
         xkArr=[xkArr;[xk',fk,0]];
-         % test
-         if countFM<50
-        rkt=b-A*xk;
-        Nk2=rkt;
-        Nk2(Nk2>0)=1;
-        Nk2(Nk2<0)=0;
-        reals=logical(Nk2'==active(countFM,:));
-        realsum=sum(reals);
-        if realsum~=m
-            realsum
-        end
-         end
+         % test dff.mat baseActive.mat
+%          if countFM<50
+%         rkt=b-A*xk;
+%         Nk2=rkt;
+%         Nk2(Nk2>0)=1;
+%         Nk2(Nk2<0)=0;
+%         reals=logical(Nk2'==active(countFM,:));
+%         realsum=sum(reals);
+%         if realsum~=m
+%             realsum
+%         end
+%          end
          % test 
     end
      % test 
@@ -62,15 +63,15 @@ while Ar>delt*rn && rn>delt
         Nk(Nk>0)=1;
         Nk(Nk<0)=0;
         Bn=I-nIter*QQ*diag(Nk);
-        rkn=Bn*rk;
+        rkn=Bn*rkk;
         % by corresponding compontent great zero
         signkn=sign(rkn.*rkk);
-        % test 
-        Nk2=rkk;
-        Nk2(Nk2>0)=1;
-        Nk2(Nk2<0)=0;
-        reals=logical(Nk2'==active(base,:));
-        realsum=sum(reals);
+        % test baseActive.mat
+%         Nk2=rkk;
+%         Nk2(Nk2>0)=1;
+%         Nk2(Nk2<0)=0;
+%         reals=logical(Nk2'==active(base,:));
+%         realsum=sum(reals);
         % test
         ssign=sum(signkn);
         % if all great zeros mean same sign
@@ -85,14 +86,16 @@ while Ar>delt*rn && rn>delt
             xkArr=[xkArr;[xk',fk,1]];
         end
     end
+   
+    % test 
+%     if Ar>FAr
+%         [Ar,FAr]
+%     end
     Ar=norm(A'*rk);
     rn=norm(rk);
-    % test 
-    if Ar>FAr
-        [Ar,FAr]
-    end
-    % test 
     x0=xk;
+    % test 
+
 end
 tf=etime(clock,t);
 disp(['hybrid6 m:',num2str(m),' n:',num2str(n),' AT(b-A*x)+:',num2str(Ar),' fk:',num2str(fk),' ssqr:',num2str(countNW),' FM:',num2str(countFM),' cpu:',num2str(tf),' beginSS:',num2str(beginNW)]);
