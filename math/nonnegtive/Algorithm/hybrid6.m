@@ -1,12 +1,12 @@
 % Dax hybrid algorithm and r=B*r Nr==N
-function [xk,fk,xkArr,countFM,countNW,Q]=hybrid6(x0,A,b)
+function [xk,fk,xkArr,countFM,countNW,Q]=hybrid6(x0,A,b,nIter)
 % test baseActive.mat
 % load('baseActive.mat');
 t=clock;
 %compute hybrid uIter
 [m,n]=size(A);
 uIter=max(33,(m+n)/4);
-nIter=10;
+% nIter=10;
 %FM need a qr decompose
 [Q,R]=qr(A);
 Qn=Q(:,1:n);
@@ -55,7 +55,7 @@ while Ar>delt*rn && rn>delt
     FAr=norm(A'*rk);
     Frn=norm(rk);
      % test 
-    if mod(uIndex,10)==0 && uIndex >0
+    if mod(uIndex,nIter)==0 && uIndex >0
         % check if exposed face by r=B^n*r0
         uIndex=0;
         rkk=b-A*xk;
@@ -75,7 +75,7 @@ while Ar>delt*rn && rn>delt
         % test
         ssign=sum(signkn);
         % if all great zeros mean same sign
-        if ssign==m
+        if ssign==m ||ssign>m*0.99
             %newtonalgorithm
             countNW=countNW+1;
             % record begin newtron type iteratror

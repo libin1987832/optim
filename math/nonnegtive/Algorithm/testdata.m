@@ -33,17 +33,25 @@
 % Nk(Nk<0)=0;
 % tt.mat have feasible solution but the change very ...
 % ddf.mat test result is good
-addpath('FM')
-m=10;
-ratio=0.3;
-n=ceil(ratio*m);
-A=2*rand(m,n)-1;
-b=2*rand(m,1)-1;
-% save('tt1.mat','A','b','m','n')
-% load('tt1.mat')
-load('ddf.mat');
-[Q,R]=qr(A);
+% addpath('FM')
+% m=10;
+% ratio=0.3;
+% n=ceil(ratio*m);
+% A=2*rand(m,n)-1;
+% b=2*rand(m,1)-1;
+addpath('FM');
+addpath('util');
+[A,rows,cols,entries,rep,field,symm]=mmread('./util/well1033.mtx');
+n=cols;
+m=rows;
 x0=zeros(n,1);
+b=ones(rows,1);
+x0=zeros(cols,1)+12441233;
+save('well1033.mat','A','b','m','n')
+% load('tt1.mat')
+% load('ddf.mat');
+[Q,R]=qr(A);
+% x0=zeros(n,1);
 r=b-A*x0;
 Nk=r;
 Nk(Nk>0)=1;
@@ -52,15 +60,15 @@ out=[];
 fkO=[];
 active=[];
 QB=Q(:,1:n);
-x10=x0;
-n=10;
-B=diag(ones(m,1))-QB*QB'*diag(Nk);
-        B33=B^n;
-       B3=diag(ones(m,1))-n*QB*QB'*diag(Nk);
-       Bd=B33-B3;
-        norm(Bd*r)
-       return;
-for i = 1:100
+% x10=x0;
+% n=10;
+% B=diag(ones(m,1))-QB*QB'*diag(Nk);
+%         B33=B^n;
+%        B3=diag(ones(m,1))-n*QB*QB'*diag(Nk);
+%        Bd=B33-B3;
+%         norm(Bd*r)
+%        return;
+for i = 1:500
     %[xk,r0,rk,fk,fm,fr]=FM(x0,Q,R,A,b);
     [xk,r0,rk,z,fk,fr,fu,fz,fd]=FMTD(x0,Q,R,A,b);
     
@@ -103,7 +111,7 @@ for i = 1:100
     Nk=rk;
     Nk(Nk>0)=1;
     Nk(Nk<0)=0;
-    groundtrue1=sum(sign(r10.*rk));
+%     groundtrue1=sum(sign(r10.*rk));
     r=b-A*xk;
     Nk2=r;
     Nk2(Nk2>0)=1;
@@ -124,7 +132,7 @@ active;
 out;
 fkO;
 base=out(1,end);
-save('baseActive.mat','active','base');
+save('baseActivewell.mat','active','base');
 for i=base:99
     ss=sum(active(base,:)-active(i,:));
     if ss~=0
