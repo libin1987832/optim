@@ -1,7 +1,8 @@
 % Dax hybrid algorithm and r=B*r Nr==N
-function [xk,fk,xkArr,countFM,countNW,Q]=hybrid6(x0,A,b,nIter)
+function [xk,fk,xkArr,countFM,countNW,Q]=hybrid6(x0,A,b,nIter,varargin)
 % test baseActive.mat
 % load('baseActive.mat');
+var=size(varargin,2);
 t=clock;
 %compute hybrid uIter
 [m,n]=size(A);
@@ -10,7 +11,9 @@ uIter=max(33,(m+n)/4);
 %FM need a qr decompose
 [Q,R]=qr(A);
 Qn=Q(:,1:n);
-QQ=nIter*Qn*Qn';
+if var==0 
+ QQ=nIter*Qn*Qn';
+end
 r=b-A*x0;
 r(r<0)=0;
 %condition for terminate
@@ -65,7 +68,11 @@ while Ar>delt*rn && rn>delt
 %         Bn=I-QQ*diag(Nk);
 %          Bn=getBn(QQ,rkk);
 %          rkn=Bn*rkk;
-           ssign=getBn(QQ,fm,I);
+            if var==0
+                ssign=getBn(QQ,fm,I);
+            else
+                ssign=getBn2(nIter,Qn,fm,I);
+            end
         % by corresponding compontent great zero
 %        signkn=sign(rkn.*rkk);
         % test baseActive.mat
