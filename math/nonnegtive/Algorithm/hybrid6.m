@@ -13,6 +13,8 @@ uIter=max(33,(m+n)/4);
 Qn=Q(:,1:n);
 if var==0 
  QQ=nIter*Qn*Qn';
+elseif var==2
+    tmpq=3*ones(m,m);
 end
 r=b-A*x0;
 r(r<0)=0;
@@ -70,8 +72,10 @@ while Ar>delt*rn && rn>delt
 %          rkn=Bn*rkk;
             if var==0
                 ssign=getBn(QQ,fm,I);
-            else
+            elseif var==1
                 ssign=getBn2(nIter,Qn,fm,I);
+            else
+                [ssign,tmpq]=getBn2(nIter,Qn,fm,I,tmpq);    
             end
         % by corresponding compontent great zero
 %        signkn=sign(rkn.*rkk);
