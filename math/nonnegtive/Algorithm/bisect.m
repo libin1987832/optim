@@ -1,5 +1,7 @@
+% bisect method for solving the lambed of the  A'(b - a*Ax)=0 [this is the derive for min (b-aAx)+]
 function c=bisect(r,p)
 TOL = 1e-5;
+% in the interval [0,1] 
 a=0;
 b=1;
 r(r<0)=0;
@@ -7,6 +9,7 @@ f0=p'*r;
 r1=r-p;
 r1(r1<0)=0;
 f1=p'*r1;
+% if the 1 is the answer 
 if abs(f1)<1e-10 || f1>0
     c=1;
     return;
@@ -16,6 +19,7 @@ end
 %     c=b;
 %     return;
 % end
+% bisect for A(b-aAx)=0 ,f is b-a*Ax
 while (b-a)/2>TOL
     c=(a+b)/2;
     v=f(r,p,c);
