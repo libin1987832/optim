@@ -1,4 +1,4 @@
-
+% plot picture ldimsenetion
 A=[1;-1;1];
 b=[1;1;3 ];
 x0=5;

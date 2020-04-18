@@ -1,4 +1,4 @@
-% take the positive (b-Ax) 
+% take the positive (b-Ax)  AI bI
 function [y,AI,bI]=Areax(x0,x1,A,b)
 % take the positive of A
 r0=b-A*x0;
