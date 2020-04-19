@@ -23,10 +23,12 @@ rst=v*j*inv(v)*rs
 v*diag([0,1,1,1])*inv(v)
 v*diag([0,1,1,1])*inv(v)*rs
 v*diag([0,1,1,1])*inv(v)*rst
+% why is NULL? forgot
 nn1=null(v*diag([0,1,1,1])*inv(v));
 nn1=nn1/norm(nn1);
 nn2=(rs-rst);
 nn2=nn2/norm(nn2);
 % vpa(nn1)
 % vpa(nn2)
+% exact arthmtic evalvte
 vpa(rst);

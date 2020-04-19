@@ -1,3 +1,4 @@
+addpath('../FM')
 A=[1,1;-1,-1;-1,0;-6,-3];
 b=[1;1;0.5;2];
 % QR decomposition in the exact arithmetic
@@ -10,8 +11,8 @@ Q=[q1,q2];
 % x=[-3;-1];
 x=[-3;1]/4;
 rt0=b-A*x;
-r0A=r0;
-r0B=r0;
+r0A=rt0;
+r0B=rt0;
 r0A(r0A>0)=1;
 r0A(r0A<0)=0;
 % violate the constrain
