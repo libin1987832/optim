@@ -22,13 +22,16 @@ yy2=[];
 
 for x=-2:0.1:1
     for y=-1.5:0.2:3
+        % form a point
         x0=[x;y];
         xF=x0;
+        % two step compare
         for j=1:2
         [xk,r0,rk,fkFM,fm,fr]=FM(xF,q,r,A,b);
         xF=xk;
         end
         [xk,rk,fkssqr,f0,lambe]=ssqr(x0,A,b);
+        % if the reduction is more ,then add the point
     if  fkFM>fkssqr
         xx1=[xx1,x];
         yy1=[yy1,y];
