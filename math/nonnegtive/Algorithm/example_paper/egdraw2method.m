@@ -36,7 +36,7 @@ for x=-2:0.1:1
         xx1=[xx1,x];
         yy1=[yy1,y];
     else
-       xx2=[xx2,x];
+        xx2=[xx2,x];
         yy2=[yy2,y];
     end
     end
