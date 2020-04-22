@@ -1,7 +1,7 @@
 % x0 initial value Q R is decompl A b
 % xk out value 
 %r0=(b-Ax0)+ rk=(b-Axk)+ 
-%fm=0.5*norm(A*uk-r)^2 fr=norm(yk1)^2 
+%fm=b-Axk fr=norm(yk1)^2 
 function [xk,r0,rk,fk,fm,fr]=FM(x0,Q,R,A,b)
 r=b-A*x0;
 r(r<0)=0;
