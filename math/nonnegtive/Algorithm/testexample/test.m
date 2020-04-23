@@ -29,10 +29,10 @@ b=[1;1;0.5;-1.5;-1.5];
  x0=[0;-0.5];
 
  
-d=lineData(A,b,[-2,1],[-1.5,3]);
-line(d(:,1:2)',d(:,3:4)')
-line([-2/3,1],[2/3,-1],'LineStyle','--');
-hold on 
+% d=lineData(A,b,[-2,1],[-1.5,3]);
+% line(d(:,1:2)',d(:,3:4)')
+% line([-2/3,1],[2/3,-1],'LineStyle','--');
+% hold on 
 [Q,R]=qr(A);
 q=Q(:,1:2);
 qq=q*q';
@@ -70,4 +70,6 @@ qBB=qq(B,B);
 z33=q3B*qzs
 z34=qq(4,B)*qzs+zs(4)
 z35=qq(5,B)*qzs
-z=qBB*qzs+qBB*zs(B)
+z3=qBB*qzs
+z3(z3<0)=0;
+z4=qBB*z3+zs(B)
