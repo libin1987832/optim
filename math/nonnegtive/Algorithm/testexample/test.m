@@ -68,3 +68,6 @@ qBB=qq(B,B);
  qzs=qBB*zsB(B);
  qzs(qzs<0)=0;
 z33=q3B*qzs
+z34=qq(4,B)*qzs+zs(4)
+z35=qq(5,B)*qzs
+z=qBB*qzs+qBB*zs(B)
