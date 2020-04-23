@@ -1,16 +1,17 @@
 addpath('../FM')
 addpath('../hybrid')
 addpath('../util')
-A=[1,1;-1,-1;1,0;6,3];
-b=[1;1;-0.5;-2];
+A=[1,1;-1,-1;-1,0;6,3];
+b=[1;1;0.5;-2];
 [Q,r]=qr(A);
 Qn=Q(:,1:2);
-nIter=10;
-QQ=nIter*Qn*Qn';
+nIter=5;
+QQn=Qn*Qn';
+QQ=nIter*QQn;
 x=[-1;0.05;0];
 y=[1;0.05:0];
-A=[1,1;-1,-1;1,0;6,3];
-b=[1;1;-0.5;-2];
+A=[1,1;-1,-1;-1,0;-6,-3];
+b=[1;1;0.5;2];
 % output
 d=lineData(A,b,[-2,1],[-1.5,3]);
 line(d(:,1:2)',d(:,3:4)')
@@ -21,8 +22,8 @@ yy1=[];
 xx2=[];
 yy2=[];
 I=diag([1,1,1,1]);
-for x=-2:0.1:1
-    for y=-1.5:0.2:3
+ for x=-2:0.1:1
+     for y=-1.5:0.2:3
         x0=[x;y];
         fm=b-A*x0;
         ssign=getBn(QQ,fm,I);
@@ -33,6 +34,13 @@ for x=-2:0.1:1
             xx2=[xx2;x];
             yy2=[yy2;y];
         end
+         x00=x0;
+         for i=0:5
+            [xk,r0,rk,fk,fm,fr]=FM(x00,Q,R,A,b);
+            x00=xk;
+         end
+         Bn=I-QQn*diag(Nk);
+         r10=Bn^2*rkn
     end
 end
 % express neton's method good
