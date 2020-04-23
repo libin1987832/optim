@@ -39,20 +39,30 @@ qq=q*q';
 zs=[0,0,0,1,0]';
 qzs=qq*zs;
 qb=b-qq*b;
-
-for i=1:5
-    c=num2str(i);
- plot(x0(1),x0(2),'*')
- c=[' ',c];
-
-text(x0(1),x0(2),c)
- hold on
+fmV=[];
+for i=1:20
+%     c=num2str(i);
+%  plot(x0(1),x0(2),'*')
+%  c=[' ',c];
+% 
+% text(x0(1),x0(2),c)
+%  hold on
  fm0=A*x0-b;
+ fmV=[fmV,fm0]
  fm0(fm0<0)=0;
  [xk,r0,rk,fk,fm,fr]=FM(x0,Q,R,A,b);
  x0=xk
- qq(3,5)*fm0(5)+qq(3,4)*(fm0(4)-zs(4))
- qq(5,5)*fm0(5)+qq(5,4)*(fm0(4)-zs(4))
+%  qq(3,5)*fm0(5)+qq(3,4)*(fm0(4)-zs(4))
+%  qq(5,5)*fm0(5)+qq(5,4)*(fm0(4)-zs(4))
 %  qq(3,4)*(fm0(4)-zs(4))
 %  qq(4,3)*(fm0(4)-zs(4))+qq(4,)
 end
+fmV
+B=[3,4,5];
+q3B=qq(3,B);
+qBB=qq(B,B);
+ x00=[0;-0.5];
+ zs0=A*x00-b;
+ zs0(zs0<0)=0;
+ zsB=zs0-zs;
+z33=q3B*qBB*zsB(B)
