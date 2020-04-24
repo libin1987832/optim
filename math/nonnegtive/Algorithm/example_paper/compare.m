@@ -36,12 +36,12 @@ x0=xk;
 end
 
 plot(4:size(errorF,1),errorF(4:end,1),'-b*',4:size(errorN,1),errorN(4:end),'-or');
-% d=lineData(A,b,[-2,1],[-1.5,3]);
-% line(d(:,1:2)',d(:,3:4)')
-% line([-2/3,1],[2/3,-1],'LineStyle','--');
-% hold on 
-% plot(xx1,yy1,'r*');
-% hold on
+d=lineData(A,b,[-2,1],[-1.5,3]);
+line(d(:,1:2)',d(:,3:4)')
+line([-2/3,1],[2/3,-1],'LineStyle','--');
+hold on 
+plot(xx1,yy1,'r*');
+hold on
 
 [xx1';yy1']
 % [xk1,fk1,xkArr1,countF1,countN1]=hybrid6(x0,A,b,3);
