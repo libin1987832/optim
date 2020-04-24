@@ -8,16 +8,18 @@ AI=A(I,:);
 %h=r(I);
 %u=R\Q'*h;
 
-% AII=AI'*AI;
-% bII=AI'*(r(I));
-% [U,S,V]=svds(AII);
+AII=AI'*AI;
+bII=AI'*(r(I));
+[U,S,V]=svds(AII);
 
-% rnkd=length(find(diag(S) >= 1e-10));
-% Udd=U(:,1:rnkd);
-% Sdd=S(1:rnkd,1:rnkd);
-% Vdd=V(:,1:rnkd);
-% u=Vdd*(Sdd\(Udd'*bII));
-u=AI\r(I);
+rnkd=length(find(diag(S) >= 1e-10));
+Udd=U(:,1:rnkd);
+Sdd=S(1:rnkd,1:rnkd);
+Vdd=V(:,1:rnkd);
+u=Vdd*(Sdd\(Udd'*bII));
+% 内置算法 有时候会比SVD要快
+% u=AI\r(I);
+
 r(r<0)=0;
 f0=0.5*(r'*r);
 
