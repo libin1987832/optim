@@ -1,9 +1,9 @@
 A=[1,1;-1,-1;-1,0;-6,-3];
 b=[1;1;0.5;2];
-x0=[-1;-0.1];
+x0=[-1;-0.5];
 [Q,R]=qr(A);
-xx1=[];
-yy1=[];
+xx1=[x0(1)];
+yy1=[x0(2)];
 error=[];
 for i=0:3
 fk=b-A*x0;
@@ -35,13 +35,23 @@ yyF=[yyF;xk(2)];
 x0=xk;
 end
 
-plot(4:size(errorF,1),errorF(4:end,1),'-b*',4:size(errorN,1),errorN(4:end),'-or');
+% plot(4:size(errorF,1),errorF(4:end,1),'-b*',4:size(errorN,1),errorN(4:end),'-or');
 d=lineData(A,b,[-2,1],[-1.5,3]);
 line(d(:,1:2)',d(:,3:4)')
-line([-2/3,1],[2/3,-1],'LineStyle','--');
+% line([-2/3,1],[2/3,-1],'LineStyle','--');
+line([-2/3,-2],[2/3,2],'LineStyle','--');
 hold on 
+line(xx1',yy1')
 plot(xx1,yy1,'r*');
-hold on
+for i=1:size(xx1,1)
+    x0=[xx1(i),yy1(i)];
+    c=num2str(i);
+    plot(x0(1),x0(2),'*')
+    c=[' ',c];
+    text(x0(1),x0(2),c)
+    %plot(xx1,yy1,'r*');
+    hold on
+end
 
 [xx1';yy1']
 % [xk1,fk1,xkArr1,countF1,countN1]=hybrid6(x0,A,b,3);
