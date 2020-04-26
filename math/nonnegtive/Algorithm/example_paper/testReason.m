@@ -17,7 +17,7 @@ for i=1:n
     Nk0(Nk0>0)=1;
     Nk0(Nk0<0)=0;
     % active set change break£»
-    if ~logical(Nk0==Nk)
+    if sum(xor(Nk0,Nk))~=0
         same=i-1;
         break;
     end
@@ -28,6 +28,8 @@ if same > 0
         same=same-1;
     end
     optimaln=same;
+elseif same==0
+    optimaln=0;
 end
 
 function r=predict(QQn,A,b,x0,n,rkn,Nk)
