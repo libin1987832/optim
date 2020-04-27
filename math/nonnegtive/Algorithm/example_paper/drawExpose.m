@@ -16,9 +16,11 @@ yy1=[];
 xx2=[];
 yy2=[];
 nIter=3;
+count=0;
 for x=-2.5:0.1:0
     for y=-1.5:0.2:3
-       x0=[x;y];  
+       count=count+11;
+        x0=[x;y];  
          % in the expose face 
   %      x0=[-2.5;1.7]
         % not in
