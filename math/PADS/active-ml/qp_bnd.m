@@ -4,7 +4,7 @@ function [ x, s, iter, Aopt] = qp_bnd( Q, d, b, A);
 % Q is assumed to be symmetric positive definite
 % KKT:    Qx + s + d = 0;  x <= b, s >=0, s'(x-b) = 0
 % input:  (Q,d,b) problem data,
-%         A ... guess on initial active set, e.g. A=(1:n)ï¿½; 
+%         A ... guess on initial active set, e.g. A=(1:n)ï¿? 
 % output: (x,s) optimal solution, iter= # iterations
 %         Aopt = active set at opt. sol. 
 % call:   [ x, s, iter, Aopt] = qp_bnd( Q, d, b, A);
@@ -42,10 +42,11 @@ while done < 1;                  % while not optimal
 	 x( I) = x( id(p_inv));
      end;                               
      if length( A)>0;            % backsubsitute for s(A), if |A|>0 
-         s( A) = -d( A) - Q( A, :)* x  
+       %  s( A) = -d( A) - Q( A, :)* x  
+       s(A) = d( A) + Q( A, :)* x  
      end;
 
-     A = [find(x>b); find(s>0)]; % active constraints of new solution
+     A = [find(x<b); find(s>0)]; % active constraints of new solution
 
      done = (max(x-b)<= tol) & (min(s)>= -tol); 
 
