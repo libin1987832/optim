@@ -10,17 +10,9 @@ while err>tol && index< nmax
  index=index+1;
  % Cauthy step
  [y,res]=fpi(x0,1,M,q);
- if res <0
-     xk=y;
-     break;
- end
  [ac,xc]=computeCauchyStep(q,M,x0,y-x0);
  % additional fixed point iterations
-[y,res]=fpi(xc,nf,B,U,q);
- if res <0
-     xk=y;
-     break;
- end
+[y,res]=fpi(xc,nf,M,q);
  % projected search on fixed point iteration
  [a,xpf]=projectedsearch(y-xc,xc,M,q);
  % subspace step
