@@ -18,8 +18,8 @@ nmax=100;
 
 [xkb,s,iter,Aopt]=qp_bnd(C,q);
 [w,xka,retcode] = LCPSolve(C,q);
-[xkd,resd]=splitD(C,q,1000);
-[xks,ress]=splitS(C,q,1,2000);
+[xkd,resd]=splitD(C,q,x0,1000);
+[xks,ress]=splitS(C,q,1,x0,2000);
 
 xsb=norm(xs-xkb)
 xsa=norm(xs-xka)

@@ -1,15 +1,15 @@
 %function [x,err]=splitForlcp(x0,nmax,jc,je,delt0,deltmax,M,q)
 function [x,err]=splitForlcp(x0,nmax,M,q)
 tol=1e-5;
-U=triu(M,1)
-B=M-U;
+% U=triu(M,1)
+% B=M-U;
 nf=5;
 err=test_valid(M,q,x0);
 index=1;
 while err>tol && index< nmax
  index=index+1;
  % Cauthy step
- [y,res]=fpi(x0,1,B,U,q);
+ [y,res]=fpi(x0,1,M,q);
  if res <0
      xk=y;
      break;

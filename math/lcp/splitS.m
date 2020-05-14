@@ -1,10 +1,10 @@
-function [xk,res] = splitS(Q,d,s,iter)
+function [xk,res] = splitS(Q,d,s,x0,iter)
 [m,n]=size(Q)
 Di=diag(Q);
 Di(Di<0)=0;
 Di=1./Di;
 tol=1e-12;
-x0=zeros(n,1);
+% x0=zeros(n,1);
 xk=x0;
 for i=1:iter
     xk(1)=x0(1)-s*Di(1)*(d(1)+Q(1,:)*x0);
