@@ -8,8 +8,8 @@ tol=1e-12;
 
 for i=1:iter
     xk=zeros(n,1);
-    xk(1)=x0(1)-s*(d(1)+Q(1,:)*x0)/Di(1);
-    for j=2:n
+
+    for j=1:n
 %         sd=s*Di(j)*(d(j)+Q(j,:)*[xk(1:(j-1));x0(j:n)]);
         sd=s*(d(j)+Q(j,:)*[xk(1:(j-1));x0(j:n)])/Di(j);
         if x0(j)>sd

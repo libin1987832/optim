@@ -1,7 +1,6 @@
 %% test split
 clear
 n=500
-;
 A=randn(n);
 A=A'*A;
 B=0.1*eye(n);
