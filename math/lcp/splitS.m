@@ -16,7 +16,7 @@ for i=1:iter
             xk(j)=x0(j)-sd;
         end
     end
-    xk(xk<0)=0;
+%     xk(xk<0)=0;
     x0=xk;
     res=test_valid(Q,d,xk);
     if res<tol
