@@ -1,6 +1,7 @@
 %% test split
 clear
-n=1000;
+n=500
+;
 A=randn(n);
 A=A'*A;
 B=0.1*eye(n);
@@ -23,7 +24,7 @@ tol_abs  = 0.0;
 
 [xkb,s,iter,Aopt]=qp_bnd(C,q);
 [w,xka,retcode] = LCPSolve(C,q);
-[xkpsor err iter flag convergence msg] = psor(C, q, x0, 1.4, max_iter, tol_rel, tol_abs, false)
+[xkpsor err iter flag convergence msg] = psor(C, q, x0, 1.4, max_iter, tol_rel, tol_abs, false);
 [xk2,err]=splitForlcp(x0,nmax,C,q);
 xsb=norm(xs-xkb)
 xsa=norm(xs-xka)
