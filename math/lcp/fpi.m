@@ -13,20 +13,21 @@ for i=1:nf
 %     x = LCP(B,d);
 end
 done=1;
+maxiter=3;
 while done
+    done=done+1;
     res=test_valid(M,q,x0);
     res1=test_valid(M,q,z);
-    if res>res1
-        x0=z;
-        break;
-    else
-        if done >maxiter
+    if res>res1 ||  done >maxiter
            break;
-        end
     end
     x0=z;
     [z err iter flag convergence msg] =  pgs(M,q, x0, 1, tol_rel, tol_abs, false);
 end
-y=x0;
+y=z;
+res1=1;
+if done > maxiter
+    res1=0;
+end
 
 
