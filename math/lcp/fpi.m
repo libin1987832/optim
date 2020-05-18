@@ -1,4 +1,4 @@
-function [y,res]=fpi(x0,nf,M,q)
+function [y,res1]=fpi(x0,nf,M,q)
 [m,n]=size(M);
 max_iter = 10;
 tol_rel  = 0.0;
@@ -11,16 +11,21 @@ for i=1:nf
     [z err iter flag convergence msg] =  pgs(M,q, x0, 1, tol_rel, tol_abs, false);
 %     [z err iter flag convergence msg] = psor(M,q, x0, 1.4, 1, tol_rel, tol_abs, false)
 %     x = LCP(B,d);
-%    test_bnd(B,d,z)
+end
+done=1;
+while done
     res=test_valid(M,q,x0);
     res1=test_valid(M,q,z);
     if res>res1
         x0=z;
-    else
-        res=-1;
         break;
+    else
+        if done >maxiter
+           break;
+        end
     end
-%     test_bnd(B,d,xk)
+    x0=z;
+    [z err iter flag convergence msg] =  pgs(M,q, x0, 1, tol_rel, tol_abs, false);
 end
 y=x0;
 

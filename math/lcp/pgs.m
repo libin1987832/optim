@@ -53,9 +53,11 @@ flag        = 2;
 while iter <= max_iter
   
   dx = 0;
+%   old_xi2 = x;
   for i=1:N
     old_xi = x(i);
-    ri     = b(i) + A(i,:)*x;
+     ri     = b(i) + A(i,:)*x;
+%  ri     = b(i) + A(i,:)*old_xi2;
     Aii    = A(i,i);
     
     x(i) = max( 0, old_xi - (ri / Aii) );

@@ -1,4 +1,11 @@
-function [alph,xk]=projectedsearch(d,x0,G,c)
+function [alph,xk,res]=projectedsearch(d,x0,G,c)
+tol=1e-10;
+if norm(d)<tol
+    res=0;
+    xk=x0;
+    alph=0;
+    return;
+end
 [m,n]=size(G);
 le0=(d<0);
 t1=-1*ones(n,1);
@@ -28,4 +35,5 @@ for i=1:len
     end
 end
 xk=max(x0+alph*d,zeros(n,1));
+res=1;
 % test_projected(alph,G,c,x0,d)
