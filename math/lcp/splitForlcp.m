@@ -1,8 +1,6 @@
 %function [x,err]=splitForlcp(x0,nmax,jc,je,delt0,deltmax,M,q)
 function [x,err]=splitForlcp(x0,nmax,M,q)
 tol=1e-5;
-% U=triu(M,1)
-% B=M-U;
 nf=5;
 err=test_valid(M,q,x0);
 index=1;

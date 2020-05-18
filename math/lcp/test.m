@@ -1,6 +1,6 @@
 %% test split
 clear
-n=100;
+n=1000;
 A=randn(n);
 A=A'*A;
 B=0.1*eye(n);
@@ -20,25 +20,13 @@ max_iter = 10;
 tol_rel  = 0.0;
 tol_abs  = 0.0;
 
-% [xkpgs err iter flag convergence msg] =  pgs(C, q, x0, max_iter, tol_rel, tol_abs, false);
-% [xk2,err]=splitForlcp(x0,nmax,C,q);
-%     [res,fx]=test_valid(C,q,x0);
-%     [res1,fx1]=test_valid(C,q,xk2);
-%     [res2,fx2]=test_valid(C,q,xkpgs);
-%     [res3,fx3]=test_valid(C,q,xs);
 
 [xkb,s,iter,Aopt]=qp_bnd(C,q);
 [w,xka,retcode] = LCPSolve(C,q);
-% [xkd,resd]=splitD(C,q,x0,10);
-% [xks,ress]=splitS(C,q,1,x0,20);
-% [xkpgs err iter flag convergence msg] =  pgs(C, q, x0, max_iter, tol_rel, tol_abs, false);
 [xkpsor err iter flag convergence msg] = psor(C, q, x0, 1.4, max_iter, tol_rel, tol_abs, false)
 [xk2,err]=splitForlcp(x0,nmax,C,q);
 xsb=norm(xs-xkb)
 xsa=norm(xs-xka)
-% xsd=norm(xs-xkd)
-% xss=norm(xs-xks)
-% xspgs=norm(xs-xkpgs)
 xspsor=norm(xs-xkpsor)
 xs2=norm(xs-xk2)
 [ress,fxs]=test_valid(C,q,xs);
@@ -72,3 +60,10 @@ xs2=norm(xs-xk2)
 % [xks,ress]=splitS(C,q,1.4,x0,10);
 % [xkd,resd]=splitD(C,q,x0,20);
 % [xkpsor err iter flag convergence msg] = psor(C, q, x0, 1.4, max_iter, tol_rel, tol_abs, false)
+%% test split
+% [xkpgs err iter flag convergence msg] =  pgs(C, q, x0, max_iter, tol_rel, tol_abs, false);
+% [xk2,err]=splitForlcp(x0,nmax,C,q);
+%     [res,fx]=test_valid(C,q,x0);
+%     [res1,fx1]=test_valid(C,q,xk2);
+%     [res2,fx2]=test_valid(C,q,xkpgs);
+%     [res3,fx3]=test_valid(C,q,xs);

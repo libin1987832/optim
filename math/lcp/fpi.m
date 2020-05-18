@@ -14,6 +14,7 @@ for i=1:nf
 end
 done=1;
 maxiter=3;
+% fpi may worse but good later i.e,no mono
 while done
     done=done+1;
     res=test_valid(M,q,x0);
@@ -28,6 +29,7 @@ y=z;
 res1=1;
 if done > maxiter
     res1=0;
+    y=x0;
 end
 
 
