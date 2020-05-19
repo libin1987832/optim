@@ -14,16 +14,18 @@ clear
 % load('fpis')
 n=2;
 C=[1/4,1/7;1/7,1];
-q=[-1/12;1/5];
-xs=[1/3;0];
-C*xs+q
-x0=[1;1/4];
+
+xs=[1/3;1];
+q=-C*xs;
+x0=[0;0];
 nmax=100;
+xA=[];
 for i=0:5
     [xks,ress]=splitS(C,q,1,x0,1);
-    x0=xks
+    x0=xks;
+    xA=[xA x0];
 end
-
+xA
 
 % 
 % max_iter = 1;

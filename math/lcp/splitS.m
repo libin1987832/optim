@@ -1,5 +1,5 @@
 function [xk,res] = splitS(Q,d,s,x0,iter)
-[m,n]=size(Q)
+[m,n]=size(Q);
 Di=diag(Q);
 Di(Di<0)=0;
 % Di=1./Di;
