@@ -1,5 +1,5 @@
-clear
-%  n=100;
+% clear
+%  n=2;
 % A=randn(n);
 % A=A'*A;
 % B=0.1*eye(n);
@@ -11,45 +11,49 @@ clear
 % q(xs>0)=-qt(xs>0);
 % q(xs==0)=max(abs(qt))+0.1;
 % x0=ones(n,1);
-% save('fpis','C','xs','q','n')
+% save('fpis','C','xs','q','n','x0')
 
 % load('fpis')
-C=[1/4,1/7;1/7,1];
-D=tril(C)
-inv(D)
-% x0=ones(n,1);
-% xA=[];
-% I0=find(x0>0);
-% begin=1;
-% xAI=[];
-% iter=20;
-% I=zeros(1,iter);
-% xAI=[I];
-% xAI(begin,1)=1;
-% for i=2:iter
-%     [xks,ress]=splitS(C,q,1.4,x0,1);
-%     Iks=find(xks>0);
-%     e=setdiff(I0,Iks);
-%     if isempty(e)
-%         xAI(begin,i)=1;
-%     else
-%         xAI=[xAI;zeros(1,iter)];
-%         begin=begin+1;
-%         xAI(begin,i)=1;
-%         I0=Iks;
-%     end
-%     x0=xks;
-%     xA=[xA x0];
-% end
-% xAI
+ C=[4,-3;-3,8];
+q=[5;-16];
+x0=ones(n,1);
+% D=tril(C)
+% dl=inv(D);
+% x=dl*(D-C)*x0-dl*q
+xA=[];
+I0=find(x0>0);
+begin=1;
+xAI=[];
+iter=20;
+I=zeros(1,iter);
+xAI=[I];
+xAI(begin,1)=1;
+for i=2:iter
+    [xks,ress]=splitS(C,q,1,x0,1);
+    Iks=find(xks>0);
+    e=setdiff(I0,Iks);
+    if isempty(e)
+        xAI(begin,i)=1;
+    else
+        xAI=[xAI;zeros(1,iter)];
+        begin=begin+1;
+        xAI(begin,i)=1;
+        I0=Iks;
+    end
+    x0=xks;
+    xA=[xA x0];
+end
+xAI
+xA
 
-
-
+% C=[1/4,1/7;1/7,1];
+% D=tril(C)
+% inv(D)
 
 
 % n=2;
 % C=[1/4,1/7;1/7,1];
-%
+% 
 % xs=[1/3;1];
 % q=-C*xs;
 % x0=[0;0];
