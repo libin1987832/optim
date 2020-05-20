@@ -4,6 +4,6 @@ b=computAC(A,q);
 rq=b;
 for i=1:3
 rq=computDLU(A,rq);
-rq=rq+b;
+rq=rq-b;
 end
 x=rq;
