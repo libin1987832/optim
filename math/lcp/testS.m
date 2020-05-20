@@ -58,7 +58,7 @@
 
 % n=2;
 % C=[1/4,1/7;1/7,1];
-% 
+%
 % xs=[1/3;1];
 % q=-C*xs;
 % x0=[0;0];
@@ -89,31 +89,40 @@
 % [ress,fxs]=test_valid(C,q,xs);
 
 %% predict
-n=2;
-% A=randn(n);
-% A=A'*A;
-% B=0.1*eye(n);
-% C=A+B;
-% xs=randn(n,1);
-% qt=-C*xs;
-% Cx+qt=0;
-C=[4,-3;-3,8];
-qt=[5;-16];
-
-x0=ones(n,1);
-iter=4;
-t=predict(C,x0,qt,iter-1);
-rx=x0;
-for i=1:iter
-rx=computDLU(C,rx);
-end
-rxt=rx+t;
-xk0=x0;
-xk=x0;
-for i=1:iter
-    for j=1:n
-        xk(j)=xk0(j)-(C(j,:)*[xk(1:j-1);xk0(j:n)]+qt(j))/C(j,j);
+n=30;
+cz=zeros(1,n);
+for e=1:100
+    A=randn(n);
+    A=A'*A;
+    B=0.1*eye(n);
+    C=A+B;
+    xs=randn(n,1)+40;
+    qt=-C*xs;
+    % Cx+qt=0;
+    % C=[4,-3;-3,8];
+    % qt=[5;-16];
+    
+    x0=ones(n,1);
+    iter=40;
+    t=predict(C,x0,qt,2);
+    rx=x0;
+    for i=1:10
+    rx=computDLU(C,rx);
     end
-    xk0=xk;
+    rxt=rx+t;
+    t=rxt;
+    xk0=x0;
+    xk=x0;
+    for i=1:iter
+        for j=1:n
+            xk(j)=xk0(j)-(C(j,:)*[xk(1:j-1);xk0(j:n)]+qt(j))/C(j,j);
+        end
+        xk0=xk;
+    end
+    I1=(xk>0);
+    I2=(t>0);
+    d=abs(I1-I2);
+%     [ms,ns]=size(d);
+    cz(sum(d)+1)=cz(sum(d)+1)+1;
 end
-[xk t rxt]
+cz

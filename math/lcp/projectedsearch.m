@@ -3,7 +3,7 @@ tol=1e-10;
 res=0;
 xk=x0;
 alph=0;
-if norm(d)<tol
+if norm(d)>tol
     [m,n]=size(G);
     le0=(d<0);
     % negative is marked for inf 
