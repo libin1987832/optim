@@ -19,14 +19,14 @@ save('fpi','C','xs','q','n')
 x0=ones(n,1);
 nmax=100;
 
-max_iter = 10;
+max_iter = 100;
 tol_rel  = 0.0;
 tol_abs  = 0.0;
 
 
 [xkb,s,iter,Aopt]=qp_bnd(C,q);
 [w,xka,retcode] = LCPSolve(C,q);
-[xkpsor err iter flag convergence msg] = psor(C, q, x0, 1.4, max_iter, tol_rel, tol_abs, false);
+[xkpsor err iter flag convergence msg] = psor(C, q, x0, 1, max_iter, tol_rel, tol_abs, false);
 [xks,ress]=splitS(C,q,1.4,x0,10);
 [xk2,err,index2]=splitForlcp(x0,nmax,C,q);
 [xkpa,err,indexpa1,indexpa2]=PA(x0,nmax,C,q);

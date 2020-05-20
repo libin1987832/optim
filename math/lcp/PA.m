@@ -16,10 +16,11 @@ while err>tol && index< nmax
     t(t>0)=1;
     t(t<0)=0;
     cs=sum(I);
-    if sum(t)>cs*0.95
+    if sum(t)>cs*0.985
         % subspace step
         xs=subspacesearch(xpf,M,q);
-        x0=xs;
+         [a,xk]=projectedsearch(xs-xpf,xpf,M,q);
+        x0=xk;
         indexN=indexN+1;
     else
         x0=xpf;
