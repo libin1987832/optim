@@ -1,9 +1,9 @@
-function [x]=predict(A,x0,q)
+function [x]=predict(A,x0,q,iter)
 [m,n]=size(A);
-b=computAC(A,q);
+b=-1*computAC(A,q);
 rq=b;
-for i=1:3
+for i=1:iter
 rq=computDLU(A,rq);
-rq=rq-b;
+rq=rq+b;
 end
 x=rq;

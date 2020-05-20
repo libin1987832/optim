@@ -96,22 +96,24 @@ n=2;
 % C=A+B;
 % xs=randn(n,1);
 % qt=-C*xs;
+% Cx+qt=0;
 C=[4,-3;-3,8];
 qt=[5;-16];
 
 x0=ones(n,1);
-t=predict(C,x0,qt);
+iter=4;
+t=predict(C,x0,qt,iter-1);
 rx=x0;
-for i=1:3
+for i=1:iter
 rx=computDLU(C,rx);
 end
 rxt=rx+t;
 xk0=x0;
 xk=x0;
-for i=1:3
+for i=1:iter
     for j=1:n
         xk(j)=xk0(j)-(C(j,:)*[xk(1:j-1);xk0(j:n)]+qt(j))/C(j,j);
     end
     xk0=xk;
 end
-[rxt xk]
+[xk t rxt]
