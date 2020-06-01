@@ -1,6 +1,8 @@
 n=3;
-A=rand(n);
-xs=rand(n,1);
+% A=rand(n);
+% xs=rand(n,1);
+% save('tt','A','xs');
+load('tt','A','xs')
 q=A*xs;
 A\q
 xs
@@ -12,3 +14,6 @@ eig(DLU)
 [x,n,xa]=guaseidel(A,q,zeros(n,1),1e-5,10);
 xa;
 x;
+xad=xa(:,1:8)-xa(:,2:9);
+xro=xad(:,2:8)./xad(:,1:7);
+abs(xro)

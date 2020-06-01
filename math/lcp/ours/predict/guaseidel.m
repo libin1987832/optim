@@ -34,7 +34,7 @@ for i=1:it_max
     xk=zeros(ns,1);
     for j=1:ns
         sd=s*(b(j)-A(j,:)*[xk(1:(j-1));x0(j:ns)])/A(j,j);
-        xk(j)=x0(j)-sd;
+        xk(j)=x0(j)+sd;
     end
     x0=xk;
     xA=[xA xk];
