@@ -19,4 +19,5 @@ rou=0.99;
 trmax=1e12;
 trr=1;
 x0=ones(n,1)*100;
-y0=asysub(x0,M,q,nmax,etc,ete,trr,trmax,rou);
+[x0,iter,nss]=asysub(x0,M,q,nmax,etc,ete,trr,trmax,rou);
+

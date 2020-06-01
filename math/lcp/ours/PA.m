@@ -1,4 +1,5 @@
 function [x,err,index,indexN]=PA(x0,nmax,M,q)
+addpath('./predict');
 tol=1e-10;
 nf=5;
 err=test_valid(M,q,x0);
