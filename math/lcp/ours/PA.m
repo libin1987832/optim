@@ -1,4 +1,4 @@
-function [x,err,index,indexN]=PA(x0,nmax,M,q)
+function [x,err,index,indexN]=PA(x0,nmax,M,q,xt)
 addpath('./predict');
 tol=1e-10;
 nf=5;
@@ -6,6 +6,7 @@ err=test_valid(M,q,x0);
 index=1;
 indexN=0;
 nf=5;
+csA=[];
 while err>tol && index< nmax
     index=index+1;
     % Cauthy step
@@ -21,7 +22,10 @@ while err>tol && index< nmax
     t(t>0)=1;
     t(t<0)=0;
     cs=sum(I);
-    if sum(t)>cs
+    cs1=sum(t);
+    csA=[csA,cs1]; 
+    if cs1==cs
+   
         % subspace step
         xs=subspacesearch(xpf,M,q);
          [a,xk]=projectedsearch(xs-xpf,xpf,M,q);
@@ -34,3 +38,4 @@ while err>tol && index< nmax
     err=test_valid(M,q,x0);
 end
 x=x0;
+csA

@@ -1,6 +1,6 @@
 %% test split
 clear
-n=50;
+n=500;
 A=randn(n);
 A=A'*A;
 B=0.1*eye(n);
@@ -18,8 +18,9 @@ save('fpi','C','xs','q','n')
 %  load('fpi')
 x0=ones(n,1);
 nmax=10;
-
-[xk2,err,indexG,indexN]=PA(x0,nmax,C,q);
+cs2
+[xk2,err,indexG,indexN]=PA(x0,nmax,C,q,xs);
 xs2=norm(xs-xk2);
 [res2,fx3]=test_valid(C,q,xk2);
-[res2 indexG indexN]
+cs1=countA(xk2);
+[cs2,cs1,xs2 indexG indexN]
