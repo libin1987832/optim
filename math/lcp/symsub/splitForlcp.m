@@ -1,7 +1,6 @@
 %function [x,err]=splitForlcp(x0,nmax,jc,je,delt0,deltmax,M,q)
-function [x,err,index]=splitForlcp(x0,nmax,M,q)
+function [x,err,index]=splitForlcp(x0,nmax,nf,M,q)
 tol=1e-10;
-nf=5;
 err=test_valid(M,q,x0);
 index=1;
 while err>tol && index< nmax

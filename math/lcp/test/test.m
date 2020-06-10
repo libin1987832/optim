@@ -1,6 +1,11 @@
 %% test split
+clc
 clear
-n=500
+addpath('./other')
+addpath('./symsub')
+
+
+n=500;
 A=randn(n);
 A=A'*A;
 B=0.1*eye(n);
@@ -14,7 +19,9 @@ q=rand(n,1);
 qt=C*xs;
 q(xs>0)=-qt(xs>0);
 q(xs==0)=max(abs(qt))+0.1;
-save('fpi','C','xs','q','n')
+save('fpi','C','xs','q','n');
+
+
 %  load('fpi')
 x0=ones(n,1);
 nmax=100;
@@ -28,13 +35,16 @@ tol_abs  = 0.0;
 [w,xka,retcode] = LCPSolve(C,q);
 [xkpsor err iter flag convergence msg] = psor(C, q, x0, 1, max_iter, tol_rel, tol_abs, false);
 [xks,ress]=splitS(C,q,1.4,x0,10);
-[xk2,err,index2]=splitForlcp(x0,nmax,C,q);
-[xkpa,err,indexpa1,indexpa2]=PA(x0,nmax,C,q);
-xsb=norm(xs-xkb)
-xsa=norm(xs-xka)
-xspsor=norm(xs-xkpsor)
-xs2=norm(xs-xk2)
+nf=10;
+[xk2,err,index2]=splitForlcp(x0,nmax,nf,C,q);
+[xkpa,errpa,indexpa1,indexpa2]=PA(x0,nmax,nf,C,q);
+[xkor,error,indexor,indexNor,~]=hybridorigin(x0,nmax,nf,C,q);
+xsb=norm(xs-xkb);
+xsa=norm(xs-xka);
+xspsor=norm(xs-xkpsor);
+xs2=norm(xs-xk2);
 xspa=norm(xs-xkpa);
+xsor=norm(xs-xkor);
 [ress,fxs]=test_valid(C,q,xs);
 [resss,fxss]=test_valid(C,q,xks);
 [res,fx]=test_valid(C,q,xkb);
@@ -42,6 +52,7 @@ xspa=norm(xs-xkpa);
 [res2,fx2]=test_valid(C,q,xkpsor);
 [res3,fx3]=test_valid(C,q,xk2);
 [res4,fx4]=test_valid(C,q,xkpa);
+[resor,fxor]=test_valid(C,q,xkor);
 %% test qp_bnd
 % n=3;
 % A=randn(n)

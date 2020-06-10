@@ -7,7 +7,7 @@ nf=5;
 % error for x0
 err=test_valid(M,q,x0);
 while err>tol && index< nmax
-    [xkA,~] = splitS(M,q,1,x0,nf,cmax);
+    xkA = splitS(M,q,1,x0,nf);
     I=(xkA(:,nf-2)>0);
     % predict forumla eigen
     t=predict2(xkA(:,nf-2),xkA(:,nf-1),xkA(:,nf));

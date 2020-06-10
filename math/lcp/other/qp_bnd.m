@@ -39,7 +39,7 @@ while done < 1;                  % while not optimal
            rhs = rhs - Q( I1,A)*x( A);   
          end; 	   
          xtmp = (ltri') \ rhs; 
-         x( I) = ltri \  xtmp   % solve for inactive variables	   
+         x( I) = ltri \  xtmp ;  % solve for inactive variables	   
 	 x( I) = x( id(p_inv));
      end;                               
      if length( A)>0;            % backsubsitute for s(A), if |A|>0 

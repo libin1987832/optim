@@ -2,17 +2,21 @@
 % allValue:record all value,[split predict xs(zeors for no exposed point)]
 function [x,err,index,indexN,allValue]=hybridorigin(x0,nmax,nf,M,q)
 addpath('./predict');
+addpath('./ours/predict');
 addpath('../util');
+addpath('./util');
 tol=1e-10;
 err=test_valid(M,q,x0);
 index=0;
 indexN=0;
 csA=[];
 allValue=[];
-while err>tol && index/nf< nmax
+count=nmax*nf;
+while err>tol && index< count
     index=index+nf;
     cmax=0;
-    [xkA,cmax] = splitS(M,q,1,x0,nf,cmax);
+%     xkA= splitS_our(M,q,1,x0,nf);
+    xkA= splitS_ourres(M,q,1,x0,nf);
     I=(xkA(:,nf-2)>0);
     t=predict2(xkA(:,nf-2),xkA(:,nf-1),xkA(:,nf));
    % allValue=[allValue xkA t];
@@ -28,15 +32,17 @@ while err>tol && index/nf< nmax
 %         allValue=[allValue xs];
         % check for optimality
         err=test_valid(M,q,xs);
-        %x0=xk;
         indexN=indexN+1;
-        x=xs;
     else
-%        x0=xpf;
-        x=xkA(:,nf);
         err=test_valid(M,q,x0);
         allValue=[allValue zeros(size(x0))];
     end
      x0=xkA(:,nf);
 end
-csA
+if index< count
+x=xs;
+else
+x=xkA(:,nf);
+end
+err=test_valid(M,q,x);
+csA;

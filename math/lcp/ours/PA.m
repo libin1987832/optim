@@ -1,18 +1,16 @@
-function [x,err,index,indexN]=PA(x0,nmax,M,q,xt)
+% index: statistic split iterations indexN: statistic subspace minimzaiton
+% allValue:record all value,[split predict xs(zeors for no exposed point)]
+function [x,err,index,indexN]=PA(x0,nmax,nf,M,q)
 addpath('./predict');
 tol=1e-10;
-nf=5;
 err=test_valid(M,q,x0);
-index=1;
+index=0;
 indexN=0;
-nf=5;
 csA=[];
-while err>tol && index< nmax
-    index=index+1;
-    % Cauthy step
-%     [y,res]=fpi(x0,5,M,q);
-    cmax=0;
-    [xkA,cmax] = splitS(M,q,1,x0,nf,cmax);
+count=nmax*nf;
+while err>tol && index< count
+    index=index+nf;
+    xkA= splitS_our(M,q,1,x0,nf);
      [a,xpf,result]=projectedsearch(xkA(:,nf)-x0,x0,M,q);
      I=(xpf>0);
 %     MII=M(I,I);
@@ -25,7 +23,6 @@ while err>tol && index< nmax
     cs1=sum(t);
     csA=[csA,cs1]; 
     if cs1==cs
-   
         % subspace step
         xs=subspacesearch(xpf,M,q);
          [a,xk]=projectedsearch(xs-xpf,xpf,M,q);
@@ -38,4 +35,4 @@ while err>tol && index< nmax
     err=test_valid(M,q,x0);
 end
 x=x0;
-csA
+csA;
