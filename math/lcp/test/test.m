@@ -23,7 +23,7 @@ q(xs==0)=max(abs(qt))+0.1;
 save('fpi','C','xs','q','n');
 
 
-%  load('fpi')
+% load('fpiq')
 x0=ones(n,1);
 nmax=100;
 
@@ -39,7 +39,7 @@ tol_abs  = 0.0;
 nf=10;
 [xk2,err,index2]=splitForlcp(x0,nmax,nf,C,q);
 [xkpa,errpa,indexpa1,indexpa2]=PA(x0,nmax,nf,C,q);
-[xkor,error,indexor,indexNor,~]=hybridorigin(x0,nmax,nf,C,q);
+[xkor,error,indexor,indexNor]=hybridorigin(x0,nmax,nf,C,q);
 xsb=norm(xs-xkb);
 xsa=norm(xs-xka);
 xspsor=norm(xs-xkpsor);
