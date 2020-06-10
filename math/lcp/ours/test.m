@@ -14,12 +14,14 @@ q=rand(n,1);
 qt=C*xs;
 q(xs>0)=-qt(xs>0);
 q(xs==0)=max(abs(qt))+0.1;
-save('fpi','C','xs','q','n')
-%  load('fpi')
-x0=ones(n,1);
 nmax=10;
-cs2
-[xk2,err,indexG,indexN]=PA(x0,nmax,C,q,xs);
+nf=10
+x0=ones(n,1);
+save('fpi','C','xs','q','n','nf','x0')
+%  load('fpi')
+cs2;
+
+[xk2,err,indexG,indexN]=PA(x0,nmax,nf,C,q);
 xs2=norm(xs-xk2);
 [res2,fx3]=test_valid(C,q,xk2);
 cs1=countA(xk2);

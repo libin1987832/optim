@@ -3,7 +3,8 @@ clc
 clear
 addpath('./other')
 addpath('./symsub')
-
+addpath('../other')
+addpath('../symsub')
 
 n=500;
 A=randn(n);

@@ -19,7 +19,7 @@ clear
 
  load('fpiq')
 x0=ones(n,1);
-nmax=20;
+nmax=100;
 nf=10;
 [xk2,err,indexG,indexN,all]=hybridorigin(x0,nmax,nf,C,q);
 count=indexG/nf;
@@ -27,5 +27,5 @@ count=indexG/nf;
 countpa=indexpa/nf;
  xkA= splitS_our(C,q,1,x0,indexG);
  errsp=test_valid(C,q,xkA(:,indexG));
- errspa=test_valid(C,q,all(:,indexG));
+%  errspa=test_valid(C,q,all(:,indexG));
 errspaa=test_valid(C,q,xk2);
