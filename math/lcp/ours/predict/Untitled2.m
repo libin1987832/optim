@@ -1,9 +1,9 @@
 n=3;
-% A=rand(n);
-% xs=rand(n,1);
-% save('tt1w','A','xs');
+A=rand(n);
+xs=rand(n,1);
+save('tt1w','A','xs');
 
- load('tt','A','xs')
+%  load('tt','A','xs')
 q=A*xs;
 A\q
 xs
