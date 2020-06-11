@@ -6,7 +6,7 @@ addpath('./symsub')
 addpath('../other')
 addpath('../symsub')
 
-n=3000;
+n=1000;
 A=randn(n);
 A=A'*A;
 B=0.1*eye(n);
@@ -33,7 +33,7 @@ tol_rel  = 0.0;
 tol_abs  = 0.0;
 
 
-[xkb,s,iter,Aopt]=qp_bnd(C,q);
+% [xkb,s,iter,Aopt]=qp_bnd(C,q);
 %[w,xka,retcode] = LCPSolve(C,q);
 % xsa=norm(xs-xka);
 % [res1,fx1]=test_valid(C,q,xka);
@@ -43,7 +43,7 @@ nf=10;
 [xk2,err,index2]=splitForlcp(x0,nmax,nf,C,q);
 [xkpa,errpa,indexpa1,indexpa2]=PA(x0,nmax,nf,C,q);
 [xkor,error,indexor,indexNor]=hybridorigin(x0,nmax,nf,C,q);
-xsb=norm(xs-xkb);
+% xsb=norm(xs-xkb);
 
 xspsor=norm(xs-xkpsor);
 xs2=norm(xs-xk2);
@@ -51,7 +51,7 @@ xspa=norm(xs-xkpa);
 xsor=norm(xs-xkor);
 [ress,fxs]=test_valid(C,q,xs);
 [resss,fxss]=test_valid(C,q,xks);
-[res,fx]=test_valid(C,q,xkb);
+% [res,fx]=test_valid(C,q,xkb);
 
 [res2,fx2]=test_valid(C,q,xkpsor);
 [res3,fx3]=test_valid(C,q,xk2);
