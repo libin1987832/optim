@@ -11,21 +11,24 @@ A=randn(n);
 A=A'*A;
 B=0.1*eye(n);
 % C=A+B;
-C=sprandsym(n,0.6,0.1);
-xs=randn(n,1);
+C=sprandsym(n,0.2,0.1);
+% xs=randn(n,1);
+xs=sprandn(n,1,0.3);
 I1=(xs<0);
 xs(I1)=0;
 I2=(xs>0);
 cs2=sum(I2);
-q=rand(n,1);
+% q=rand(n,1);
+q=sprandn(n,1,0.3);
 qt=C*xs;
 q(xs>0)=-qt(xs>0);
 q(xs==0)=max(abs(qt))+0.1;
 save('fpi','C','xs','q','n');
-
-
+ress=func(C,q,xs);
+ressvv=test_valid(C,q,xs);
 % load('fpiq')
-x0=ones(n,1);
+% x0=ones(n,1);
+x0=speye(n,1);
 nmax=100;
 
 max_iter = 50;
@@ -52,7 +55,7 @@ xsor=norm(xs-xkor);
 [ress,fxs]=test_valid(C,q,xs);
 [resss,fxss]=test_valid(C,q,xks);
 % [res,fx]=test_valid(C,q,xkb);
-
+  
 [res2,fx2]=test_valid(C,q,xkpsor);
 [res3,fx3]=test_valid(C,q,xk2);
 [res4,fx4]=test_valid(C,q,xkpa);
