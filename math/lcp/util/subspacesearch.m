@@ -4,7 +4,7 @@ I=(x0>0);
 MII=M(I,I);
 qI=q(I);
 if s
-x=sparse(size(x0));
+x=sparse(size(x0,1),1);
 x(I) = pcg(MII,-qI,1e-7,150);
 else
 x=zeros(size(x0));

@@ -8,17 +8,22 @@ index=0;
 indexN=0;
 csA=[];
 count=nmax*nf;
+tol_rel  = 1e-5;
+tol_abs  = 1e-10;
+
 while err>tol && index< count
     index=index+nf;
-    xkA= splitS_ourres(M,q,1,x0,nf);
-[a,xpf,result]=projectedsearch(xkA(:,3)-x0,x0,M,q);
+    [ynf0 err iter flag convergence msg] =  pgs(M,q, x0, nf-2, tol_rel, tol_abs, true);
+    [ynf1 err iter flag convergence msg] =  pgs(M,q, ynf0, 1, tol_rel, tol_abs, true);
+    [ynf2 err iter flag convergence msg] =  pgs(M,q, ynf1, 1, tol_rel, tol_abs, true);
+    [a,xpf,result]=projectedsearch(ynf2-x0,x0,M,q);
 %      [a,xpf,result]=projectedsearch(xkA(:,nf)-x0,x0,M,q);
      I=(xpf>0);
 %     MII=M(I,I);
 %     qI=q(I);
 %    t=predict(MII,xpf(I),qI,4);
 %     t=predict2(xkA(:,nf-2),xkA(:,nf-1),xkA(:,nf)); %mathc splitS_our
- t=predict2(xkA(:,1),xkA(:,2),xkA(:,3));
+ t=predict2(ynf0,ynf1,ynf2);
     t(t>0)=1;
     t(t<0)=0;
     cs=sum(I);
@@ -35,6 +40,7 @@ while err>tol && index< count
     end
     % check for optimality
     err=test_valid(M,q,x0);
+    disp(['pa err:',num2str(err)]);
 end
 x=x0;
 csA;

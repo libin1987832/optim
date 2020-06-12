@@ -7,10 +7,16 @@ index=0;
 indexN=0;
 count=nmax*nf;
 errA=cell(5,nmax);
+tol_rel  = 1e-5;
+tol_abs  = 1e-10;
 while err>tol && index< count
     index=index+nf;
 %     xkA= splitS_our(M,q,1,x0,nf);
-    xkA= splitS_ourres(M,q,1,x0,nf);
+%     xkA= splitS_ourres(M,q,1,x0,nf);
+    [ynf0 err iter flag convergence msg] =  pgs(M,q, x0, nf-2, tol_rel, tol_abs, true);
+    [ynf1 err iter flag convergence msg] =  pgs(M,q, ynf0, 1, tol_rel, tol_abs, true);
+    [ynf2 err iter flag convergence msg] =  pgs(M,q, ynf1, 1, tol_rel, tol_abs, true);
+    xkA=[ynf0;ynf1;ynf2];
 %     I=(xkA(:,3)>0);
 %     I=(xkA(:,nf-2)>0);
 %     t=predict2(xkA(:,nf-2),xkA(:,nf-1),xkA(:,nf));
@@ -40,6 +46,7 @@ while err>tol && index< count
     errA(2,index/nf)={err};
 %      x0=xkA(:,nf);
     x0=xkA(:,3);
+    disp(['hy err:',num2str(err)]);
 end
 if index< count
 x=xs;

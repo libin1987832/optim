@@ -1,4 +1,4 @@
-function x=subspacesearch(x0,M,q)
+function x=subspacesearch_our(x0,M,q)
 s=issparse(M);
 I=(x0>0);
 MII=M(I,I);

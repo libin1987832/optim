@@ -22,12 +22,29 @@ q(xs>0)=-qt(xs>0);
 q(xs==0)=max(abs(qt))+0.1;
 save('fpi','C','xs','q','n');
 % load('fpiq')
+% convergence of the iteratve methods
 CC=triu(C,1);
 TC=tril(C);
-ressvvf=func(C,q,xs);
-ressvv=test_valid(C,q,xs);
-[symmetric,posdef]=isPosdef(C);
 [symmetric2,posdef2]=isPosdef(TC-CC);
+if posdef2==0
+disp('the iterative methods may not converge');
+else
+disp('the iterative methods converges');
+end
+% object value
+ressvvf=func(C,q,xs);
+% KKT error
+ressvv=test_valid(C,q,xs);
+% posdef
+[symmetric,posdef]=isPosdef(C);
+if posdef==0
+disp('C may not the prositive semidefine');
+else if posdef==1
+    disp('positive');
+else
+    disp('semipositive');
+    end
+end
 
 x0=ones(n,1);
 nmax=100;
