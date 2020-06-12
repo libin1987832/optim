@@ -23,7 +23,7 @@ x0r(I2,:)=x0r(I2,:)+rand(cs2,m)+ones(cs2,m);
 x1r=rand(n,m);
 x1r(x1r<0)=0;
 save('fpi','C','xs','q','n','cs2','x0r','m','x1r');
-%   load('fpi')
+% load('fpi')
 B=tril(C);
 Ct=triu(C,1);
 lambda=max(abs(eig(inv(B)*Ct)));
@@ -36,7 +36,7 @@ tol_abs  = 1e-10;
 data=zeros(m,2*n+2);
 data(1,:)=[xs>0;xs;1;0]';
 
-for j=2:2
+for j=1:2
     for i=1:m
         if j==1
             x0=x0r(:,i);
@@ -44,7 +44,7 @@ for j=2:2
             x0=x1r(:,i);
         end
         y2=checkEqS(xs,x0);
-        [ynf0 err iter flag convergence msg] =  pgs(C,q, x0, 10, tol_rel, tol_abs, true);
+        [ynf0 err iter flag convergence msg] =  pgs(C,q, x0, 7, tol_rel, tol_abs, true);
         y1=checkEqS(ynf0,x0);
         [ynf1 err iter flag convergence msg] =  pgs(C,q, ynf0, 1, tol_rel, tol_abs, true);
         y2=checkEqS(ynf1,x0);
