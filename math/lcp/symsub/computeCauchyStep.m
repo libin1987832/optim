@@ -2,6 +2,9 @@ function [cauthy,xc,res]=computeCauchyStep(c,G,x0,d)
 grad=G*x0+c;
 dgrad=d'*grad;
 if dgrad>0
+    cauthy=0;
+    xc=x0;
+    res=0;
     assert(dgrad>0, ['aglobal = ' num2str(dgrad) '<0 is impossible!']);
 else
     tol=1e-10;

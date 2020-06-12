@@ -56,14 +56,14 @@ flag        = 2;
 
 while iter <= max_iter
   
-  dx = 0;
+  dx = 0;% record norm kkt
   for i=1:N
     old_xi = x(i);
     ri     = b(i) + A(i,:)*x;
     Aii    = A(i,i);
     
     x(i) = max( 0, old_xi - lambda*(ri / Aii) );
-    dx   = max(dx, abs(x(i) - old_xi));
+    dx   = max(dx, abs(x(i) - old_xi));% inf norm
   end
   
   old_err = err;
