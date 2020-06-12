@@ -6,7 +6,7 @@ err=test_valid(M,q,x0);
 index=0;
 indexN=0;
 count=nmax*nf;
-errA=cell(5,nmax);
+errA=cell(6,nmax);
 tol_rel  = 1e-5;
 tol_abs  = 1e-10;
 while err>tol && index< count
@@ -46,9 +46,11 @@ while err>tol && index< count
     errA(2,index/nf)={err};
 %      x0=xkA(:,nf);
     x0=xkA(:,3);
+    errd=test_valid(M,q,xkA(:,3));
+    errA(6,index/nf)={errd}; 
     disp(['hy err:',num2str(err)]);
 end
-if index< count
+if index< count && errd>err
 x=xs;
 else
 % x=xkA(:,nf);

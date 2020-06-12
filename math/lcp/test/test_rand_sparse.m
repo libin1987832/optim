@@ -5,7 +5,7 @@ addpath('./symsub')
 addpath('../other')
 addpath('../symsub')
 
-n=1000;
+n=2000;
 C=sprandsym(n,0.4,1)+speye(n)*1.5;
 xs=sprandn(n,1,0.3);
 % xs must be nonnegative
@@ -47,16 +47,16 @@ save('fpi','C','xs','q','n');
 %     disp('semipositive');
 %     end
 % end
-% x0=sparse(1:n,1:1,ones(n,1));
-x0=speye(n,1);
+ x0=sparse(1:n,1:1,ones(n,1));
+% x0=speye(n,1);
 nmax=10;
 
-max_iter = 10;
+max_iter = nmax;
 tol_rel  = 1e-5;
 tol_abs  = 1e-10;
 nf=10;
 
-[xkpsor err iter flag convergence msg] = psor(C, q, x0, 1, max_iter, tol_rel, tol_abs, true);
+[xkpsor err iter flag convergence msg] = psor(C, q, x0, 1, max_iter*nf/2, tol_rel, tol_abs, true);
 [xks,ress]=splitS(C,q,1.4,x0,10);
 disp(['mindig:' num2str(min(diag(C)))]);
 [xk2,err,index2]=splitForlcp(x0,nmax,nf,C,q);
@@ -81,4 +81,8 @@ disp(['our:(',num2str(indexor),' ',num2str(indexNor),') err:',num2str(resor)])
 disp(['GS:(',num2str(max_iter),' ',num2str(0),') err:',num2str(res2)])
 
 
-% analysis
+% % analysis
+% checkEqS(cell2mat(error(4,1)),xs)
+% checkEqS(cell2mat(error(4,2)),xs)
+% checkEqS(cell2mat(error(4,3)),xs)
+% checkEqS(cell2mat(error(4,4)),xs)
