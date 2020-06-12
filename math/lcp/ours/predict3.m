@@ -1,4 +1,4 @@
-function [x]=predict2(x0,x1,x2)
+function [x,lambda1]=predict3(x0,x1,x2)
 d1=x1-x0;
 d2=x2-x1;
 % lambda=max(abs(d2./d1));
