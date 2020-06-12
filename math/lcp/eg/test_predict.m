@@ -3,7 +3,7 @@ addpath('../ours/predict')
 addpath('../util')
 clc
 clear
-n=10;
+n=100;
 m=50;
 A=randn(n);
 A=A'*A;
@@ -36,7 +36,7 @@ tol_abs  = 1e-10;
 data=zeros(m,2*n+2);
 data(1,:)=[xs>0;xs;1;0]';
 
-for j=1:1
+for j=2:2
     for i=1:m
         if j==1
             x0=x0r(:,i);
@@ -44,7 +44,7 @@ for j=1:1
             x0=x1r(:,i);
         end
         y2=checkEqS(xs,x0);
-        [ynf0 err iter flag convergence msg] =  pgs(C,q, x0, 2, tol_rel, tol_abs, true);
+        [ynf0 err iter flag convergence msg] =  pgs(C,q, x0, 10, tol_rel, tol_abs, true);
         y1=checkEqS(ynf0,x0);
         [ynf1 err iter flag convergence msg] =  pgs(C,q, ynf0, 1, tol_rel, tol_abs, true);
         y2=checkEqS(ynf1,x0);
