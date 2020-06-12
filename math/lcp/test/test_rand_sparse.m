@@ -6,7 +6,7 @@ addpath('../other')
 addpath('../symsub')
 
 n=1000;
-C=sprandsym(n,0.4,1)+speye(n);
+C=sprandsym(n,0.4,1)+speye(n)*1.5;
 xs=sprandn(n,1,0.3);
 % xs must be nonnegative
 I1=(xs<0);
@@ -47,6 +47,7 @@ save('fpi','C','xs','q','n');
 %     disp('semipositive');
 %     end
 % end
+% x0=sparse(1:n,1:1,ones(n,1));
 x0=speye(n,1);
 nmax=10;
 
@@ -57,6 +58,7 @@ nf=10;
 
 [xkpsor err iter flag convergence msg] = psor(C, q, x0, 1, max_iter, tol_rel, tol_abs, true);
 [xks,ress]=splitS(C,q,1.4,x0,10);
+disp(['mindig:' num2str(min(diag(C)))]);
 [xk2,err,index2]=splitForlcp(x0,nmax,nf,C,q);
 [xkpa,errpa,indexpa1,indexpa2]=PA(x0,nmax,nf,C,q);
 [xkor,error,indexor,indexNor]=hybridorigin(x0,nmax,nf,C,q);
@@ -77,3 +79,6 @@ disp(['RFNP:(',num2str(index2*(nf+1)),' ',num2str(index2),') err:',num2str(res3)
 disp(['PA:(',num2str(indexpa1),' ',num2str(indexpa2),') err:',num2str(res4)])
 disp(['our:(',num2str(indexor),' ',num2str(indexNor),') err:',num2str(resor)])
 disp(['GS:(',num2str(max_iter),' ',num2str(0),') err:',num2str(res2)])
+
+
+% analysis

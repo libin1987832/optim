@@ -16,7 +16,7 @@ while err>tol && index< count
     [ynf0 err iter flag convergence msg] =  pgs(M,q, x0, nf-2, tol_rel, tol_abs, true);
     [ynf1 err iter flag convergence msg] =  pgs(M,q, ynf0, 1, tol_rel, tol_abs, true);
     [ynf2 err iter flag convergence msg] =  pgs(M,q, ynf1, 1, tol_rel, tol_abs, true);
-    xkA=[ynf0;ynf1;ynf2];
+    xkA=[ynf0 ynf1 ynf2];
 %     I=(xkA(:,3)>0);
 %     I=(xkA(:,nf-2)>0);
 %     t=predict2(xkA(:,nf-2),xkA(:,nf-1),xkA(:,nf));

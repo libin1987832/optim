@@ -9,7 +9,7 @@ if norm(d)>tol
     le0=(d<0);
     % negative is marked for inf
     if s
-    t1=-1*speye(n,1);
+    t1=-1*sparse(1:n,1:1,ones(n,1));
     else
     t1=-1*ones(n,1);
     end
@@ -41,6 +41,7 @@ if norm(d)>tol
             break;
         else
             deltt=-fj1/fj2;
+             %如果对称轴在某个区间 或者最大的【a,+]
             if st(i)+deltt<st(i+1) || st(i+1)>maxt1
                 alph=st(i)+deltt;
                 break;
