@@ -3,27 +3,27 @@ addpath('../ours/predict')
 addpath('../util')
 clc
 clear
-n=100;
-m=50;
-A=randn(n);
-A=A'*A;
-B=0.5*eye(n);
-C=A+B;
-xs=randn(n,1);
-I1=(xs<0);
-xs(I1)=0;
-I2=(xs>0);
-cs2=sum(I2);
-q=rand(n,1);
-qt=C*xs;
-q(xs>0)=-qt(xs>0);
-q(xs==0)=max(abs(qt))+0.1;
-x0r=repmat(xs,1,m);
-x0r(I2,:)=x0r(I2,:)+rand(cs2,m)+ones(cs2,m);
-x1r=rand(n,m);
-x1r(x1r<0)=0;
-save('fpi','C','xs','q','n','cs2','x0r','m','x1r');
-% load('fpi')
+% n=100;
+% m=50;
+% A=randn(n);
+% A=A'*A;
+% B=0.5*eye(n);
+% C=A+B;
+% xs=randn(n,1);
+% I1=(xs<0);
+% xs(I1)=0;
+% I2=(xs>0);
+% cs2=sum(I2);
+% q=rand(n,1);
+% qt=C*xs;
+% q(xs>0)=-qt(xs>0);
+% q(xs==0)=max(abs(qt))+0.1;
+% x0r=repmat(xs,1,m);
+% x0r(I2,:)=x0r(I2,:)+rand(cs2,m)+ones(cs2,m);
+% x1r=rand(n,m);
+% x1r(x1r<0)=0;
+% save('fpi','C','xs','q','n','cs2','x0r','m','x1r');
+load('fpi')
 B=tril(C);
 Ct=triu(C,1);
 lambda=max(abs(eig(inv(B)*Ct)));
