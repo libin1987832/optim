@@ -59,7 +59,7 @@ while iter <= max_iter
      ri     = b(i) + A(i,:)*x;
 %  ri     = b(i) + A(i,:)*old_xi2;
     Aii    = A(i,i);
-    assert(abs(Aii)>1e-10, ['abs(Aii) = ' num2str(abs(Aii)) '<0 is too small!']);
+%    assert(abs(Aii)>1e-10, ['abs(Aii) = ' num2str(abs(Aii)) '<0 is too small!']);
     x(i) = max( 0, old_xi - (ri / Aii) );
     dx = max(dx, abs(x(i) - old_xi));
   end
