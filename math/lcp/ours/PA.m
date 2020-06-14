@@ -1,7 +1,6 @@
 % index: statistic split iterations indexN: statistic subspace minimzaiton
 % allValue:record all value,[split predict xs(zeors for no exposed point)]
 function [x,err,index,indexN]=PA(x0,nmax,nf,M,q)
-addpath('./predict');
 tol=1e-10;
 err=test_valid(M,q,x0);
 index=0;
@@ -40,7 +39,7 @@ while err>tol && index< count
     end
     % check for optimality
     err=test_valid(M,q,x0);
-    disp(['pa err:',num2str(err)]);
+%     disp(['pa err:',num2str(err)]);
 end
 x=x0;
 csA;

@@ -4,7 +4,9 @@ clear
 addpath('../other')
 addpath('../symsub')
 addpath('../util')
-n=1000;
+addpath('../ours')
+for n=1000:100:2000
+% n=1000;
 A=randn(n);
 A=A'*A;
 B=0.1*eye(n);
@@ -18,31 +20,6 @@ q=rand(n,1);
 qt=C*xs;
 q(xs>0)=-qt(xs>0);
 q(xs==0)=max(abs(qt))+0.1;
-save('fpi','C','xs','q','n');
-% load('fpiq')
-% convergence of the iteratve methods
-CC=triu(C,1);
-TC=tril(C);
-[symmetric2,posdef2]=isPosdef(TC-CC);
-if posdef2==0
-disp('the iterative methods may not converge');
-else
-disp('the iterative methods converges');
-end
-% object value
-ressvvf=func(C,q,xs);
-% KKT error
-ressvv=test_valid(C,q,xs);
-% posdef
-[symmetric,posdef]=isPosdef(C);
-if posdef==0
-disp('C may not the prositive semidefine');
-else if posdef==1
-    disp('positive');
-else
-    disp('semipositive');
-    end
-end
 
 x0=ones(n,1);
 nmax=100;
@@ -63,14 +40,12 @@ xs2=norm(xs-xk2);
 xspa=norm(xs-xkpa);
 xsor=norm(xs-xkor);
 [ress,fxs]=test_valid(C,q,xs);
-[resss,fxss]=test_valid(C,q,xks);
-% [res,fx]=test_valid(C,q,xkb);
-  
+[resss,fxss]=test_valid(C,q,xks);  
 [res2,fx2]=test_valid(C,q,xkpsor);
 [res3,fx3]=test_valid(C,q,xk2);
 [res4,fx4]=test_valid(C,q,xkpa);
 [resor,fxor]=test_valid(C,q,xkor);
-disp(['RFNP:(',num2str(index2*(nf+1)),' ',num2str(index2),') err:',num2str(res3)])
-disp(['PA:(',num2str(indexpa1),' ',num2str(indexpa2),') err:',num2str(res4)])
-disp(['our:(',num2str(indexor),' ',num2str(indexNor),') err:',num2str(resor)])
-disp(['GS:(',num2str(max_iter),' ',num2str(0),') err:',num2str(res2)])
+disp(['n=',num2str(n),'&',num2str(res2),'&',num2str(max_iter),'&',...
+    num2str(res3),'&',num2str(index2*nf+index2),'&',num2str(index2),'&',num2str(index2),'&',...
+    num2str(resor),'&',num2str(indexor+indexNor),'&',num2str(indexor/nf),'&',num2str(indexNor)])
+end

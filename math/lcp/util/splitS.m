@@ -1,5 +1,5 @@
 function [x,res] = splitS(Q,d,s,x0,iter)
-addpath('./test')
+% addpath('./test')
 [m,n]=size(Q);
 Di=diag(Q);
 Di(Di<0)=0;
