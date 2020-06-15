@@ -48,7 +48,7 @@ while err>tol && index< count
     x0=xkA(:,3);
     errd=test_valid(M,q,xkA(:,3));
     errA(6,index/nf)={errd}; 
-     disp(['hy err:',num2str(err)]);
+%      disp(['hy err:',num2str(err)]);
 end
 if index< count && errd>err
 x=xs;

@@ -6,8 +6,8 @@ addpath('../util')
 addpath('../ours')
 n=10000;
 condtions=[1e-1,1e-2,1e-3,1e-4,1e-5,1e-6];
-for i=1:1
-    for j=1:1
+for i=1:6
+    for j=1:3
         C=sprandsym(n,0.01,condtions(i),2);
         xs=sprandn(n,1,0.3);
         % xs must be nonnegative
@@ -37,7 +37,7 @@ for i=1:1
         
         
         % [xks,ress]=splitS(C,q,1.4,x0,10);
-        disp(['mindig:' num2str(min(diag(C)))]);
+     %   disp(['mindig:' num2str(min(diag(C)))]);
         tic;[xk2,err,index2]=splitForlcp(x0,nmax,nf,C,q);f1=toc;
         tic;[xkpa,errpa,indexpa1,indexpa2]=PA(x0,nmax,nf,C,q);f2=toc;
         tic;[xkor,error,indexor,indexNor]=hybridorigin(x0,nmax,nf,C,q);f3=toc;
@@ -54,8 +54,8 @@ for i=1:1
         [res3,fx3]=test_valid(C,q,xk2);
         [res4,fx4]=test_valid(C,q,xkpa);
         [resor,fxor]=test_valid(C,q,xkor);
-        disp([num2str(n),' ',num2str(condtions(i)),'&',num2str(res2),'&',num2str(max_iter),'&',...
-            num2str(res3),'&',num2str(index2*nf+index2),'&',num2str(index2),'&',num2str(index2),'&',...
-            num2str(resor),'&',num2str(indexor+indexNor),'&',num2str(indexor/nf),'&',num2str(indexNor)])
+        disp([num2str(n),' ',num2str(condtions(i)),' & ',num2str(res2),' & ',num2str(max_iter),' & ',...
+            num2str(res3),' & ',num2str(index2*nf+index2),' & ',num2str(index2),' & ',num2str(index2),' & ',...
+            num2str(resor),' & ',num2str(indexor+indexNor),' & ',num2str(indexor/nf),' & ',num2str(indexNor)])
     end
 end

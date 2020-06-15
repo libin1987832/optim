@@ -19,6 +19,6 @@ while err>tol && index< nmax
  x0=xk;
  % check for optimality
  err=test_valid(M,q,x0);
-disp(['sym err:',num2str(err)]);
+% disp(['sym err:',num2str(err)]);
 end
 x=xk;
