@@ -1,0 +1,9 @@
+n=10000
+tic
+A=sprandsym(n,0.01,1e-10,2);
+f=toc;
+condest(A)
+fprintf('%8.04f\n',f)
+xs=sprandn(n,1,0.3);
+b=A(5,:)*xs;
+fa=full(A(5,:))*full(xs);

@@ -39,7 +39,7 @@ while err>tol && index< count
     end
     % check for optimality
     err=test_valid(M,q,x0);
-%     disp(['pa err:',num2str(err)]);
+     disp(['pa err:',num2str(err)]);
 end
 x=x0;
 csA;
