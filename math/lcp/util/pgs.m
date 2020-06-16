@@ -54,39 +54,38 @@ while iter <= max_iter
   
 %   dx = 0;
 %   old_xi2 = x;
+
   for i=1:N
-%     old_xi = x(i);
-  %   ri     = b(i) + full(A(i,:))*full(x);
-%   Ax=A(i,:)*x;
-%       ri     = b(i) + Ax;
+    old_xi = x(i);
+
+      ri     = b(i) + A(i,:)*x;
 %  ri     = b(i) + A(i,:)*old_xi2;
-%     Aii    = A(i,i);
-%    assert(abs(Aii)>1e-10, ['abs(Aii) = ' num2str(abs(Aii)) '<0 is too small!']);
-%     x(i) = max( 0, old_xi - (ri / Aii) );
+    Aii    = A(i,i);
+   %assert(abs(Aii)>1e-10, ['abs(Aii) = ' num2str(abs(Aii)) '<0 is too small!']);
+    x(i) = max( 0, old_xi - (ri / Aii) );
 %     dx = max(dx, abs(x(i) - old_xi));
-x(i) = (b(i) + sum(A(i,j) * Xtemp)) / A(i,i);
   end
   
   old_err = err;
     
-  y   = abs( A*x + b );   % Abs is used to fix problem with negative y-values.
-  err = x'*y;
+ % y   = abs( A*x + b );   % Abs is used to fix problem with negative y-values.
+%  err = x'*y;
   
   if profile
     convergence(iter) = err;
   end
   
   % Relative stopping criteria
-  if (abs(err - old_err) / abs(old_err)) < tol_rel  
-    flag = 3;
-    break;
-  end
+%   if (abs(err - old_err) / abs(old_err)) < tol_rel  
+%     flag = 3;
+%     break;
+%   end
   
   % Absolute stopping criteria
-  if err < tol_abs   
-    flag = 4;
-    break;
-  end
+%   if err < tol_abs   
+%     flag = 4;
+%     break;
+%   end
   
   % Stagnation testing
 %   if dx < eps

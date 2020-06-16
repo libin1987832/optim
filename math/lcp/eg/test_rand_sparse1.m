@@ -4,11 +4,16 @@ addpath('../other')
 addpath('../symsub')
 addpath('../util')
 addpath('../ours')
-n=1000;
+n=10000;
 condtions=[1e-1,1e-2,1e-3,1e-4,1e-5,1e-6];
 for i=1:1
     for j=1:1
         C=sprandsym(n,0.01,condtions(i),2);
+         D = diag(diag(C));
+         L = tril(C)- D;
+         U = triu(C)- D;
+         iDL=inv(D+L);
+         iDLU=-iDL*U;
         xs=sprandn(n,1,0.3);
         % xs must be nonnegative
         I1=(xs<0);
@@ -38,19 +43,20 @@ for i=1:1
         
         % [xks,ress]=splitS(C,q,1.4,x0,10);
      %   disp(['mindig:' num2str(min(diag(C)))]);
-        tic;[xk2,err,index2]=splitForlcp(x0,nmax,nf,C,q);f1=toc;
-        tic;[xkpa,errpa,indexpa1,indexpa2]=PA(x0,nmax,nf,C,q);f2=toc;
-        tic;[xkor,error,indexor,indexNor]=hybridorigin(x0,nmax,nf,C,q);f3=toc;
-        tic;[xkpsor err iter flag convergence msg] = psor(C, q, x0, 1, max_iter*2, tol_rel, tol_abs, true);f4=toc;
+        tic;[xk2,err,index2]=splitForlcp1(x0,nmax,nf,C,q,iDLU,iDL);f1=toc;
+        tic;[xkpa,errpa,indexpa1,indexpa2]=PA1(x0,nmax,nf,C,q,iDLU,iDL);f2=toc;
+        tic;[xkor,error,indexor,indexNor]=hybridorigin1(x0,nmax,nf,C,q,iDLU,iDL);f3=toc;
+  %      tic;[xkpsor err iter flag convergence msg] = psor(C, q, x0, 1, max_iter*2, tol_rel, tol_abs, true);f4=toc;
         % || x-x^*||
-        xspsor=norm(xs-xkpsor);
+%         xspsor=norm(xs-xkpsor);
         xs2=norm(xs-xk2);
         xspa=norm(xs-xkpa);
         xsor=norm(xs-xkor);
         % ||KKT||
         [ress,fxs]=test_valid(C,q,xs);
         % [resss,fxss]=test_valid(C,q,xks);
-        [res2,fx2]=test_valid(C,q,xkpsor);
+%         [res2,fx2]=test_valid(C,q,xkpsor);
+        res2=0;
         [res3,fx3]=test_valid(C,q,xk2);
         [res4,fx4]=test_valid(C,q,xkpa);
         [resor,fxor]=test_valid(C,q,xkor);
