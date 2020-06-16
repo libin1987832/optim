@@ -49,21 +49,22 @@ err         = Inf;               % Current error measure
 x           = x0;                % Current iterate
 iter        = 1;                 % Iteration counter
 flag        = 2;
-
+j=1:N;
 while iter <= max_iter
   
-  dx = 0;
+%   dx = 0;
 %   old_xi2 = x;
   for i=1:N
-    old_xi = x(i);
+%     old_xi = x(i);
   %   ri     = b(i) + full(A(i,:))*full(x);
-  Ax=A(i,:)*x;
-      ri     = b(i) + Ax;
+%   Ax=A(i,:)*x;
+%       ri     = b(i) + Ax;
 %  ri     = b(i) + A(i,:)*old_xi2;
-    Aii    = A(i,i);
+%     Aii    = A(i,i);
 %    assert(abs(Aii)>1e-10, ['abs(Aii) = ' num2str(abs(Aii)) '<0 is too small!']);
-    x(i) = max( 0, old_xi - (ri / Aii) );
-    dx = max(dx, abs(x(i) - old_xi));
+%     x(i) = max( 0, old_xi - (ri / Aii) );
+%     dx = max(dx, abs(x(i) - old_xi));
+x(i) = (b(i) + sum(A(i,j) * Xtemp)) / A(i,i);
   end
   
   old_err = err;
@@ -88,10 +89,10 @@ while iter <= max_iter
   end
   
   % Stagnation testing
-  if dx < eps
-    flag = 5;
-    break;
-  end
+%   if dx < eps
+%     flag = 5;
+%     break;
+%   end
   
   iter = iter + 1;
 end
