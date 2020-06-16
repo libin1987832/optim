@@ -6,8 +6,8 @@ addpath('../util')
 addpath('../ours')
 n=10000;
 condtions=[1e-1,1e-2,1e-3,1e-4,1e-5,1e-6];
-for i=1:6
-    for j=1:3
+for i=1:1
+    for j=1:1
         C=sprandsym(n,0.01,condtions(i),2);
         xs=sprandn(n,1,0.3);
         % xs must be nonnegative
