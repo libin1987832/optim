@@ -1,9 +1,9 @@
 % compare simple iterator and newton method 
 % A=[1,1;-1,-1;1,0;6,3];
 % b=[1;1;-0.5;-2];
-addpath('FM');
-addpath('util');
-addpath('hybrid');
+addpath('../FM');
+addpath('../util');
+addpath('../hybrid');
 A=[1,1;-1,-1;-1,0;-6,-3];
 b=[1;1;0.5;2];
 

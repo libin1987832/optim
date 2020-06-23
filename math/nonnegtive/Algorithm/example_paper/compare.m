@@ -1,13 +1,15 @@
-addpath('FM');
-addpath('util');
-addpath('hybrid');
-A=[1,1;-1,-1;-1,0;-6,-3];
-b=[1;1;0.5;2];
+% compare our hybrid and Dax
+addpath('../FM');
+addpath('../util');
+addpath('../hybrid');
+A=[1,1;-1,-1;1,0;6,3];
+b=[1;1;-0.5;-2];
 x0=[-1;-0.2];
 [Q,R]=qr(A);
 xx1=[];
 yy1=[];
 error=[];
+% take two steps for both algorithm
 for i=0:1
 fk=b-A*x0;
 fk(fk<0)=0;
@@ -20,12 +22,14 @@ end
 xxF=xx1;
 yyF=yy1;
 errorF=error;
+% matlab have four column
 Qn=Q(:,1:2);
 QQ=3*Qn*Qn';
 I=diag(ones(4,1))
+% predict
 ssign=getBn(QQ,fm,I);
-
-[xkN,rkN,fk,f0,lambe]=ssqr(x0,A,b);
+% take newton type method
+[xkN,fk,dh,rkk]=ssqr4(x0,A,b);
 errorN=[error;norm(A'*rkN)];
 % xx1=[xx1;xk(1)];
 % yy1=[yy1;xk(2)];
@@ -40,11 +44,15 @@ x0=xk;
 end
 
 % plot(4:size(errorF,1),errorF(4:end,1),'-b*',4:size(errorN,1),errorN(4:end),'-or');
+% plot problem
 d=lineData(A,b,[-2.5,0],[-1.5,3]);
 line(d(:,1:2)',d(:,3:4)')
+
 % line([-2/3,1],[2/3,-1],'LineStyle','--');
+% plot solution 
 line([-2/3,-2.5],[2/3,2.5],'LineStyle','--');
 hold on 
+% plot Dax
 line(xxF',yyF','LineWidth',2)
 plot(xxF,yyF,'r*');
 H=line([xx1;xkN(1)]',[yy1;xkN(2)]','Color',[.1 .1 .1],'LineWidth',2);
