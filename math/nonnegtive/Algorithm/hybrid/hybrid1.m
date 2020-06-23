@@ -21,7 +21,10 @@ countFM=0;
 countNW=0;
 beginNW=0;
 if Ar<delt*rn || rn<delt
-    error('input x is satisfied all constrain!(Ar<delt*rn|| rn<delt)') %ceases execution
+    xk=x0;
+    rk=r;
+    fk=0.5*(r'*r);
+    disp('input x is satisfied all constrain!(Ar<delt*rn|| rn<delt)') %ceases execution
 end
 %||A'(r)+||<=delt||(r)+|| ||(r)+||<=de
 while Ar>delt*rn && rn>delt

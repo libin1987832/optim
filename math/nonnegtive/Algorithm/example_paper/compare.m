@@ -64,13 +64,13 @@ plot(xxF,yyF,'r*');
 H=line([xx1;xkN(1)]',[yy1;xkN(2)]','Color',[.1 .1 .1],'LineWidth',2);
 plot([xx1;xkN(1)]',[yy1;xkN(2)]','bo');
 line([xx1;]',[yy1;]','Color',[.5 0 0],'LineWidth',2);
-    text(xkN(1),xkN(2),'3')
-for i=1:size(xxF,1)
+    text(xkN(1)+0.05,xkN(2),'2')
+for i=1:size(xxF,1)-2
     x0=[xxF(i),yyF(i)];
-    c=num2str(i);
+    c=num2str(i-1);
 %     plot(x0(1),x0(2),'*')
     c=[' ',c];
-    text(x0(1),x0(2),c)
+    text(x0(1)+0.05,x0(2)-0.01,c)
     %plot(xx1,yy1,'r*');
     hold on
 end

@@ -1,11 +1,11 @@
 % paper rand [1,1] example
 %<<<<<<< HEAD
 addpath('FM')
-% m=1000;
-% ratio=0.3;
-% n=ceil(ratio*m);
-%  A=2*rand(m,n)-1;
-%  b=2*rand(m,1)-1;
+m=1000;
+ratio=0.3;
+n=ceil(ratio*m);
+ A=2*rand(m,n)-1;
+ b=2*rand(m,1)-1;
 % save('ddf1.mat','A','b','m','n')
 %  load('tt1.mat')
 % load('ddf.mat')

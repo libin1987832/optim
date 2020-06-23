@@ -18,6 +18,7 @@ elseif var==2
 end
 r=b-A*x0;
 r(r<0)=0;
+fk=0.5*(r'*r);
 %condition for terminate
 Ar=norm(A'*r);
 rn=norm(r);
@@ -34,6 +35,7 @@ countFM=0;
 countNW=0;
 beginNW=0;
 I=diag(ones(1,m));
+xk=x0;
 while Ar>delt*rn && rn>delt
     %     if uIndex<uIter
     if uIndex<nIter

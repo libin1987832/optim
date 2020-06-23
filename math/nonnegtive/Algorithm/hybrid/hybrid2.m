@@ -9,6 +9,7 @@ tol=0;
 [Q,R]=qr(A);
 r=b-A*x0;
 r(r<0)=0;
+
 %condition for terminate
 Ar=norm(A'*r);
 rn=norm(r);
@@ -27,7 +28,9 @@ countNW=0;
 beginNW=0;
 
 if Ar<delt*rn || rn<delt
-    error('input x is satisfied all constrain!') %ceases execution
+    rk=r;
+    xk=x0;
+    disp('input x is satisfied all constrain!') %ceases execution
 end
 %||A'(r)+||<=delt||(r)+|| ||(r)+||<=de
 while Ar>delt*rn && rn>delt
