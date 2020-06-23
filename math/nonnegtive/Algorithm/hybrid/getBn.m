@@ -1,4 +1,5 @@
 % sum2 is to conuting number which is same r
+% QQ=n*Q'*Q
 function sum2=getBn(QQ,r,I)
 % Nk=r;
 % Nk(Nk>0)=1;

@@ -2,32 +2,33 @@
 addpath('../FM');
 addpath('../util');
 addpath('../hybrid');
-A=[1,1;-1,-1;1,0;6,3];
-b=[1;1;-0.5;-2];
+A=[1,1;-1,-1;-1,0;-6,-3];
+b=[1;1;0.5;2];
 x0=[-1;-0.2];
 [Q,R]=qr(A);
-xx1=[];
-yy1=[];
+xx1=[x0(1)];
+yy1=[x0(2)];
 error=[];
 % take two steps for both algorithm
-for i=0:1
+for i=1:1
 fk=b-A*x0;
 fk(fk<0)=0;
 error=[error;norm(A'*(fk))];
-xx1=[xx1;x0(1)];
-yy1=[yy1;x0(2)];
 [xk,r0,rk,fk,fm,fr]=FM(x0,Q,R,A,b);
 x0=xk;
+xx1=[xx1;x0(1)];
+yy1=[yy1;x0(2)];
 end
 xxF=xx1;
 yyF=yy1;
 errorF=error;
 % matlab have four column
 Qn=Q(:,1:2);
-QQ=3*Qn*Qn';
+QQ=2*Qn*Qn';
 I=diag(ones(4,1))
 % predict
 ssign=getBn(QQ,fm,I);
+
 % take newton type method
 [xkN,fk,dh,rkk]=ssqr4(x0,A,b);
 errorN=[error;norm(A'*rkN)];

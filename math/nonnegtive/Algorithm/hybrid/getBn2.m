@@ -1,4 +1,4 @@
-function varargout=getBn2(nIter,Q,r,I,varargin)
+function varargout=getBn2(nIter,Q,r,varargin)
 [m,n]=size(r);
 rkn=r;
 %p=find(rkn>0);
