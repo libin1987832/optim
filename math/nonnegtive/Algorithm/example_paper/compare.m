@@ -100,7 +100,7 @@ fprintf('$ x_%i $ & (%4.2f,%4.2f) & %4.2f & {1,2}& (%4.2f,%4.2f) & %4.2f & {1,2}
     ,xx1(i+1),yy1(i+1),errorN(i+1));
 end
 for i=3:5
-fprintf('$ x_%i $ & (%4.2f,%4.2f) & %4.2f & {1,2} & - & - & - & -\\\\\n',i,xxF(i+1),yyF(i+1),errorF(i+1));
+fprintf('$ x_%i $ & (%4.2f,%4.2f) & %4.2f & {1,2} & - & - & - & -\\\\\\n',i,xxF(i+1),yyF(i+1),errorF(i+1));
 end
 
 % [xk1,fk1,xkArr1,countF1,countN1]=hybrid6(x0,A,b,3);
