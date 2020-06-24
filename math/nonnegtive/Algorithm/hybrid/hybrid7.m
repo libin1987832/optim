@@ -54,6 +54,8 @@ while Ar>delt*rn && rn>delt
         uIndex=0;
         if var==0
             ssign=getBn(QQ,fm,I);
+            %check r=(I-QQ)^nr0
+            ssign=getABn(QQ,fm,I,nIter);
         elseif var==1
             ssign=getBn2(nIter,Qn,fm,I);
         else
@@ -67,8 +69,9 @@ while Ar>delt*rn && rn>delt
             if countNW ==1
                 beginNW=countFM;
             end   
-            [xk,fk,dh,rkk]=ssqr4(x0,A,b);
+            [xk,fk,dh,rkk]=ssqr4(yf,A,b);
             xkArr=[xkArr;[xk',fk,1]];
+            rk=rkk;
         end
     end
    

@@ -11,7 +11,8 @@ AI=A(I,:);
 if m==n
     hk=AI\r(I);
 else
-    hk=pinv(AI)*r(I);
+   % hk=pinv(AI)*r(I);
+   [hk,flag] = pcg(AI'*AI,AI'*r(I),1e-10,150);
 end
 xk=x0+hk;
 % ÏÂ½µÁ¿Au

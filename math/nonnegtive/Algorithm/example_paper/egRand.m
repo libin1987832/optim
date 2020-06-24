@@ -1,6 +1,8 @@
 % paper rand [1,1] example
 %<<<<<<< HEAD
-addpath('FM')
+clc 
+clear
+addpath('../FM')
 m=1000;
 ratio=0.3;
 n=ceil(ratio*m);
@@ -44,10 +46,10 @@ n=ceil(ratio*m);
 % [xk2,fk2,xkArr2,countF2,countN2]=hybrid2(x0,A,b);
 
 
-for m=1000:2000:5000
-    for ratio=0.1:0.3:0.7
-% m=300;
-% ratio=0.5;
+for m=10:20:50
+    for ratio=0.1:0.3:0.5
+m=300;
+ratio=0.5;
 n=ceil(ratio*m);
 A=2*rand(m,n)-1;
 b=2*rand(m,1)-1;
