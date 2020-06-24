@@ -56,6 +56,8 @@ x0=zeros(n,1);
 [xk1,fk1,xkArr1,countF1,countN1]=hybrid1(x0,A,b);
 [xk2,fk2,xkArr2,countF2,countN2]=hybrid2(x0,A,b);
 [xk1,fk1,xkArr1,countF1,countN1]=hybrid6(x0,A,b,10);
+[xk1,fk1,xkArr1,countF1,countN1]=hybrid7(x0,A,b,10);
+
     end
 end
 % [xk2,fk2,xkArr2,countF2,countN2]=hybrid4(x0,A,b);

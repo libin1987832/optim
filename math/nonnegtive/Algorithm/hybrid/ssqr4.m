@@ -8,7 +8,11 @@ r0(r0<0)=0;
 Ar0=norm(A'*r0);
 I=find(r>=tol);
 AI=A(I,:);
-hk=pinv(AI)*r(I);
+if m==n
+    hk=AI\r(I);
+else
+    hk=pinv(AI)*r(I);
+end
 xk=x0+hk;
 % ÏÂ½µÁ¿Au
 dh=A*hk;

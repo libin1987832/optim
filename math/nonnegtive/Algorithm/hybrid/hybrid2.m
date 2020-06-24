@@ -88,5 +88,5 @@ fk=0.5*rk'*rk;
 tf=etime(clock,t);
 vk=sum(sign(rk));
 disp(['%hybrid2 m:',num2str(m),' n:',num2str(n),' AT(b-A*x)+:',num2str(Ar),' fk:',num2str(fk),' ssqr:',num2str(countNW),' FM:',num2str(countFM),' cpu:',num2str(tf),' uIter:',num2str(beginNW)]);
-disp(['$',num2str(m),'\times ',num2str(n),'$&FMEF&(',num2str(countFM),',',num2str(countNW),')&',num2str(tf),'&',num2str(fk),'&',num2str(Ar)]);
-disp(['well1033&our&',num2str(vk),'&',num2str(rn),'&',num2str(Ar),'&(',num2str(countFM),',',num2str(countNW),')&',num2str(beginNW)]);
+%disp(['$',num2str(m),'\times ',num2str(n),'$&FMEF&(',num2str(countFM),',',num2str(countNW),')&',num2str(tf),'&',num2str(fk),'&',num2str(Ar)]);
+%disp(['well1033&our&',num2str(vk),'&',num2str(rn),'&',num2str(Ar),'&(',num2str(countFM),',',num2str(countNW),')&',num2str(beginNW)]);
