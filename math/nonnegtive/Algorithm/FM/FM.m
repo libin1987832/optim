@@ -3,15 +3,22 @@
 %r0=(b-Ax0)+ rk=(b-Axk)+ 
 %fm=b-Axk fr=norm(yk1)^2 
 function [xk,r0,rk,fk,fm,fr]=FM(x0,Q,R,A,b)
+[m,n]=size(A);
 r=b-A*x0;
 r(r<0)=0;
 r0=r;
-fr=0.5*r'*r;
+fr=0.5*(r'*r);
 % compute min increase
-uk=R\(Q'*r);
+% uk=R\(Q'*r);
+Qr=Q'*r;
+xk=x0;
+for i=n:1
+    for j=n:i+1
+        xk(i)=Qr(i)/R(i,i);
+    end
+end
 % mm=A*uk-r;
 % fm=0.5*mm'*mm;
-
 xk=x0+uk;
 fk=b-A*xk;
 fm=fk;
