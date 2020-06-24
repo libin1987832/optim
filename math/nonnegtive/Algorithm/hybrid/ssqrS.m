@@ -1,4 +1,4 @@
-function [xk,rk,fk,f0,lambe]=ssqr(x0,A,b)
+function [xk,rk,fk,f0,lambe]=ssqrS(x0,A,b)
 % take the binary search step length
 r=b-A*x0;
 I=(r>=0);
@@ -18,8 +18,8 @@ AI=A(I,:);
 % Vdd=V(:,1:rnkd);
 % u=Vdd*(Sdd\(Udd'*bII));
 % 内置算法 有时候会比SVD要快
-u=AI\r(I);
-
+%u=AI\r(I);
+[u,flag]=lsqr(AI,r(I),1e-10,50);
 r(r<0)=0;
 f0=0.5*(r'*r);
 
@@ -37,7 +37,4 @@ while fk>f0
     fk=0.5*(r'*r);
 end
 rk=r;
-
-
-
 

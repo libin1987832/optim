@@ -46,8 +46,8 @@ b=2*rand(m,1)-1;
 % [xk2,fk2,xkArr2,countF2,countN2]=hybrid2(x0,A,b);
 
 
-for m=1000:1000:5000
-    for ratio=0.1:0.3:0.8
+for m=100:100:1000
+    for ratio=0.1:0.2:1
         n=ceil(ratio*m);
         A=2*rand(m,n)-1;
         b=2*rand(m,1)-1;
@@ -62,10 +62,10 @@ t=clock;
 %         [xk7,fk1,xkArr1,countF7,countN7]=hybrid7(x0,A,b,10);
         r=b-A*xk1;
         r(r<0)=0;
-        fprintf('$ %d \\times %d $ & %4.2f & %4.2f & %d & %d & %4.2f &',m,n,0.5*(r'*r),norm(A'*r),countF1,countN1,tf1);
+        fprintf('$ %d \\times %d $ & %4.2f & %g & %d & %d & %4.2f &',m,n,0.5*(r'*r),norm(A'*r),countF1,countN1,tf1);
         r=b-A*xk6;
         r(r<0)=0;
-        fprintf('%4.2f & %4.2f & %d & %d & %4.2f\\\\\n',0.5*(r'*r),norm(A'*r),countF6,countN6,tf2);
+        fprintf('%4.2f & %g & %d & %d & %4.2f\\\\% 4.2f\n',0.5*(r'*r),norm(A'*r),countF6,countN6,tf2,tf1/tf2);
     end
 end
 % [xk2,fk2,xkArr2,countF2,countN2]=hybrid4(x0,A,b);
