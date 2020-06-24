@@ -20,7 +20,7 @@ ssign=[ssign1];
 rkn=getEstimatedR(QQ,fk,I);
 skn=[rkn];
 fk(fk<0)=0;
-fkk1=[(fk'*fk)];
+fkk1=[0.5*(fk'*fk)];
 error=[norm(A'*(fk))];
 
 % matlab have four column
@@ -34,7 +34,7 @@ fkk1=[fkk1;(fk'*fk)];
 x0=xk;
 xx1=[xx1;x0(1)];
 yy1=[yy1;x0(2)];
-error=[error;norm(A'*(fk))];
+error=[error;norm(A'*(rk))];
 end
 xxF=xx1;
 yyF=yy1;
@@ -56,7 +56,7 @@ fk=b-A*x0;
 fk(fk<0)=0;
 fkk1=[fkk1;(fk'*fk)];
 [xk,r0,rk,fk,fm,fr]=FM(x0,Q,R,A,b);
-errorF=[errorF;norm(A'*(fk))];
+errorF=[errorF;norm(A'*(rk))];
 xxF=[xxF;xk(1)];
 yyF=[yyF;xk(2)];
 x0=xk;
@@ -94,13 +94,13 @@ for i=1:size(xxF,1)-2
 end
 
 [xx1';yy1']
-rkn
+skn
 for i=0:2
-fprintf('$ x_%i $ & (%4.2f,%4.2f) & %4.2f & (1,2)& (%4.2f,%4.2f) & %4.2f & (1,2) & - \\\\\n',i,xxF(i+1),yyF(i+1),errorF(i+1)...
+fprintf('$ x_%i $ & (%4.2f,%4.2f) & %4.2f & {1,2}& (%4.2f,%4.2f) & %4.2f & {1,2} & - \\\\\n',i,xxF(i+1),yyF(i+1),errorF(i+1)...
     ,xx1(i+1),yy1(i+1),errorN(i+1));
 end
 for i=3:5
-fprintf('$ x_%i $ & (%4.2f,%4.2f) & %4.2f & (1,2)& - & - & - & -\\\\\n',i,xxF(i+1),yyF(i+1),errorF(i+1));
+fprintf('$ x_%i $ & (%4.2f,%4.2f) & %4.2f & {1,2} & - & - & - & -\\\\\n',i,xxF(i+1),yyF(i+1),errorF(i+1));
 end
 
 % [xk1,fk1,xkArr1,countF1,countN1]=hybrid6(x0,A,b,3);
