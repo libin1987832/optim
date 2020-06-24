@@ -49,13 +49,14 @@ while Ar>delt*rn && rn>delt
 %     FAr=norm(A'*rk);
 %     Frn=norm(rk);
      % test 
+     %[b-A*x0 b-A*xk fm fm-QQ*diag(fm>0)*fm (I-QQ/nIter*diag(fm>0))^nIter*fm]
     if mod(uIndex,nIter)==0 && uIndex >0
         % check if exposed face by r=B^n*r0
         uIndex=0;
         if var==0
             ssign=getBn(QQ,fm,I);
             %check r=(I-QQ)^nr0
-            ssign=getABn(QQ,fm,I,nIter);
+%             ssign=getABn(QQ,fm,I,nIter);
         elseif var==1
             ssign=getBn2(nIter,Qn,fm,I);
         else
