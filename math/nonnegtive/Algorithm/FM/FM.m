@@ -8,15 +8,16 @@ r=b-A*x0;
 r(r<0)=0;
 r0=r;
 fr=0.5*(r'*r);
-% compute min increase
-% uk=R\(Q'*r);
 Qr=Q'*r;
-xk=x0;
-for i=n:1
-    for j=n:i+1
-        xk(i)=Qr(i)/R(i,i);
-    end
-end
+% compute min increase
+uk=R\Qr;
+% uk=x0;
+% for i=n:-1:1
+%     for j=n:-1:(i+1)
+%         Qr(i)=Qr(i)-uk(j)*R(i,j);
+%     end
+%     uk(i)=Qr(i)/R(i,i);
+% end
 % mm=A*uk-r;
 % fm=0.5*mm'*mm;
 xk=x0+uk;
@@ -25,10 +26,3 @@ fm=fk;
 fk(fk<0)=0;
 rk=fk;
 fk=0.5*fk'*fk;
-% z0=A*x0-b;
-% z0(z0<0)=0;
-% u0=A*x0-z0
-% 
-% zk=A*xk-b;
-% zk(zk<0)=0;
-% uk=A*xk-zk

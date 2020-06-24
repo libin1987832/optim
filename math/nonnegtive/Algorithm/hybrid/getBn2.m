@@ -1,3 +1,4 @@
+% 延迟计算 Q*Q'
 function varargout=getBn2(nIter,Q,r,varargin)
 [m,n]=size(r);
 rkn=r;
@@ -12,6 +13,7 @@ for i=1:m
     tmp=0;
     for j=1:m
         if r(j)>0
+            % 如果 小于2 则表示该值已经有计算 不需要计算
             if vn>0 && tmpq(i,j)<2
                 tmp=tmp+tmpq(i,j)*r(j);
             else

@@ -1,4 +1,4 @@
-% FM+exposed change 连续uIter FM 都没有改变则采用 牛顿法 
+% FM+exposed change 连续uIter FM 都没有改变则采用 牛顿法
 function [xk,fk,xkArr,countFM,countNW,Q]=hybrid2(x0,A,b)
 
 t=clock;
@@ -42,7 +42,7 @@ while Ar>delt*rn && rn>delt
         countFM=countFM+1;
         Ik=IkN;
         [xk,r0,rk,fk1,fm,fr]=FM(x0,Q,R,A,b);
-         fk=fk1;
+        fk=fk1;
         xkArr=[xkArr;[xk',fk1,0]];
         IkN=find(rk>tol);
         face(ii)=isequal(IkN,Ik);
@@ -53,32 +53,17 @@ while Ar>delt*rn && rn>delt
             break
         end
     end
-  
-
+    
+    % the first is successise unchange the second is feasible the third machine error
     if all(face(2:end)) && ~isempty(IkN) && ArN>delt*rn && rnN>delt
-        %     if isequal(I,Ik1)
-        %newtonalgorithm
-%         y=0;
-%         while ~y
-%             statSS=statSS+1;
-            countNW=countNW+1;
-             if countNW ==1
-                 beginNW=countFM;
-             end
-%             [xk2,fk2,y]=ssqr2(xk,A,b);
-              [xk,rk,fk2,f0,lambe]=ssqr(xk,A,b);
-            xkArr=[xkArr;[xk',fk2,1]];
-%             xkArr=[xkArr;[xk',fk1,1]];
-%             if abs(fk2 - fk1) < 1e-7 || fk2 < fk1 
-%                 xk=xk2;
-%                 rk2=b-A*xk2;
-%                 rk2(rk2<0)=0;
-%                 rk=rk2;
-%                 ArF=norm(A'*rk);
-%              %   break;
-%             end
+        countNW=countNW+1;
+        if countNW ==1
+            beginNW=countFM;
         end
-%     end
+        % take the binary search step length
+        [xk,rk,fk2,f0,lambe]=ssqr(xk,A,b);
+        xkArr=[xkArr;[xk',fk2,1]];
+    end
     Ar=norm(A'*rk);
     rn=norm(rk);
     r=rk;
