@@ -1,5 +1,5 @@
 % Dax hybrid algorithm and r=B*r Nr==N
-function [xk,fk,xkArr,countFM,countNW,Q]=hybrid6(x0,A,b,nIter,maxIter,varargin)
+function [xk,fk,xkArr,countFM,countNW,Q]=hybrid6(x0,A,b,nIter,eIter,maxIter,varargin)
 % test baseActive.mat
 % load('baseActive.mat');
 var=size(varargin,2);
@@ -12,7 +12,7 @@ uIter=max(33,(m+n)/4);
 [Q,R]=qr(A);
 Qn=Q(:,1:n);
 if var==0 
- QQ=nIter*Qn*Qn';
+ QQ=eIter*(Qn*Qn');
 elseif var==2
     tmpq=3*ones(m,m);
 end
@@ -53,9 +53,9 @@ while Ar>delt*rn && rn>delt
             if var==0
                 ssign=getBn(QQ,fm,I);
             elseif var==1
-                ssign=getBn2(nIter,Qn,fm,I);
+                ssign=getBn2(eIter,Qn,fm,I);
             else
-                [ssign,tmpq]=getBn2(nIter,Qn,fm,I,tmpq);    
+                [ssign,tmpq]=getBn2(eIter,Qn,fm,I,tmpq);    
             end
         % if all great zeros mean same sign
         if ssign==m ||ssign>m*0.99
