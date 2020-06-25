@@ -1,7 +1,7 @@
 % Dax hybrid algorithm
-function [xk,fk,xkArr,countFM,countNW,Q]=hybrid1(x0,A,b)
+function [xk,fk,xkArr,countFM,countNW,Q]=hybrid1(x0,A,b,maxIter)
 t=clock;
-maxIter=100;
+
 %compute hybrid uIter
 [m,n]=size(A);
 uIter=floor(max(33,(m+n)/4));

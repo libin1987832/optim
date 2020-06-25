@@ -3,50 +3,10 @@
 clc
 clear
 addpath('../FM')
-m=1000;
-ratio=0.3;
-n=ceil(ratio*m);
-A=2*rand(m,n)-1;
-b=2*rand(m,1)-1;
-% save('ddf1.mat','A','b','m','n')
-%  load('tt1.mat')
-% load('ddf.mat')
-% x0=zeros(n,1);
-%
-% [xk1,fk1,xkArr1,countF1,countN1]=hybrid6(x0,A,b,10);
-% [xk1,fk1,xkArr1,countF1,countN1]=hybrid2(x0,A,b);
-% [xk2,fk2,xkArr2,countF2,countN2]=hybrid1(x0,A,b);
-% [xkArr1m,xkArr1n]=size(xkArr1);
-% [xkArr2m,xkArr2n]=size(xkArr2);
-% beginRow=18;
-% plx1=beginRow:xkArr1m;
-% ply1=xkArr1(plx1,n+1)';
-% plx2=beginRow:xkArr2m;
-% ply2=xkArr2(plx2,n+1)';
-% plot(plx1(xkArr1(plx1,n+2)'==1),ply1(xkArr1(plx1,n+2)'==1),'ro');
-%  hold on
-% plot(plx1(xkArr1(plx1,n+2)'==0),ply1(xkArr1(plx1,n+2)'==0),'r.');
-% plot(plx2(xkArr2(plx2,n+2)'==1),ply2(xkArr2(plx2,n+2)'==1),'bo');
-% plot(plx2(xkArr2(plx2,n+2)'==0),ply2(xkArr2(plx2,n+2)'==0),'b-');
-
-% for m=1000:1000:5000
-%     for ratio=0.1:0.3:0.7
-% % m=300;
-% % ratio=0.5;
-%=======
-% m=300;
-% ratio=0.2;
-%>>>>>>> a73cbedf22b6ac1a723380c9f9c07baa55399595
-% n=ceil(ratio*m);
-% A=2*rand(m,n)-1;
-% b=2*rand(m,1)-1;
-% x0=zeros(n,1);
-%
-% [xk1,fk1,xkArr1,countF1,countN1]=hybrid1(x0,A,b);
-% [xk2,fk2,xkArr2,countF2,countN2]=hybrid2(x0,A,b);
-
-
-for m=100:100:1000
+tfA=[];
+dfA=[];
+dim=[];
+for m=100:100:200
     for ratio=0.1:0.2:1
         n=ceil(ratio*m);
         A=2*rand(m,n)-1;
@@ -56,17 +16,21 @@ for m=100:100:1000
         [xk1,fk1,xkArr1,countF1,countN1]=hybrid1(x0,A,b);
         tf1=etime(clock,t);
 %         [xk2,fk2,xkArr2,countF2,countN2]=hybrid2(x0,A,b);
-t=clock;
+        t=clock;
         [xk6,fk1,xkArr1,countF6,countN6]=hybrid6(x0,A,b,10);
         tf2=etime(clock,t);
 %         [xk7,fk1,xkArr1,countF7,countN7]=hybrid7(x0,A,b,10);
         r=b-A*xk1;
         r(r<0)=0;
-        fprintf('$ %d \\times %d $ & %4.2f & %g & %d & %d & %4.2f &',m,n,0.5*(r'*r),norm(A'*r),countF1,countN1,tf1);
+        df1=norm(A'*r);
+        fprintf('$ %d \\times %d $ & %4.2f & %g & %d & %d & %4.2f &',m,n,0.5*(r'*r),df1,countF1,countN1,tf1);
         r=b-A*xk6;
         r(r<0)=0;
-        fprintf('%4.2f & %g & %d & %d & %4.2f\\\\% 4.2f\n',0.5*(r'*r),norm(A'*r),countF6,countN6,tf2,tf1/tf2);
+        df6=norm(A'*r);
+        fprintf('%4.2f & %g & %d & %d & %4.2f\\\\% 4.2f\n',0.5*(r'*r),df6,countF6,countN6,tf2,tf1/tf2);
+        tfA=[tfA tf/tf2];
+        dfA=[dfA df1/df6];
+        dim=[dim [num2str(m) 'X' num2str(n)]];
     end
 end
-% [xk2,fk2,xkArr2,countF2,countN2]=hybrid4(x0,A,b);
-
+semilogy(1:size(dfA,2),dfA);

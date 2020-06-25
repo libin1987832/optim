@@ -1,10 +1,9 @@
 % Dax hybrid algorithm and r=B*r Nr==N
-function [xk,fk,xkArr,countFM,countNW,Q]=hybrid6(x0,A,b,nIter,varargin)
+function [xk,fk,xkArr,countFM,countNW,Q]=hybrid6(x0,A,b,nIter,maxIter,varargin)
 % test baseActive.mat
 % load('baseActive.mat');
 var=size(varargin,2);
 t=clock;
-maxIter=100;
 %compute hybrid uIter
 [m,n]=size(A);
 uIter=max(33,(m+n)/4);
