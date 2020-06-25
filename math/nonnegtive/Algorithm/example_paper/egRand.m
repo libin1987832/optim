@@ -9,9 +9,8 @@ tfA6=[];
 dfA6=[];
 dim={};
 maIter=500;
-for ratio=0.1:0.2:1
-    for m=100:100:1000
-        
+ for m=100:100:100
+for ratio=0.1:0.01:1
         n=ceil(ratio*m);
         A=2*rand(m,n)-1;
         b=2*rand(m,1)-1;
@@ -42,11 +41,12 @@ end
 xais=1:size(tfA1,2);
 subplot(1,2,1)
 semilogy(1:size(dfA1,2),dfA1,'--o',1:size(dfA1,2),dfA6,'-o');
-set(gca,'XTick',xais(1:10:end));
-set(gca,'XTicklabel',dim(1:10:end));% X轴的记号
+set(gca,'XTick',xais(1:20:end));
+set(gca,'XTicklabel',dim(1:20:end));% X轴的记号
 legend("Dax","Ours")
 subplot(1,2,2)
 plot(1:size(tfA1,2),tfA1,'--o',1:size(tfA6,2),tfA6,'-o');
-set(gca,'XTick',xais(1:2:end));
-set(gca,'XTicklabel',dim(1:2:end));% X轴的记号
+set(gca,'XTick',xais(1:20:end));
+set(gca,'XTicklabel',dim(1:20:end));% X轴的记号
 legend("Dax","Ours")
+save('data2','dfA1','dfA6','tfA1','tfA6')
