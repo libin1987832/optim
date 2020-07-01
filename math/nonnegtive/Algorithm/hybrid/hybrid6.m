@@ -1,4 +1,4 @@
-% Dax hybrid algorithm and r=B*r Nr==N
+% Dax hybrid algorithm and r=B*r Nr==N nIter 预测的间隔 eIter 预测未来的多少步 
 function [xk,fk,xkArr,countFM,countNW,Q]=hybrid6(x0,A,b,nIter,eIter,maxIter,varargin)
 % test baseActive.mat
 % load('baseActive.mat');
@@ -78,4 +78,4 @@ while Ar>delt*rn && rn>delt
     end
 end
 tf=etime(clock,t);
-% disp(['hybrid6 m:',num2str(m),' n:',num2str(n),' AT(b-A*x)+:',num2str(Ar),' fk:',num2str(fk),' ssqr:',num2str(countNW),' FM:',num2str(countFM),' cpu:',num2str(tf),' beginSS:',num2str(beginNW)]);
+disp(['hybrid6 m:',num2str(m),' n:',num2str(n),' AT(b-A*x)+:',num2str(Ar),' fk:',num2str(fk),' ssqr:',num2str(countNW),' FM:',num2str(countFM),' cpu:',num2str(tf),' beginSS:',num2str(beginNW)]);

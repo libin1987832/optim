@@ -1,5 +1,5 @@
 % Dax hybrid algorithm and r=B*r Nr==N
-function [xk,fk,xkArr,countFM,countNW,Q]=hybrid7(x0,A,b,nIter,varargin)
+function [xk,fk,xkArr,countFM,countNW,Q]=hybrid7(x0,A,b,nIter,maxIter,varargin)
 var=size(varargin,2);
 t=clock;
 %compute hybrid uIter
@@ -81,7 +81,9 @@ while Ar>delt*rn && rn>delt
     rn=norm(rk);
     x0=xk;
     % test 
-
+    if maxIter < countFM
+        break;
+    end
 end
 tf=etime(clock,t);
 disp(['hybrid7 m:',num2str(m),' n:',num2str(n),' AT(b-A*x)+:',num2str(Ar),' fk:',num2str(fk),' ssqr:',num2str(countNW),' FM:',num2str(countFM),' cpu:',num2str(tf),' beginSS:',num2str(beginNW)]);

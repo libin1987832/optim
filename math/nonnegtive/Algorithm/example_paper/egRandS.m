@@ -3,19 +3,20 @@
 clc
 clear
 addpath('../FM')
-
-for m=1000:1000:50000
-    for ratio=0.1:0.2:0.6
+mIter=300;
+for m=10000:10000:200000
+    for ratio=0.1:0.2:0.1
         n=ceil(ratio*m);
-        A=sprandn(m,n,0.04);
-        b=sprandn(m,1,0.04);
+        A=sprandn(m,n,0.0004);
+        b=sprandn(m,1,0.0004);
         x0=sparse(n,1);
         t=clock;
-        [xk1,fk1,xkArr1,countF1,countN1]=hybrid1(x0,A,b);
+        [xk1,fk1,xkArr1,countF1,countN1]=hybrid1(x0,A,b,mIter);
         tf1=etime(clock,t);
 %         [xk2,fk2,xkArr2,countF2,countN2]=hybrid2(x0,A,b);
-t=clock;
-        [xk6,fk1,xkArr1,countF6,countN6]=hybrid6(x0,A,b,10);
+        t=clock;
+       [xk6,fk1,xkArr1,countF6,countN6]=hybridGS1(x0,A,b,mIter);
+%         [xk6,fk1,xkArr1,countF6,countN6]=hybrid6(x0,A,b,10);
         tf2=etime(clock,t);
 %         [xk7,fk1,xkArr1,countF7,countN7]=hybrid7(x0,A,b,10);
         r=b-A*xk1;

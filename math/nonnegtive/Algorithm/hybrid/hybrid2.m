@@ -1,5 +1,5 @@
 % FM+exposed change 连续uIter FM 都没有改变则采用 牛顿法
-function [xk,fk,xkArr,countFM,countNW,Q]=hybrid2(x0,A,b)
+function [xk,fk,xkArr,countFM,countNW,Q]=hybrid2(x0,A,b,maxIter)
 
 t=clock;
 tol=0;
@@ -68,6 +68,9 @@ while Ar>delt*rn && rn>delt
     rn=norm(rk);
     r=rk;
     x0=xk;
+    if maxIter < countFM
+        break;
+    end
 end
 fk=0.5*rk'*rk;
 tf=etime(clock,t);
