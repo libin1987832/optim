@@ -11,7 +11,7 @@ uIter=max(33,(m+n)/4);
 %FM need a qr decompose
 [Q,R]=qr(A);
 Qn=Q(:,1:n);
-if var==0 
+if var==1 
  QQ=eIter*(Qn*Qn');
 elseif var==2
     tmpq=3*ones(m,m);
@@ -50,8 +50,9 @@ while Ar>delt*rn && rn>delt
         % check if exposed face by r=B^n*r0
         uIndex=0;
 
-            if var==0
-                ssign=getBn(QQ,fm,I);
+            if var==1
+%                ssign=getBn(QQ,fm,I);
+                ssign=getBnS(Qn,fm,I,eIter);
             elseif var==1
                 ssign=getBn2(eIter,Qn,fm,I);
             else
