@@ -17,12 +17,12 @@ addpath('../FM')
 % A=2*rand(m,n)-1;
 % b=2*rand(m,1)-1;
 x0=zeros(n,1);
-
-[xk1,fk1,xkArr1,countF1,countN1]=hybrid1(x0,A,b);
-[xk2,fk2,xkArr2,countF2,countN2]=hybrid2(x0,A,b);
-[xk6,fk1,xkArr1,countF1,countN1]=hybrid6(x0,A,b,10);
+mIter=300;
+[xk1,fk1,xkArr1,countF1,countN1]=hybrid1(x0,A,b,mIter);
+[xk2,fk2,xkArr2,countF2,countN2]=hybrid2(x0,A,b,mIter);
+[xk6,fk1,xkArr1,countF1,countN1]=hybrid6(x0,A,b,10,mIter);
 % [[1:m]' b-A*xk1 b-A*xk2 b-A*xk6]'
-[xk7,fk1,xkArr1,countF1,countN1]=hybrid7(x0,A,b,1);
+[xk7,fk1,xkArr1,countF1,countN1]=hybrid7(x0,A,b,1,mIter);
 
 %     end
 % end
