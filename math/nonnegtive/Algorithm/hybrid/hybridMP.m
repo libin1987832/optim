@@ -1,4 +1,4 @@
-function [xk,fk,xkArr,countFM,countNW,Q]=hybridMP(x0,A,b,maxIter)
+function [xk,fk,xkArr,countFM,countNW,Q]=hybridMP(x0,A,b,a,L,maxIter)
 t=clock;
 %compute hybrid uIter
 [m,n]=size(A);
@@ -31,10 +31,22 @@ if Ar<delt*rn || rn<delt
     fk=0.5*(r'*r);
     disp('input x is satisfied all constrain!(Ar<delt*rn|| rn<delt)') %ceases execution
 end
+z0=A*x0-b;
+z0(z0<0)=0;
+AA=find(z0<ee);
+%FF=setdiff(1:m,AA)';
+        
+Axkz=(A*x0-b-z0);
+f1=A'*Axkz;
+%f2(FF)=-Axkz(FF); will be zeros
+% b2=-Axkz(AA);will be zeros
+% b2=min(b2,0);will be zeros
+bx=b2;
+fx=[f1;f2];
 %||A'(r)+||<=delt||(r)+|| ||(r)+||<=de
 while Ar>delt*rn && rn>delt
     bxn=bx'*bx;
-    f1x=x0./a;
+    f1x=[x0;z0]./a;
     fxc=find(f1x>fx);
     f1x(fxc)=fx(fxc);
     if bxn<=L*f1x'*fx
@@ -44,28 +56,36 @@ while Ar>delt*rn && rn>delt
         end
         uIndex=0;
         %[xk,rk,fk,f0,lambe]=ssqr(x0,A,b);
-        z0=A*x0-b;
+        fm0=A*x0-b;
+        z0=fm0;
+        z0(z0<0)=0;
         AA=find(z0<ee);
-        FF=setdiff(1:m,AA);
-        d=-A(AA,:)\(z0(AA));
+        FF=setdiff(1:m,AA)';
+        d=-A(AA,:)\(fm0(AA));
         %a1=-min(z./A*d);
         Ad=A(FF,:)*d;
-        a2=-min(z(FF)./Ad);
+        z0Ad=z0(FF)./Ad;
+        z0Ad(z0Ad<0)=inf;
+        a2=min(z0Ad);
         a2=min(a2,1);
         xk=x0+a2*d;
         zk=z0;
         zk(FF)=z0(FF)-a2*Ad;
         %zk=A*xk-b;
         %zk(zk<0)=0;
-        Axkz=( A*xk-b-zk);
+        Axkz=A*xk-b-zk;
         f1=A'*Axkz;
-        f2=0;
+        f2(:)=0;
         f2(FF)=-Axkz(FF);
-        b2=0;
+        b2(:)=0;
         b2=-Axkz(AA);
         b2=min(b2,0);
+        rk=b-A*xk;
+        rk(rk<0)=0;
+        fkk=0.5*rk'*rk;
+        fk=0.5*Axkz'*Axkz;
         xkArr=[xkArr;[xk',fk,1]];
-        disp(['conject gradient:',num2str(rk'*rk)]);
+        %disp(['conject gradient:',num2str(fkk)]);
     else
         countFM=countFM+1;
         %FM algorithm
@@ -73,15 +93,15 @@ while Ar>delt*rn && rn>delt
         zk=-fm;
         zk(zk<0)=0;
         AA=find(zk<ee);
-        FF=setdiff(1:m,AA);
+        FF=setdiff(1:m,AA)';
         Axkz=(A*xk-b-zk);
         f1=A'*Axkz;
-        f2=0;b2=0;
-        f2(FF)=-Axkz(FF);
+        f2(:)=0;b2(:)=0;
+        %f2(FF)=-Axkz(FF);
         b2=-Axkz(AA);
         b2=min(b2,0);
         xkArr=[xkArr;[xk',fk,0]];
-        disp(['go to implement space:',num2str(rk'*rk)]);
+        %disp(['go to implement space:',num2str(rk'*rk)]);
     end
     bx=b2;
     fx=[f1;f2];
@@ -93,10 +113,10 @@ while Ar>delt*rn && rn>delt
         break;
     end
 end
-end
+
 tf=etime(clock,t);
 vk=sum(sign(rk));
-disp(['%hybrid1 m:',num2str(m),' n:',num2str(n),' AT(b-A*x)+:',num2str(Ar),' fk:',num2str(fk),' ssqr:',num2str(countNW),' FM:',num2str(countFM),' cpu:',num2str(tf),' beginSS:',num2str(beginNW)]);
+disp(['%hybridMP m:',num2str(m),' n:',num2str(n),' AT(b-A*x)+:',num2str(Ar),' fk:',num2str(fk),' ssqr:',num2str(countNW),' FM:',num2str(countFM),' cpu:',num2str(tf),' beginSS:',num2str(beginNW)]);
 %disp(['$',num2str(m),'\times ',num2str(n),'$&FM&(',num2str(countFM),',',num2str(countNW),')&',num2str(tf),'&',num2str(fk),'&',num2str(Ar)]);
 %disp(['well1033&Daxs&',num2str(vk),'&',num2str(rn),'&',num2str(Ar),'&(',num2str(countFM),',',num2str(countNW),')&',num2str(beginNW)]);
 
