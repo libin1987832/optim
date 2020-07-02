@@ -1,4 +1,4 @@
-function xk=MPRGP(A,b,x0,L,a,delta,l)
+function xk=MPRGP(A,b,x0,L,a,delta,l,maxIter)
 k=0;r=A*x0-b;
 tol=1e-15;
 [m,n]=size(r);
