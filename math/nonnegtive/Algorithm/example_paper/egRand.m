@@ -20,11 +20,13 @@ for ratio=0.1:0.01:0.3
         tf1=etime(clock,t);
         %         [xk2,fk2,xkArr2,countF2,countN2]=hybrid2(x0,A,b);
         t=clock;
-        if n > 60
-        [xk6,fk1,xkArr1,countF6,countN6]=hybrid6(x0,A,b,5,20,maIter);
-        else
-        [xk6,fk1,xkArr1,countF6,countN6]=hybrid6(x0,A,b,30,50,maIter); 
-        end
+        [xk6,fk6,xkArr6,countF6,countN6]=hybrid6(x0,A,b,5,20,maIter);
+        [xk61,fk61,xkArr61,countF61,countN61]=hybrid6(x0,A,b,5,20,maIter,1);
+%         if n > 60
+%         [xk6,fk1,xkArr1,countF6,countN6]=hybrid6(x0,A,b,5,20,maIter);
+%         else
+%         [xk6,fk1,xkArr1,countF6,countN6]=hybrid6(x0,A,b,30,50,maIter); 
+%         end
         tf6=etime(clock,t);
         %         [xk7,fk1,xkArr1,countF7,countN7]=hybrid7(x0,A,b,10);
         r=b-A*xk1;

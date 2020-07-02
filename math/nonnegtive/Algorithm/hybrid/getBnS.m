@@ -14,6 +14,7 @@ sum=0;
 sum2=0;
  % r=(I-QQN)r
  QTr=Qn(p,:)'*r(p);
+ 
 for i=1:m
     rkn(i)=r(i)-nIter*Qn(i,:)*QTr;
     if sign(rkn(i)*r(i))>0
