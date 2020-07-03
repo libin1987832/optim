@@ -19,6 +19,8 @@ while bxn+fx'*fx>delta
     f1x(fxc)=fx(fxc);
     if bxn<=L*f1x'*fx 
         acg=(rI'*p)/(p'*AI*p);y=x0-acg*p;
+        azf=z(FF)./(AI*p);
+        
         af=computeMaxStep(x0,p);
         if acg<af
             xk=y;r=r-acg*A*p;[fy,bx]=fbxf(y,m,l,tol,r);
