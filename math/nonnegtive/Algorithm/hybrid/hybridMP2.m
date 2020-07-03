@@ -1,7 +1,8 @@
-function [xk,fk,xkArr,countFM,countNW,Q]=hybridMP(x0,A,b,a,L,maxIter)
+function [xk,fk,xkArr,countFM,countNW,Q]=hybridMP2(x0,A,b,a,L,maxIter)
 t=clock;
 %compute hybrid uIter
 [m,n]=size(A);
+uIter=floor(max(33,(m+n)/4));
 %FM need a qr decompose
 [Q,R]=qr(A);
 r=b-A*x0;
@@ -63,13 +64,17 @@ while Ar>delt*rn && rn>delt
         d=-A(AA,:)\(fm0(AA));
         %a1=-min(z./A*d);
         Ad=A(FF,:)*d;
-        z0Ad=z0(FF)./Ad;
+        %z0Ad=z0(FF)./Ad;
+        z0Ad=z0./(A*d);
         z0Ad(z0Ad<=0)=inf;
         a2=min(z0Ad);
         a2=min(a2,1);
         xk=x0+a2*d;
-        zk=z0;
-        zk(FF)=z0(FF)-a2*Ad;
+        %zk=z0;
+        zk=z0-a2*A*d;
+        %zk(FF)=z0(FF)-a2*Ad;
+        %zk=A*xk-b;
+        %zk(zk<0)=0;
         Axkz=A*xk-b-zk;
         f1=A'*Axkz;
         f2(:)=0;
@@ -77,6 +82,9 @@ while Ar>delt*rn && rn>delt
         b2(:)=0;
         b2=-Axkz(AA);
         b2=min(b2,0);
+        rk=b-A*xk;
+        rk(rk<0)=0;
+        fkk=0.5*rk'*rk;
         fk=0.5*Axkz'*Axkz;
         xkArr=[xkArr;[xk',fk,1]];
         %disp(['conject gradient:',num2str(fkk)]);
@@ -91,6 +99,7 @@ while Ar>delt*rn && rn>delt
         Axkz=(A*xk-b-zk);
         f1=A'*Axkz;
         f2(:)=0;b2(:)=0;
+        %f2(FF)=-Axkz(FF);
         b2=-Axkz(AA);
         b2=min(b2,0);
         xkArr=[xkArr;[xk',fk,0]];
@@ -109,6 +118,18 @@ end
 
 tf=etime(clock,t);
 vk=sum(sign(rk));
-disp(['%hybridMP m:',num2str(m),' n:',num2str(n),' AT(b-A*x)+:',num2str(Ar),' fk:',num2str(fk),' ssqr:',num2str(countNW),' FM:',num2str(countFM),' cpu:',num2str(tf),' beginSS:',num2str(beginNW)]);
+disp(['%hybridMP2 m:',num2str(m),' n:',num2str(n),' AT(b-A*x)+:',num2str(Ar),' fk:',num2str(fk),' ssqr:',num2str(countNW),' FM:',num2str(countFM),' cpu:',num2str(tf),' beginSS:',num2str(beginNW)]);
 %disp(['$',num2str(m),'\times ',num2str(n),'$&FM&(',num2str(countFM),',',num2str(countNW),')&',num2str(tf),'&',num2str(fk),'&',num2str(Ar)]);
 %disp(['well1033&Daxs&',num2str(vk),'&',num2str(rn),'&',num2str(Ar),'&(',num2str(countFM),',',num2str(countNW),')&',num2str(beginNW)]);
+
+
+
+% function [f,b]=fbxf(x0,m,tol,p)
+% AA=find(x0<tol);
+% FF=setdiff(1:m,AA);
+% b=zeros(m,1);
+% f=zeros(m,1);
+% b(AA)=p(AA);
+% f(FF)=p(FF);
+% b(b>0)=0;
+% end
