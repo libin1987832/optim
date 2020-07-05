@@ -77,7 +77,9 @@ while Ar>delt*rn && rn>delt
         b2(:)=0;
         b2=-Axkz(AA);
         b2=min(b2,0);
-        fk=0.5*Axkz'*Axkz;
+        rk=b-A*xk;
+        rk(rk<0)=0;
+        fk=0.5*rk'*rk;
         xkArr=[xkArr;[xk',fk,1]];
         %disp(['conject gradient:',num2str(fkk)]);
     else

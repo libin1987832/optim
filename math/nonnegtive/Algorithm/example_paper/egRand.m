@@ -9,7 +9,7 @@ tfA6=[];
 dfA6=[];
 dim={};
 maIter=500;
- for m=1000:100:1000
+ for m=100:100:100
 for ratio=0.1:0.01:0.3
         n=ceil(ratio*m);
         A=2*rand(m,n)-1;
@@ -22,7 +22,7 @@ for ratio=0.1:0.01:0.3
         tf1=etime(clock,t);
         %         [xk2,fk2,xkArr2,countF2,countN2]=hybrid2(x0,A,b);
         t=clock;
-        [xk6,fk6,xkArr6,countF6,countN6]=hybridMP2(x0,A,b,1,0.00001,maIter);
+        [xk6,fk6,xkArr6,countF6,countN6]=hybridMPLSQR(x0,A,b,1,0.00001,maIter);
         %[xk6,fk6,xkArr6,countF6,countN6]=hybrid6(x0,A,b,5,20,maIter);
         %[xk61,fk61,xkArr61,countF61,countN61]=hybrid6(x0,A,b,5,20,maIter,1);
 %         if n > 60

@@ -56,17 +56,21 @@ while Ar>delt*rn && rn>delt
         uIndex=0;
         %[xk,rk,fk,f0,lambe]=ssqr(x0,A,b);
         %d=-A(AA,:)\(fm0(AA));
-        [xk,zk]=kyrlov(AALL,x0);
+        [xk,zk]=kyrlov(A,b,x0);
         Axkz=A*xk-b-zk;
         f1=A'*Axkz;
         f2(:)=0;
+        AA=zk<ee;
+        FF=setdiff(1:m,AA)';
         f2(FF)=-Axkz(FF);
         b2(:)=0;
         b2=-Axkz(AA);
         b2=min(b2,0);
-        fk=0.5*Axkz'*Axkz;
+        rk=b-A*xk;
+        rk(rk<0)=0;
+        fk=0.5*rk'*rk;
         xkArr=[xkArr;[xk',fk,1]];
-        %disp(['conject gradient:',num2str(fkk)]);
+ %       disp(['conject gradient:',num2str(fk)]);
     else
         countFM=countFM+1;
         %FM algorithm
@@ -81,7 +85,7 @@ while Ar>delt*rn && rn>delt
         b2=-Axkz(AA);
         b2=min(b2,0);
         xkArr=[xkArr;[xk',fk,0]];
-        %disp(['go to implement space:',num2str(rk'*rk)]);
+%        disp(['go to implement space:',num2str(rk'*rk)]);
     end
     bx=b2;
     fx=[f1;f2];
@@ -96,20 +100,27 @@ end
 
 tf=etime(clock,t);
 vk=sum(sign(rk));
-disp(['%hybridMP m:',num2str(m),' n:',num2str(n),' AT(b-A*x)+:',num2str(Ar),' fk:',num2str(fk),' ssqr:',num2str(countNW),' FM:',num2str(countFM),' cpu:',num2str(tf),' beginSS:',num2str(beginNW)]);
+disp(['%hybridMPLSQR m:',num2str(m),' n:',num2str(n),' AT(b-A*x)+:',num2str(Ar),' fk:',num2str(fk),' ssqr:',num2str(countNW),' FM:',num2str(countFM),' cpu:',num2str(tf),' beginSS:',num2str(beginNW)]);
 %disp(['$',num2str(m),'\times ',num2str(n),'$&FM&(',num2str(countFM),',',num2str(countNW),')&',num2str(tf),'&',num2str(fk),'&',num2str(Ar)]);
 %disp(['well1033&Daxs&',num2str(vk),'&',num2str(rn),'&',num2str(Ar),'&(',num2str(countFM),',',num2str(countNW),')&',num2str(beginNW)]);
 end
 
-function [xk,zk]=kyrlov(AALL,x0)
+function [xk,zk]=kyrlov(AALL,b,x0)
 [m,n]=size(AALL);
 fm0=AALL*x0-b;
 z0=fm0;
 z0(z0<0)=0;
+ee=1e-15;% computer floating point arithmetic
 AA=(z0<ee);
 %FF=setdiff(1:m,AA)';
 
 A=AALL(AA,:);
+
+y=b(AA)-A*x0;
+
+rmrk=AALL*x0-b-z0;
+watch1=0.5*rmrk'*rmrk;
+
 
 u1=0;  
 beta1=norm(y);q1=y/beta1;v1=A'*q1;alph1=norm(v1);v1=v1/alph1;
@@ -135,6 +146,9 @@ for i=1:n
     fmk=AALL*xk-b;
     zk=fmk;
     zk(zk<0)=0;
+    rmrk=AALL*xk-b-zk;
+    watch2=0.5*rmrk'*rmrk;
+
     AAk=(zk<ee);
     empty=isempty(setdiff(AA,AAk));
     if ~empty
@@ -150,6 +164,10 @@ for i=1:n
         a2=min(a2,1);
         xk=x1+a2*d;
         zk(FF)=zk(FF)-a2*Ad;
+        
+        rmrk=AALL*xk-b-zk;
+        watch3=0.5*rmrk'*rmrk;
+
         break;
     end
     
@@ -160,7 +178,4 @@ for i=1:n
     thgma_1=thgma_2;
     g1=g2;
 end
- xk=u1;
- fk=0.5*(A*xk-y)'*(A*xk-y);
-
 end

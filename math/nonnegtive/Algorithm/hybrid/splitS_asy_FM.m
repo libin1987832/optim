@@ -5,7 +5,7 @@ if iter<1
     xkA=[xkA xk];
 else
     [m,n]=size(A);
-    tol=1e-12;
+%    tol=1e-12;
     % x0=zeros(n,1);
     for i=1:iter
         [xk,r0,rk,fk,fm,fr]=FM(x0,Q,R,A,b);
