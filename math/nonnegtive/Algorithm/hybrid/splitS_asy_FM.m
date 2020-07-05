@@ -1,4 +1,4 @@
-function [xkA,cmax] = splitS_asy_FM(A,b,Q,R,x0,iter,cmax)
+function [xkA,rk,cmax] = splitS_asy_FM(A,b,Q,R,x0,iter,cmax)
 xkA=[];
 if iter<1
     xk=x0;

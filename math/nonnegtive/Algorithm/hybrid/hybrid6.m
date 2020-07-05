@@ -78,5 +78,5 @@ while Ar>delt*rn && rn>delt
     end
 end
 tf=etime(clock,t);
-disp(['QQ:',num2str(var)]);
+%disp(['QQ:',num2str(var)]);
 disp(['hybrid6 m:',num2str(m),' n:',num2str(n),' AT(b-A*x)+:',num2str(Ar),' fk:',num2str(fk),' ssqr:',num2str(countNW),' FM:',num2str(countFM),' cpu:',num2str(tf),' beginSS:',num2str(beginNW)]);

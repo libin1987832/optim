@@ -18,7 +18,7 @@ delt=am*m*n*10*ee;
 
 countFM=0;
 countNW=0;
-beginNW=0;
+beginNW=nf;
 
 if Ar<delt*rn || rn<delt
     xk=x0;
@@ -33,24 +33,21 @@ while Ar>delt*rn && rn>delt
     cmax=0;
     iter=iter+nf+ns;
     countFM=iter;
-    [xfA,cmax] = splitS_asy_FM(A,b,Q,R,x0,nf,cmax);
-    
+    [xfA,rsk,cmax] = splitS_asy_FM(A,b,Q,R,x0,nf,cmax);
+    countNW=countNW+1;
     [xs,zk]=kyrlov(A,b,x0);
-    
     xsn=norm(xs-xfA(:,nf));
     mtr=min(1,tr0/xsn);
     xi=xfA(:,nf)+mtr*(xs-xfA(:,nf));
     nss=nss+ns;
     %[xsA,cmax] = splitS(A,q,xi,ns,cmax);
-    [xsA,cmax] = splitS_asy_FM(A,b,Q,R,xi,ns,cmax);
+    [xsA,rsk,cmax] = splitS_asy_FM(A,b,Q,R,xi,ns,cmax);
     
     rok=max(rou,(1+cmax)/2);
     p1=norm(xsA(:,1)-xfA(:,nf));
     p2=norm(xsA(:,2)-xsA(:,1));
     p3=norm(xfA(:,nf)-xs(:,1));
   %  funfi3=funfi(xsA(:,ns),M,q);
-    rsk=b-A*xsA(:,ns);
-    rsk(rsk<0)=0;
     funfi3=0.5*(rsk'*rsk);
     if p1<=rok*p3 && p2<=rok*p1
         xk=xsA(:,ns);
