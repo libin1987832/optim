@@ -8,20 +8,20 @@
 % A=[1,1;-1,-1;-1,0];
 % b=[10,10,50]';
 % x0=[-100;-100];
-m=100;n=70;
-A=100*rand(m,n)-1;
+m=30;n=20;
+A=1*rand(m,n)-1;
 b=2*rand(m,1)-1;
+norm(pinv(A)*A)
+%norm(pinv(A))*norm(A)
 x0=zeros(n,1);
 
 [Q,R]=qr(A);
 all=[];
 x0GS=x0;
 xk=x0;
-for i=1:100
-
-
+for i=1:15
 if i>2
-    all=[all norm(A*(xk-x0))/norm(A*(x0-x1))];
+    all=[all [norm(A*(xk-x0));norm(A*(x0-x1));norm(A*(xk-x0))/norm(A*(x0-x1))]];
 end
 x1=x0;
 x0=xk;
@@ -32,6 +32,6 @@ x0=xk;
 % x0=xk;
 % x0GS=xkGS;
 end
-all
+%all
 % all
 % [xkGS,r0GS,rkGS,fkGS,fmGS,frGS]=FMGS(x0GS,A,b);
