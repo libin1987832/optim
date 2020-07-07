@@ -1,6 +1,7 @@
-function [xk,zk]=kyrlov(AALL,b,x0,r0)
+function [xk,zk]=krylov(AALL,b,x0)
 [m,n]=size(AALL);
-r0=z0;
+r0=AALL*x0-b;
+z0=r0;
 z0(z0<0)=0;
 ee=1e-15;% computer floating point arithmetic
 AA=(z0<ee);
@@ -22,6 +23,7 @@ ro_1=alph1;
 thgma_1=beta1;
 g1=v1;
 xk=x0;
+fmk=0;
 for i=1:n
     q2=A*v1-alph1*q1;beta2=norm(q2);q2=q2/beta2;
     
@@ -37,7 +39,7 @@ for i=1:n
     xk=xk+d;
    % xk=x0+u2;
     zkp=fmk;
-    fmk=AFF*xk-b(AA);
+    fmk=AFF*xk-b(FF);
     %zk=fmk;
     %zk(zk<0)=0;
     
@@ -49,7 +51,7 @@ for i=1:n
     %empty=isempty(setdiff(AA,AAk));
     empty=isempty(find(fmk<0,1));
     if ~empty
-        x1=xk-d1;
+        x1=xk-d;
         %zk=zkp;
         %zk(zk<0)=0;
         

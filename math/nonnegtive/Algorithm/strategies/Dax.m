@@ -1,5 +1,5 @@
 % Dax hybrid algorithm
-function [xk,fk,countFM,countNW]=Dax(x0,A,b,maxIter)
+function [xk,rk,countFM,countNW,beginNW,tf,vk]=Dax(x0,A,b,maxIter)
 t=clock;
 
 %compute hybrid uIter
@@ -39,8 +39,9 @@ while Ar>delt*rn && rn>delt
             beginNW=countFM;
         end
         uIndex=0;
-        []=
-        xkArr=[xkArr;[xk',fk,1]];
+        [xk,~]=kyrlov(A,b,xk,rk);
+        rk=(b-A*xk);
+        rk(rk<0)=0;
     end
     uIndex=uIndex+1;
     Ar=norm(A'*rk);
@@ -52,7 +53,7 @@ while Ar>delt*rn && rn>delt
 end
 tf=etime(clock,t);
 vk=sum(sign(rk));
-disp(['%hybrid1 m:',num2str(m),' n:',num2str(n),' AT(b-A*x)+:',num2str(Ar),' fk:',num2str(fk),' ssqr:',num2str(countNW),' FM:',num2str(countFM),' cpu:',num2str(tf),' beginSS:',num2str(beginNW)]);
+%disp(['%hybrid1 m:',num2str(m),' n:',num2str(n),' AT(b-A*x)+:',num2str(Ar),' fk:',num2str(fk),' ssqr:',num2str(countNW),' FM:',num2str(countFM),' cpu:',num2str(tf),' beginSS:',num2str(beginNW)]);
 %disp(['$',num2str(m),'\times ',num2str(n),'$&FM&(',num2str(countFM),',',num2str(countNW),')&',num2str(tf),'&',num2str(fk),'&',num2str(Ar)]);
 %disp(['well1033&Daxs&',num2str(vk),'&',num2str(rn),'&',num2str(Ar),'&(',num2str(countFM),',',num2str(countNW),')&',num2str(beginNW)]);
 

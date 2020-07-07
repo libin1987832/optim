@@ -8,7 +8,7 @@ else
 %    tol=1e-12;
     % x0=zeros(n,1);
     for i=1:iter
-        [xk,r0,rk,fk,fm,fr]=FM(x0,Q,R,A,b);
+        [xk,r0,rk]=FixedM(x0,Q,R,A,b);
         if i>1
             d1=norm(xk-x0);
             d2=norm(x0-xn1);
