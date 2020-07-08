@@ -66,7 +66,7 @@ while Ar>delt*rn && rn>delt
         lll=min(eig(AII'*AII));
         [xkkry,~]=krylov(A,b,xk,rkp);
         
-        fprintf("formula:%g,predict:%d,FM:%d,xs:%d,ss:%d,ll:%g,jj:%g,dd:%g\n", nn,sump,sumpp,sumpx,ssign,lll,norm(ss),norm(xkkry-xs));
+        fprintf("formula:%g,predict:%d,FM:%d,xs:%d,ss:%d,ll:%g,jj:%g,dd1:%g,dd2:%g\n", nn,sump,sumpp,sumpx,ssign,lll,norm(ss),norm(xkkry-xs),norm(xk-xs));
         %%%
         
         %ssign=getBnS(eIter,Qn,fm,I);

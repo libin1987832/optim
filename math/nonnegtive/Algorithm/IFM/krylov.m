@@ -7,7 +7,7 @@ AA=(z0<ee);
 %FF=setdiff(1:m,AA)';
 zk=z0;
 A=AALL(AA,:);
-FF=setdiff(1:m,AA)';
+FF=~AA;
 AFF=AALL(FF,:);
 %|| A(AA,:)u-(b(AA)-A(AA,:)x) ||
 y=r0(AA);

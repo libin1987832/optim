@@ -17,12 +17,13 @@ rou=0.99;
 trmax=1e12;
 trr=1;
 
-for m=1000:1000:1000
-    for ratio=0.1:0.1:0.1
+for m=1000:1000:3000
+    for ratio=0.1:0.1:0.3
         n=ceil(ratio*m);
         A=2*rand(m,n)-1;
         b=2*rand(m,1)-1;
         x0=zeros(n,1);
+ 
         [xs,fk,xkArr,countFM,countNW,Q]=hybrid1(x0,A,b,maxIter);
 %         [xkM,fkM,xkArrM,countFM,countNM]=hybridMPLSQR(x0,A,b,1,0.00001,maxIter);
 %         [xkS,fkS,countFMS,countNWS]=hybridSplit(x0,A,b,maxIter,20,5,etc,ete,trr,trmax,rou);
@@ -30,7 +31,8 @@ for m=1000:1000:1000
         [xkD,rkD,countFD,countND,bNWD,tfD,vkD]=Dax(x0,A,b,maxIter);
 %         [xkG,rkG,countFG,countNG,bNWG,tfG,vkG]=gradientFM(x0,A,b,1,0.00001,maxIter);
  %        [xkC,rkC,countFC,countNC,bNWC,tfC,vkC]=contraction(x0,A,b,maxIter,20,5,etc,ete,trr,trmax,rou);
-         [xkP,rkP,countFP,countNP,bNWP,tfP,vkP]=predictFM_d(x0,A,b,5,10,maxIter,xs);
+  %      [xkPP,rkPP,countFPP,countNPP,bNWPP,tfPP,vkPP]=predictFM_d(x0,A,b,5,10,maxIter,xs);
+         [xkP,rkP,countFP,countNP,bNWP,tfP,vkP]=predictFM(x0,A,b,5,10,maxIter);
           dD=norm(xkD-xs);
 %          dG=norm(xkG-xs);
 %          dC=norm(xkC-xs);
