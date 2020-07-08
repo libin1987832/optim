@@ -1,5 +1,5 @@
 % Dax hybrid algorithm and r=B*r Nr==N nIter 预测的间隔 eIter 预测未来的多少步
-function [xk,rk,countFM,countNW,beginNW,tf,vk]=predictFM(x0,A,b,nIter,eIter,maxIter)
+function [xk,rk,countFM,countNW,beginNW,tf,vk]=predictFM_d(x0,A,b,nIter,eIter,maxIter,xs)
 % test baseActive.mat
 % load('baseActive.mat');
 t=clock;
@@ -43,6 +43,32 @@ while Ar>delt*rn && rn>delt
         qrkn=Qn*qrkn;
         rkn=rkp-eIter*qrkn;
         ssign=sum(~xor(rk>ee,rkn>ee));
+        %%%
+        rkpN=rkp;
+        xkN=xk;
+        [xkN,rkpN]=FixedM(xkN,Q,R,A,b,rkpN);
+        rknNN=rkp-qrkn;
+        % predict formula is OK
+        nn=norm(rknNN-rkpN);
+        rkpN=rkp;
+        xkN=xk;
+        % predict n step
+        for i=1:eIter
+            [xkN,rkpN]=FixedM(xkN,Q,R,A,b,rkpN);
+        end
+        sump=sum(rkn>0);
+        sumpp=sum(rkpN>0);
+        rks=(b-A*xs);
+        sumpx=sum(rks>0);
+        AAA=(rks>-1e-10);
+        AII=A(AAA,:);
+        ss=AII'*AII*xs-AII'*b(AAA);
+        lll=min(eig(AII'*AII));
+        [xkkry,~]=krylov(A,b,xk,rkp);
+        
+        fprintf("formula:%g,predict:%d,FM:%d,xs:%d,ss:%d,ll:%g,jj:%g,dd:%g\n", nn,sump,sumpp,sumpx,ssign,lll,norm(ss),norm(xkkry-xs));
+        %%%
+        
         %ssign=getBnS(eIter,Qn,fm,I);
         % if all great zeros mean same sign
         if ssign==m ||ssign>m*0.99
