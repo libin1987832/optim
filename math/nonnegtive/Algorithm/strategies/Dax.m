@@ -31,15 +31,18 @@ end
 while Ar>delt*rn && rn>delt
     if uIndex<uIter
         countFM=countFM+1;
+        r0=b-A*x0;
         %FM algorithm
-        [xk,r0,rk]=FixedM(x0,Q,R,A,b);
+        [xk,rkp]=FixedM(x0,Q,R,A,b,r0);
+        rk=rkp;
+        rk(rk<0)=0;
     else
         countNW=countNW+1;
         if countNW ==1
             beginNW=countFM;
         end
         uIndex=0;
-        [xk,~]=kyrlov(A,b,xk,rk);
+        [xk,~]=krylov(A,b,xk,rkp);
         rk=(b-A*xk);
         rk(rk<0)=0;
     end

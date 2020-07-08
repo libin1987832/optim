@@ -1,19 +1,18 @@
-function [xk,zk]=krylov(AALL,b,x0)
+function [xk,zk]=krylov(AALL,b,x0,r0)
 [m,n]=size(AALL);
-r0=AALL*x0-b;
 z0=r0;
 z0(z0<0)=0;
 ee=1e-15;% computer floating point arithmetic
-AA=(z0<ee);
+AA=(r0<ee);
 %FF=setdiff(1:m,AA)';
-
+zk=z0;
 A=AALL(AA,:);
 FF=setdiff(1:m,AA)';
 AFF=AALL(FF,:);
 %|| A(AA,:)u-(b(AA)-A(AA,:)x) ||
-y=b(AA)-A*x0;
+y=r0(AA);
 % \fi
-rmrk=AALL*x0-b-z0;
+%rmrk=AALL*x0-b-z0;
 %watch1=0.5*rmrk'*rmrk;
 
 u1=0;  
@@ -40,7 +39,7 @@ for i=1:n
    % xk=x0+u2;
     zkp=fmk;
     fmk=AFF*xk-b(FF);
-    %zk=fmk;
+    zk(FF)=fmk;
     %zk(zk<0)=0;
     
     
@@ -76,6 +75,8 @@ for i=1:n
     ro_1=ro_2;
     thgma_1=thgma_2;
     g1=g2;
+    
+    zk=0;
 end
 
 
