@@ -8,7 +8,8 @@ t=clock;
 %FM need a qr decompose
 [Q,R]=qr(A);
 Qn=Q(:,1:n);
-r=b-A*x0;
+rkp=b-A*x0;
+r=rkp;
 r(r<0)=0;
 fk=0.5*(r'*r);
 %condition for terminate
@@ -28,7 +29,8 @@ while Ar>delt*rn && rn>delt
         countFM=countFM+1;
         uIndex=uIndex+1;
         %FM algorithm
-        [xk,r0,rk]=FixedM(x0,Q,R,A,b);
+        [xk,rkp]=FixedM(x0,Q,R,A,b,rkp);
+        rk=rkp;
         rk(rk<0)=0;
     end
     
@@ -36,9 +38,10 @@ while Ar>delt*rn && rn>delt
         % check if exposed face by r=B^n*r0
         uIndex=0;
         %QQ=eIter*(Qn*Qn');
-        qrkn=Qn'*rk;
+        AA=find(rk>ee);
+        qrkn=Qn(AA,:)'*rk(AA);
         qrkn=Qn*qrkn;
-        rkn=rk-eIter*qrkn;
+        rkn=rkp-eIter*qrkn;
         ssign=sum(~xor(rk>ee,rkn>ee));
         %ssign=getBnS(eIter,Qn,fm,I);
         % if all great zeros mean same sign
@@ -49,8 +52,9 @@ while Ar>delt*rn && rn>delt
             if countNW ==1
                 beginNW=countFM;
             end
-            [xk,~]=krylov(A,b,x0);
-            rk=b-A*xk;
+            [xk,~]=krylov(A,b,x0,rkp);
+            rkp=b-A*xk;
+            rk=rkp;
             rk(rk<0)=0;
 %             [xk,rk,fk,f0,lambe]=ssqr(x0,A,b);
 %             xkArr=[xkArr;[xk',fk,1]];

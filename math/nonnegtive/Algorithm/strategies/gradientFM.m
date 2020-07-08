@@ -57,7 +57,8 @@ while Ar>delt*rn && rn>delt
         %[xk,rk,fk,f0,lambe]=ssqr(x0,A,b);
         %d=-A(AA,:)\(fm0(AA));
         [xk,zk]=krylov(A,b,x0,rkp);
-        Axkz=A*xk-b-zk;
+        rkp=b-A*xk;
+        Axkz=-rkp-zk;
         f1=A'*Axkz;
         f2(:)=0;
         AA=zk<ee;
@@ -66,7 +67,7 @@ while Ar>delt*rn && rn>delt
         b2(:)=0;
         b2=-Axkz(AA);
         b2=min(b2,0);
-        rk=b-A*xk;
+        rk=rkp;
         rk(rk<0)=0;
 %         fk=0.5*rk'*rk;
 %         xkArr=[xkArr;[xk',fk,1]];
@@ -75,12 +76,12 @@ while Ar>delt*rn && rn>delt
         countFM=countFM+1;
         %FM algorithm
         %[xk,r0,rk,fk,fm,fr]=FM(x0,Q,R,A,b);
-        [xk,r0,rk]=FixedM(x0,Q,R,A,b);
-        zk=-rk;
+        [xk,rkp]=FixedM(x0,Q,R,A,b,rkp);
+        zk=-rkp;
         zk(zk<0)=0;
         AA=find(zk<ee);
         FF=setdiff(1:m,AA)';
-        Axkz=(A*xk-b-zk);
+        Axkz=(-rkp-zk);
         f1=A'*Axkz;
         f2(:)=0;b2(:)=0;
         b2=-Axkz(AA);

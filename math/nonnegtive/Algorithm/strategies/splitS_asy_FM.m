@@ -1,14 +1,15 @@
-function [xkA,rk,cmax] = splitS_asy_FM(A,b,Q,R,x0,iter,cmax)
-xkA=[];
+function [xkA,rpk,cmax] = splitS_asy_FM(A,b,Q,R,x0,iter,cmax,r0)
+[m,n]=size(A);
 if iter<1
     xk=x0;
-    xkA=[xkA xk];
+    xkA=xk;
 else
-    [m,n]=size(A);
+    xkA=zeros(n,iter);
 %    tol=1e-12;
     % x0=zeros(n,1);
     for i=1:iter
-        [xk,r0,rk]=FixedM(x0,Q,R,A,b);
+        [xk,rpk]=FixedM(x0,Q,R,A,b,r0);
+        r0=rpk;
         if i>1
             d1=norm(xk-x0);
             d2=norm(x0-xn1);
@@ -19,6 +20,6 @@ else
         end
         xn1=x0;
         x0=xk;
-        xkA=[xkA xk];
+        xkA(:,i)=xk;
     end
 end

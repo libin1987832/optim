@@ -6,7 +6,8 @@ t=clock;
 [m,n]=size(A);
 %FM need a qr decompose
 [Q,R]=qr(A);
-r=b-A*x0;
+rkp=b-A*x0;
+r=rkp;
 r(r<0)=0;
 funfim0=0.5*(r'*r);
 %condition for terminate
@@ -33,20 +34,23 @@ while Ar>delt*rn && rn>delt
     cmax=0;
     iter=iter+nf+ns;
     countFM=iter;
-    [xfA,rsk,cmax] = splitS_asy_FM(A,b,Q,R,x0,nf,cmax);
+    [xfA,rkp,cmax] = splitS_asy_FM(A,b,Q,R,x0,nf,cmax,rkp);
     countNW=countNW+1;
-    [xs,zk]=krylov(A,b,x0);
+    [xs,zk]=krylov(A,b,x0,rkp);
+    rkp=b-A*xs;
     xsn=norm(xs-xfA(:,nf));
     mtr=min(1,tr0/xsn);
     xi=xfA(:,nf)+mtr*(xs-xfA(:,nf));
     nss=nss+ns;
     %[xsA,cmax] = splitS(A,q,xi,ns,cmax);
-    [xsA,rsk,cmax] = splitS_asy_FM(A,b,Q,R,xi,ns,cmax);
+    [xsA,rkp,cmax] = splitS_asy_FM(A,b,Q,R,xi,ns,cmax,rkp);
     
     rok=max(rou,(1+cmax)/2);
     p1=norm(xsA(:,1)-xfA(:,nf));
     p2=norm(xsA(:,2)-xsA(:,1));
     p3=norm(xfA(:,nf)-xs(:,1));
+    rsk=rkp;
+    rsk(rsk<0)=0;
   %  funfi3=funfi(xsA(:,ns),M,q);
     funfi3=0.5*(rsk'*rsk);
     if p1<=rok*p3 && p2<=rok*p1
@@ -61,7 +65,6 @@ while Ar>delt*rn && rn>delt
         xk=x0;
     end
     rk=rsk;
-    rk(rk<0)=0;
     fk=0.5*(rk'*rk);
     Ar=norm(A'*rk);
     rn=norm(rk);
