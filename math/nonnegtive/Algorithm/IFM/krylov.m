@@ -1,9 +1,9 @@
 function [xk,zk]=krylov(AALL,b,x0,r0)
 [m,n]=size(AALL);
-z0=r0;
+z0=-r0;
 z0(z0<0)=0;
 ee=1e-15;% computer floating point arithmetic
-AA=(r0<ee);
+AA=(z0<ee);
 %FF=setdiff(1:m,AA)';
 zk=z0;
 A=AALL(AA,:);

@@ -7,11 +7,12 @@ t=clock;
 uIter=floor(max(33,(m+n)/4));
 %FM need a qr decompose
 [Q,R]=qr(A);
-r=b-A*x0;
-r(r<0)=0;
+r0=b-A*x0;
+rkp=r0;
+r0(r0<0)=0;
 %condition for terminate
-Ar=norm(A'*r);
-rn=norm(r);
+Ar=norm(A'*r0);
+rn=norm(r0);
 am=max(max(A));
 ee=1e-15;% computer floating point arithmetic
 delt=am*m*n*10*ee;
@@ -31,10 +32,11 @@ end
 while Ar>delt*rn && rn>delt
     if uIndex<uIter
         countFM=countFM+1;
-        r0=b-A*x0;
+        r0=rkp;
         %FM algorithm
         [xk,rkp]=FixedM(x0,Q,R,A,b,r0);
         rk=rkp;
+        AA=find(rkp>0);
         rk(rk<0)=0;
     else
         countNW=countNW+1;

@@ -33,6 +33,7 @@ while Ar>delt*rn && rn>delt
         countFM=countFM+1;
         %FM algorithm
         [xk,r0,rk,fk,fm,fr]=FM(x0,Q,R,A,b);
+        AA=find(rk>0);
         xkArr=[xkArr;[xk',fk,0]];
     else
         countNW=countNW+1;

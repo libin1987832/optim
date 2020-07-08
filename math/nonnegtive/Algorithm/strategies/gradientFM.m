@@ -4,7 +4,8 @@ t=clock;
 [m,n]=size(A);
 %FM need a qr decompose
 [Q,R]=qr(A);
-r=b-A*x0;
+rkp=b-A*x0;
+r=rkp;
 r(r<0)=0;
 %condition for terminate
 Ar=norm(A'*r);
@@ -29,12 +30,12 @@ if Ar<delt*rn || rn<delt
     rk=r;
     disp('input x is satisfied all constrain!(Ar<delt*rn|| rn<delt)') %ceases execution
 end
-z0=A*x0-b;
+z0=-rkp;
 z0(z0<0)=0;
 AA=find(z0<ee);
 %FF=setdiff(1:m,AA)';
         
-Axkz=(A*x0-b-z0);
+Axkz=(-rkp-z0);
 f1=A'*Axkz;
 %f2(FF)=-Axkz(FF); will be zeros
 % b2=-Axkz(AA);will be zeros
@@ -55,7 +56,7 @@ while Ar>delt*rn && rn>delt
         uIndex=0;
         %[xk,rk,fk,f0,lambe]=ssqr(x0,A,b);
         %d=-A(AA,:)\(fm0(AA));
-        [xk,zk]=krylov(A,b,x0);
+        [xk,zk]=krylov(A,b,x0,rkp);
         Axkz=A*xk-b-zk;
         f1=A'*Axkz;
         f2(:)=0;
