@@ -32,9 +32,10 @@ while Ar>delt*rn && rn>delt
     if uIndex<uIter
         countFM=countFM+1;
         %FM algorithm
-        [xk,r0,rk,fk,fm,fr]=FM(x0,Q,R,A,b);
+        [xk,r0,rk,fk,fm,fr,l1,l2]=FM(x0,Q,R,A,b);
         AA=find(rk>0);
-        xkArr=[xkArr;[xk',fk,0]];
+        xkArr=[xkArr [l1;l2;l2/l1]];
+        %xkArr=[xkArr;[xk',fk,0]];
     else
         countNW=countNW+1;
         if countNW ==1
@@ -42,7 +43,7 @@ while Ar>delt*rn && rn>delt
         end
         uIndex=0;
         [xk,rk,fk,f0,lambe]=ssqr(x0,A,b);
-        xkArr=[xkArr;[xk',fk,1]];
+        %xkArr=[xkArr;[xk',fk,1]];
     end
     uIndex=uIndex+1;
     Ar=norm(A'*rk);
