@@ -1,4 +1,4 @@
-function [xk,zk,fk]=PC(x1,z1,A,b)
+    function [xk,zk,fk]=PC(x1,z1,A,b)
 e1=A'*(A*x1-z1-b);
 r=A*x1-b;
 r(r<0)=0;
