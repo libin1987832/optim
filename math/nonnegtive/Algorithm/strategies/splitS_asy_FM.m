@@ -11,8 +11,10 @@ else
         [xk,rpk]=FixedM(x0,Q,R,A,b,r0);
         r0=rpk;
         if i>1
-            d1=norm(xk-x0);
-            d2=norm(x0-xn1);
+            dk0=xk-x0;
+            d1=dk0'*dk0;
+            dk1=x0-xn1;
+            d2=dk1'*dk1;
             c=d1/d2;
             if c>cmax
                 cmax=c;

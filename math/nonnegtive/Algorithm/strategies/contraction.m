@@ -48,7 +48,7 @@ while Ar>delt*rn && rn>delt
     rok=max(rou,(1+cmax)/2);
     p1=norm(xsA(:,1)-xfA(:,nf));
     p2=norm(xsA(:,2)-xsA(:,1));
-    p3=norm(xfA(:,nf)-xs(:,1));
+    p3=norm(xfA(:,nf-1)-xfA(:,nf));
     rsk=rkp;
     rsk(rsk<0)=0;
   %  funfi3=funfi(xsA(:,ns),M,q);

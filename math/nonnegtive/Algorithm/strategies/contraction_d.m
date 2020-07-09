@@ -1,5 +1,5 @@
 %function [x,err]=splitForlcp(x0,nmax,jc,je,delt0,deltmax,M,q)
-function [xk,rk,countFM,countNW,beginNW,tf,vk]=contraction(x0,A,b,maxIter,nf,ns,etc,ete,trr,trmax,rou)
+function [xk,rk,countFM,countNW,beginNW,tf,vk]=contraction_d(x0,A,b,maxIter,nf,ns,etc,ete,trr,trmax,rou)
 %function [x0,iter,nss]=asysub(x0,M,q,nmax,etc,ete,trr,trmax,rou)
 t=clock;
 %compute hybrid uIter
@@ -32,10 +32,11 @@ iter=0;
 nss=0;
 while Ar>delt*rn && rn>delt
     cmax=0;
-    iter=iter+nf+ns;
+    iter=iter+nf+ns+1;
     countFM=iter;
-    [xfA,rkp,cmax] = splitS_asy_FM(A,b,Q,R,x0,nf,cmax,rkp);
+    [xfA,rkp,cmax] = splitS_asy_FM(A,b,Q,R,x0,nf+1,cmax,rkp);
     countNW=countNW+1;
+    
     [xs,zk]=krylov(A,b,x0,rkp);
     rkp=b-A*xs;
     xsn=norm(xs-xfA(:,nf));
@@ -46,13 +47,19 @@ while Ar>delt*rn && rn>delt
     [xsA,rkp,cmax] = splitS_asy_FM(A,b,Q,R,xi,ns,cmax,rkp);
     
     rok=max(rou,(1+cmax)/2);
-    p1=norm(xsA(:,1)-xfA(:,nf));
-    p2=norm(xsA(:,2)-xsA(:,1));
-    p3=norm(xfA(:,nf)-xs(:,1));
+    p1n=xsA(:,1)-xfA(:,nf);
+    p1=p1n'*p1n;
+    p2n=xsA(:,2)-xsA(:,1);
+    p2=p2n'*p2n;
+    p3n=xfA(:,nf-1)-xfA(:,nf);
+    p3=p3n'*p3n;
     rsk=rkp;
     rsk(rsk<0)=0;
   %  funfi3=funfi(xsA(:,ns),M,q);
     funfi3=0.5*(rsk'*rsk);
+    %%
+    fprintf('p1/p3:%g,p2/p1:%g,ro:%g,f:%g,f0:%g,tr:%g\n',p1/p3,p2/p1,rok,funfi3,funfim0,tr0);
+    %%
     if p1<=rok*p3 && p2<=rok*p1
         xk=xsA(:,ns);
         tr0=median([trr,ete*tr0,trmax]);
@@ -65,11 +72,9 @@ while Ar>delt*rn && rn>delt
         xk=x0;
     end
     rk=rsk;
-    fk=0.5*(rk'*rk);
     Ar=norm(A'*rk);
     rn=norm(rk);
-    x0=xk;
-    
+    x0=xk;  
     if maxIter < countFM
         break;
     end

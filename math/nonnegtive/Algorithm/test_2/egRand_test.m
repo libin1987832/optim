@@ -3,7 +3,7 @@ clear
 addpath('../FM')
 addpath('../IFM')
 addpath('../strategies')
-
+addpath('../hybrid')
 tfA1=[];
 dfA1=[];
 tfA6=[];
@@ -14,7 +14,7 @@ nmax=500;
 etc=0.5;
 ete=2;
 rou=0.99;
-trmax=1e12;
+trmax=1e2;
 trr=1;
 
 for m=1000:1000:3000
@@ -28,23 +28,33 @@ for m=1000:1000:3000
 %         [xkM,fkM,xkArrM,countFM,countNM]=hybridMPLSQR(x0,A,b,1,0.00001,maxIter);
 %         [xkS,fkS,countFMS,countNWS]=hybridSplit(x0,A,b,maxIter,20,5,etc,ete,trr,trmax,rou);
 %         [xk6,fk6,xkArr6,countF6,countN6]=hybrid6(x0,A,b,5,20,maxIter);
+
         [xkD,rkD,countFD,countND,bNWD,tfD,vkD]=Dax(x0,A,b,maxIter);
-%         [xkG,rkG,countFG,countNG,bNWG,tfG,vkG]=gradientFM(x0,A,b,1,0.00001,maxIter);
- %        [xkC,rkC,countFC,countNC,bNWC,tfC,vkC]=contraction(x0,A,b,maxIter,20,5,etc,ete,trr,trmax,rou);
-  %      [xkPP,rkPP,countFPP,countNPP,bNWPP,tfPP,vkPP]=predictFM_d(x0,A,b,5,10,maxIter,xs);
-         [xkP,rkP,countFP,countNP,bNWP,tfP,vkP]=predictFM(x0,A,b,5,10,maxIter);
-          dD=norm(xkD-xs);
+        dD=norm(xkD-xs);
+        gD=norm(A'*rkD);
+        fprintf('Dax$ %d \\times %d $ & %g & %g & %4.2f &\n',m,n,dD,gD,tfD);
+%       [xkG,rkG,countFG,countNG,bNWG,tfG,vkG]=gradientFM(x0,A,b,1,0.00001,maxIter);
 %          dG=norm(xkG-xs);
-%          dC=norm(xkC-xs);
-         dP=norm(xkP-xs);
-          gD=norm(A'*rkD);
 %          gG=norm(A'*rkG);
-%          gC=norm(A'*rkC);
-         gP=norm(A'*rkP);
-          fprintf('Dax$ %d \\times %d $ & %g & %g & %4.2f &\n',m,n,dD,gD,tfD);
 %          fprintf('grad$ %d \\times %d $ & %g & %g & %4.2f &\n',m,n,dG,gG,tfG);
-         fprintf('pred$ %d \\times %d $ & %g & %g & %4.2f &\n',m,n,dP,gP,tfP);
+
+        [xkC,rkC,countFC,countNC,bNWC,tfC,vkC]=contraction_d(x0,A,b,maxIter,3,2,etc,ete,trr,trmax,rou);
+   %      [xkC,rkC,countFC,countNC,bNWC,tfC,vkC]=contraction_d(x0,A,b,maxIter,20,5,etc,ete,trr,trmax,rou);
+        %dC=norm(xkC-xs);
+%        gC=norm(A'*rkC);
 %          fprintf('con$ %d \\times %d $ & %g & %g & %4.2f &\n',m,n,dC,gC,tfC);
+
+  %      [xkPP,rkPP,countFPP,countNPP,bNWPP,tfPP,vkPP]=predictFM_d(x0,A,b,5,10,maxIter,xs);
+ %       [xkP,rkP,countFP,countNP,bNWP,tfP,vkP]=predictFM(x0,A,b,5,10,maxIter);
+ %       dP=norm(xkP-xs);
+%        gP=norm(A'*rkP);
+%         fprintf('pred$ %d \\times %d $ & %g & %g & %4.2f &\n',m,n,dP,gP,tfP);
+
+          
+
+
+
+
         
     
         
