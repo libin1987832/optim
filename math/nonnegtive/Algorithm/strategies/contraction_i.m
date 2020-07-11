@@ -1,7 +1,5 @@
 % Dax hybrid algorithm and r=B*r Nr==N nIter 预测的间隔 eIter 预测未来的多少步
-function [xk,rk,countFM,countNW,beginNW,tf,vk]=predictFM_d(x0,A,b,nIter,eIter,maxIter,xs)
-% test baseActive.mat
-% load('baseActive.mat');
+function [xk,rk,countFM,countNW,beginNW,tf,vk]=contraction_i(x0,A,b,nIter,rou,maxIter,xs)
 t=clock;
 %compute hybrid uIter
 [m,n]=size(A);
@@ -11,7 +9,6 @@ Qn=Q(:,1:n);
 rkp=b-A*x0;
 r=rkp;
 r(r<0)=0;
-fk=0.5*(r'*r);
 %condition for terminate
 Ar=norm(A'*r);
 rn=norm(r);
@@ -23,6 +20,7 @@ uIndex=0;
 countFM=0;
 countNW=0;
 beginNW=0;
+
 while Ar>delt*rn && rn>delt
     %     if uIndex<uIter
     if uIndex<nIter
@@ -38,40 +36,37 @@ while Ar>delt*rn && rn>delt
         % check if exposed face by r=B^n*r0
         uIndex=0;
         %QQ=eIter*(Qn*Qn');
-        AA=find(rk>ee);
-        qrkn=Qn(AA,:)'*rk(AA);
-        qrkn=Qn*qrkn;
-        rkn=rkp-eIter*qrkn;
-        ssign=sum(~xor(rk>ee,rkn>ee));
+        p1v=x0-xpn;
+        p1=p1v'*p1v;
+        p2v=xk-x0;
+        p2=p2v'*p2v;
+        roup=p2/p1;
         %%% if debug
-        rkpN=rkp;
-        xkN=xk;
-        [xkN,rkpN]=FixedM(xkN,Q,R,A,b,rkpN);
-        rknNN=rkp-qrkn;
-        % predict formula is OK
-        nn=norm(rknNN-rkpN);
-        rkpN=rkp;
-        xkN=xk;
-        % predict n step
-        for i=1:eIter
-            [xkN,rkpN]=FixedM(xkN,Q,R,A,b,rkpN);
+        if xs~=-1
+            AA=find(rk>ee);
+            IAA=eye(n)-pinv(A)*diag(AA)*A;
+            lmax=max(eig(IAA));
+            u1=p1;
+            u2=IAA*u1;
+            rouI=(u2'*u2)/(u1'*u1);
+            
+           
+            sump=sum(AA);
+            rks=(b-A*xs);
+            sumpx=sum(rks>0);
+            AAA=(rks>-1e-10);
+            AII=A(AAA,:);
+            ss=AII'*AII*xs-AII'*b(AAA);% valid xs true solution
+            lll=min(eig(AII'*AII));% is positive then unqiue
+            [xkkry,~]=krylov(A,b,xk,rkp);
+            
+            fprintf("rou:%g,actural:%g,after expose:%g,xs:%d,cs:%d,ll:%g,xs err:%g,dd1:%g,dd2:%g\n", rou,roup,rouI,sumpx,sump,lmax,norm(ss),norm(xkkry-xs),norm(xk-xs));
         end
-        sump=sum(rkn>0);
-        sumpp=sum(rkpN>0);
-        rks=(b-A*xs);
-        sumpx=sum(rks>0);
-        AAA=(rks>-1e-10);
-        AII=A(AAA,:);
-        ss=AII'*AII*xs-AII'*b(AAA);
-        lll=min(eig(AII'*AII));
-        [xkkry,~]=krylov(A,b,xk,rkp);
-        
-        fprintf("formula:%g,predict:%d,FM:%d,xs:%d,ss:%d,ll:%g,jj:%g,dd1:%g,dd2:%g\n", nn,sump,sumpp,sumpx,ssign,lll,norm(ss),norm(xkkry-xs),norm(xk-xs));
         %%%
         
         %ssign=getBnS(eIter,Qn,fm,I);
         % if all great zeros mean same sign
-        if ssign==m ||ssign>m*0.99
+        if roup<rou
             %newtonalgorithm
             countNW=countNW+1;
             % record begin newtron type iteratror
@@ -82,12 +77,13 @@ while Ar>delt*rn && rn>delt
             rkp=b-A*xk;
             rk=rkp;
             rk(rk<0)=0;
-%             [xk,rk,fk,f0,lambe]=ssqr(x0,A,b);
-%             xkArr=[xkArr;[xk',fk,1]];
+            %             [xk,rk,fk,f0,lambe]=ssqr(x0,A,b);
+            %             xkArr=[xkArr;[xk',fk,1]];
         end
     end
     Ar=norm(A'*rk);
     rn=norm(rk);
+    xpn=x0;
     x0=xk;
     % test
     if maxIter < countFM

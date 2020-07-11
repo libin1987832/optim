@@ -37,10 +37,10 @@ while Ar>delt*rn && rn>delt
     [xfA,rkp,cmax] = splitS_asy_FM(A,b,Q,R,x0,nf,cmax,rkp);
     countNW=countNW+1;
     [xs,zk]=krylov(A,b,x0,rkp);
-    rkp=b-A*xs;
     xsn=norm(xs-xfA(:,nf));
     mtr=min(1,tr0/xsn);
     xi=xfA(:,nf)+mtr*(xs-xfA(:,nf));
+    rkp=b-A*xi;
     nss=nss+ns;
     %[xsA,cmax] = splitS(A,q,xi,ns,cmax);
     [xsA,rkp,cmax] = splitS_asy_FM(A,b,Q,R,xi,ns,cmax,rkp);
