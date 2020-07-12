@@ -1,5 +1,5 @@
 % Dax hybrid algorithm and r=B*r Nr==N nIter 预测的间隔 eIter 预测未来的多少步
-function [xk,rk,countFM,countNW,beginNW,tf,vk]=contraction_i(x0,A,b,nIter,rou,maxIter,xs)
+function [xk,rk,countFM,countNW,beginNW,tf,vk]=gradientFM_i(x0,A,b,nIter,rou,maxIter,xs)
 t=clock;
 %compute hybrid uIter
 [m,n]=size(A);
@@ -20,12 +20,14 @@ uIndex=0;
 countFM=0;
 countNW=0;
 beginNW=0;
-
+L1=0;
+L2=0;
 while Ar>delt*rn && rn>delt
     %     if uIndex<uIter
     if uIndex<nIter
         countFM=countFM+1;
         uIndex=uIndex+1;
+        zpk=rkp;
         %FM algorithm
         [xk,rkp]=FixedM(x0,Q,R,A,b,rkp);
         rk=rkp;
@@ -36,22 +38,34 @@ while Ar>delt*rn && rn>delt
         % check if exposed face by r=B^n*r0
         uIndex=0;
         %QQ=eIter*(Qn*Qn');
-        p1v=x0-xpn;
-        p1=p1v'*p1v;
-        p2v=xk-x0;
-        p2=p2v'*p2v;
-        roup=p2/p1;
+        r0=zpk;
+        r0(r0<0)=0;
+        L1=r0*r0;
+        L2=rk*rk;
+        z0=-zpk;
+        z0(z0<0)=0;
+        LMv=-rkp-z0;
+        LM=LMv'*LMv;
+        L1m=L1-LM;
+        L2m=LM-L2;
+        LL=L1m-L2m;
+        
+        AA=find(rk>ee);
+        Au=rkp-zpk;
+        AuAA=Au(AA);
+        LLA=AuAA'*AuAA;
+        
         %%% if debug
         if xs~=-1
-            AA=(rk>ee);
-            IAA=eye(n)-pinv(A)*diag(AA)*A;
-            lmax=max(eig(IAA));
-            u1=p1;
-            u2=IAA*u1;
-            rouI=(u2'*u2)/(u1'*u1);
+            u=xk-x0;
+            Auu=A*u;
+            Auun=Auu'*Auu;%L1
+            LMv1=LMv(zpk>ee);
+            LMv2=LMv(zpk<ee);
+            L21=rkp(zpk>ee);
+            L22=rkp(zpk<ee);
             
-           
-            sump=sum(AA);
+            sump=sum(zpk>0);
             rks=(b-A*xs);
             sumpx=sum(rks>0);
             AAA=(rks>-1e-10);
@@ -67,7 +81,7 @@ while Ar>delt*rn && rn>delt
         
         %ssign=getBnS(eIter,Qn,fm,I);
         % if all great zeros mean same sign
-        if roup<rou
+        if LLA>rou*LL
             %newtonalgorithm
             countNW=countNW+1;
             % record begin newtron type iteratror
