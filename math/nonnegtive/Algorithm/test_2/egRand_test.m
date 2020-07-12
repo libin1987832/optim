@@ -36,7 +36,7 @@ for m=1000:1000:3000
 %         fprintf('Dax$ %d \\times %d $ & %g & %g & %4.2f &\n',m,n,dD,gD,tfD);
 
        % [xkG,rkG,countFG,countNG,bNWG,tfG,vkG]=gradientFM(x0,A,b,1,0.00001,maxIter);
-        [xkG,rkG,countFG,countNG,bNWG,tfG,vkG]=gradientFM_d(x0,A,b,1,0.00001,maxIter);
+        [xkG,rkG,countFG,countNG,bNWG,tfG,vkG]=gradientFM_i(x0,A,b,1,1.1,maxIter,xs);
          dG=norm(xkG-xs);
          gG=norm(A'*rkG);
          fprintf('grad$ %d \\times %d $ & %g & %g & %4.2f &\n',m,n,dG,gG,tfG);

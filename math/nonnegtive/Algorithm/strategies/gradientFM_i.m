@@ -40,10 +40,10 @@ while Ar>delt*rn && rn>delt
         r0=zpk;
         r0(r0<0)=0;
         %|| L(xk,zk) ||
-        L1=r0*r0;
+        L1=r0'*r0;
         %||L(xk+1,zk+1)||^2
-        L2=rk*rk;
-        z0=-r0;
+        L2=rk'*rk;
+        z0=-zpk;
         z0(z0<0)=0;
         % -(b-Axk+1)-zk
         LMv=-rkp-z0;
@@ -72,13 +72,17 @@ while Ar>delt*rn && rn>delt
             %||Au||^2=||L(xk,zk)||^2-||L(xk+1,zk+1)||^2
             Auun=Auu'*Auu;
             %LMv=Ax_{k+1}-b-zk 
-            %LMv1=LMv(AA)=(Ax_{k+1}-b)(AA)=(Ax_{k+1}-b-(Axk-b))
+            %LMv1=LMv(AA)=(Ax_{k+1}-b)(AA)=(Ax_{k+1}-b)
             LMv1=LMv(zpk>ee);
             %LMv2=LMv(FF)=(Ax_{k+1}-A_k)(FF)
             LMv2=LMv(zpk<ee);
             % if exposed point LMv1=L21 L22=Lmv2
             L21=rkp(zpk>ee);
             L22=rkp(zpk<ee);
+            LLMv1=LMv1-L21;
+            LLMv1f=LLMv1'*LLMv1;
+            LLMv2=LMv2-L22;
+            LLMv2f=LLMv2'*LLMv2;
             
             sump=sum(zpk>0);
             rks=(b-A*xs);
@@ -90,7 +94,7 @@ while Ar>delt*rn && rn>delt
             [xkkry,~]=krylov(A,b,xk,rkp);
             % 1：输入用于判断的参数 2：实际上收缩率 3：在充分大以后收缩率 4.最优点积极集 5 当前积极集 6，充分大后收缩量公式
             %7 解是否唯一 8输入的解是否为真 9-10 子空间方法是否缩短了距离
-            fprintf("rou:%g,LL/LLA:%g,L1-Auun:%g,L21:%d,cs:%d,ll:%g,unqiue:%g,xs err:%g,dd1:%g,dd2:%g\n", rou,LL/LLA,,L1-Auun,sump,lmax,lll,norm(ss),norm(xkkry-xs),norm(xk-xs));
+            fprintf("rou:%g,LL/LLA:%g,L1-Auun:%g,L2:%g,L21:%g,L22:%g,cs:%d,ac:%d,unqiue:%g,xs err:%g,dd1:%g,dd2:%g\n", rou,LL/LLA,L1-Auun,L2,LLMv1f,LLMv2f,sumpx,sump,lll,norm(ss),norm(xkkry-xs),norm(xk-xs));
         end
         %%%
         
@@ -113,7 +117,6 @@ while Ar>delt*rn && rn>delt
     end
     Ar=norm(A'*rk);
     rn=norm(rk);
-    xpn=x0;
     x0=xk;
     % test
     if maxIter < countFM
