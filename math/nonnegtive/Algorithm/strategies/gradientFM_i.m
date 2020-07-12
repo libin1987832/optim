@@ -90,16 +90,20 @@ while Ar>delt*rn && rn>delt
             %LMv2=LMv(FF)=(Ax_{k+1}-A_k)(FF)
             LMv2=LMv(rkp0<ee);
             % if exposed point LMv1=L21 L22=Lmv2
-            L21=rkp(zpk>ee);
-            L22=rkp(zpk<ee);
+            L21=rkp(rkp0>ee);
+            L22=rkp(rkp0<ee);
             LLMv1=LMv1-L21;
             LLMv1f=LLMv1'*LLMv1;
             LLMv2=LMv2-L22;
             LLMv2f=LLMv2'*LLMv2;
             
-            sump=sum(zpk>0);
+            sump=sum(rkp0>0);
             rks=(b-A*xs);
             sumpx=sum(rks>0);
+      
+            
+            
+            
             AAA=(rks>-1e-10);
             AII=A(AAA,:);
             ss=AII'*AII*xs-AII'*b(AAA);% valid xs true solution
