@@ -1,5 +1,5 @@
 % Dax hybrid algorithm and r=B*r Nr==N nIter 预测的间隔 eIter 预测未来的多少步
-function [xk,rk,countFM,countNW,beginNW,tf,vk]=gradientFM_i(x0,A,b,nIter,rou,maxIter,xs)
+function [xk,rk,countFM,countNW,beginNW,tf,vk]=gradientFM_i(x0,A,b,nIter,rou,elta,maxIter,xs)
 t=clock;
 %compute hybrid uIter
 [m,n]=size(A);
@@ -73,7 +73,7 @@ while Ar>delt*rn && rn>delt
             %Au=L(xk,zk)-L(xk+1,zk)
             Auu=Au;
             %Au-r;
-            Aur=Auu-rkp0;
+            Aur=Auu-r0;
             %||Au||^2=||L(xk,zk)||^2-||L(xk+1,zk+1)||^2
             % Auun=Au(AA)
             Auun=Aur(AAz)'*Aur(AAz);
@@ -87,12 +87,17 @@ while Ar>delt*rn && rn>delt
             %LMv=Ax_{k+1}-b-zk=(Au-r0+) 
             %LMv1=LMv(AA)=(Ax_{k+1}-b)(AA)=(Ax_{k+1}-b)
             LMv1=LMv(rkp0>ee);
+            LMv1f=LMv1'*LMv1;
             %LMv2=LMv(FF)=(Ax_{k+1}-A_k)(FF)
             LMv2=LMv(rkp0<ee);
+            LMv2f=LMv2'*LMv2;
             % if exposed point LMv1=L21 L22=Lmv2
             L21=rkp(rkp0>ee);
+            L21f=L21'*L21;
             L22=rkp(rkp0<ee);
-            LLMv1=LMv1-L21;
+            L22(L22<0)=0;
+            l22f=L22'*L22;
+            LLMv1=LMv1f-L21f;
             LLMv1f=LLMv1'*LLMv1;
             LLMv2=LMv2-L22;
             LLMv2f=LLMv2'*LLMv2;
@@ -118,7 +123,7 @@ while Ar>delt*rn && rn>delt
         
         %ssign=getBnS(eIter,Qn,fm,I);
         % if all great zeros mean same sign
-        if LLA>rou*LL
+        if LLA>rou*LL || LLA<elta
             %newtonalgorithm
             countNW=countNW+1;
             % record begin newtron type iteratror
