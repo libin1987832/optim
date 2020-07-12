@@ -66,11 +66,23 @@ while Ar>delt*rn && rn>delt
         
         %%% if debug
         if xs~=-1
+            FF=~AAz;
+            Bu=Au(FF);
+            LLB=Bu'*Bu;
+            
             u=xk-x0;
             %Au=L(xk,zk)-L(xk+1,zk)
             Auu=A*u;
+            %Au-r;
+            Aur=Auu-zpk;
             %||Au||^2=||L(xk,zk)||^2-||L(xk+1,zk+1)||^2
-            Auun=Auu'*Auu;
+            Auun=Aur(AAz)'*Aur(AAz);
+            Auunf=Aur(AAz);
+            Auunf(Auunf<0)=0;
+            Auunff=Auunf'*Auunf;
+            AuunfFF=Aur(FF);
+            AuunfFF(AuunfFF<0)=0;
+            AuunfFFff=AuunfFF'*AuunfFF;
             %LMv=Ax_{k+1}-b-zk 
             %LMv1=LMv(AA)=(Ax_{k+1}-b)(AA)=(Ax_{k+1}-b)
             LMv1=LMv(zpk>ee);
@@ -94,7 +106,8 @@ while Ar>delt*rn && rn>delt
             [xkkry,~]=krylov(A,b,xk,rkp);
             % 1：输入用于判断的参数 2：实际上收缩率 3：在充分大以后收缩率 4.最优点积极集 5 当前积极集 6，充分大后收缩量公式
             %7 解是否唯一 8输入的解是否为真 9-10 子空间方法是否缩短了距离
-            fprintf("rou:%g,LL/LLA:%g,L1-Auun:%g,L2:%g,L21:%g,L22:%g,cs:%d,ac:%d,unqiue:%g,xs err:%g,dd1:%g,dd2:%g\n", rou,LL/LLA,L1-Auun,L2,LLMv1f,LLMv2f,sumpx,sump,lll,norm(ss),norm(xkkry-xs),norm(xk-xs));
+            fprintf("LL/LLA:%g,L11:%g,L12:%g,L21:%g,L22:%g,L211:%g,L222:%g,cs:%d,ac:%d,unqiue:%g,xs err:%g,dd1:%g,dd2:%g\n",...
+                LL/LLA,LLA,LLB,Auun-Auunff,LLB-AuunfFFff,LLMv1f,LLMv2f,sump,sumpx,lll,norm(ss),norm(xkkry-xs),norm(xk-xs));
         end
         %%%
         
