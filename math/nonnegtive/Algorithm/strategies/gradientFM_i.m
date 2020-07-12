@@ -35,33 +35,48 @@ while Ar>delt*rn && rn>delt
     end
     
     if mod(uIndex,nIter)==0 && uIndex >0
-        % check if exposed face by r=B^n*r0
         uIndex=0;
-        %QQ=eIter*(Qn*Qn');
+        
         r0=zpk;
         r0(r0<0)=0;
+        %|| L(xk,zk) ||
         L1=r0*r0;
+        %||L(xk+1,zk+1)||^2
         L2=rk*rk;
-        z0=-zpk;
+        z0=-r0;
         z0(z0<0)=0;
+        % -(b-Axk+1)-zk
         LMv=-rkp-z0;
         LM=LMv'*LMv;
+        %L(xk,zk)-L(xk+1,zk)
         L1m=L1-LM;
+        %L(xk+1,zk)-L(xk+1,zk+1)
         L2m=LM-L2;
+        %[L(xk,zk)-L(xk+1,zk)]-[L(xk+1,zk)-L(xk+1,zk+1)]
         LL=L1m-L2m;
         
-        AA=find(rk>ee);
-        Au=rkp-zpk;
-        AuAA=Au(AA);
+        % active set r0
+        AAz=(zpk>ee);
+        %Au=-(b-Ax_{k+1})+(b-Axk)
+        Au=-rkp+zpk;
+        % Au(AAz)
+        AuAA=Au(AAz);
+        %|| Au(AAz) ||^2
         LLA=AuAA'*AuAA;
         
         %%% if debug
         if xs~=-1
             u=xk-x0;
+            %Au=L(xk,zk)-L(xk+1,zk)
             Auu=A*u;
-            Auun=Auu'*Auu;%L1
+            %||Au||^2=||L(xk,zk)||^2-||L(xk+1,zk+1)||^2
+            Auun=Auu'*Auu;
+            %LMv=Ax_{k+1}-b-zk 
+            %LMv1=LMv(AA)=(Ax_{k+1}-b)(AA)=(Ax_{k+1}-b-(Axk-b))
             LMv1=LMv(zpk>ee);
+            %LMv2=LMv(FF)=(Ax_{k+1}-A_k)(FF)
             LMv2=LMv(zpk<ee);
+            % if exposed point LMv1=L21 L22=Lmv2
             L21=rkp(zpk>ee);
             L22=rkp(zpk<ee);
             
@@ -75,7 +90,7 @@ while Ar>delt*rn && rn>delt
             [xkkry,~]=krylov(A,b,xk,rkp);
             % 1：输入用于判断的参数 2：实际上收缩率 3：在充分大以后收缩率 4.最优点积极集 5 当前积极集 6，充分大后收缩量公式
             %7 解是否唯一 8输入的解是否为真 9-10 子空间方法是否缩短了距离
-            fprintf("rou:%g,actural:%g,after expose:%g,xs:%d,cs:%d,ll:%g,unqiue:%g,xs err:%g,dd1:%g,dd2:%g\n", rou,roup,rouI,sumpx,sump,lmax,lll,norm(ss),norm(xkkry-xs),norm(xk-xs));
+            fprintf("rou:%g,LL/LLA:%g,L1-Auun:%g,L21:%d,cs:%d,ll:%g,unqiue:%g,xs err:%g,dd1:%g,dd2:%g\n", rou,LL/LLA,,L1-Auun,sump,lmax,lll,norm(ss),norm(xkkry-xs),norm(xk-xs));
         end
         %%%
         
