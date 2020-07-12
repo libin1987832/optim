@@ -27,7 +27,7 @@ while Ar>delt*rn && rn>delt
     if uIndex<nIter
         countFM=countFM+1;
         uIndex=uIndex+1;
-        zpk=rkp;
+        rkp0=rkp;
         %FM algorithm
         [xk,rkp]=FixedM(x0,Q,R,A,b,rkp);
         rk=rkp;
@@ -37,13 +37,13 @@ while Ar>delt*rn && rn>delt
     if mod(uIndex,nIter)==0 && uIndex >0
         uIndex=0;
         
-        r0=zpk;
+        r0=rkp0;
         r0(r0<0)=0;
         %|| L(xk,zk) ||
         L1=r0'*r0;
         %||L(xk+1,zk+1)||^2
         L2=rk'*rk;
-        z0=-zpk;
+        z0=-rkp0;
         z0(z0<0)=0;
         % -(b-Axk+1)-zk
         LMv=-rkp-z0;
@@ -56,9 +56,9 @@ while Ar>delt*rn && rn>delt
         LL=L1m-L2m;
         
         % active set r0
-        AAz=(zpk>ee);
+        AAz=(rkp0>ee);
         %Au=-(b-Ax_{k+1})+(b-Axk)
-        Au=-rkp+zpk;
+        Au=-rkp+rkp0;
         % Au(AAz)
         AuAA=Au(AAz);
         %|| Au(AAz) ||^2
@@ -70,24 +70,25 @@ while Ar>delt*rn && rn>delt
             Bu=Au(FF);
             LLB=Bu'*Bu;
             
-            u=xk-x0;
             %Au=L(xk,zk)-L(xk+1,zk)
-            Auu=A*u;
+            Auu=Au;
             %Au-r;
-            Aur=Auu-zpk;
+            Aur=Auu-rkp0;
             %||Au||^2=||L(xk,zk)||^2-||L(xk+1,zk+1)||^2
+            % Auun=Au(AA)
             Auun=Aur(AAz)'*Aur(AAz);
             Auunf=Aur(AAz);
-            Auunf(Auunf<0)=0;
+
             Auunff=Auunf'*Auunf;
             AuunfFF=Aur(FF);
-            AuunfFF(AuunfFF<0)=0;
+            %AuunfFF(AuunfFF<0)=0;
+            % AuunfFF=Au(FF)
             AuunfFFff=AuunfFF'*AuunfFF;
-            %LMv=Ax_{k+1}-b-zk 
+            %LMv=Ax_{k+1}-b-zk=(Au-r0+) 
             %LMv1=LMv(AA)=(Ax_{k+1}-b)(AA)=(Ax_{k+1}-b)
-            LMv1=LMv(zpk>ee);
+            LMv1=LMv(rkp0>ee);
             %LMv2=LMv(FF)=(Ax_{k+1}-A_k)(FF)
-            LMv2=LMv(zpk<ee);
+            LMv2=LMv(rkp0<ee);
             % if exposed point LMv1=L21 L22=Lmv2
             L21=rkp(zpk>ee);
             L22=rkp(zpk<ee);
