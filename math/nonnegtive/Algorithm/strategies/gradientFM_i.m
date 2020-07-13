@@ -116,7 +116,7 @@ while Ar>delt*rn && rn>delt
             [xkkry,~]=krylov(A,b,xk,rkp);
             % 1：输入用于判断的参数 2：实际上收缩率 3：在充分大以后收缩率 4.最优点积极集 5 当前积极集 6，充分大后收缩量公式
             %7 解是否唯一 8输入的解是否为真 9-10 子空间方法是否缩短了距离
-            fprintf("LL/LLA:%g,L11:%g,L12:%g,L21:%g,L22:%g,L211:%g,L222:%g,cs:%d,ac:%d,unqiue:%g,xs err:%g,dd1:%g,dd2:%g\n",...
+            fprintf(':%g,L11:%g,L12:%g,L21:%g,L22:%g,L211:%g,L222:%g,cs:%d,ac:%d,unqiue:%g,xs err:%g,dd1:%g,dd2:%g\n',...
                 LL/LLA,LLA,LLB,Auun-Auunff,LLB-AuunfFFff,LLMv1f,LLMv2f,sump,sumpx,lll,norm(ss),norm(xkkry-xs),norm(xk-xs));
         end
         %%%
