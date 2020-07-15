@@ -17,8 +17,8 @@ rou=0.99;
 trmax=1e2;
 trr=1;
 
-for m=1000:1000:6000
-    for ratio=0.1:0.2:0.3
+for m=1000:1000:3000
+    for ratio=0.6:0.2:0.8
         n=ceil(ratio*m);
         A=2*rand(m,n)-1;
         b=2*rand(m,1)-1;
