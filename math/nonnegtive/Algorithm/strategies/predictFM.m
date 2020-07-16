@@ -5,6 +5,7 @@ function [xk,rk,countFM,countNW,beginNW,tf,vk]=predictFM(x0,A,b,nIter,eIter,maxI
 t=clock;
 %compute hybrid uIter
 [m,n]=size(A);
+rou=m/n;
 %FM need a qr decompose
 [Q,R]=qr(A);
 Qn=Q(:,1:n);
@@ -56,6 +57,9 @@ while Ar>delt*rn && rn>delt
             rkp=b-A*xk;
             rk=rkp;
             rk(rk<0)=0;
+            if rou>0.6
+            nIter=(2^countNW)*nIter;
+            end
 %            nIter=2*countNW*nIter;
 %             [xk,rk,fk,f0,lambe]=ssqr(x0,A,b);
 %             xkArr=[xkArr;[xk',fk,1]];

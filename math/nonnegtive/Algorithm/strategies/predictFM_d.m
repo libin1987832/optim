@@ -84,7 +84,8 @@ while Ar>delt*rn && rn>delt
             rkp=b-A*xk;
             rk=rkp;
             rk(rk<0)=0;
-            nIter=countNW*nIter;
+          %  nIter=countNW*nIter;
+             nIter=(2^countNW)*nIter;
 %             [xk,rk,fk,f0,lambe]=ssqr(x0,A,b);
 %             xkArr=[xkArr;[xk',fk,1]];
         end
