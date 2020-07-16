@@ -39,8 +39,8 @@ while Ar>delt*rn && rn>delt
         % check if exposed face by r=B^n*r0
         uIndex=0;
         %QQ=eIter*(Qn*Qn');
-        AA=find(rk>ee);
-        qrkn=Qn(AA,:)'*rk(AA);
+        AA=find(rkp>ee);
+        qrkn=Qn(AA,:)'*rkp(AA);
         qrkn=Qn*qrkn;
         rkn=rkp-eIter*qrkn;
         ssign=sum(~xor(rk>ee,rkn>ee));

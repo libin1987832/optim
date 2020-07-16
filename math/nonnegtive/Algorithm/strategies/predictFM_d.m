@@ -58,7 +58,7 @@ while Ar>delt*rn && rn>delt
         end
         sump=sum(rkn>0);
         sumpp=sum(rkpN>0);
-        rks=(b-A*xs);
+        rks=b-A*xs;
         sumpx=sum(rks>0);
         AAA=(rks>-1e-10);
         AII=A(AAA,:);

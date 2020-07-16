@@ -17,12 +17,12 @@ rou=0.99;
 trmax=1e2;
 trr=1;
 
-for m=1000:1000:2000
-    for ratio=0.1:0.2:0.3
+for m=5:1000:1000
+    for ratio=0.6:0.2:0.7
         n=ceil(ratio*m);
-        A=2*rand(m,n)-1;
-        b=2*rand(m,1)-1;
-%         load('test')
+%         A=2*rand(m,n)-1;
+%         b=2*rand(m,1)-1;
+         load('test')
         x0=zeros(n,1);
         xs=-1;
  %       [xs,fk,xkArr,countFM,countNW,Q]=hybrid1(x0,A,b,maxIter);
@@ -59,7 +59,7 @@ for m=1000:1000:2000
          gC=norm(A'*rkC);
           fprintf('con$ %d \\times %d $ & %g & %g & %4.2f & %g & %g & %g &\n',m,n,dC,gC,tfC,countFMC,countNWC,beginNWC);
 
-    %    [xkP_d,rkP_d,countFP_d,countNP_d,bNWP_d,tfP_d,vkP_d]=predictFM_d(x0,A,b,5,10,maxIter,xs);
+       [xkP_d,rkP_d,countFP_d,countNP_d,bNWP_d,tfP_d,vkP_d]=predictFM_d(x0,A,b,5,10,maxIter,xkD);
         [xkP,rkP,countFP,countNP,bNWP,tfP,vkP]=predictFM(x0,A,b,5,10,maxIter);
 %          fprintf(' & %g & %d & %d & %d & %d & %d & %d,%g,%g\n',norm(xkP_d-xkP),countFP,countNP,bNWP,countFP_d,countNP_d,bNWP_d,tfP,tfP_d); 
         dP=norm(xkP-xs);
