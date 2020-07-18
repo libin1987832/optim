@@ -2,7 +2,7 @@
 % xk out value
 %r0=(b-Ax0)+ rk=(b-Axk)+
 %fm=b-Axk fr=norm(yk1)^2
-function [xk,r0,rk,fk,fm,fr]=FMGS(x0,A,b)
+function [xk,r0,rk,fk,fm,fr]=FMGS(x0,A,b,r)
 [m,n]=size(A);
 r=(b-A*x0);
 r0=r;
