@@ -17,12 +17,12 @@ rou=0.99;
 trmax=1e2;
 trr=1;
 
-for m=5:1000:1000
-    for ratio=0.6:0.2:0.7
+for m=1000:1000:2000
+    for ratio=0.1:0.2:0.3
         n=ceil(ratio*m);
-%         A=2*rand(m,n)-1;
-%         b=2*rand(m,1)-1;
-         load('test')
+         A=2*rand(m,n)-1;
+         b=2*rand(m,1)-1;
+%          load('test')
         x0=zeros(n,1);
         xs=-1;
  %       [xs,fk,xkArr,countFM,countNW,Q]=hybrid1(x0,A,b,maxIter);
@@ -40,9 +40,9 @@ for m=5:1000:1000
         %          dD=norm(xkD-xs);
 %          gD=norm(A'*rkD);
          fprintf('Dax$ %d \\times %d $ & %g & %g & %4.2f & %d & %d & %d\n',m,n,dD,gD,tfD,countFD,countND,bNWD);
-
+        xs=xkD;
        % [xkG,rkG,countFG,countNG,bNWG,tfG,vkG]=gradientFM(x0,A,b,1,0.00001,maxIter);
-        [xkG,rkG,countFG,countNG,bNWG,tfG,vkG]=gradientFM_i(x0,A,b,1,0.99,1e-5,maxIter,-1);
+        [xkG,rkG,countFG,countNG,bNWG,tfG,vkG]=gradientFM_i(x0,A,b,1,0.99,1e-5,maxIter,xs);
           dG=norm(xkG-xs);
           rkG=b-A*xkG;
           rkG(rkG<0)=0;
@@ -52,14 +52,14 @@ for m=5:1000:1000
 %        
 %         [xkC,rkC,countFC,countNC,bNWC,tfC,vkC]=contraction_d(x0,A,b,maxIter,3,2,etc,ete,trr,trmax,rou);
    %      [xkC,rkC,countFC,countNC,bNWC,tfC,vkC]=contraction_d(x0,A,b,maxIter,20,5,etc,ete,trr,trmax,rou);
-     [xkC,rkC,countFMC,countNWC,beginNWC,tfC,vkC]=contraction_i(x0,A,b,2,0.8,maxIter,-1);
+     [xkC,rkC,countFMC,countNWC,beginNWC,tfC,vkC]=contraction_i(x0,A,b,2,0.8,maxIter,xs);
          dC=norm(xkC-xs);
         rkC=b-A*xkC;
           rkC(rkC<0)=0;
          gC=norm(A'*rkC);
           fprintf('con$ %d \\times %d $ & %g & %g & %4.2f & %g & %g & %g &\n',m,n,dC,gC,tfC,countFMC,countNWC,beginNWC);
 
-       [xkP_d,rkP_d,countFP_d,countNP_d,bNWP_d,tfP_d,vkP_d]=predictFM_d(x0,A,b,5,10,maxIter,xkD);
+       [xkP_d,rkP_d,countFP_d,countNP_d,bNWP_d,tfP_d,vkP_d]=predictFM_d(x0,A,b,5,10,maxIter,xs);
         [xkP,rkP,countFP,countNP,bNWP,tfP,vkP]=predictFM(x0,A,b,5,10,maxIter);
 %          fprintf(' & %g & %d & %d & %d & %d & %d & %d,%g,%g\n',norm(xkP_d-xkP),countFP,countNP,bNWP,countFP_d,countNP_d,bNWP_d,tfP,tfP_d); 
         dP=norm(xkP-xs);
