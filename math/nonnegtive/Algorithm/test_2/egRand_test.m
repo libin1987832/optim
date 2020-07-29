@@ -40,7 +40,7 @@ for m=1000:1000:2000
         %          dD=norm(xkD-xs);
 %          gD=norm(A'*rkD);
          fprintf('Dax$ %d \\times %d $ & %g & %g & %4.2f & %d & %d & %d\n',m,n,dD,gD,tfD,countFD,countND,bNWD);
-%        xs=xkD;
+        xs=xkD;
        % [xkG,rkG,countFG,countNG,bNWG,tfG,vkG]=gradientFM(x0,A,b,1,0.00001,maxIter);
         [xkG,rkG,countFG,countNG,bNWG,tfG,vkG]=gradientFM_i(x0,A,b,3,1e-8,maxIter,xs);
           dG=norm(xkG-xs);
