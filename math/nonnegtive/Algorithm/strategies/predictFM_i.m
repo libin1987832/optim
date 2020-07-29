@@ -1,10 +1,11 @@
 % Dax hybrid algorithm and r=B*r Nr==N nIter 预测的间隔 eIter 预测未来的多少步
-function [xk,rk,countFM,countNW,beginNW,tf,vk]=predictFM_d(x0,A,b,nIter,eIter,maxIter,xs)
+function [xk,rk,countFM,countNW,beginNW,tf,vk]=predictFM_i(x0,A,b,nIter,eIter,maxIter,xs)
 % test baseActive.mat
 % load('baseActive.mat');
 t=clock;
 %compute hybrid uIter
 [m,n]=size(A);
+rou=m/n;
 %FM need a qr decompose
 [Q,R]=qr(A);
 Qn=Q(:,1:n);
@@ -43,6 +44,7 @@ while Ar>delt*rn && rn>delt
         qrkn=Qn*qrkn;
         rkn=rkp-eIter*qrkn;
         ssign=sum(~xor(rk>ee,rkn>ee));
+        if xs~=-1
         %%% if debug
         rkpN=rkp;
         xkN=xk;
@@ -77,6 +79,7 @@ while Ar>delt*rn && rn>delt
         fprintf('predict|formula:%g,predict:%d,FM:%d,xs:%d,ss:%d,ll:%g,jj:%g,dd1:%g,dd2:%g\n', nn,sump,sumpp,sumpx,ssign,lll,norm(ss),norm(xkkry-xs),norm(xk-xs));
         %%%
  %       end
+        end
         %ssign=getBnS(eIter,Qn,fm,I);
         % if all great zeros mean same sign
         if ssign==m ||ssign>m*0.99
@@ -91,7 +94,9 @@ while Ar>delt*rn && rn>delt
             rk=rkp;
             rk(rk<0)=0;
           %  nIter=countNW*nIter;
+          if rou>0.6
              nIter=(2^countNW)*nIter;
+          end
 %             [xk,rk,fk,f0,lambe]=ssqr(x0,A,b);
 %             xkArr=[xkArr;[xk',fk,1]];
         end
