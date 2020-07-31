@@ -42,12 +42,12 @@ for m=1000:1000:2000
          fprintf('Dax$ %d \\times %d $ & %g & %g & %4.2f & %d & %d & %d\n',m,n,dD,gD,tfD,countFD,countND,bNWD);
         xs=xkD;
        % [xkG,rkG,countFG,countNG,bNWG,tfG,vkG]=gradientFM(x0,A,b,1,0.00001,maxIter);
-        [xkG,rkG,countFG,countNG,bNWG,tfG,vkG]=gradientFM_i(x0,A,b,3,1e-8,maxIter,xs);
-          dG=norm(xkG-xs);
-          rkG=b-A*xkG;
-          rkG(rkG<0)=0;
-          gG=norm(A'*rkG);
-          fprintf('grad$ %d \\times %d $ & %g & %g & %4.2f & %g & %g & %g &\n',m,n,dG,gG,tfG,countFG,countNG,bNWG);
+%         [xkG,rkG,countFG,countNG,bNWG,tfG,vkG]=gradientFM_i(x0,A,b,3,1e-8,maxIter,xs);
+%           dG=norm(xkG-xs);
+%           rkG=b-A*xkG;
+%           rkG(rkG<0)=0;
+%           gG=norm(A'*rkG);
+%           fprintf('grad$ %d \\times %d $ & %g & %g & %4.2f & %g & %g & %g &\n',m,n,dG,gG,tfG,countFG,countNG,bNWG);
 
 %        
 %         [xkC,rkC,countFC,countNC,bNWC,tfC,vkC]=contraction_d(x0,A,b,maxIter,3,2,etc,ete,trr,trmax,rou);
@@ -59,14 +59,14 @@ for m=1000:1000:2000
          gC=norm(A'*rkC);
           fprintf('con$ %d \\times %d $ & %g & %g & %4.2f & %g & %g & %g &\n',m,n,dC,gC,tfC,countFMC,countNWC,beginNWC);
 
-       [xkP,rkP,countFP,countNP,bNWP,tfP,vkP]=predictFM_i(x0,A,b,5,10,maxIter,xs);
-       % [xkP,rkP,countFP,countNP,bNWP,tfP,vkP]=predictFM(x0,A,b,5,10,maxIter);
-%          fprintf(' & %g & %d & %d & %d & %d & %d & %d,%g,%g\n',norm(xkP_d-xkP),countFP,countNP,bNWP,countFP_d,countNP_d,bNWP_d,tfP,tfP_d); 
-        dP=norm(xkP-xs);
-        rkP=b-A*xkP;
-          rkP(rkP<0)=0;
-        gP=norm(A'*rkP);
-         fprintf('pred$ %d \\times %d $ & %g & %g & %4.2f & %g & %g & %g &\n',m,n,dP,gP,tfP,countFP,countNP,bNWP);        
+%        [xkP,rkP,countFP,countNP,bNWP,tfP,vkP]=predictFM_i(x0,A,b,5,10,maxIter,xs);
+%        % [xkP,rkP,countFP,countNP,bNWP,tfP,vkP]=predictFM(x0,A,b,5,10,maxIter);
+% %          fprintf(' & %g & %d & %d & %d & %d & %d & %d,%g,%g\n',norm(xkP_d-xkP),countFP,countNP,bNWP,countFP_d,countNP_d,bNWP_d,tfP,tfP_d); 
+%         dP=norm(xkP-xs);
+%         rkP=b-A*xkP;
+%           rkP(rkP<0)=0;
+%         gP=norm(A'*rkP);
+%          fprintf('pred$ %d \\times %d $ & %g & %g & %4.2f & %g & %g & %g &\n',m,n,dP,gP,tfP,countFP,countNP,bNWP);        
     
    %     fprintf('%d\\time %d & %g & %g & %g & %g & %g & %g & %g & %g &\n',m,n,gD,tfD,gC,tfC,gG,tfG,gP,tfP);
 %         r=b-A*xk1;

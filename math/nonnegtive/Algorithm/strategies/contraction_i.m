@@ -56,9 +56,14 @@ while Ar>delt*rn && rn>delt
             rks=(b-A*xs);
             sumpx=sum(rks>0);
             AAA=(rks>-1e-10);
+            FFF=(rks<1e-10);
             AII=A(AAA,:);
+            NF=diag(FFF);
             ss=AII'*AII*xs-AII'*b(AAA);% valid xs true solution
-            lll=min(eig(AII'*AII));% is positive then unqiue
+            PAFA=pinv(A)*NF*A;
+            p222=PAFA*p1v;
+            rouI=max(abs(p222-p2));
+            lll=max(eig(PAFA));% is positive then unqiue
             [xkkry,~]=krylov(A,b,xk,rkp);
             if roup<con
                 fprintf('xs:%d,cs:%d,check ok\n',sumpx,sump);
@@ -69,7 +74,7 @@ while Ar>delt*rn && rn>delt
             % 1：输入用于判断的参数 2：实际上收缩率 3：在充分大以后收缩率 4.最优点积极集 5 当前积极集 6，充分大后收缩量公式
             %7 解是否唯一 8输入的解是否为真 9-10 子空间方法是否缩短了距离
             fprintf('contraction|rou:%g,actural:%g,after expose:%g,xs:%d,cs:%d,ll:%g,unqiue:%g,xs err:%g,dd1:%g,  dd2:%g\n',...
-                        con,      roup,           rouI,sumpx,sump, lmax,       lll,norm(ss),norm(xkkry-xs),norm(xk-xs));
+                                    con,      roup,           rouI,sumpx,sump, lmax,       lll,norm(ss),norm(xkkry-xs),norm(xk-xs));
 %             end
         end
         %%%
