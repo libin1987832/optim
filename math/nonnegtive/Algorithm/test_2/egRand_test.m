@@ -17,7 +17,7 @@ rou=0.99;
 trmax=1e2;
 trr=1;
 
-for m=1000:1000:2000
+for m=100:100:200
     for ratio=0.6:0.2:0.8
         n=ceil(ratio*m);
          A=2*rand(m,n)-1;
@@ -33,6 +33,7 @@ for m=1000:1000:2000
 
 %         [xkD,rkD,countFD,countND,bNWD,tfD,vkD]=Dax_GS(x0,A,b,maxIter);
         [xkD,rkD,countFD,countND,bNWD,tfD,vkD]=Dax(x0,A,b,maxIter);
+        disp('dd');
 %             dD=norm(xkD-xs);
 %           rkD=b-A*xkD;
 %           rkD(rkD<0)=0;
