@@ -18,7 +18,7 @@ trmax=1e2;
 trr=1;
 
 for m=1000:1000:2000
-    for ratio=0.1:0.2:0.3
+    for ratio=0.6:0.2:0.8
         n=ceil(ratio*m);
          A=2*rand(m,n)-1;
          b=2*rand(m,1)-1;
@@ -33,14 +33,14 @@ for m=1000:1000:2000
 
 %         [xkD,rkD,countFD,countND,bNWD,tfD,vkD]=Dax_GS(x0,A,b,maxIter);
         [xkD,rkD,countFD,countND,bNWD,tfD,vkD]=Dax(x0,A,b,maxIter);
-            dD=norm(xkD-xs);
-          rkD=b-A*xkD;
-          rkD(rkD<0)=0;
-          gD=norm(A'*rkD);
+%             dD=norm(xkD-xs);
+%           rkD=b-A*xkD;
+%           rkD(rkD<0)=0;
+%           gD=norm(A'*rkD);
         %          dD=norm(xkD-xs);
 %          gD=norm(A'*rkD);
-         fprintf('Dax$ %d \\times %d $ & %g & %g & %4.2f & %d & %d & %d\n',m,n,dD,gD,tfD,countFD,countND,bNWD);
-        xs=xkD;
+%          fprintf('Dax$ %d \\times %d $ & %g & %g & %4.2f & %d & %d & %d\n',m,n,dD,gD,tfD,countFD,countND,bNWD);
+%         xs=xkD;
        % [xkG,rkG,countFG,countNG,bNWG,tfG,vkG]=gradientFM(x0,A,b,1,0.00001,maxIter);
 %         [xkG,rkG,countFG,countNG,bNWG,tfG,vkG]=gradientFM_i(x0,A,b,3,1e-8,maxIter,xs);
 %           dG=norm(xkG-xs);
@@ -52,12 +52,12 @@ for m=1000:1000:2000
 %        
 %         [xkC,rkC,countFC,countNC,bNWC,tfC,vkC]=contraction_d(x0,A,b,maxIter,3,2,etc,ete,trr,trmax,rou);
    %      [xkC,rkC,countFC,countNC,bNWC,tfC,vkC]=contraction_d(x0,A,b,maxIter,20,5,etc,ete,trr,trmax,rou);
-     [xkC,rkC,countFMC,countNWC,beginNWC,tfC,vkC]=contraction_i(x0,A,b,5,0.8,maxIter,xs);
-         dC=norm(xkC-xs);
-        rkC=b-A*xkC;
-          rkC(rkC<0)=0;
-         gC=norm(A'*rkC);
-          fprintf('con$ %d \\times %d $ & %g & %g & %4.2f & %g & %g & %g &\n',m,n,dC,gC,tfC,countFMC,countNWC,beginNWC);
+%      [xkC,rkC,countFMC,countNWC,beginNWC,tfC,vkC]=contraction_i(x0,A,b,5,0.8,maxIter,xs);
+%          dC=norm(xkC-xs);
+%         rkC=b-A*xkC;
+%           rkC(rkC<0)=0;
+%          gC=norm(A'*rkC);
+%           fprintf('con$ %d \\times %d $ & %g & %g & %4.2f & %g & %g & %g &\n',m,n,dC,gC,tfC,countFMC,countNWC,beginNWC);
 
 %        [xkP,rkP,countFP,countNP,bNWP,tfP,vkP]=predictFM_i(x0,A,b,5,10,maxIter,xs);
 %        % [xkP,rkP,countFP,countNP,bNWP,tfP,vkP]=predictFM(x0,A,b,5,10,maxIter);

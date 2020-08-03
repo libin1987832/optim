@@ -47,6 +47,11 @@ while Ar>delt*rn && rn>delt
         [xk,~]=krylov(A,b,xk,rkp);
         rk=(b-A*xk);
         rk(rk<0)=0;
+        %%% 验证 正交性
+        rk0=rkp;
+        rk0(rk0<0)=0;
+        fprintf('orthogonol is sartisfied!%g\n',(A'*rk0)'*(A'*rk));
+        %%%
     end
     uIndex=uIndex+1;
     Ar=norm(A'*rk);
