@@ -7,7 +7,7 @@ r(r<0)=0;
 Qr=Q'*r;
 % compute min increase
 uk=R\Qr;
-xk=x0+uk;
+ xk=x0+uk;
 rk=b-A*xk;
 % uk=x0;
 % for i=n:-1:1

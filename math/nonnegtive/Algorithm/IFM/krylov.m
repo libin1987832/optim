@@ -1,4 +1,4 @@
-function [xk,zk]=krylov(AALL,b,x0,r0)
+function [xk,zk,rkp]=krylov(AALL,b,x0,r0)
 [m,n]=size(AALL);
 z0=-r0;
 z0(z0<0)=0;
@@ -23,6 +23,7 @@ thgma_1=beta1;
 g1=v1;
 xk=x0;
 fmk=0;
+rkp=r0;
 for i=1:n
     q2=A*v1-alph1*q1;beta2=norm(q2);q2=q2/beta2;
     
@@ -35,11 +36,23 @@ for i=1:n
     d=thgma1*g1./ro1;
     %g2=v2-theta2*g1./ro1;
     u2=u1+d;  g2=v2-theta2*g1./ro1;
-    xk=xk+d;
-   % xk=x0+u2;
-    zkp=fmk;
-    fmk=AFF*xk-b(FF);
-    zk(FF)=fmk;
+    
+    
+  %  xk=xk+u2;
+  %check I(xk)==I(xk+1)
+    xk=x0+u2;
+    rkp0=rkp;
+    rkp=b-AALL*xk;
+    AAk=(rkp>-ee);
+    empty=sum(xor(AA,AAk));
+    if empty
+        xk=x0+u1;
+        rkp=rkp0;
+        break;
+    end
+%     zkp=fmk;
+%     fmk=AFF*xk-b(FF);
+%     zk(FF)=fmk;
     %zk(zk<0)=0;
     
     
@@ -48,27 +61,27 @@ for i=1:n
 
     %AAk=(zk<ee);
     %empty=isempty(setdiff(AA,AAk));
-    empty=isempty(find(fmk<0,1));
-    if ~empty
-        x1=xk-d;
-        %zk=zkp;
-        %zk(zk<0)=0;
-        
-        Ad=AFF*d;
-        z0Ad=zkp./Ad;
-        z0Ad(z0Ad<=0)=inf;
-        a2=min(z0Ad);
-        a2=min(a2,1);
-        xk=x1+a2*d;
-        zk=z0;
-        zk(FF)=zk(FF)-a2*Ad;
-        
-        %rmrk=AALL*xk-b-zk;
-        %watch3=0.5*rmrk'*rmrk;
-
-        break;
-    end
-    
+%     empty=isempty(find(fmk<0,1));
+%     if empty
+%         x1=xk-d;
+%         %zk=zkp;
+%         %zk(zk<0)=0;
+%         
+%         Ad=AFF*d;
+%         z0Ad=zkp./Ad;
+%         z0Ad(z0Ad<=0)=inf;
+%         a2=min(z0Ad);
+%         a2=min(a2,1);
+%         xk=x1+a2*d;
+%         zk=z0;
+%         zk(FF)=zk(FF)-a2*Ad;
+%         
+%         %rmrk=AALL*xk-b-zk;
+%         %watch3=0.5*rmrk'*rmrk;
+% 
+%         break;
+%     end
+    % update paramters
     u1=u2;
     q1=q2;v1=v2;alph1=alph2;
     
