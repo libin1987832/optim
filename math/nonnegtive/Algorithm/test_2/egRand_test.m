@@ -16,9 +16,13 @@ ete=2;
 rou=0.99;
 trmax=1e2;
 trr=1;
-
+Arecord=[];
+bnf=2;
+enf=10;
+nnf=enf-bnf+1;
 for m=1000:1000:2000
-    for ratio=0.1:0.2:0.2
+    for ratio=0.1:0.6:0.8
+        for nf=bnf:enf
         n=ceil(ratio*m);
          A=2*rand(m,n)-1;
          b=2*rand(m,1)-1;
@@ -41,6 +45,15 @@ for m=1000:1000:2000
         t2=etime(clock,t);
         fprintf('time A*x:%g,pinv:%g,qr:%g,r*q*x:%g\n',t1,t2,tq,tr);
         xs=-1;
+        
+        [xkR,rkR,countFR,countNWR,bNWR,tfR,vkR]=residualR(x0,A,b,maxIter);
+         dR=norm(xkR-xs);
+         rkR=b-A*xkR;
+         rkR(rkR<0)=0;
+         gR=norm(A'*rkR);
+         fprintf('resdual$ %d \\times %d $ & %g & %g & %4.2f & %d & %d &\n',m,n,dR,gR,tfR,countFR,countNWR);
+         
+        
         [xkA,rkA,countFA,countNA,bNWA,tfA,vkA,Arr]=als(x0,A,b,maxIter);
           xs=-1;
          dA=norm(xkA-xs);
@@ -64,7 +77,7 @@ for m=1000:1000:2000
          gD=norm(A'*rkD);
          fprintf('Dax$ %d \\times %d $ & %g & %g & %4.2f & %d & %d & %d\n',m,n,dD,gD,tfD,countFD,countND,bNWD);
         
-        [xkG,rkG,countFG,countNG,bNWG,tfG,vkG]=gradientFM_i(x0,A,b,3,1e-8,maxIter,xs);
+        [xkG,rkG,countFG,countNG,bNWG,tfG,vkG]=gradientFM_i(x0,A,b,nf,1e-8,maxIter,xs);
           dG=norm(xkG-xs);
           rkG=b-A*xkG;
           rkG(rkG<0)=0;
@@ -72,20 +85,27 @@ for m=1000:1000:2000
           fprintf('grad$ %d \\times %d $ & %g & %g & %4.2f & %g & %g & %g &\n',m,n,dG,gG,tfG,countFG,countNG,bNWG);
 % 
 % 
-     [xkC,rkC,countFMC,countNWC,beginNWC,tfC,vkC]=contraction_i(x0,A,b,5,0.8,maxIter,xs);
+     [xkC,rkC,countFMC,countNWC,beginNWC,tfC,vkC]=contraction_i(x0,A,b,nf,0.8,maxIter,xs);
          dC=norm(xkC-xs);
         rkC=b-A*xkC;
           rkC(rkC<0)=0;
          gC=norm(A'*rkC);
           fprintf('con$ %d \\times %d $ & %g & %g & %4.2f & %g & %g & %g &\n',m,n,dC,gC,tfC,countFMC,countNWC,beginNWC);
 
-       [xkP,rkP,countFP,countNP,bNWP,tfP,vkP]=predictFM_i(x0,A,b,5,10,maxIter,xs);
+       [xkP,rkP,countFP,countNP,bNWP,tfP,vkP]=predictFM_i(x0,A,b,nf,10,maxIter,xs);
         dP=norm(xkP-xs);
         rkP=b-A*xkP;
           rkP(rkP<0)=0;
         gP=norm(A'*rkP);
-         fprintf('pred$ %d \\times %d $ & %g & %g & %4.2f & %g & %g & %g &\n',m,n,dP,gP,tfP,countFP,countNP,bNWP);        
-    
+         fprintf('pred$ %d \\times %d $ & %g & %g & %4.2f & %g & %g & %g &\n',m,n,dP,gP,tfP,countFP,countNP,bNWP); 
+         record=[m,n,gR,tfR,countFR,countNWR,nf;...
+                 m,n,gA,tfA,countFA,countNA,nf;...
+                 m,n,gD,tfD,countFD,countND,nf;...
+                 m,n,gG,tfG,countFG,countNG,nf;...
+                 m,n,gC,tfC,countFMC,countNWC,nf;...
+                 m,n,gP,tfP,countFP,countNP,nf...
+                ];
+        Arecord=[Arecord;record];
    %     fprintf('%d\\time %d & %g & %g & %g & %g & %g & %g & %g & %g &\n',m,n,gD,tfD,gC,tfC,gG,tfG,gP,tfP);
 %         r=b-A*xk1;
 %         r(r<0)=0;
@@ -102,6 +122,22 @@ for m=1000:1000:2000
 %         dim=[dim num2str(n)];
      end
 end
+end
+recordG=Arecord(4:6:end,:);
+recordC=Arecord(5:6:end,:);
+recordP=Arecord(6:6:end,:);
+subplot(3,2,1)
+plot(recordG(1:nnf,7),recordG(1:nnf,4),'--r*','linewidth',2,'markersize',5)
+subplot(3,2,2)
+plot(recordG(1+nnf:nnf+nnf,7),recordG(1+nnf:nnf+nnf,4),'--b*','linewidth',2,'markersize',5)
+subplot(3,2,3)
+plot(recordC(1:nnf,7),recordC(1:nnf,4),'--r*','linewidth',2,'markersize',5)
+subplot(3,2,4)
+plot(recordC(1+nnf:nnf+nnf,7),recordC(1+nnf:nnf+nnf,4),'--b*','linewidth',2,'markersize',5)
+subplot(3,2,5)
+plot(recordP(1:nnf,7),recordP(1:nnf,4),'--r*','linewidth',2,'markersize',5)
+subplot(3,2,6)
+plot(recordP(1+nnf:nnf+nnf,7),recordP(1+nnf:nnf+nnf,4),'--b*','linewidth',2,'markersize',5)
 % xais=1:size(tfA1,2);
 % itxais=5;
 % subplot(1,2,1)

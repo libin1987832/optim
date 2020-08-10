@@ -1,4 +1,4 @@
-function [xk,rk,countFM,countNW,beginNW,tf,vk]=als(x0,A,b,maxIter)
+function [xk,rk,countFM,countNW,beginNW,tf,vk]=residualR(x0,A,b,maxIter)
 t=clock;
 %compute hybrid uIter
 [m,n]=size(A);
@@ -26,11 +26,14 @@ if Ar<delt*rn || rn<delt
     rk=r;
     disp('input x is satisfied all constrain!(Ar<delt*rn|| rn<delt)') %ceases execution
 end
+
 %||A'(r)+||<=delt||(r)+|| ||(r)+||<=de
 while Ar>delt*rn && rn>delt
-    r0p=r0;
-    r0p(r0p<0)=0;
-   rk=r0-Qn*Qn'*r0p;
+    Qr=Qn'*r0;
+    rkp=rkp-Qn*Qr;
+    rk=rkp;
+    rk(rk<0)=0;
+    r0=rk;
     uIndex=uIndex+1;
     Ar=norm(A'*rk);
     rn=norm(rk);
@@ -39,5 +42,6 @@ while Ar>delt*rn && rn>delt
         break;
     end
 end
+xk=A\(b-rkp);
 tf=etime(clock,t);
 vk=sum(sign(rk));
