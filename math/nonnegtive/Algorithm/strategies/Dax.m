@@ -48,11 +48,11 @@ while Ar>delt*rn && rn>delt
          rk=(b-A*xk);
          rk(rk<0)=0;
 %         %%% 验证 正交性
-        rk0=rkp;
-        rk0(rk0<0)=0;
-        ssign=sum(~xor(rk>0,rk0>0));
-        fprintf('diff!%g %g\n',norm(A'*rk0),norm(A'*rk));
-        fprintf('orthogonol is sartisfied!%g %d %d\n',(A'*rk0)'*(A'*rk),ssign,m);                 
+%         rk0=rkp;
+%         rk0(rk0<0)=0;
+%         ssign=sum(~xor(rk>0,rk0>0));
+%         fprintf('diff!%g %g\n',norm(A'*rk0),norm(A'*rk));
+%         fprintf('orthogonol is sartisfied!%g %d %d\n',(A'*rk0)'*(A'*rk),ssign,m);                 
         %%%
     end
     uIndex=uIndex+1;

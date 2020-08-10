@@ -18,20 +18,44 @@ trmax=1e2;
 trr=1;
 
 for m=1000:1000:2000
-    for ratio=0.1:0.2:0.3
+    for ratio=0.1:0.2:0.2
         n=ceil(ratio*m);
          A=2*rand(m,n)-1;
          b=2*rand(m,1)-1;
 %          load('test')
         x0=zeros(n,1);
+        xr=rand(n,1);
+        t=clock;
+        [q,r]=qr(A);
+        tq=etime(clock,t);
+       t=clock;
+        r\(q(1:n,:)'*xr);
+        tr=etime(clock,t);
+        t=clock;
+        for i=1:10
+        A*xr;
+        end
+        t1=etime(clock,t);
+        t=clock;
+        pinv(A);
+        t2=etime(clock,t);
+        fprintf('time A*x:%g,pinv:%g,qr:%g,r*q*x:%g\n',t1,t2,tq,tr);
         xs=-1;
+        [xkA,rkA,countFA,countNA,bNWA,tfA,vkA,Arr]=als(x0,A,b,maxIter);
+          xs=-1;
+         dA=norm(xkA-xs);
+         rkA=b-A*xkA;
+         rkA(rkA<0)=0;
+         gA=norm(A'*rkA);
+         fprintf('ALS$ %d \\times %d $ & %g & %g & %4.2f & %d & %d & %d,%g\n',m,n,dA,gA,tfA,countFA,countNA,Arr(1,end),t1*countFA/10);
+         
  %       [xs,fk,xkArr,countFM,countNW,Q]=hybrid1(x0,A,b,maxIter);
        % xkArr
 %         [xkM,fkM,xkArrM,countFM,countNM]=hybridMPLSQR(x0,A,b,1,0.00001,maxIter);
 %         [xkS,fkS,countFMS,countNWS]=hybridSplit(x0,A,b,maxIter,20,5,etc,ete,trr,trmax,rou);
 %         [xk6,fk6,xkArr6,countF6,countN6]=hybrid6(x0,A,b,5,20,maxIter);
 
-%         [xkD,rkD,countFD,countND,bNWD,tfD,vkD]=Dax_GS(x0,A,b,maxIter);
+ %        [xkD,rkD,countFD,countND,bNWD,tfD,vkD]=Dax_GS(x0,A,b,maxIter);
         [xkD,rkD,countFD,countND,bNWD,tfD,vkD]=Dax(x0,A,b,maxIter);
           xs=-1;
          dD=norm(xkD-xs);
@@ -40,27 +64,27 @@ for m=1000:1000:2000
          gD=norm(A'*rkD);
          fprintf('Dax$ %d \\times %d $ & %g & %g & %4.2f & %d & %d & %d\n',m,n,dD,gD,tfD,countFD,countND,bNWD);
         
-%         [xkG,rkG,countFG,countNG,bNWG,tfG,vkG]=gradientFM_i(x0,A,b,3,1e-8,maxIter,xs);
-%           dG=norm(xkG-xs);
-%           rkG=b-A*xkG;
-%           rkG(rkG<0)=0;
-%           gG=norm(A'*rkG);
-%           fprintf('grad$ %d \\times %d $ & %g & %g & %4.2f & %g & %g & %g &\n',m,n,dG,gG,tfG,countFG,countNG,bNWG);
+        [xkG,rkG,countFG,countNG,bNWG,tfG,vkG]=gradientFM_i(x0,A,b,3,1e-8,maxIter,xs);
+          dG=norm(xkG-xs);
+          rkG=b-A*xkG;
+          rkG(rkG<0)=0;
+          gG=norm(A'*rkG);
+          fprintf('grad$ %d \\times %d $ & %g & %g & %4.2f & %g & %g & %g &\n',m,n,dG,gG,tfG,countFG,countNG,bNWG);
 % 
 % 
-%      [xkC,rkC,countFMC,countNWC,beginNWC,tfC,vkC]=contraction_i(x0,A,b,5,0.8,maxIter,xs);
-%          dC=norm(xkC-xs);
-%         rkC=b-A*xkC;
-%           rkC(rkC<0)=0;
-%          gC=norm(A'*rkC);
-%           fprintf('con$ %d \\times %d $ & %g & %g & %4.2f & %g & %g & %g &\n',m,n,dC,gC,tfC,countFMC,countNWC,beginNWC);
-% 
-%        [xkP,rkP,countFP,countNP,bNWP,tfP,vkP]=predictFM_i(x0,A,b,5,10,maxIter,xs);
-%         dP=norm(xkP-xs);
-%         rkP=b-A*xkP;
-%           rkP(rkP<0)=0;
-%         gP=norm(A'*rkP);
-%          fprintf('pred$ %d \\times %d $ & %g & %g & %4.2f & %g & %g & %g &\n',m,n,dP,gP,tfP,countFP,countNP,bNWP);        
+     [xkC,rkC,countFMC,countNWC,beginNWC,tfC,vkC]=contraction_i(x0,A,b,5,0.8,maxIter,xs);
+         dC=norm(xkC-xs);
+        rkC=b-A*xkC;
+          rkC(rkC<0)=0;
+         gC=norm(A'*rkC);
+          fprintf('con$ %d \\times %d $ & %g & %g & %4.2f & %g & %g & %g &\n',m,n,dC,gC,tfC,countFMC,countNWC,beginNWC);
+
+       [xkP,rkP,countFP,countNP,bNWP,tfP,vkP]=predictFM_i(x0,A,b,5,10,maxIter,xs);
+        dP=norm(xkP-xs);
+        rkP=b-A*xkP;
+          rkP(rkP<0)=0;
+        gP=norm(A'*rkP);
+         fprintf('pred$ %d \\times %d $ & %g & %g & %4.2f & %g & %g & %g &\n',m,n,dP,gP,tfP,countFP,countNP,bNWP);        
     
    %     fprintf('%d\\time %d & %g & %g & %g & %g & %g & %g & %g & %g &\n',m,n,gD,tfD,gC,tfC,gG,tfG,gP,tfP);
 %         r=b-A*xk1;
