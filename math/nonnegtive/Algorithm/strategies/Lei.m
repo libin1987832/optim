@@ -26,13 +26,14 @@ if Ar<delt*rn || rn<delt
 end
 %||A'(r)+||<=delt||(r)+|| ||(r)+||<=de
 while Ar>delt*rn && rn>delt
-    [uk,fk]=krylov(A,rk,k);
+    uk=krylovk(A,r0,k);
     xk=x0+uk;
     rk=b-A*xk;
     rk(rk<0)=0;
     Ar=norm(A'*rk);
     rn=norm(rk);
     x0=xk;
+    r0=rk;
     countFM=countFM+1;
     if maxIter < countFM
         break;

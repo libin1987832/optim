@@ -32,7 +32,7 @@ if Ar<delt*rn || rn<delt
     disp('input x is satisfied all constrain!(Ar<delt*rn|| rn<delt)') %ceases execution
 end
 %||A'(r)+||<=delt||(r)+|| ||(r)+||<=de
-while Ar>delt*rn && rn>delt
+while Ar>delt
     I=find(r0>=tol);
     %提取子矩阵判断是否正定
     AI=A(I,:);
@@ -42,11 +42,11 @@ while Ar>delt*rn && rn>delt
     hk=AI\r0(I);
     if isposdef
         countFM= countFM+1;
-        aa=bisect(r0,dh);
+        aa=bisect(r0,A*hk);
 %         aa=piecewise(A,b,dh,x)
     else
         countNW= countNW+1;
-        ai=r./dh;
+        ai=r0./(A*hk);
         aa=min(ai(ai>tol));
     end
     xk=x0+aa*hk;
@@ -56,6 +56,7 @@ while Ar>delt*rn && rn>delt
     rn=norm(rk);
     x0=xk;
     r0=rk;
+    vk=sum(sign(rk));
     if maxIter < countFM
         break;
     end

@@ -1,4 +1,4 @@
-function [xk,rk,countFM,countNW,beginNW,tf,vk]=residualR(x0,A,b,maxIter)
+function [xk,xk2,countFM,countNW,beginNW,tf,vk]=residualR(x0,A,b,maxIter)
 t=clock;
 %compute hybrid uIter
 [m,n]=size(A);
@@ -43,5 +43,18 @@ while Ar>delt*rn && rn>delt
     end
 end
 xk=A\(b-rkp);
+x0=xk;
+I=find(rkp>=ee);
+% 提取子矩阵判断是否正定
+AI=A(I,:);
+hk=AI\rkp(I);
+aa=piecewise(A,b,hk,x0);
+xk=x0+aa*hk;
+
+[xk2,~]=krylov(A,b,x0,rkp);
+
+rkp=b-A*xk;
+rk=rkp;
+rk(rk<0)=0;
 tf=etime(clock,t);
 vk=sum(sign(rk));

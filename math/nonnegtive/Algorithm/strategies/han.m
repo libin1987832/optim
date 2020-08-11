@@ -38,7 +38,7 @@ while Ar>delt*rn && rn>delt
     AI=A(I,:);
 %    AII=AI'*AI;
     hk=AI\r0(I);      
-    aa=piecewise(A,b,dh,x);
+    aa=piecewise(A,b,hk,x0);
     xk=x0+aa*hk;
     rk=b-A*xk;
     rk(rk<0)=0;
