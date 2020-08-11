@@ -53,7 +53,27 @@ for m=1000:1000:2000
          gR=norm(A'*rkR);
          fprintf('resdual$ %d \\times %d $ & %g & %g & %4.2f & %d & %d &\n',m,n,dR,gR,tfR,countFR,countNWR);
          
-        
+         [xkpa,rkpa,countFMpa,countNWpa,beginNWpa,tfpa,vkpa]=pina(x0,A,b,maxIter)
+         dpa=norm(xkpa-xs);
+         rkpa=b-A*xkpa;
+         rkpa(rkpa<0)=0;
+         gpa=norm(A'*rkpa);
+         fprintf('pina$ %d \\times %d $ & %g & %g & %4.2f & %d & %d &\n',m,n,dpa,gpa,tfpa,countFMpa,countNWpa);
+         
+         [xkhan,rkhan,countFMhan,countNWhan,beginNWhan,tfhan,vkhan]=han(x0,A,b,maxIter)
+         dhan=norm(xkhan-xs);
+         rkhan=b-A*xkhan;
+         rkhan(rkhan<0)=0;
+         ghan=norm(A'*rkhan);
+         fprintf('han$ %d \\times %d $ & %g & %g & %4.2f & %d & %d &\n',m,n,dhan,ghan,tfhan,countFMhan,countNWhan);
+                  
+         [xkLei,rkLei,countFMLei,countNWLei,beginNWLei,tfLei,vkLei]=Lei(x0,A,b,maxIter)
+         dhan=norm(xkhan-xs);
+         rkhan=b-A*xkhan;
+         rkhan(rkhan<0)=0;
+         ghan=norm(A'*rkhan);
+         fprintf('han$ %d \\times %d $ & %g & %g & %4.2f & %d & %d &\n',m,n,dhan,ghan,tfhan,countFMhan,countNWhan);
+         
         [xkA,rkA,countFA,countNA,bNWA,tfA,vkA,Arr]=als(x0,A,b,maxIter);
           xs=-1;
          dA=norm(xkA-xs);

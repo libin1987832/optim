@@ -1,5 +1,5 @@
 % pina hybrid algorithm
-function [xk,rk,countFM,countNW,beginNW,tf,vk]=pina(x0,A,b,maxIter)
+function [xk,rk,countFM,countNW,beginNW,tf,vk]=han(x0,A,b,maxIter)
 t=clock;
 tol=1e-15;
 %compute hybrid uIter
@@ -19,7 +19,6 @@ countFM=0;
 countNW=0;
 beginNW=0;
 
-
 % AII=AI'*AI;
 % bII=AI'*(r(I));
 % sparse for svds densy for svd
@@ -33,29 +32,20 @@ if Ar<delt*rn || rn<delt
 end
 %||A'(r)+||<=delt||(r)+|| ||(r)+||<=de
 while Ar>delt*rn && rn>delt
+    countFM=countFM+1;
     I=find(r0>=tol);
     %提取子矩阵判断是否正定
     AI=A(I,:);
-    AII=AI'*AI;
-    [d,v] = eig(AII);
-    isposdef = all(d > tol);
-    hk=AI\r0(I);
-    if isposdef
-        countFM= countFM+1;
-        aa=bisect(r0,dh);
-%         aa=piecewise(A,b,dh,x)
-    else
-        countNW= countNW+1;
-        ai=r./dh;
-        aa=min(ai(ai>tol));
-    end
+%    AII=AI'*AI;
+    hk=AI\r0(I);      
+    aa=piecewise(A,b,dh,x);
     xk=x0+aa*hk;
     rk=b-A*xk;
     rk(rk<0)=0;
+    r0=rk;
+    x0=xk;
     Ar=norm(A'*rk);
     rn=norm(rk);
-    x0=xk;
-    r0=rk;
     if maxIter < countFM
         break;
     end

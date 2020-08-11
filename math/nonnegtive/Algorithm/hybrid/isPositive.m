@@ -24,3 +24,8 @@ else
     isTF = 0;
 end
 end
+
+tf = issymmetric(A)
+d = eig(A)
+isposdef = all(d > tol)
+issemidef = all(d > -tol)
