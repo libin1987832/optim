@@ -22,7 +22,7 @@ bnf=50;
 enf=55;
 nnf=enf-bnf+1;
 for m=100:100:1000
-    for ratio=0.1:0.2:1
+    for ratio=0.3:0.2:0.8
         for nf=bnf:enf
         n=ceil(ratio*m);
          %A=2*rand(m,n)-1;
@@ -52,8 +52,6 @@ for m=100:100:1000
         fprintf('time A*x:%g,pinv:%g,qr:%g,r*q*x:%g\n',t1,t2,tq,tr);
         xs=-1;
         
-
-        
         [xkR,xkR2,countFR,countNWR,bNWR,tfR,vkR]=residualR(x0,A,b,maxIter);
          dR=norm(xkR-xs);
          rkR=b-A*xkR;
@@ -71,7 +69,7 @@ for m=100:100:1000
          rkA(rkA<0)=0;
          gA=norm(A'*rkA);
          fprintf('ALS$ %d \\times %d $ & %g & %g & %4.2f & %d & %d & %d,%g\n',m,n,dA,gA,tfA,countFA,countNA,Arr(1,end),t1*countFA/10);
-         Arecord=[Arecord m n Arr(1,end)];
+         Arecord=[Arecord;m n Arr(1,end) gA];
 %          [xkpa,rkpa,countFMpa,countNWpa,beginNWpa,tfpa,vkpa]=pina(x0,A,b,maxIter);
 %          dpa=norm(xkpa-xs);
 %          rkpa=b-A*xkpa;
