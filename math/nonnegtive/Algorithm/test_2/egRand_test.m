@@ -17,12 +17,14 @@ ete=2;
 rou=0.99;
 trmax=1e2;
 trr=1;
+
+
+for batch=1:10
 Arecord=[];
-bnf=50;
+    bnf=50;
 enf=55;
 nnf=enf-bnf+1;
-for batch=1:10
-for m=100:100:1000
+    for m=100:100:1000
     for ratio=0.3:0.2:0.8
         for nf=bnf:enf
         n=ceil(ratio*m);
@@ -149,6 +151,8 @@ end
 end
 save(['ff' num2str(batch) '.mat'],'Arecord')
 end
+
+
  %       [xs,fk,xkArr,countFM,countNW,Q]=hybrid1(x0,A,b,maxIter);
        % xkArr
 %         [xkM,fkM,xkArrM,countFM,countNM]=hybridMPLSQR(x0,A,b,1,0.00001,maxIter);
