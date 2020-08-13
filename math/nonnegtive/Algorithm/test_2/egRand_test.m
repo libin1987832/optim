@@ -21,13 +21,13 @@ trr=1;
 
 for batch=1:10
 Arecord=[];
-    bnf=50;
-enf=55;
-nnf=enf-bnf+1;
-    for m=100:100:1000
-    for ratio=0.3:0.2:0.8
-        for nf=bnf:enf
-        n=ceil(ratio*m);
+%     bnf=50;
+% enf=55;
+% nnf=enf-bnf+1;
+    for m=200:400:1000
+    for ratio=0.1:0.1:1
+%         for nf=bnf:enf
+        n=floor(ratio*m);
          %A=2*rand(m,n)-1;
 
          A = 2*randn(m,m) * ...
@@ -146,7 +146,7 @@ nnf=enf-bnf+1;
 %         dfA1=[dfA1 df1];
 %         dfA6=[dfA6 df6];
 %         dim=[dim num2str(n)];
-     end
+%     end
 end
 end
 save(['ff' num2str(batch) '.mat'],'Arecord')
