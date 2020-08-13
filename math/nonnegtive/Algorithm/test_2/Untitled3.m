@@ -1,3 +1,4 @@
+clear
 f1=load('ff1.mat');
 f2=load('ff2.mat');
 f3=load('ff3.mat');
