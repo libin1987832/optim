@@ -21,6 +21,7 @@ Arecord=[];
 bnf=50;
 enf=55;
 nnf=enf-bnf+1;
+for batch=1:10
 for m=100:100:1000
     for ratio=0.3:0.2:0.8
         for nf=bnf:enf
@@ -70,6 +71,7 @@ for m=100:100:1000
          gA=norm(A'*rkA);
          fprintf('ALS$ %d \\times %d $ & %g & %g & %4.2f & %d & %d & %d,%g\n',m,n,dA,gA,tfA,countFA,countNA,Arr(1,end),t1*countFA/10);
          Arecord=[Arecord;m n Arr(1,end) gA];
+        
 %          [xkpa,rkpa,countFMpa,countNWpa,beginNWpa,tfpa,vkpa]=pina(x0,A,b,maxIter);
 %          dpa=norm(xkpa-xs);
 %          rkpa=b-A*xkpa;
@@ -145,7 +147,8 @@ for m=100:100:1000
      end
 end
 end
-
+save(['ff' num2str(batch) '.mat'],'Arecord')
+end
  %       [xs,fk,xkArr,countFM,countNW,Q]=hybrid1(x0,A,b,maxIter);
        % xkArr
 %         [xkM,fkM,xkArrM,countFM,countNM]=hybridMPLSQR(x0,A,b,1,0.00001,maxIter);
@@ -196,3 +199,7 @@ end
 %         A=[1,1;-1,-1;-1,0;-6,-3];
 %         b=[1;1;0.5;2];
 %         x0=[-5;0];
+
+
+
+ %save('nfrand.mat','Arecord')
