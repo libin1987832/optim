@@ -43,3 +43,12 @@ for ratio=0.1:0.2:1
     Arecord=[Arecord;m n batchArr];
 end
 % save(['ff' num2str(batch) '.mat'],'Arecord')
+%%
+nf=Arecord(:,5:3:32);
+time=Arecord(:,4:3:32);
+accuracy=Arecord(:,3:3:32);
+
+%%
+nfms=[nf mean(nf,2) std(nf,0,2)];
+timems=[nf mean(time,2) std(time,0,2)];
+accuracyms=[nf mean(accuracy,2) std(accuracy,0,2)];
