@@ -12,8 +12,8 @@ nmax=500;
 
 m=1000;
 
-for m=[1000]
-    n=500;
+for m=[6]
+    n=3;
     batchArr=zeros(1,3*10);
     eigenA=zeros(2,10);
     ArrA=cell(10,1);
@@ -27,6 +27,14 @@ for m=[1000]
         x0=zeros(n,1);
         xr=rand(n,1);
         xs=-1;
+        
+        [xkhan,rkhan,countFMhan,countNWhan,beginNWhan,tfhan,vkhan]=han(x0,A,b,maxIter); 
+        dhan=norm(xkhan-xs);
+        xs=xkhan;
+         rkhan=b-A*xkhan;
+         rkhan(rkhan<0)=0;
+         ghan=norm(A'*rkhan);
+         fprintf('han$ %d \\times %d $ & %g & %g & %4.2f & %d & %d &\n',m,n,dhan,ghan,tfhan,countFMhan,countNWhan);
         
         [xkR,xkR2,countFR,countNWR,bNWR,tfR,vkR]=residualR(x0,A,b,maxIter);
         dR=norm(xkR-xs);
@@ -44,18 +52,13 @@ for m=[1000]
         rkA=b-A*xkA;
         rkA(rkA<0)=0;
         gA=norm(A'*rkA);
+        if ~isempty(Arr)
         fprintf('ALS$ %d \\times %d $ & %g & %g & %4.2f & %d & %d & %d\n',m,n,dA,gA,tfA,countFA,countNA,Arr(1,end));
         batchArr(1,3*batch-2:3*batch)=[gA,tfA,Arr(1,end)];
         %eigenA(:,batch)=[max(eA);min(eA)];
         ArrA{batch}=Arr;
-        
-        [xkhan,rkhan,countFMhan,countNWhan,beginNWhan,tfhan,vkhan]=han(x0,A,b,maxIter);
-        dhan=norm(xkhan-xs);
-         rkhan=b-A*xkhan;
-         rkhan(rkhan<0)=0;
-         ghan=norm(A'*rkhan);
-         fprintf('han$ %d \\times %d $ & %g & %g & %4.2f & %d & %d &\n',m,n,dhan,ghan,tfhan,countFMhan,countNWhan);
-%          
+        end
+        %          
     end
     Arecord=[Arecord;m n batchArr];
 end
