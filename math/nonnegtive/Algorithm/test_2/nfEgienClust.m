@@ -11,11 +11,17 @@ nmax=500;
 
 
 m=1000;
-for m=[100,200,400,600,800,1000]
+
+for m=[1000]
     n=100;
     batchArr=zeros(1,3*10);
+    eigenA=zeros(2,10);
     for batch=1:10
-        A=2*rand(m,n)-1;
+   %      A=2*rand(m,n)-1;
+       A = 2*randn(m,m) * ...
+         [diag([ones(floor(n/2),1)*100;ones(ceil(n/2),1)])*10;ones(m-n,n)*10] * ...
+         randn(n,n)-1;
+        eA=eig(A'*A);
         b=2*rand(m,1)-1;
         x0=zeros(n,1);
         xr=rand(n,1);
@@ -39,6 +45,7 @@ for m=[100,200,400,600,800,1000]
         gA=norm(A'*rkA);
         fprintf('ALS$ %d \\times %d $ & %g & %g & %4.2f & %d & %d & %d\n',m,n,dA,gA,tfA,countFA,countNA,Arr(1,end));
         batchArr(1,3*batch-2:3*batch)=[gA,tfA,Arr(1,end)];
+        eigenA(:,batch)=[max(eA);min(eA)];
     end
     Arecord=[Arecord;m n batchArr];
 end
