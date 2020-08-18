@@ -20,34 +20,21 @@ trr=1;
 
 
 
-Arecord=[];
+Nrecord=[];
      bnf=10;
  enf=30;
  nnf=enf-bnf+1;
-    for m=200:400:1000
-    for ratio=0.1:0.1:1
+   % m=200:400:1000
+   m=1000;
+    %for ratio=0.1:0.1:1
+    for n=[100,500,1000]
+     for nf=bnf:enf
+         Arecord=[];
         for batch=1:10
-%         for nf=bnf:enf
-        n=floor(ratio*m);
-         A=2*rand(m,n)-1;
+        A=2*rand(m,n)-1;
          b=2*rand(m,1)-1;
         x0=zeros(n,1);
         xr=rand(n,1);
-        t=clock;
-        [q,r]=qr(A);
-        tq=etime(clock,t);
-       t=clock;
-        r\(q(1:n,:)'*xr);
-        tr=etime(clock,t);
-        t=clock;
-        for i=1:10
-        A*xr;
-        end
-        t1=etime(clock,t);
-        t=clock;
-        pinv(A);
-        t2=etime(clock,t);
-        fprintf('time A*x:%g,pinv:%g,qr:%g,r*q*x:%g\n',t1,t2,tq,tr);
         xs=-1;
         
         [xkR,xkR2,countFR,countNWR,bNWR,tfR,vkR]=residualR(x0,A,b,maxIter);
@@ -66,15 +53,8 @@ Arecord=[];
          rkA=b-A*xkA;
          rkA(rkA<0)=0;
          gA=norm(A'*rkA);
-         fprintf('ALS$ %d \\times %d $ & %g & %g & %4.2f & %d & %d & %d,%g\n',m,n,dA,gA,tfA,countFA,countNA,Arr(1,end),t1*countFA/10);
-         Arecord=[Arecord;m n Arr(1,end) gA];
-        
-%          [xkpa,rkpa,countFMpa,countNWpa,beginNWpa,tfpa,vkpa]=pina(x0,A,b,maxIter);
-%          dpa=norm(xkpa-xs);
-%          rkpa=b-A*xkpa;
-%          rkpa(rkpa<0)=0;
-%          gpa=norm(A'*rkpa);
-%          fprintf('pina$ %d \\times %d $ & %g & %g & %4.2f & %d & %d &\n',m,n,dpa,gpa,tfpa,countFMpa,countNWpa);
+         fprintf('ALS$ %d \\times %d $ & %g & %g & %4.2f & %d & %d & %d\n',m,n,dA,gA,tfA,countFA,countNA,Arr(1,end));
+       %  Arecord=[Arecord;m n Arr(1,end) gA];
          
          [xkhan,rkhan,countFMhan,countNWhan,beginNWhan,tfhan,vkhan]=han(x0,A,b,maxIter);
          dhan=norm(xkhan-xs);
@@ -117,56 +97,29 @@ Arecord=[];
         rkP=b-A*xkP;
           rkP(rkP<0)=0;
         gP=norm(A'*rkP);
-         fprintf('pred$ %d \\times %d $ & %g & %g & %4.2f & %g & %g & %g &\n',m,n,dP,gP,tfP,countFP,countNP,bNWP); 
-         record=[m,n,gR,tfR,countFR,countNWR,nf;...
-                 m,n,gA,tfA,countFA,countNA,nf;...
-                 m,n,gD,tfD,countFD,countND,nf;...
-                 m,n,gG,tfG,countFG,countNG,nf;...
-                 m,n,gC,tfC,countFMC,countNWC,nf;...
-                 m,n,gP,tfP,countFP,countNP,nf...
+         fprintf('pred$ %d \\times %d $ & %g & %g & %4.2f & %g & %g & %g &\n',m,n,dP,gP,tfP,countFP,countNP,bNWP);
+         recordE=[gR,tfR,countFR,countNWR;...
+                 gA,tfA,countFA,countNA;...
+                 gD,tfD,countFD,countND;...
+                 gG,tfG,countFG,countNG;...
+                 gC,tfC,countFMC,countNWC;...
+                 gP,tfP,countFP,countNP...
                 ];
-        Arecord=[Arecord;record];
-        
-   %     fprintf('%d\\time %d & %g & %g & %g & %g & %g & %g & %g & %g &\n',m,n,gD,tfD,gC,tfC,gG,tfG,gP,tfP);
-%         r=b-A*xk1;
-%         r(r<0)=0;
-%         df1=norm(A'*r);
-%         %fprintf('$ %d \\times %d $ & %4.2f & %g & %d & %d & %4.2f &',m,n,0.5*(r'*r),df1,countF1,countN1,tf1);
-%         r=b-A*xk6;
-%         r(r<0)=0;
-%         df6=norm(A'*r);
-%         fprintf('%4.2f & %g & %d & %d & %4.2f\\\\%% %4.2f %4.2f\n',0.5*(r'*r),df6,countF6,countN6,tf6,tf1/tf6,log10(df1/df6));
-%         tfA1=[tfA1 tf1];
-%         tfA6=[tfA6 tf6];
-%         dfA1=[dfA1 df1];
-%         dfA6=[dfA6 df6];
-%         dim=[dim num2str(n)];
-%     end
-end
-end
-save(['ff' num2str(batch) '.mat'],'Arecord')
-end
-clear
-f1=load('ff1.mat');
-f2=load('ff2.mat');
-f3=load('ff3.mat');
-f4=load('ff4.mat');
-f5=load('ff5.mat');
-f6=load('ff6.mat');
-f7=load('ff7.mat');
-f8=load('ff8.mat');
-f9=load('ff9.mat');
-f10=load('ff10.mat');
-summ=[f1.Arecord(:,1:3),f2.Arecord(:,3),f3.Arecord(:,3),f4.Arecord(:,3),...
-    f5.Arecord(:,3),f6.Arecord(:,3),f7.Arecord(:,3),f8.Arecord(:,3)...
-    ,f9.Arecord(:,3),f10.Arecord(:,3)];
-summ2=[summ mean(summ(:,3:12),2) std(summ(:,3:12),0,2)];
-subplot(1,3,1)
-plot(0.1:0.1:1,summ2(1:10,13))
-subplot(1,3,2)
-plot(0.1:0.1:1,summ2(11:20,13))
-subplot(1,3,3)
-plot(0.1:0.1:1,summ2(21:30,13))
+        Arecord=[Arecord recordE]; 
+        end
+        AArecord=[repmat([m,n,nf],6,1) Arecord];
+     end
+     Nrecord=[Nrecord;AArecord];
+    end
+tfsumme=Nrecord(:,5:4:end);
+tfsme=[tfsumme mean(tfsumme,2) std(tfsumme,0,2)];
+% summ2=[summ mean(summ(:,3:12),2) std(summ(:,3:12),0,2)];
+% subplot(1,3,1)
+% plot(0.1:0.1:1,summ2(1:10,13))
+% subplot(1,3,2)
+% plot(0.1:0.1:1,summ2(11:20,13))
+% subplot(1,3,3)
+% plot(0.1:0.1:1,summ2(21:30,13))
 
  %       [xs,fk,xkArr,countFM,countNW,Q]=hybrid1(x0,A,b,maxIter);
        % xkArr
