@@ -1,10 +1,10 @@
 % pina hybrid algorithm
-function [xk,rk,countFM,countNW,beginNW,tf,vk]=han(x0,A,b,maxIter)
+function [xk,rk,countFM,countNW,beginNW,tf,vk,xkArr]=han(x0,A,b,maxIter)
 t=clock;
 tol=1e-15;
 %compute hybrid uIter
 [m,n]=size(A);
-
+xkArr=[];
 %FM need a qr decompose
 r0=b-A*x0;
 r0(r0<0)=0;
@@ -40,7 +40,9 @@ while Ar>delt*rn && rn>delt
     hk=AI\r0(I);      
     aa=piecewise(A,b,hk,x0);
     xk=x0+aa*hk;
+    
     rk=b-A*xk;
+    xkArr=[xkArr rk];
     rk(rk<0)=0;
     r0=rk;
     x0=xk;

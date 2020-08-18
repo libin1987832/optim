@@ -5,10 +5,10 @@ addpath('../IFM')
 addpath('../strategies')
 addpath('../hybrid')
 addpath('../linearsolve')
-tfA1=[];
-dfA1=[];
-tfA6=[];
-dfA6=[];
+tfA1=[];  
+
+
+
 dim={};
 maxIter=500;
 nmax=500;

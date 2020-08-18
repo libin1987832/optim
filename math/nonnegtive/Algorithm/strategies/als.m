@@ -1,4 +1,4 @@
-function [xk,rk,countFM,countNW,beginNW,tf,vk,Arr]=als(x0,A,b,maxIter)
+function [xk,rk,countFM,countNW,beginNW,tf,vk,Arr,rkrr]=als(x0,A,b,maxIter)
 t=clock;
 %compute hybrid uIter
 [m,n]=size(A);
@@ -28,9 +28,12 @@ zk0=-rkp;
 zk0(zk0<0)=0;
 vk0=sum(sign(r0));
 Arr=[];
+rkrr=[];
 while Ar>delt*rn && rn>delt
     xk=A\(b+zk0);
     rkp=b-A*xk;
+    rkrr=[rkrr rkp];
+    
     zk0=-rkp;
     rk=rkp;
     rk(rk<0)=0;

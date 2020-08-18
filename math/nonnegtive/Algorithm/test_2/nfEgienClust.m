@@ -28,7 +28,7 @@ for m=[6]
         xr=rand(n,1);
         xs=-1;
         
-        [xkhan,rkhan,countFMhan,countNWhan,beginNWhan,tfhan,vkhan]=han(x0,A,b,maxIter); 
+        [xkhan,rkhan,countFMhan,countNWhan,beginNWhan,tfhan,vkhan,xkAhan]=han(x0,A,b,maxIter); 
         dhan=norm(xkhan-xs);
         xs=xkhan;
          rkhan=b-A*xkhan;
@@ -47,7 +47,7 @@ for m=[6]
         gR2=norm(A'*rkR2);
         fprintf('resdual$ %d \\times %d $ & %g & %g & %4.2f & %d & %d &\n',m,n,gR2,gR,tfR,countFR,countNWR);
         
-        [xkA,rkA,countFA,countNA,bNWA,tfA,vkA,Arr]=als(x0,A,b,maxIter);
+        [xkA,rkA,countFA,countNA,bNWA,tfA,vkA,Arr,rkrr]=als(x0,A,b,maxIter);
         dA=norm(xkA-xs);
         rkA=b-A*xkA;
         rkA(rkA<0)=0;
