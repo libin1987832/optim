@@ -10,13 +10,7 @@ tfA1=[];
 
 
 dim={};
-maxIter=500;
-nmax=500;
-etc=0.5;
-ete=2;
-rou=0.99;
-trmax=1e2;
-trr=1;
+maxIter=200;
 
 
 
@@ -108,8 +102,9 @@ Nrecord=[];
         Arecord=[Arecord recordE]; 
         end
         AArecord=[repmat([m,n,nf],6,1) Arecord];
+        Nrecord=[Nrecord;AArecord];
      end
-     Nrecord=[Nrecord;AArecord];
+     
     end
 tfsumme=Nrecord(:,5:4:end);
 tfsme=[tfsumme mean(tfsumme,2) std(tfsumme,0,2)];

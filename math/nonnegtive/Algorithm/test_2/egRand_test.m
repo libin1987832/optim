@@ -27,27 +27,27 @@ Arecord=[];
     for m=200:400:1000
     for ratio=0.1:0.1:1
         for batch=1:10
-%         for nf=bnf:enf
+         for nf=bnf:enf
         n=floor(ratio*m);
          A=2*rand(m,n)-1;
          b=2*rand(m,1)-1;
         x0=zeros(n,1);
         xr=rand(n,1);
-        t=clock;
-        [q,r]=qr(A);
-        tq=etime(clock,t);
-       t=clock;
-        r\(q(1:n,:)'*xr);
-        tr=etime(clock,t);
-        t=clock;
-        for i=1:10
-        A*xr;
-        end
-        t1=etime(clock,t);
-        t=clock;
-        pinv(A);
-        t2=etime(clock,t);
-        fprintf('time A*x:%g,pinv:%g,qr:%g,r*q*x:%g\n',t1,t2,tq,tr);
+%         t=clock;
+%         [q,r]=qr(A);
+%         tq=etime(clock,t);
+%        t=clock;
+%         r\(q(1:n,:)'*xr);
+%         tr=etime(clock,t);
+%         t=clock;
+%         for i=1:10
+%         A*xr;
+%         end
+%         t1=etime(clock,t);
+%         t=clock;
+%         pinv(A);
+%         t2=etime(clock,t);
+%         fprintf('time A*x:%g,pinv:%g,qr:%g,r*q*x:%g\n',t1,t2,tq,tr);
         xs=-1;
         
         [xkR,xkR2,countFR,countNWR,bNWR,tfR,vkR]=residualR(x0,A,b,maxIter);
@@ -66,8 +66,8 @@ Arecord=[];
          rkA=b-A*xkA;
          rkA(rkA<0)=0;
          gA=norm(A'*rkA);
-         fprintf('ALS$ %d \\times %d $ & %g & %g & %4.2f & %d & %d & %d,%g\n',m,n,dA,gA,tfA,countFA,countNA,Arr(1,end),t1*countFA/10);
-         Arecord=[Arecord;m n Arr(1,end) gA];
+         fprintf('ALS$ %d \\times %d $ & %g & %g & %4.2f & %d & %d & %d\n',m,n,dA,gA,tfA,countFA,countNA,Arr(1,end));
+%         Arecord=[Arecord;m n Arr(1,end) gA];
         
 %          [xkpa,rkpa,countFMpa,countNWpa,beginNWpa,tfpa,vkpa]=pina(x0,A,b,maxIter);
 %          dpa=norm(xkpa-xs);
