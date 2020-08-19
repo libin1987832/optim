@@ -25,8 +25,9 @@ if i>2
 end
 x1=x0;
 x0=xk;
-    [xk,r0,rk,fk,fm,fr]=FM(x0,Q,R,A,b);
-
+r=b-A*x0;
+[xk,r0]=FixedM(x0,Q,R,A,b,r);
+[xk1,r01]=FixedMS(x0,Q,R,A,b,r);
 % 
 % all=[all [xk;xkGS]];
 % x0=xk;
