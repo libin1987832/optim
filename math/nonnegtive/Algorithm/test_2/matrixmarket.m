@@ -1,9 +1,16 @@
 addpath('../FM');
 addpath('../util');
-[A,rows,cols,entries,rep,field,symm]=mmread('../util/well1033.mtx');
+% [A,rows,cols,entries,rep,field,symm]=mmread('../util/well1033.mtx');
+[A,rows,cols,entries,rep,field,symm]=mmread('../util/well1850.mtx');
+m=rows;
+n=cols;
+A(20:20:end,:)=0;
 b=ones(rows,1);
+b(1:2:end)=-1;
 x0=zeros(cols,1);
-maxIter=300;
+maxIter=1000;
+nf=50;
+type=1;
       [xkR,xkR2,countFR,countNWR,bNWR,tfR,vkR]=residualR(x0,A,b,maxIter);
          dR=norm(xkR-xs);
          rkR=b-A*xkR;
@@ -56,7 +63,7 @@ maxIter=300;
          gD=norm(A'*rkD);
          fprintf('Dax$ %d \\times %d $ & %g & %g & %4.5f & %d & %d & %d\n',m,n,dD,gD,tfD,countFD,countND,bNWD);
         
-        [xkG,rkG,countFG,countNG,bNWG,tfG,vkG]=gradientFM_i(x0,A,b,nf,1e-8,maxIter,xs,2);
+        [xkG,rkG,countFG,countNG,bNWG,tfG,vkG]=gradientFM_i(x0,A,b,nf,1e-8,maxIter,xs,type);
           dG=norm(xkG-xs);
           rkG=b-A*xkG;
           rkG(rkG<0)=0;
@@ -64,7 +71,7 @@ maxIter=300;
           gG=norm(A'*rkG);
           fprintf('grad$ %d \\times %d $ & %g & %g & %4.2f & %g & %g & %g &\n',m,n,dG,gG,tfG,countFG,countNG,bNWG);
  
-     [xkC,rkC,countFMC,countNWC,beginNWC,tfC,vkC]=contraction_i(x0,A,b,nf,0.8,maxIter,xs,2);
+     [xkC,rkC,countFMC,countNWC,beginNWC,tfC,vkC]=contraction_i(x0,A,b,nf,0.8,maxIter,xs,type);
          dC=norm(xkC-xs);
         rkC=b-A*xkC;
           rkC(rkC<0)=0;
@@ -72,7 +79,7 @@ maxIter=300;
          gC=norm(A'*rkC);
           fprintf('con$ %d \\times %d $ & %g & %g & %4.5f & %g & %g & %g &\n',m,n,dC,gC,tfC,countFMC,countNWC,beginNWC);
 
-       [xkP,rkP,countFP,countNP,bNWP,tfP,vkP]=predictFM_i(x0,A,b,nf,10,maxIter,xs,2);
+       [xkP,rkP,countFP,countNP,bNWP,tfP,vkP]=predictFM_i(x0,A,b,nf,10,maxIter,xs,type);
         dP=norm(xkP-xs);
         rkP=b-A*xkP;
           rkP(rkP<0)=0;
