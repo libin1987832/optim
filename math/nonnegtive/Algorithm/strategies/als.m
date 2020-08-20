@@ -29,7 +29,7 @@ zk0(zk0<0)=0;
 vk0=sum(sign(r0));
 Arr=[];
 rkrr=[];
-while Ar>delt*rn && rn>delt
+while   rn>delt
     xk=A\(b+zk0);
     rkp=b-A*xk;
     rkrr=[rkrr rkp];

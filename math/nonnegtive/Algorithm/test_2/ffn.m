@@ -10,7 +10,7 @@ dfA1=[];
 tfA6=[];
 dfA6=[];
 dim={};
-maxIter=500;
+maxIter=200;
 nmax=500;
 etc=0.5;
 ete=2;
@@ -22,7 +22,7 @@ trr=1;
 for batch=1:10
 Arecord=[];
      m=1000;
-    for n=100:50:1000
+    for n=100:100:1000
 
          A = 2*randn(m,m) * ...
          [diag([ones(floor(n/2),1)*100;ones(ceil(n/2),1)])*10;ones(m-n,n)*10] * ...
@@ -72,4 +72,4 @@ summ=[f1.Arecord(:,1:3),f2.Arecord(:,3),f3.Arecord(:,3),f4.Arecord(:,3),...
     f5.Arecord(:,3),f6.Arecord(:,3),f7.Arecord(:,3),f8.Arecord(:,3)...
     ,f9.Arecord(:,3),f10.Arecord(:,3)];
 summ2=[summ mean(summ(:,3:12),2) std(summ(:,3:12),0,2)];
-plot(100:50:1000,summ2(:,13))
+plot(100:100:1000,summ2(:,13))
