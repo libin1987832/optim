@@ -7,11 +7,11 @@ n=cols;
 A(20:20:end,:)=0;
 b=ones(rows,1);
 b(1:2:end)=-1;
-m=1000;
-n=100;
- A=2*rand(m,n)-1;
- b=2*rand(m,1)-1;
-x0=zeros(n,1);
+% m=1000;
+% n=100;
+%  A=2*rand(m,n)-1;
+%  b=2*rand(m,1)-1;
+ x0=zeros(n,1);
 maxIter=1000;
 nf=10;
 type=1;
@@ -43,7 +43,7 @@ type=1;
 %          rkpa(rkpa<0)=0;
 %          gpa=norm(A'*rkpa);
 %          fprintf('pina$ %d \\times %d $ & %g & %g & %4.2f & %d & %d &\n',m,n,dpa,gpa,tfpa,countFMpa,countNWpa);
-         
+         xs1=-1;
          [xkhan,rkhan,countFMhan,countNWhan,beginNWhan,tfhan,vkhan]=han(x0,A,b,maxIter);
          dhan=norm(xkhan-xs);
          rkhan=b-A*xkhan;
@@ -68,7 +68,7 @@ type=1;
          gD=norm(A'*rkD);
          fprintf('Dax$ %d \\times %d $ & %g & %g & %4.5f & %d & %d & %d\n',m,n,dD,gD,tfD,countFD,countND,bNWD);
         
-        [xkG,rkG,countFG,countNG,bNWG,tfG,vkG]=gradientFM_i(x0,A,b,nf,1e-8,maxIter,xs,type);
+        [xkG,rkG,countFG,countNG,bNWG,tfG,vkG]=gradientFM_i(x0,A,b,nf,1e-8,maxIter,xs1,type);
           dG=norm(xkG-xs);
           rkG=b-A*xkG;
           rkG(rkG<0)=0;
@@ -76,7 +76,7 @@ type=1;
           gG=norm(A'*rkG);
           fprintf('grad$ %d \\times %d $ & %g & %g & %4.2f & %g & %g & %g &\n',m,n,dG,gG,tfG,countFG,countNG,bNWG);
  
-     [xkC,rkC,countFMC,countNWC,beginNWC,tfC,vkC]=contraction_i(x0,A,b,nf,0.8,maxIter,xs,type);
+     [xkC,rkC,countFMC,countNWC,beginNWC,tfC,vkC]=contraction_i(x0,A,b,nf,0.8,maxIter,xs1,type);
          dC=norm(xkC-xs);
         rkC=b-A*xkC;
           rkC(rkC<0)=0;
@@ -84,7 +84,7 @@ type=1;
          gC=norm(A'*rkC);
           fprintf('con$ %d \\times %d $ & %g & %g & %4.5f & %g & %g & %g &\n',m,n,dC,gC,tfC,countFMC,countNWC,beginNWC);
 
-       [xkP,rkP,countFP,countNP,bNWP,tfP,vkP]=predictFM_i(x0,A,b,nf,10,maxIter,xs,type);
+       [xkP,rkP,countFP,countNP,bNWP,tfP,vkP]=predictFM_i(x0,A,b,nf,10,maxIter,xs1,type);
         dP=norm(xkP-xs);
         rkP=b-A*xkP;
           rkP(rkP<0)=0;
@@ -99,4 +99,4 @@ type=1;
                  m,n,gP,tfP,countFP,countNP,nf...
                 ];
 
-        
+        Arr
