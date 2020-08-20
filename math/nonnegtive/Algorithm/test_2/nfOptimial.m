@@ -108,6 +108,12 @@ Nrecord=[];
     end
 tfsumme=Nrecord(:,5:4:end);
 tfsme=[tfsumme mean(tfsumme,2) std(tfsumme,0,2)];
+
+%%
+Daxtf=tfsme(3:6:end,:);
+gradienttf=tfsme(4:6:end,:);
+constracttf=tfsme(5:6:end,:);
+predicttf=tfsme(6:6:end,:);
 % summ2=[summ mean(summ(:,3:12),2) std(summ(:,3:12),0,2)];
 % subplot(1,3,1)
 % plot(0.1:0.1:1,summ2(1:10,13))
