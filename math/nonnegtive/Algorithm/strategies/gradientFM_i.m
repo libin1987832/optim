@@ -23,7 +23,8 @@ countNW=0;
 beginNW=0;
 L1=0;
 L2=0;
-while Ar>delt*rn && rn>delt
+%while Ar>delt*rn && rn>delt
+while rn>delt
     %     if uIndex<uIter
     if uIndex<nIter
         countFM=countFM+1;
