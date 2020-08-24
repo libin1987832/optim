@@ -46,7 +46,9 @@ for i=1:n
     AAk=(rkp>-ee);
     empty=sum(xor(AA,AAk));
     if empty
-        xk=x0+u1;
+        aa=piecewise(AALL,b,u2,x0);
+        xk=x0+aa*u2;
+       % xk=x0+u1;
         rkp=rkp0;
         break;
     end

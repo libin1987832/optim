@@ -23,7 +23,7 @@ beginNW=0;
 
 if Ar<delt*rn || rn<delt
     xk=x0;
-    rk=r;
+    rk=r0;
     disp('input x is satisfied all constrain!(Ar<delt*rn|| rn<delt)') %ceases execution
 end
 
