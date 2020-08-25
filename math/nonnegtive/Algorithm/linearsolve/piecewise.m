@@ -22,5 +22,6 @@ for i =1:am
     else
         alph=1;
         break;
-    end
+    end    
 end
+
