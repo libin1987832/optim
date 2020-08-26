@@ -24,9 +24,9 @@ Arecord=[];
      bnf=5;
  enf=30;
  nnf=enf-bnf+1;
-    for m=1000:1000:6000
+    for m=1000:1000:3000
    %m=1000;
-    for ratio=0.1:0.1:0.3
+    for ratio=0.6:0.2:0.8
       %  for batch=1:10
             nf=5;
          %for nf=bnf:enf
@@ -128,7 +128,7 @@ Arecord=[];
                  m,n,gP,tfP,countFP,countNP,nf...
                 ];
         Arecord=[Arecord;record];
-        
+         fprintf('$ %d \\times %d $ & %g & %g & %g & %g & %g & %g & %g & %g\n',m,n,gD,tfD,gC,tfC,gG,tfG,gP,tfP); 
    %     fprintf('%d\\time %d & %g & %g & %g & %g & %g & %g & %g & %g &\n',m,n,gD,tfD,gC,tfC,gG,tfG,gP,tfP);
 %         r=b-A*xk1;
 %         r(r<0)=0;
