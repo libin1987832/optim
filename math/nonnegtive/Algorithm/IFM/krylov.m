@@ -47,19 +47,22 @@ for i=1:n
     empty=sum(xor(AA,AAk));
     if empty
         if u1==0
-%              I=find(rkp0>=ee);
-%             %提取子矩阵判断是否正定
-%             AI=AALL(I,:);
-%             hk=AI\rkp0(I);
-%             aa=piecewise(AALL,b,hk,x0);
-%             xk=x0+aa*hk;
+            for j=0:5
+            I=find(rkp0>=ee);
+            AI=AALL(I,:);
+            hk=AI\rkp0(I);
+            aa=piecewise(AALL,b,hk,x0);
+            xk=x0+aa*hk;
+          
+%             rk0=rkp0;
+%             rk0(rk0<0)=0;
+%             gradient=AALL'*rk0;
+%             aa=piecewise(AALL,b,gradient,x0);
+%             xk=x0+aa*gradient;
 
-            rk0=rkp0;
-            rk0(rk0<0)=0;
-            gradient=AALL'*rk0;
-            aa=piecewise(AALL,b,gradient,x0);
-            xk=x0+aa*gradient;
-            
+            x0=xk;
+            rkp0=b-AALL*x0;
+           end
 %             rkp=b-AALL*xk;
 %             rk=rkp;
 %             rk(rk<0)=0;

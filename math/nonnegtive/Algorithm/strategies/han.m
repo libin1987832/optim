@@ -4,7 +4,7 @@ t=clock;
 tol=1e-15;
 %compute hybrid uIter
 [m,n]=size(A);
-rkArr=[];
+rkArr=zeros(2*maxIter);
 %FM need a qr decompose
 r0=b-A*x0;
 r0(r0<0)=0;
@@ -43,12 +43,13 @@ while Ar>delt*rn && rn>delt
     
     rk=b-A*xk;
     rk(rk<0)=0;
-    rkArr=[rkArr norm(rk)];
+    
     
     r0=rk;
     x0=xk;
     Ar=norm(A'*rk);
     rn=norm(rk);
+    rkArr(countFM)=rn;
     if maxIter < countFM
         break;
     end
