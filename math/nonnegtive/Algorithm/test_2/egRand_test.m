@@ -5,17 +5,17 @@ addpath('../IFM')
 addpath('../strategies')
 addpath('../hybrid')
 addpath('../linearsolve')
-maxIter=200;
+maxIter=300;
 nmax=500;
 Arecord=[];
      bnf=5;
  enf=30;
  nnf=enf-bnf+1;
-    for m=1000:1000:3000
+    for m=2000:1000:2000
    %m=1000;
     for ratio=0.6:0.2:0.8
       %  for batch=1:10
-            nf=5;
+            nf=3;
          %for nf=bnf:enf
         n=floor(ratio*m);
          A=2*rand(m,n)-1;
@@ -90,7 +90,7 @@ Arecord=[];
          rkD(rkD<0)=0;
          dD=norm(rkD);
          gD=norm(A'*rkD);
-   %      fprintf('Dax$ %d \\times %d $ & %g & %g & %4.2f & %d & %d & %d\n',m,n,dD,gD,tfD,countFD,countND,bNWD);
+         fprintf('Dax$ %d \\times %d $ & %g & %g & %4.2f & %d & %d & %d\n',m,n,dD,gD,tfD,countFD,countND,bNWD);
         type=1;
         [xkG,rkG,countFG,countNG,bNWG,tfG,vkG,rkArrG]=gradientFM_i(x0,A,b,nf,1e-8,maxIter,xs,type);
           dGD=norm(xkG-xs);
@@ -98,7 +98,7 @@ Arecord=[];
           rkG(rkG<0)=0;
           dG=norm(rkG);
           gG=norm(A'*rkG);
-    %      fprintf('grad$ %d \\times %d $ & %g & %g & %4.2f & %g & %g & %g &\n',m,n,dG,gG,tfG,countFG,countNG,bNWG);
+          fprintf('grad$ %d \\times %d $ & %g & %g & %4.2f & %g & %g & %g &\n',m,n,dG,gG,tfG,countFG,countNG,bNWG);
  
      [xkC,rkC,countFMC,countNWC,beginNWC,tfC,vkC,rkArrC]=contraction_i(x0,A,b,nf,0.8,maxIter,xs,type);
          dCD=norm(xkC-xs);
@@ -106,15 +106,15 @@ Arecord=[];
           rkC(rkC<0)=0;
          dC=norm(rkC);
           gC=norm(A'*rkC);
-     %     fprintf('con$ %d \\times %d $ & %g & %g & %4.2f & %g & %g & %g &\n',m,n,dC,gC,tfC,countFMC,countNWC,beginNWC);
+          fprintf('con$ %d \\times %d $ & %g & %g & %4.2f & %g & %g & %g &\n',m,n,dC,gC,tfC,countFMC,countNWC,beginNWC);
 
-       [xkP,rkP,countFP,countNP,bNWP,tfP,vkP,rkArrP]=predictFM_i(x0,A,b,nf,10,maxIter,xs,type);
+       [xkP,rkP,countFP,countNP,bNWP,tfP,vkP,rkArrP]=predictFM_i(x0,A,b,nf,3,maxIter,xs,type);
         dPD=norm(xkP-xs);
         rkP=b-A*xkP;
           rkP(rkP<0)=0;
         dP=norm(rkP);
           gP=norm(A'*rkP);
-      %   fprintf('pred$ %d \\times %d $ & %g & %g & %4.2f & %g & %g & %g &\n',m,n,dP,gP,tfP,countFP,countNP,bNWP); 
+         fprintf('pred$ %d \\times %d $ & %g & %g & %4.2f & %g & %g & %g &\n',m,n,dP,gP,tfP,countFP,countNP,bNWP); 
 %          record=[m,n,gR,tfR,countFR,countNWR,nf;...
 %                  m,n,gA,tfA,countFA,countNA,nf;...
 %                  m,n,gD,tfD,countFD,countND,nf;...
