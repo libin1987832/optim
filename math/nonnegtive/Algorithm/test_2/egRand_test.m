@@ -63,12 +63,12 @@ Arecord=[];
          gR2=norm(A'*rkR2);
          fprintf('resdual$ %d \\times %d $ & %g & %g & %4.2f & %d & %d &\n',m,n,gR2,gR,tfR,countFR,countNWR);
          
-         [xkA,rkA,countFA,countNA,bNWA,tfA,vkA,Arr]=als(x0,A,b,maxIter);
-         dA=norm(xkA-xs);
-         rkA=b-A*xkA;
-         rkA(rkA<0)=0;
-         gA=norm(A'*rkA);
-         fprintf('ALS$ %d \\times %d $ & %g & %g & %4.2f & %d & %d & %d\n',m,n,dA,gA,tfA,countFA,countNA,Arr(1,end));
+%          [xkA,rkA,countFA,countNA,bNWA,tfA,vkA,Arr]=als(x0,A,b,maxIter);
+%          dA=norm(xkA-xs);
+%          rkA=b-A*xkA;
+%          rkA(rkA<0)=0;
+%          gA=norm(A'*rkA);
+%          fprintf('ALS$ %d \\times %d $ & %g & %g & %4.2f & %d & %d & %d\n',m,n,dA,gA,tfA,countFA,countNA,Arr(1,end));
 %         Arecord=[Arecord;m n Arr(1,end) gA];
         
 %          [xkpa,rkpa,countFMpa,countNWpa,beginNWpa,tfpa,vkpa]=pina(x0,A,b,maxIter);
@@ -120,14 +120,14 @@ Arecord=[];
           rkP(rkP<0)=0;
         gP=norm(A'*rkP);
          fprintf('pred$ %d \\times %d $ & %g & %g & %4.2f & %g & %g & %g &\n',m,n,dP,gP,tfP,countFP,countNP,bNWP); 
-         record=[m,n,gR,tfR,countFR,countNWR,nf;...
-                 m,n,gA,tfA,countFA,countNA,nf;...
-                 m,n,gD,tfD,countFD,countND,nf;...
-                 m,n,gG,tfG,countFG,countNG,nf;...
-                 m,n,gC,tfC,countFMC,countNWC,nf;...
-                 m,n,gP,tfP,countFP,countNP,nf...
-                ];
-        Arecord=[Arecord;record];
+%          record=[m,n,gR,tfR,countFR,countNWR,nf;...
+%                  m,n,gA,tfA,countFA,countNA,nf;...
+%                  m,n,gD,tfD,countFD,countND,nf;...
+%                  m,n,gG,tfG,countFG,countNG,nf;...
+%                  m,n,gC,tfC,countFMC,countNWC,nf;...
+%                  m,n,gP,tfP,countFP,countNP,nf...
+%                 ];
+%         Arecord=[Arecord;record];
          fprintf('$ %d \\times %d $ & %g & %g & %g & %g & %g & %g & %g & %g\n',m,n,gD,tfD,gC,tfC,gG,tfG,gP,tfP); 
    %     fprintf('%d\\time %d & %g & %g & %g & %g & %g & %g & %g & %g &\n',m,n,gD,tfD,gC,tfC,gG,tfG,gP,tfP);
 %         r=b-A*xk1;
