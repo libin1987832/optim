@@ -47,15 +47,16 @@ for i=1:n
     empty=sum(xor(AA,AAk));
     if empty
         if u1==0
-             I=find(r0>=ee);
-            %提取子矩阵判断是否正定
-            AI=AALL(I,:);
-        %    AII=AI'*AI;
-            u2=AI\r0(I);      
+%              I=find(r0>=ee);
+%             %提取子矩阵判断是否正定
+%             AI=AALL(I,:);
+%         %    AII=AI'*AI;
+%             u2=AI\r0(I);      
             aa=piecewise(AALL,b,u2,x0);
             xk=x0+aa*u2;
+           % rkp=b-AALL*xk;
         else
-        xk=x0+u1;
+            xk=x0+u1;
         end
         rkp=rkp0;
         break;

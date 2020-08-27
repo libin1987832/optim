@@ -24,7 +24,7 @@ Arecord=[];
      bnf=5;
  enf=30;
  nnf=enf-bnf+1;
-    for m=1000:1000:3000
+    for m=100:100:300
    %m=1000;
     for ratio=0.6:0.2:0.8
       %  for batch=1:10
@@ -99,22 +99,22 @@ Arecord=[];
          rkD(rkD<0)=0;
          gD=norm(A'*rkD);
          fprintf('Dax$ %d \\times %d $ & %g & %g & %4.2f & %d & %d & %d\n',m,n,dD,gD,tfD,countFD,countND,bNWD);
-        
-        [xkG,rkG,countFG,countNG,bNWG,tfG,vkG]=gradientFM_i(x0,A,b,nf,1e-8,maxIter,xs,2);
+        type=1;
+        [xkG,rkG,countFG,countNG,bNWG,tfG,vkG]=gradientFM_i(x0,A,b,nf,1e-8,maxIter,xs,type);
           dG=norm(xkG-xs);
           rkG=b-A*xkG;
           rkG(rkG<0)=0;
           gG=norm(A'*rkG);
           fprintf('grad$ %d \\times %d $ & %g & %g & %4.2f & %g & %g & %g &\n',m,n,dG,gG,tfG,countFG,countNG,bNWG);
  
-     [xkC,rkC,countFMC,countNWC,beginNWC,tfC,vkC]=contraction_i(x0,A,b,nf,0.8,maxIter,xs,2);
+     [xkC,rkC,countFMC,countNWC,beginNWC,tfC,vkC]=contraction_i(x0,A,b,nf,0.8,maxIter,xs,type);
          dC=norm(xkC-xs);
         rkC=b-A*xkC;
           rkC(rkC<0)=0;
          gC=norm(A'*rkC);
           fprintf('con$ %d \\times %d $ & %g & %g & %4.2f & %g & %g & %g &\n',m,n,dC,gC,tfC,countFMC,countNWC,beginNWC);
 
-       [xkP,rkP,countFP,countNP,bNWP,tfP,vkP]=predictFM_i(x0,A,b,nf,10,maxIter,xs,2);
+       [xkP,rkP,countFP,countNP,bNWP,tfP,vkP]=predictFM_i(x0,A,b,nf,10,maxIter,xs,type);
         dP=norm(xkP-xs);
         rkP=b-A*xkP;
           rkP(rkP<0)=0;
