@@ -40,7 +40,7 @@ Arecord=[];
 %         fprintf('time A*x:%g,pinv:%g,qr:%g,r*q*x:%g\n',t1,t2,tq,tr);
         xs=-1;
         
-        [xkR,xkR2,countFR,countNWR,bNWR,tfR,vkR]=residualR(x0,A,b,maxIter-100);
+        [xkR,xkR2,countFR,countNWR,bNWR,tfR,vkR,rkArrR]=residualR(x0,A,b,maxIter);
          dR=norm(xkR-xs);
          rkR=b-A*xkR;
          rkR(rkR<0)=0;
@@ -67,7 +67,7 @@ Arecord=[];
 %          gpa=norm(A'*rkpa);
 %          fprintf('pina$ %d \\times %d $ & %g & %g & %4.2f & %d & %d &\n',m,n,dpa,gpa,tfpa,countFMpa,countNWpa);
          
-         [xkhan,rkhan,countFMhan,countNWhan,beginNWhan,tfhan,vkhan]=han(x0,A,b,maxIter);
+         [xkhan,rkhan,countFMhan,countNWhan,beginNWhan,tfhan,vkhan,rkArrh]=han(x0,A,b,maxIter);
          dhanD=norm(xkhan-xs);
          rkhan=b-A*xkhan;
          rkhan(rkhan<0)=0;
@@ -83,16 +83,16 @@ Arecord=[];
          gLei=norm(A'*rkLei);
          fprintf('Lei$ %d \\times %d $ & %g & %g & %4.2f & %d & %d &\n',m,n,dLei,gLei,tfLei,countFMLei,countNWLei);
          
-        [xkD,rkD,countFD,countND,bNWD,tfD,vkD]=Dax(x0,A,b,maxIter);
+        [xkD,rkD,countFD,countND,bNWD,tfD,vkD,rkArrD]=Dax(x0,A,b,maxIter);
           xs=-1;
          dDD=norm(xkD-xs);
          rkD=b-A*xkD;
          rkD(rkD<0)=0;
-         dD=nrom(rkD);
+         dD=norm(rkD);
          gD=norm(A'*rkD);
          fprintf('Dax$ %d \\times %d $ & %g & %g & %4.2f & %d & %d & %d\n',m,n,dD,gD,tfD,countFD,countND,bNWD);
         type=1;
-        [xkG,rkG,countFG,countNG,bNWG,tfG,vkG]=gradientFM_i(x0,A,b,nf,1e-8,maxIter,xs,type);
+        [xkG,rkG,countFG,countNG,bNWG,tfG,vkG,rkArrG]=gradientFM_i(x0,A,b,nf,1e-8,maxIter,xs,type);
           dGD=norm(xkG-xs);
           rkG=b-A*xkG;
           rkG(rkG<0)=0;
@@ -100,7 +100,7 @@ Arecord=[];
           gG=norm(A'*rkG);
           fprintf('grad$ %d \\times %d $ & %g & %g & %4.2f & %g & %g & %g &\n',m,n,dG,gG,tfG,countFG,countNG,bNWG);
  
-     [xkC,rkC,countFMC,countNWC,beginNWC,tfC,vkC]=contraction_i(x0,A,b,nf,0.8,maxIter,xs,type);
+     [xkC,rkC,countFMC,countNWC,beginNWC,tfC,vkC,rkArrC]=contraction_i(x0,A,b,nf,0.8,maxIter,xs,type);
          dCD=norm(xkC-xs);
         rkC=b-A*xkC;
           rkC(rkC<0)=0;
@@ -108,7 +108,7 @@ Arecord=[];
           gC=norm(A'*rkC);
           fprintf('con$ %d \\times %d $ & %g & %g & %4.2f & %g & %g & %g &\n',m,n,dC,gC,tfC,countFMC,countNWC,beginNWC);
 
-       [xkP,rkP,countFP,countNP,bNWP,tfP,vkP]=predictFM_i(x0,A,b,nf,10,maxIter,xs,type);
+       [xkP,rkP,countFP,countNP,bNWP,tfP,vkP,rkArrP]=predictFM_i(x0,A,b,nf,10,maxIter,xs,type);
         dPD=norm(xkP-xs);
         rkP=b-A*xkP;
           rkP(rkP<0)=0;
@@ -140,8 +140,37 @@ Arecord=[];
 %         dim=[dim num2str(n)];
 %     end
 end
-end
-% save(['ff' num2str(batch) '.mat'],'Arecord')
+    end
+
+subplot(2,3,1)
+rkArrR=rkArrR(rkArrR>0);
+[m,n]=size(rkArrR);
+plot(1:m,rkArrR)
+subplot(2,3,2)
+rkArrh=rkArrR(rkArrh>0);
+[m,n]=size(rkArrh);
+plot(1:m,rkArrh)
+subplot(2,3,3)
+rkArrD=rkArrD(rkArrD>0);
+[m,n]=size(rkArrD);
+plot(1:m,rkArrD)
+
+subplot(2,3,4)
+rkArrC=rkArrC(rkArrC>0);
+[m,n]=size(rkArrC);
+plot(1:m,rkArrC)
+subplot(2,3,5)
+rkArrG=rkArrG(rkArrG>0);
+[m,n]=size(rkArrG);
+plot(1:m,rkArrG)
+
+subplot(2,3,6)
+rkArrP=rkArrP(rkArrP>0);
+[m,n]=size(rkArrP);
+plot(1:m,rkArrP)
+    
+    
+    % save(['ff' num2str(batch) '.mat'],'Arecord')
 % end
 % clear
 % f1=load('ff1.mat');

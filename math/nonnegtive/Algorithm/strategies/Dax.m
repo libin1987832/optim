@@ -1,5 +1,5 @@
 % Dax hybrid algorithm
-function [xk,rk,countFM,countNW,beginNW,tf,vk]=Dax(x0,A,b,maxIter)
+function [xk,rk,countFM,countNW,beginNW,tf,vk,rkArr]=Dax(x0,A,b,maxIter)
 t=clock;
 
 %compute hybrid uIter
@@ -17,7 +17,7 @@ am=max(max(A));
 ee=1e-15;% computer floating point arithmetic
 delt=am*m*n*10*ee;
 uIndex=0;
-
+rkArr=zeros(2*maxIter,1);
 countFM=0;
 countNW=0;
 beginNW=0;
@@ -59,6 +59,7 @@ while Ar>delt*rn && rn>delt
     Ar=norm(A'*rk);
     rn=norm(rk);
     x0=xk;
+    rkArr(countFM+countNW)=rn;
     if maxIter < countFM
         break;
     end

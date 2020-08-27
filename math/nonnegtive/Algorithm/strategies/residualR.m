@@ -1,5 +1,6 @@
-function [xk,xk2,countFM,countNW,beginNW,tf,vk]=residualR(x0,A,b,maxIter)
+function [xk,xk2,countFM,countNW,beginNW,tf,vk,rkArr]=residualR(x0,A,b,maxIter)
 t=clock;
+rkArr=zeros(2*maxIter,1);
 %compute hybrid uIter
 [m,n]=size(A);
 %FM need a qr decompose
@@ -38,6 +39,7 @@ while Ar>delt*rn && rn>delt
     Ar=norm(A'*rk);
     rn=norm(rk);
     countFM=countFM+1;
+    rkArr(countFM)=rn;
     if maxIter < countFM
         break;
     end
@@ -56,5 +58,6 @@ xk=x0+aa*hk;
 rkp=b-A*xk;
 rk=rkp;
 rk(rk<0)=0;
+rkArr(countFM+1)=norm(rk);
 tf=etime(clock,t);
 vk=sum(sign(rk));

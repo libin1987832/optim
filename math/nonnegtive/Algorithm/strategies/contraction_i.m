@@ -1,6 +1,7 @@
 % Dax hybrid algorithm and r=B*r Nr==N nIter 预测的间隔 eIter 预测未来的多少步
-function [xk,rk,countFM,countNW,beginNW,tf,vk]=contraction_i(x0,A,b,nIter,con,maxIter,xs,type)
+function [xk,rk,countFM,countNW,beginNW,tf,vk,rkArr]=contraction_i(x0,A,b,nIter,con,maxIter,xs,type)
 t=clock;
+rkArr=zeros(2*maxIter,1);
 %compute hybrid uIter
 [m,n]=size(A);
 rou=m/n;
@@ -114,6 +115,7 @@ while Ar>delt*rn && rn>delt
     rn=norm(rk);
     xpn=x0;
     x0=xk;
+    rkArr(countFM+countNW)=rn;
     % test
     if maxIter < countFM
         break;
