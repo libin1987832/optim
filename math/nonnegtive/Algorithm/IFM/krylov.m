@@ -1,6 +1,6 @@
-function [xk,zk,rkp]=krylov(AALL,b,x0,r0)
+function [xk,zk,rkp]=krylov(AALL,b,x0,rkp0)
 [m,n]=size(AALL);
-z0=-r0;
+z0=-rkp0;
 z0(z0<0)=0;
 ee=1e-15;% computer floating point arithmetic
 AA=(z0<ee);
@@ -10,7 +10,7 @@ A=AALL(AA,:);
 FF=~AA;
 AFF=AALL(FF,:);
 %|| A(AA,:)u-(b(AA)-A(AA,:)x) ||
-y=r0(AA);
+y=rkp0(AA);
 % \fi
 %rmrk=AALL*x0-b-z0;
 %watch1=0.5*rmrk'*rmrk;
@@ -23,7 +23,7 @@ thgma_1=beta1;
 g1=v1;
 xk=x0;
 fmk=0;
-rkp=r0;
+rkp=rkp0;
 for i=1:n
     q2=A*v1-alph1*q1;beta2=norm(q2);q2=q2/beta2;
     
@@ -47,14 +47,20 @@ for i=1:n
     empty=sum(xor(AA,AAk));
     if empty
         if u1==0
-%              I=find(r0>=ee);
-%             %提取子矩阵判断是否正定
+             I=find(rkp0>=ee);
+            %提取子矩阵判断是否正定
 %             AI=AALL(I,:);
-%         %    AII=AI'*AI;
-%             u2=AI\r0(I);      
-            aa=piecewise(AALL,b,u2,x0);
-            xk=x0+aa*u2;
-           % rkp=b-AALL*xk;
+%             hk=AI\rkp0(I);
+%             aa=piecewise(AALL,b,hk,x0);
+%             xk=x0+aa*hk;
+
+            rk0=rkp0;
+            rk0(rk0<0)=0;
+            gradient=AALL'*rk0;
+            aa=piecewise(AALL,b,gradient,x0);
+            xk=x0+aa*gradient;
+%      [xk,rk,countFM,countNW,beginNW,tf,vk,xkArr]=han(x0,AALL,b,2);
+% rkp=b-AALL*xk;
         else
             xk=x0+u1;
         end
