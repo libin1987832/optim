@@ -45,42 +45,7 @@ while Ar>delt*rn && rn>delt
         qrkn=Qn*qrkn;
         rkn=rkp-eIter*qrkn;
         ssign=sum(~xor(rk>ee,rkn>ee));
-        if xs~=-1
-        %%% if debug
-        rkpN=rkp;
-        xkN=xk;
-        [xkN,rkpN]=FixedM(xkN,Q,R,A,b,rkpN);
-        rknNN=rkp-qrkn;
-        % predict formula is OK by one step for test Qn*Qn'
-        nn=norm(rknNN-rkpN);
-        rkpN=rkp;
-        xkN=xk;
-        % predict n step
-        for i=1:eIter
-            [xkN,rkpN]=FixedM(xkN,Q,R,A,b,rkpN);
-        end
-        sump=sum(rkn>0);
-        sumpp=sum(rkpN>0);
-        rks=b-A*xs;
-        sumpx=sum(rks>0);
-        AAA=(rks>-1e-10);
-        AII=A(AAA,:);
-        ss=AII'*AII*xs-AII'*b(AAA);
-        lll=min(eig(AII'*AII));
-        [xkkry,~]=krylov(A,b,xk,rkp);
-         if  ssign==m ||ssign>m*0.99
-                fprintf('xs:%d,cs:%d,check ok\n',sumpx,sump);
-         %else
-         %       fprintf('xs:%d,cs:%d,check no\n',sumpx,sump);
-         end
-%        if sumpx==sump
-        % formula <1e-10 OK,predict active set ,FM true active set ,the
-        % active set of solution ,active set of current point ,the
-        % ununiqueness of solution,
-        fprintf('predict|formula:%g,predict:%d,FM:%d,xs:%d,ss:%d,ll:%g,jj:%g,dd1:%g,dd2:%g\n', nn,sump,sumpp,sumpx,ssign,lll,norm(ss),norm(xkkry-xs),norm(xk-xs));
-        %%%
- %       end
-        end
+  
         %ssign=getBnS(eIter,Qn,fm,I);
         % if all great zeros mean same sign
         if ssign==m ||ssign>m*0.99
