@@ -1,7 +1,7 @@
 % Dax hybrid algorithm
 function [xk,rk,countFM,countNW,beginNW,tf,vk,rkArr]=sdax(x0,A,b,maxIter)
 t=clock;
-
+% 
 %compute hybrid uIter
 [m,n]=size(A);
 uIter=floor(max(33,(m+n)/4));
@@ -70,4 +70,9 @@ vk=sum(sign(rk));
 %disp(['$',num2str(m),'\times ',num2str(n),'$&FM&(',num2str(countFM),',',num2str(countNW),')&',num2str(tf),'&',num2str(fk),'&',num2str(Ar)]);
 %disp(['well1033&Daxs&',num2str(vk),'&',num2str(rn),'&',num2str(Ar),'&(',num2str(countFM),',',num2str(countNW),')&',num2str(beginNW)]);
 
+%%
+% 
+%  PREFORMATTED
+%  TEXT
+% 
 
