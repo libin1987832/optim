@@ -15,6 +15,7 @@ qy=qy(:,1:5);
 ry=ry(1:5,:);
 crx=C1'*rx'
 iry=inv(ry')
+lsqr(qy,x1)
 % crx
 % A=[1 2 3;2 4 7;3 7 5];
 % x=[1;2;3];
