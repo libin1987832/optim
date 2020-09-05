@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 A=rand(6,5);
 x0=rand(5,1);
 XX=zeros(5,6);
@@ -27,3 +28,10 @@ lsqr(qy,x1)
 % C1=[[0;1;0] [0;0;1] C];
 % [Q,R]=qr(XX);
 % R*C1*inv(R)
+=======
+  n = 100; on = ones(n,1); A = spdiags([-2*on 4*on -on],-1:1,n,n);
+       b = sum(A,2); tol = 1e-8; maxit = 15;
+       M1 = spdiags([on/(-2) on],-1:0,n,n);
+       M2 = spdiags([4*on -on],0:1,n,n);
+       x = lsqr(A,b,tol,maxit,M1,M2);
+>>>>>>> 3549d3553de72f184b11b3b578b8ea4f9b2f0497
