@@ -1,10 +1,10 @@
 % Dax hybrid algorithm and r=B*r Nr==N nIter 预测的间隔 eIter 预测未来的多少步
-function [xk,rk,countFM,countNW,beginNW,tf,vk,rkArr]=sgradientFM(x0,A,b,nIter,diff,maxIter,xs,type)
+function [xk,rk,countFM,countNW,beginNW,tf,vk,rkArr]=sgradientFM(x0,A,b,nIter,diff,maxIter)
 t=clock;
 rkArr=zeros(2*maxIter,1);
 %compute hybrid uIter
 [m,n]=size(A);
-rou=m/n;
+
 %FM need a qr decompose
 [Q,R]=qr(A);
 
@@ -74,18 +74,20 @@ while Ar>delt*rn && rn>delt
             if countNW ==1
                 beginNW=countFM;
             end
-            if type ==1
-                [xk,~]=krylov(A,b,xk,rkp);
-            else
-                I=find(rkp>=ee);
-                % 提取子矩阵判断是否正定
-                AI=A(I,:);
-                hk=AI\rkp(I);
-                aa=piecewise(A,b,hk,xk);
-                xk=xk+aa*hk;
-            end
-            rkp=b-A*xk;
+%             if type ==1
+%                 [xk,~]=krylov(A,b,xk,rkp);
+%             else
+%                 I=find(rkp>=ee);
+%                 % 提取子矩阵判断是否正定
+%                 AI=A(I,:);
+%                 hk=AI\rkp(I);
+%                 aa=piecewise(A,b,hk,xk);
+%                 xk=xk+aa*hk;
+%             end
+            [xk,rkp]=sms(A,b,xk,rkp);
             rk=rkp;
+%             rkp=b-A*xk;
+%             rk=rkp;
             rk(rk<0)=0;
           
 %             if rou>0.6

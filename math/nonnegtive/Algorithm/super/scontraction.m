@@ -52,8 +52,9 @@ while Ar>delt*rn && rn>delt
                 beginNW=countFM;
             end
            % [xk,~]=krylov(A,b,xk,rkp);
-            [xk,~]=krylov(A,b,xk,rkp);
-            rkp=b-A*xk;
+%            [xk,~]=krylov(A,b,xk,rkp);
+ %           rkp=b-A*xk;
+            [xk,rkp]=sms(A,b,xk,rkp);
             rk=rkp;
             rk(rk<0)=0;
         end

@@ -1,4 +1,4 @@
-function [x,flag,relres,iter,resvec,lsvec] = lsqrM(A,b,tol,maxit,M1,M2,x0,ALL,xs,AA,varargin)
+function [x,flag,relres,iter,resvec,lsvec] = slsqrM(A,b,tol,maxit,M1,M2,x0,ALL,xs,AA,varargin)
 %LSQR   LSQR Method.
 %   X = LSQR(A,B) attempts to solve the system of linear equations A*X=B
 %   for X if A is consistent, otherwise it attempts to solve the least

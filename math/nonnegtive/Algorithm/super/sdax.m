@@ -37,7 +37,6 @@ while Ar>delt*rn && rn>delt
         %FM algorithm
         [xk,rkp]=FixedM(x0,Q,R,A,b,r0);
         rk=rkp;
-        AA=find(rkp>0);
         rk(rk<0)=0;
     else
         countNW=countNW+1;
@@ -46,25 +45,9 @@ while Ar>delt*rn && rn>delt
         end
         uIndex=0;
    %     [xk,~]=krylov(A,b,xk,rkp);
-        
-        AI=A(AA,:);
-        b=rkp(AA);
-        [x,flag,relres,iter,resvec,lsvec] = lsqrM(AI,b,tol,maxit,[],[],zeros(n,1),A,xk,AA)
-        if flag == 5
-            xk=xk+x;
-        else
-            aa=piecewise(A,b,x,xk);
-            xk=xk+aa*x;
-        end
-        rk=(b-A*xk);
-         rk(rk<0)=0;
-%         %%% 验证 正交性
-%         rk0=rkp;
-%         rk0(rk0<0)=0;
-%         ssign=sum(~xor(rk>0,rk0>0));
-%         fprintf('diff!%g %g\n',norm(A'*rk0),norm(A'*rk));
-%         fprintf('orthogonol is sartisfied!%g %d %d\n',(A'*rk0)'*(A'*rk),ssign,m);                 
-        %%%
+        [xk,rpk]=sms(A,b,xk,rkp);
+        rk=rpk;
+        rk(rk < 0)=0;
     end
     uIndex=uIndex+1;
     Ar=norm(A'*rk);

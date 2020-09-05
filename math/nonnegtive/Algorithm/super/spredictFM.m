@@ -56,17 +56,19 @@ while Ar>delt*rn && rn>delt
                 beginNW=countFM;
             end
             %[xk,~]=krylov(A,b,xk,rkp);
-           if type ==1
-                [xk,~]=krylov(A,b,xk,rkp);
-            else
-                I=find(rkp>=ee);
-                % 提取子矩阵判断是否正定
-                AI=A(I,:);
-                hk=AI\rkp(I);
-                aa=piecewise(A,b,hk,xk);
-                xk=xk+aa*hk;
-            end
-            rkp=b-A*xk;
+%            if type ==1
+%                 [xk,~]=krylov(A,b,xk,rkp);
+%             else
+%                 I=find(rkp>=ee);
+%                 % 提取子矩阵判断是否正定
+%                 AI=A(I,:);
+%                 hk=AI\rkp(I);
+%                 aa=piecewise(A,b,hk,xk);
+%                 xk=xk+aa*hk;
+%             end
+%             rkp=b-A*xk;
+%             rk=rkp;
+            [xk,rkp]=sms(A,b,xk,rkp);
             rk=rkp;
             rk(rk<0)=0;
           %  nIter=countNW*nIter;
