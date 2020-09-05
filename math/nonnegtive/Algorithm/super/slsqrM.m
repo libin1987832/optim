@@ -1,4 +1,4 @@
-function [x,flag,relres,iter,resvec,lsvec] = slsqrM(A,b,tol,maxit,M1,M2,x0,ALL,xs,AA,varargin)
+function [x,flag,relres,iter,resvec,lsvec] = slsqrM(A,b,tol,maxit,M1,M2,x0,ALL,bLL,xs,AA,varargin)
 %LSQR   LSQR Method.
 %   X = LSQR(A,B) attempts to solve the system of linear equations A*X=B
 %   for X if A is consistent, otherwise it attempts to solve the least
@@ -15,6 +15,7 @@ function [x,flag,relres,iter,resvec,lsvec] = slsqrM(A,b,tol,maxit,M1,M2,x0,ALL,x
 %   then LSQR uses the default, 1e-6.
 %
 %   X = LSQR(A,B,TOL,MAXIT) specifies the maximum number of iterations. If
+%% 
 %   MAXIT is [] then LSQR uses the default, min([N,P,20]).
 %
 %   X = LSQR(A,B,TOL,MAXIT,M) and LSQR(A,B,TOL,MAXIT,M1,M2) use P-by-P
@@ -167,7 +168,7 @@ if ((nargin >= 7) && ~isempty(x0))
     xInit = true;
 end
 
-if ((nargin > 7) && strcmp(atype,'matrix') && ...
+if ((nargin > 13) && strcmp(atype,'matrix') && ...
         strcmp(m1type,'matrix') && strcmp(m2type,'matrix'))
     error(message('MATLAB:lsqr:TooManyInputs'));
 end
@@ -346,11 +347,11 @@ for ii = 1 : maxit
     x = x + phi * d;
     
     xk=xs+x;
-    rkp=b-ALL*xk;
-    AAk=(rkp>-ee);
+    rkp=bLL-ALL*xk;
+    AAk=(rkp>1e-15);
     empty=sum(xor(AA,AAk));
     if empty
-        if iter>1
+        if ii>1
             x=y;
             flag=5;
             break;

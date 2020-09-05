@@ -5,15 +5,16 @@ addpath('../IFM')
 addpath('../strategies')
 addpath('../hybrid')
 addpath('../linearsolve')
+addpath('../super')
 maxIter=300;
 nmax=500;
 Arecord=[];
      bnf=5;
  enf=30;
  nnf=enf-bnf+1;
-    for m=200:100:200
+    for m=1000:1000:1000
    %m=1000;
-    for ratio=0.6:0.2:0.8
+    for ratio=0.5:0.2:0.6
       %  for batch=1:10
             nf=3;
          %for nf=bnf:enf
@@ -100,8 +101,10 @@ Arecord=[];
           gG=norm(A'*rkG);
           fprintf('grad$ %d \\times %d $ & %g & %g & %4.2f & %g & %g & %g &\n',m,n,dG,gG,tfG,countFG,countNG,bNWG);
  
-     [xkC,rkC,countFMC,countNWC,beginNWC,tfC,vkC,rkArrC]=contraction_i(x0,A,b,nf,0.8,maxIter,xs,type);
-         dCD=norm(xkC-xs);
+  %   [xkC,rkC,countFMC,countNWC,beginNWC,tfC,vkC,rkArrC]=contraction_i(x0,A,b,nf,0.8,maxIter,xs,type);
+     [xkC,rkC,countFMC,countNWC,beginNWC,tfC,vkC,rkArrC]=scontraction(x0,A,b,nf,0.8,maxIter);
+      
+     dCD=norm(xkC-xs);
         rkC=b-A*xkC;
           rkC(rkC<0)=0;
          dC=norm(rkC);
@@ -142,32 +145,32 @@ Arecord=[];
 end
     end
 
-subplot(2,3,1)
-rkArrR=rkArrR(rkArrR>0);
-[m,n]=size(rkArrR);
-plot(1:m,rkArrR)
-subplot(2,3,2)
-rkArrh=rkArrh(rkArrh>0);
-[m,n]=size(rkArrh');
-plot(1:m,rkArrh)
-subplot(2,3,3)
-rkArrD=rkArrD(rkArrD>0);
-[m,n]=size(rkArrD);
-plot(1:m,rkArrD)
-
-subplot(2,3,4)
-rkArrC=rkArrC(rkArrC>0);
-[m,n]=size(rkArrC);
-plot(1:m,rkArrC)
-subplot(2,3,5)
-rkArrG=rkArrG(rkArrG>0);
-[m,n]=size(rkArrG);
-plot(1:m,rkArrG)
-
-subplot(2,3,6)
-rkArrP=rkArrP(rkArrP>0);
-[m,n]=size(rkArrP);
-plot(1:m,rkArrP)
+% subplot(2,3,1)
+% rkArrR=rkArrR(rkArrR>0);
+% [m,n]=size(rkArrR);
+% plot(1:m,rkArrR)
+% subplot(2,3,2)
+% rkArrh=rkArrh(rkArrh>0);
+% [m,n]=size(rkArrh');
+% plot(1:m,rkArrh)
+% subplot(2,3,3)
+% rkArrD=rkArrD(rkArrD>0);
+% [m,n]=size(rkArrD);
+% plot(1:m,rkArrD)
+% 
+% subplot(2,3,4)
+% rkArrC=rkArrC(rkArrC>0);
+% [m,n]=size(rkArrC);
+% plot(1:m,rkArrC)
+% subplot(2,3,5)
+% rkArrG=rkArrG(rkArrG>0);
+% [m,n]=size(rkArrG);
+% plot(1:m,rkArrG)
+% 
+% subplot(2,3,6)
+% rkArrP=rkArrP(rkArrP>0);
+% [m,n]=size(rkArrP);
+% plot(1:m,rkArrP)
     
     
     % save(['ff' num2str(batch) '.mat'],'Arecord')
