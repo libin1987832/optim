@@ -21,7 +21,8 @@ rkArr=zeros(2*maxIter,1);
 countFM=0;
 countNW=0;
 beginNW=0;
-
+maxit=n;
+tol=1e-12;
 if Ar<delt*rn || rn<delt
     xk=x0;
     rk=r;
@@ -44,8 +45,18 @@ while Ar>delt*rn && rn>delt
             beginNW=countFM;
         end
         uIndex=0;
-        [xk,~]=krylov(A,b,xk,rkp);
-         rk=(b-A*xk);
+   %     [xk,~]=krylov(A,b,xk,rkp);
+        
+        AI=A(AA,:);
+        b=rkp(AA);
+        [x,flag,relres,iter,resvec,lsvec] = lsqrM(AI,b,tol,maxit,[],[],zeros(n,1),A,xk,AA)
+        if flag == 5
+            xk=xk+x;
+        else
+            aa=piecewise(A,b,x,xk);
+            xk=xk+aa*x;
+        end
+        rk=(b-A*xk);
          rk(rk<0)=0;
 %         %%% 验证 正交性
 %         rk0=rkp;
