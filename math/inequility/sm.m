@@ -9,3 +9,10 @@ else
     aa = spiecewise(A,b,u,x0);
     xs = x0 + aa * u;
 end
+
+rpk = b - A * xs;
+
+normr0 = norm(bI);
+rk=rpk;
+rk(rk<0)=0;
+normrk = norm(rk);

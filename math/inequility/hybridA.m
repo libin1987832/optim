@@ -22,17 +22,16 @@ while normAr > tol * normA * normr;
     itersm(iter + 1) = isSub;
     if isSub
         xf = xfA(:, end);
-        xs = sm(A, b, n, rpk, xf);
+        [xs,rpk] = sm(A, b, n, rpk, xf);
         x0 = xs;
     else
         x0 = xfA(:, end);
     end
-    rpk = b - A * x0;
     r = rpk;
     r(r<0) = 0;
     normAr = norm(A' * r);
-    resvec(iter + 1)=normAr;
     normr = norm( r );
+    resvec(iter + 1)=normr;
     if iter > maxit
         flag = 1;
         break;

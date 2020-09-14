@@ -352,11 +352,17 @@ for ii = 1 : maxit
     AAk=(rkp>1e-15);
     empty=sum(xor(AA,AAk));
     if empty
-        if ii>1
+        if ii>1 && flag <5
             x=y;
-            flag=5;
+            flag = 5;
             break;
+        else
+            flag = 6;
+%            disp('out\n');
         end
+%     else
+%         normy=norm(y);
+%         fprintf('normy:%g \n',normy);
     end
     
     normr = abs(s) * normr;
