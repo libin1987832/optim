@@ -34,13 +34,14 @@ switch upper(type)
             isSub = true;
         end
      case 'RHA'
-        x0 = xA(1);
-        xk = xA(2);
+        x0 = xA(:,end-1);
+        xk = xA(:,end);
         rpk0 = b - A * x0;
         rpk = b - A * xk;
         r0 = rpk0;
         rk = rpk;
         r0(r0<0) = 0;
+        rk(rk<0) = 0;
         %|| L(xk,zk) ||
         L1 = r0'*r0;
         %||L(xk+1,zk+1)||^2
@@ -48,7 +49,7 @@ switch upper(type)
         z0=-rpk0;
         z0(z0<0)=0;
         % -(b-Axk+1)-zk
-        LMv=-rkp-z0;
+        LMv=-rpk-z0;
         LM=LMv'*LMv;
         %L(xk,zk)-L(xk+1,zk)
         L1m=L1-LM;

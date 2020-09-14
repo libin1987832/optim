@@ -1,5 +1,7 @@
+clear;
+clc;
 m = 1000;
-ratio=0.1;
+ratio=0.5;
 n = floor( ratio * m);
 A = 2 * rand(m , n)-1;
 b = 2 * rand(m , 1)-1;
@@ -7,6 +9,8 @@ x0 = zeros(n , 1);
 maxIter = 100;
 nf = 3;
 str = ['D','C','P','R'];
+ [xk,rk,countFM,countNW,beginNW,tf,vk,Arr,rkrr]=als(x0,A,b,maxIter);
+ Arr(:,end)
 for i=1:4
     type = str(i);
     [xkD,flag,relres,iter,resvec,itersm,tfD]=hybridA(A,b,x0,maxIter,nf,[type,'HA']);
