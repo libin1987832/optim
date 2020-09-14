@@ -1,7 +1,10 @@
-function isSub = strategies(A,b,Qn,iter,type,Daxiter,rkp,xA)
+function isSub = strategies(A,b,Qn,iter,type,rkp,xA)
 [m,n] = size(A);
 isSub = false;
 eIter = 3;
+con = 0.8;
+diff = 10*eps;
+Daxiter = floor(max(33,(m+n)/4));
 switch upper(type)
     case 'DHA'
         if mod(iter,Daxiter) == 0
@@ -18,9 +21,9 @@ switch upper(type)
             isSub = true;
         end
     case 'CHA'
-        x0 = xA(1);
-        xpn = xA(2);
-        xk = xA(3);
+        x0 = xA(:,end - 1);
+        xpn = xA(:,end - 2);
+        xk = xA(:,end);
         p1v=x0-xpn;
         p1=p1v'*p1v;
         p2v=xk-x0;
@@ -30,12 +33,17 @@ switch upper(type)
             isSub = true;
         end
      case 'RHA'
-        r0=rpk;
-        r0(r0<0)=0;
+        x0 = xA(1);
+        xk = xA(2);
+        rp0 = b - A * x0;
+        rpk = b - A * xk;
+        r0 = rp0;
+        rk = rpk;
+        r0(r0<0) = 0;
         %|| L(xk,zk) ||
-        L1=r0'*r0;
+        L1 = r0'*r0;
         %||L(xk+1,zk+1)||^2
-        L2=rk'*rk;
+        L2 = rk'*rk;
         z0=-rkp0;
         z0(z0<0)=0;
         % -(b-Axk+1)-zk
@@ -56,6 +64,9 @@ switch upper(type)
         AuAA=Au(AAz);
         %|| Au(AAz) ||^2
         LLA=AuAA'*AuAA;
+        if abs(LLA-LL) < diff
+            isSub = true;
+        end
     otherwise
-        error(message('MATLAB:iterapp:InvalidOp'))
+        error(message('MATLAB:InvalidOp'))
 end

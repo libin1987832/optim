@@ -1,4 +1,5 @@
-function [xk, rpk]=fmnf(A,b,xk,Q,rpk,nf)
+function [xkA, rpk]=fmnf(A,b,xk,n,Q,R,rpk,nf)
+xkA = zeros(n,nf);
 for i = 1:nf
     r = rpk;
     r(r<0) = 0;
@@ -7,4 +8,5 @@ for i = 1:nf
     uk = R \ Qr;
     xk = xk+uk;
     rpk = b - A * xk;
+    xkA(:,i) = xk;
 end
