@@ -22,7 +22,7 @@ while normAr > tol * normA * normr;
     itersm(iter + 1) = isSub;
     if isSub
         xf = xfA(:, end);
-        xs = sm(A, b, xf, rpk);
+        xs = sm(A, b, n, rpk, xf);
         x0 = xs;
     else
         x0 = xfA(:, end);

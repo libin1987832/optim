@@ -4,6 +4,7 @@ isSub = false;
 eIter = 3;
 con = 0.8;
 diff = 10*eps;
+tol = 1e-13;
 Daxiter = floor(max(33,(m+n)/4));
 switch upper(type)
     case 'DHA'
@@ -12,11 +13,11 @@ switch upper(type)
         end
     case 'PHA'
         rk=rkp;
-        AA=find(rk>ee);
+        AA=find(rk>1e-15);
         qrkn=Qn(AA,:)'*rk(AA);
         qrkn=Qn*qrkn;
         rkn=rkp-eIter*qrkn;
-        ssign=sum(~xor(rk>ee,rkn>ee));
+        ssign=sum(~xor(rk>tol, rkn>tol));
         if ssign==m ||ssign>m*0.99
             isSub = true;
         end
@@ -35,16 +36,16 @@ switch upper(type)
      case 'RHA'
         x0 = xA(1);
         xk = xA(2);
-        rp0 = b - A * x0;
+        rpk0 = b - A * x0;
         rpk = b - A * xk;
-        r0 = rp0;
+        r0 = rpk0;
         rk = rpk;
         r0(r0<0) = 0;
         %|| L(xk,zk) ||
         L1 = r0'*r0;
         %||L(xk+1,zk+1)||^2
         L2 = rk'*rk;
-        z0=-rkp0;
+        z0=-rpk0;
         z0(z0<0)=0;
         % -(b-Axk+1)-zk
         LMv=-rkp-z0;
@@ -57,9 +58,9 @@ switch upper(type)
         LL=L1m-L2m;
         
         % active set r0
-        AAz=(rkp>ee);
+        AAz=(rkp>tol);
         %Au=-(b-Ax_{k+1})+(b-Axk)
-        Au=-rkp+rkp0;
+        Au=-rpk+rpk0;
         % Au(AAz)
         AuAA=Au(AAz);
         %|| Au(AAz) ||^2
