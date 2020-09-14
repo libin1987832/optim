@@ -90,6 +90,7 @@ end
 if ~iscolumn(b)
     error(message('MATLAB:lsqr:RSHnotColumn'));
 end
+
 % If A is a function, then it could take awhile to discover the value N
 nKnown = false;
 % Determine whether A is a matrix or a function.
