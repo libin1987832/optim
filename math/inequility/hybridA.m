@@ -9,9 +9,11 @@ r0(r0<0) = 0;
 normAr = norm(A' * r0);
 normr = norm(r0);
 iter = 0;
-resvec = zeros(1,maxit+1);
-itersm = false(1,maxit+1);
+resvec = zeros(1,maxit + 1);
+itersm = false(1,maxit + 1);
 resvec(1) = normr;
+smvec = zeros(2,maxit + 1);
+indexsm = 0;
 flag = 0;
 [Q,R]=qr(A);
 Qn=Q(:,1:n);
@@ -22,7 +24,9 @@ while normAr > tol * normA * normr;
     itersm(iter + 1) = isSub;
     if isSub
         xf = xfA(:, end);
-        [xs,rpk] = sm(A, b, n, rpk, xf);
+        [xs,rpk,len] = sm(A, b, n, rpk, xf);
+        indexsm = indexsm + 1;
+        smvec(:,indexsm)=[iter;len];
         x0 = xs;
     else
         x0 = xfA(:, end);

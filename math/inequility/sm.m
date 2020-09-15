@@ -1,18 +1,20 @@
-function [xs,rpk]=sm(A,b,n,rpk,x0)
+function [xs,rpk,len]=sm(A,b,n,rpk,x0)
 AA=(rpk>0);
 AI=A(AA,:);
 bI=rpk(AA);
 [u,flag,relres,iter,resvec,lsvec] = lsqrm(AI,bI,1e-12,n,[],[],zeros(n,1),A,b,x0,AA);
 if flag == 5 || flag==1
     xs = x0 + u;
+    len = 1;
 else
     aa = spiecewise(A,b,u,x0);
     xs = x0 + aa * u;
+    len = aa;
 end
 
 rpk = b - A * xs;
 
-normr0 = norm(bI);
-rk=rpk;
-rk(rk<0)=0;
-normrk = norm(rk);
+% normr0 = norm(bI);
+% rk=rpk;
+% rk(rk<0)=0;
+% normrk = norm(rk);
