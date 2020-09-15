@@ -1,4 +1,4 @@
-function [x,flag,relres,iter,resvec,lsvec] = lsqrm(A,b,tol,maxit,M1,M2,x0,ALL,bLL,xs,AA,varargin)
+function [x,flag,relres,iter,resvec,lsvec,out] = lsqrm(A,b,tol,maxit,M1,M2,x0,ALL,bLL,xs,AA,varargin)
 %LSQR   LSQR Method.
 %   X = LSQR(A,B) attempts to solve the system of linear equations A*X=B
 %   for X if A is consistent, otherwise it attempts to solve the least
@@ -15,7 +15,7 @@ function [x,flag,relres,iter,resvec,lsvec] = lsqrm(A,b,tol,maxit,M1,M2,x0,ALL,bL
 %   then LSQR uses the default, 1e-6.
 %
 %   X = LSQR(A,B,TOL,MAXIT) specifies the maximum number of iterations. If
-%% 
+%%
 %   MAXIT is [] then LSQR uses the default, min([N,P,20]).
 %
 %   X = LSQR(A,B,TOL,MAXIT,M) and LSQR(A,B,TOL,MAXIT,M1,M2) use P-by-P
@@ -82,7 +82,7 @@ function [x,flag,relres,iter,resvec,lsvec] = lsqrm(A,b,tol,maxit,M1,M2,x0,ALL,bL
 
 %   Copyright 1984-2013 The MathWorks, Inc.
 
-
+out = false;
 % Check for an acceptable number of input arguments
 if nargin < 2
     error(message('MATLAB:lsqr:NotEnoughInputs'));
@@ -105,7 +105,7 @@ if strcmp(atype,'matrix')
 else
     m = size(b,1);
 end
-    
+
 % Assign default values to unspecified parameters
 if nargin < 3 || isempty(tol)
     tol = 1e-6;
@@ -294,7 +294,7 @@ for ii = 1 : maxit
             lsvec = lsvec(1:iter);
             break
         end
-    end    
+    end
     u = iterapp('mtimes',afun,atype,afcnstr,z,varargin{:},'notransp') - alpha * u;
     beta = norm(u);
     u = u / beta;
@@ -347,24 +347,6 @@ for ii = 1 : maxit
     y=x;
     x = x + phi * d;
     
-    xk=xs+x;
-    rkp=bLL-ALL*xk;
-    AAk=(rkp>1e-15);
-    empty=sum(xor(AA,AAk));
-    if empty
-        if ii>1 && flag <5
-            x=y;
-            flag = 5;
-            break;
-        else
-            flag = 6;
-%            disp('out\n');
-        end
-%     else
-%         normy=norm(y);
-%         fprintf('normy:%g \n',normy);
-    end
-    
     normr = abs(s) * normr;
     resvec(ii+1) = normr;
     vt = iterapp('mtimes',afun,atype,afcnstr,u,varargin{:},'transp');
@@ -392,6 +374,25 @@ for ii = 1 : maxit
     alpha = norm(v);
     v = v / alpha;
     normar = alpha * abs( s * phi);
+    
+    xk = xs + x;
+    rkp = bLL - ALL * xk;
+    AAk = (rkp>1e-15);
+    empty = sum( xor( AA, AAk));
+    if empty
+        if ii>1 && flag < 5
+            x = y;
+            flag = 5;
+            break;
+        else
+            flag = 6;
+            out = true;
+            % disp('out\n');
+        end
+        %else
+        %normy=norm(y);
+        %fprintf('normy:%g \n',normy);
+    end
     
 end                            % for ii = 1 : maxit
 

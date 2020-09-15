@@ -10,25 +10,24 @@ normAr = norm(A' * r0);
 normr = norm(r0);
 iter = 0;
 resvec = zeros(1,maxit + 1);
-itersm = false(1,maxit + 1);
+itersm = zeros(1,maxit + 1);
 resvec(1) = normr;
-smvec = zeros(2,maxit + 1);
 indexsm = 0;
-flag = 0;
+flag = -1;
 [Q,R]=qr(A);
 Qn=Q(:,1:n);
 while normAr > tol * normA * normr;
     iter = iter + 1;
     [xfA,rpk] = fmnf(A,b,x0,n,Q,R,rpk,nf);
     isSub = strategies(A,b,Qn,iter*nf,type,rpk,xfA);
-    itersm(iter + 1) = isSub;
     if isSub
         xf = xfA(:, end);
-        [xs,rpk,len] = sm(A, b, n, rpk, xf);
+        [xs,rpk,len,flag] = sm(A, b, n, rpk, xf);
         indexsm = indexsm + 1;
-        smvec(:,indexsm)=[iter;len];
+        itersm(iter + 1) = len;
         x0 = xs;
     else
+        itersm(iter + 1) = -1;
         x0 = xfA(:, end);
     end
     r = rpk;
@@ -36,7 +35,7 @@ while normAr > tol * normA * normr;
     normAr = norm(A' * r);
     normr = norm( r );
     resvec(iter + 1)=normr;
-    if iter > maxit
+    if iter > maxit || flag ==0
         flag = 1;
         break;
     end
