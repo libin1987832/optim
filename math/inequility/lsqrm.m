@@ -374,31 +374,31 @@ for ii = 1 : maxit
     alpha = norm(v);
     v = v / alpha;
     normar = alpha * abs( s * phi);
-    
-    xk = xs + x;
-    rkp = bLL - ALL * xk;
-    AAk = (rkp>1e-15);
-    empty = sum( xor( AA, AAk));
-    if empty
-        if ii>1 && flag < 5
-            x = y;
-            iter = ii;
-            flag = 5;
-            out = false;
-            break;
-        else
-            flag = 6;
-            out = true;
-            % disp('out\n');
+    if ~out
+        xk = xs + x;
+        rkp = bLL - ALL * xk;
+        AAk = (rkp>1e-15);
+        empty = sum( xor( AA, AAk));
+        if empty
+            if ii>1 && flag < 5
+                x = y;
+                iter = ii;
+                flag = 5;
+                out = false;
+                break;
+            else
+                flag = 6;
+                out = true;
+                % disp('out\n');
+            end
+            %else
+            %normy=norm(y);
+            %fprintf('normy:%g \n',normy);
         end
-        %else
-        %normy=norm(y);
-        %fprintf('normy:%g \n',normy);
     end
-    
 end                            % for ii = 1 : maxit
 
-if flag == 1
+if flag == 1 || flag ==6
     if normar/(norma*normr) <= tol % check for convergence in min{|b-A*x|}
         flag = 0;
         iter = maxit;

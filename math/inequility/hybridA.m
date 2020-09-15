@@ -17,9 +17,10 @@ indexsm = 0;
 flag = 5;
 [Q,R]=qr(A);
 Qn=Q(:,1:n);
+ [xfA,rpk] = fmnf(A,b,x0,n,Q,R,rpk,nf);
 while normAr > tol * normA * normr;
     iter = iter + 1;
-    [xfA,rpk] = fmnf(A,b,x0,n,Q,R,rpk,nf);
+%     [xfA,rpk] = fmnf(A,b,x0,n,Q,R,rpk,nf);
     isSub = strategies(A,b,Qn,iter*nf,type,rpk,xfA);
     if isSub
         xf = xfA(:, end);
@@ -28,6 +29,7 @@ while normAr > tol * normA * normr;
         itersm(iter + 1) = len;
         x0 = xs;
     else
+        [xfA,rpk] = fmnf(A,b,x0,n,Q,R,rpk,nf);
         itersm(iter + 1) = -1;
         x0 = xfA(:, end);
     end
@@ -40,8 +42,11 @@ while normAr > tol * normA * normr;
     if iter > maxit || flag == 0
         break;
     end
-    if flag < 5 || flag > 6
-        disp(['flag:',num2str(flag)]);
+    if flag < 5 || flag > 6 
+        if flag < 12
+            disp(['flag:',num2str(flag)]);
+        end
+        flag = 5;
     end
 end
 xk = x0;

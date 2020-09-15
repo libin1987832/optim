@@ -2,12 +2,12 @@ function [xs,rpk,len,flag]=sm(A,b,n,rpk,x0)
 AA=(rpk>0);
 AI=A(AA,:);
 bI=rpk(AA);
-[u,flag,relres,iter,resvec,lsvec,out] = lsqrm(AI,bI,1e-12,n,[],[],zeros(n,1),A,b,x0,AA);
+[u,flag,relres,iter,resvec,lsvec,out] = lsqrm(AI,bI,1e-10,30,[],[],zeros(n,1),A,b,x0,AA);
 if ~out 
     xs = x0 + u;
     len = iter;
 else
-    u = AI\bI;
+ %   u = AI\bI;
     aa = spiecewise(A,b,u,x0);
     xs = x0 + aa * u;
     len = aa;
