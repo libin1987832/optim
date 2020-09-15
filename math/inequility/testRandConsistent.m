@@ -8,7 +8,7 @@ clc;
 % x0 = zeros(n , 1);
 % save('test.mat','A','b','x0','m','n')
 load('testPbad.mat')
-maxIter = 40;
+maxIter = 100;
 nf = 3;
 str = ['D','C','P','R'];
 [xk,rk,countFM,countNW,beginNW,tf,vk,Arr,rkrr]=als(x0,A,b,maxIter);

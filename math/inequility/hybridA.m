@@ -24,7 +24,7 @@ while normAr > tol * normA * normr;
     isSub = strategies(A,b,Qn,iter*nf,type,rpk,xfA);
     if isSub
         xf = xfA(:, end);
-        for j=1:3
+        for j=1:2
         [xs,rpk,len,flag] = sm(A, b, n, rpk, xf);
          xf=xs;
         end

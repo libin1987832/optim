@@ -111,7 +111,7 @@ if nargin < 3 || isempty(tol)
     tol = 1e-6;
 end
 if tol <= eps
-    warning(message('MATLAB:lsqr:tooSmallTolerance'));
+%    warning(message('MATLAB:lsqr:tooSmallTolerance'));
     tol = eps;
 elseif tol >= 1
     warning(message('MATLAB:lsqr:tooBigTolerance'));
