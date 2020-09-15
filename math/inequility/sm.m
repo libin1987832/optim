@@ -7,6 +7,7 @@ if ~out
     xs = x0 + u;
     len = iter;
 else
+    u = AI\bI;
     aa = spiecewise(A,b,u,x0);
     xs = x0 + aa * u;
     len = aa;

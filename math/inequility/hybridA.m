@@ -41,7 +41,7 @@ while normAr > tol * normA * normr;
         break;
     end
     if flag < 5 || flag > 6
-        disp(['flag:' flag]);
+        disp(['flag:',num2str(flag)]);
     end
 end
 xk = x0;
