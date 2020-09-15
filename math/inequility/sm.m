@@ -14,7 +14,7 @@ else
     flag = flag + 6;
 end
 rpk = b - A * xs;
-
+%semilogy(1:iter,resvec(1:iter),'b.');
 % if flag == 0 && ~out
 %     flag = 0;
 % else

@@ -31,12 +31,14 @@ for i=1:4
         maxIterA = iter+1;
     end
 end
-type=['r','g','k','c'];
-beginp = 1;
-figure
-semilogy(beginp:maxIterA,iterA(1,beginp:maxIterA),'b.');
-hold on
-for i=2:4
-    semilogy(beginp:maxIterA,iterA(i,beginp:maxIterA),[type(i) '.']);
-end
-legend('DHA','CHA','PHA','RHA');
+% type=['r','g','k','c'];
+% beginp = 1;
+% figure
+% semilogy(beginp:maxIterA,iterA(1,beginp:maxIterA),'b.');
+% hold on
+% for i=2:4
+%     semilogy(beginp:maxIterA,iterA(i,beginp:maxIterA),[type(i) '.']);
+% end
+% legend('DHA','CHA','PHA','RHA');
+% xlabel('Iteration Number');
+% ylabel('Relative Residual');

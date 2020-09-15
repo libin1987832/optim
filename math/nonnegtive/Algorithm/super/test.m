@@ -6,13 +6,14 @@ addpath('../strategies')
 addpath('../hybrid')
 addpath('../linearsolve')
 
-m = 1000;
-ratio=0.5;
-n = floor( ratio * m);
-A = 2 * rand(m , n)-1;
-b = 2 * rand(m , 1)-1;
-x0 = zeros(n , 1);
-maxIter = 200;
+% m = 1000;
+% ratio=0.5;
+% n = floor( ratio * m);
+% A = 2 * rand(m , n)-1;
+% b = 2 * rand(m , 1)-1;
+% x0 = zeros(n , 1);
+load('testPbad.mat')
+maxIter = 300;
 nf = 10;
 [xkD,rkD,countFD,countND,bNWD,tfD,vkD,rkArrD]=sdax(x0,A,b,maxIter);
 
