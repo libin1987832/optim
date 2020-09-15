@@ -2,9 +2,9 @@ function [xk,flag,relres,iter,resvec,arvec,itersm,tf] = hybridA(A,b,x0,maxit,nf,
 t=clock;
 [m,n] = size(A);
 if n/m < 0.81
-    tol = 1e-10;
+    tol = 1e-12;
 else
-    tol = 1e-8;
+    tol = 1e-10;
 end
 
 normA = norm(A,2);
