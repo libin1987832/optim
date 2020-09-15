@@ -389,6 +389,7 @@ for ii = 1 : maxit
             else
                 flag = 6;
                 out = true;
+                break;
                 % disp('out\n');
             end
             %else

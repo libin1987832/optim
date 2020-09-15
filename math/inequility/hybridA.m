@@ -1,11 +1,12 @@
 function [xk,flag,relres,iter,resvec,arvec,itersm,tf] = hybridA(A,b,x0,maxit,nf,type)
 t=clock;
 [m,n] = size(A);
-if n/m < 0.81
-    tol = 1e-12;
-else
-    tol = 1e-10;
-end
+tol = 1e-12;
+% if n/m < 0.81
+%     tol = 1e-12;
+% else
+%     tol = 1e-10;
+% end
 
 normA = norm(A,2);
 rpk = b-A * x0;
@@ -23,16 +24,16 @@ flag = 5;
 [Q,R]=qr(A);
 Qn=Q(:,1:n);
 % [xfA,rpk] = fmnf(A,b,x0,n,Q,R,rpk,nf);
-while normAr > tol * normA * normr && normr > tol;
+while normAr > tol * normA * normr && normr > tol
     iter = iter + 1;
     [xfA,rpk] = fmnf(A,b,x0,n,Q,R,rpk,nf);
     isSub = strategies(A,b,Qn,iter*nf,type,rpk,xfA);
     if isSub
         xf = xfA(:, end);
-        for j=1:5
+%        for j=1:5
         [xs,rpk,len,flag] = sm(A, b, n, rpk, xf);
-         xf=xs;
-        end
+ %        xf=xs;
+ %       end
         indexsm = indexsm + 1;
         itersm(iter + 1) = len;
         x0 = xs;

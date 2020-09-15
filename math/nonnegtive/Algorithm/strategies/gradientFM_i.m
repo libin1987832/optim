@@ -137,7 +137,7 @@ while Ar>delt*rn && rn>delt
         % if LLA>rou*LL || LLA<elta
         if abs(LLA-LL)<diff
             %newtonalgorithm
-            countNW=countNW+1;
+             countNW=countNW+1;
             % record begin newtron type iteratror
             if countNW ==1
                 beginNW=countFM;
