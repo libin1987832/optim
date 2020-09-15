@@ -10,7 +10,7 @@ else
     aa = spiecewise(A,b,u,x0);
     xs = x0 + aa * u;
     len = aa;
-    flag = flag + 5;
+    flag = flag + 6;
 end
 rpk = b - A * xs;
 

@@ -14,7 +14,7 @@ arvec = zeros(1,maxit + 1);
 itersm = zeros(1,maxit + 1);
 resvec(1) = normr;
 indexsm = 0;
-flag = -1;
+flag = 5;
 [Q,R]=qr(A);
 Qn=Q(:,1:n);
 while normAr > tol * normA * normr;
@@ -37,8 +37,11 @@ while normAr > tol * normA * normr;
     normr = norm( r );
     resvec(iter + 1) = normr;
     arvec(iter + 1) = normAr;
-    if iter > maxit || flag < 5
+    if iter > maxit || flag == 0
         break;
+    end
+    if flag < 5 || flag > 6
+        disp(['flag:' flag]);
     end
 end
 xk = x0;
