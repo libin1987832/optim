@@ -18,13 +18,13 @@ flag = 5;
 [Q,R]=qr(A);
 Qn=Q(:,1:n);
 % [xfA,rpk] = fmnf(A,b,x0,n,Q,R,rpk,nf);
-while normAr > tol * normA * normr;
+while normAr > tol * normA * normr && normr > tol;
     iter = iter + 1;
     [xfA,rpk] = fmnf(A,b,x0,n,Q,R,rpk,nf);
     isSub = strategies(A,b,Qn,iter*nf,type,rpk,xfA);
     if isSub
         xf = xfA(:, end);
-        for j=1:2
+        for j=1:5
         [xs,rpk,len,flag] = sm(A, b, n, rpk, xf);
          xf=xs;
         end
