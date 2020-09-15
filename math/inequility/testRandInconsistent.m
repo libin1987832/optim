@@ -1,15 +1,21 @@
-%for m = 1000:1000:2000
-%for ratio = 0.6:0.1:0.8
-    m = 1000;
-    ratio=0.6;
+for m = 1000:1000:2000
+for ratio = 0.6:0.1:0.8
+%     m = 1000;
+%     ratio=0.6;
     n = floor( ratio * m);
     A = 2 * rand(m , n)-1;
     b = 2 * rand(m , 1)-1;
     x0 = zeros(n , 1);
-    maxIter = 20;
-    nf = 3;
+    maxIter = 200;
+    nf = 20;
     str = ['D','C','R','P'];
-    [xk,rk,countFM,countNW,beginNW,tf,vk,Arr,rkrr]=als(x0,A,b,maxIter);
+    [xkh,rkh,countFMh,countNWh,beginNWh,tfh,vkh,rkArrh]=han(x0,A,b,maxIter);
+     rkh=b-A*xkh;
+     rkh(rkh<0)=0;
+    dh=norm(rkh);
+     gh=norm(A'*rkh);
+    fprintf('han:%g %4.4f\n',gh,tfh);
+%    [xk,rk,countFM,countNW,beginNW,tf,vk,Arr,rkrr]=als(x0,A,b,maxIter);
   %  fprintf('estiate value:%d\n',Arr(1,end));
     iterA=size(4,maxIter+2);
     maxIterA = 0;
@@ -36,16 +42,16 @@
     end
     fprintf('$ %d \\times %d $ & %g & %4.4f & %g & %4.4f & %g & %4.4f & %g & %4.4f\\\\\n'...
         ,m,n,fprintA(1),fprintA(2),fprintA(3),fprintA(4),fprintA(5),fprintA(6),fprintA(7),fprintA(8));
-%end
-% end
-type=['r','g','k','c'];
-beginp = 1;
-figure
-semilogy(beginp:maxIterA,iterA(1,beginp:maxIterA),'b.');
-hold on
-for i=2:4
-    semilogy(beginp:maxIterA,iterA(i,beginp:maxIterA),[type(i) '.']);
 end
-legend('DHA','CHA','PHA','RHA');
-xlabel('Iteration Number');
-ylabel('Relative Residual');
+end
+% type=['r','g','k','c'];
+% beginp = 1;
+% figure
+% semilogy(beginp:maxIterA,iterA(1,beginp:maxIterA),'b.');
+% hold on
+% for i=2:4
+%     semilogy(beginp:maxIterA,iterA(i,beginp:maxIterA),[type(i) '.']);
+% end
+% legend('DHA','CHA','PHA','RHA');
+% xlabel('Iteration Number');
+% ylabel('Relative Residual');

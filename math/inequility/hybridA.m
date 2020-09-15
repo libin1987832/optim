@@ -1,7 +1,12 @@
 function [xk,flag,relres,iter,resvec,arvec,itersm,tf] = hybridA(A,b,x0,maxit,nf,type)
 t=clock;
-tol = eps;
 [m,n] = size(A);
+if n/m < 0.81
+    tol = 1e-10;
+else
+    tol = 1e-8;
+end
+
 normA = norm(A,2);
 rpk = b-A * x0;
 r0 = rpk;
