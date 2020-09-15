@@ -1,4 +1,4 @@
-function [xk,flag,relres,iter,resvec,itersm,tf] = hybridA(A,b,x0,maxit,nf,type)
+function [xk,flag,relres,iter,resvec,arvec,itersm,tf] = hybridA(A,b,x0,maxit,nf,type)
 t=clock;
 tol = eps;
 [m,n] = size(A);
@@ -10,6 +10,7 @@ normAr = norm(A' * r0);
 normr = norm(r0);
 iter = 0;
 resvec = zeros(1,maxit + 1);
+arvec = zeros(1,maxit + 1);
 itersm = zeros(1,maxit + 1);
 resvec(1) = normr;
 indexsm = 0;
@@ -34,9 +35,9 @@ while normAr > tol * normA * normr;
     r(r<0) = 0;
     normAr = norm(A' * r);
     normr = norm( r );
-    resvec(iter + 1)=normr;
-    if iter > maxit || flag ==0
-        flag = 1;
+    resvec(iter + 1) = normr;
+    arvec(iter + 1) = normAr;
+    if iter > maxit || flag < 5
         break;
     end
 end
@@ -44,4 +45,5 @@ xk = x0;
 relres = normr;
 resvec = resvec(1:iter + 1);
 itersm = itersm(1:iter + 1);
+arvec = arvec(1:iter + 1);
 tf = etime(clock,t);

@@ -1,7 +1,7 @@
 function isSub = strategies(A,b,Qn,iter,type,rkp,xA)
 [m,n] = size(A);
 isSub = false;
-eIter = 3;
+eIter = 10;
 con = 0.8;
 diff = 10*eps;
 tol = 1e-13;
@@ -18,7 +18,7 @@ switch upper(type)
         qrkn=Qn*qrkn;
         rkn=rkp-eIter*qrkn;
         ssign=sum(~xor(rk>tol, rkn>tol));
-        if ssign==m ||ssign>m*0.99
+        if ssign==m 
             isSub = true;
         end
     case 'CHA'

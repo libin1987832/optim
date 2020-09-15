@@ -382,7 +382,9 @@ for ii = 1 : maxit
     if empty
         if ii>1 && flag < 5
             x = y;
+            iter = ii;
             flag = 5;
+            out = false;
             break;
         else
             flag = 6;
