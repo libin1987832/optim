@@ -1,9 +1,10 @@
 function isSub = strategies(A,b,Qn,iter,type,rkp,xA)
 [m,n] = size(A);
 isSub = false;
-eIter = 2;
-con = 0.99;
-diff = 10*eps;
+eIter = 3;
+con1 = 0.9;
+con2 = 0.7;
+diff = eps;
 tol = 1e-13;
 Daxiter = floor(max(33,(m+n)/4));
 switch upper(type)
@@ -30,7 +31,7 @@ switch upper(type)
         p2v=xk-x0;
         p2=p2v'*p2v;
         roup=p2/p1;
-        if roup<con
+        if roup<con1 && roup>con2
             isSub = true;
         end
      case 'RHA'

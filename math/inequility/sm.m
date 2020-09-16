@@ -3,7 +3,7 @@ AA = (rpk>0);
 AI = A(AA,:);
 bI = rpk(AA);
 tol = 1e-15;
-[u,flag,relres,iter,resvec,lsvec,out] = lsqrm(AI,bI,1e-5,5,[],[],zeros(n,1),A,b,x0,AA);
+[u,flag,relres,iter,resvec,lsvec,out] = lsqrm(AI,bI,1e-13,5,[],[],zeros(n,1),A,b,x0,AA);
 if ~out
     xs = x0 + u;
     len = iter;
@@ -18,7 +18,7 @@ else
         I = find(rpk>=tol);
         AI = A(I,:);
         hk = AI \ rpk(I);
-        aa = piecewise(A,b,hk,x0);
+        aa = spiecewise(A,b,hk,x0);
         xs = x0 + aa * hk;
         x0 = xs;
         rpk = b - A * x0;

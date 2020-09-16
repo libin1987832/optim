@@ -1,12 +1,12 @@
 % for m = 1000:1000:2000
 % for ratio = 0.1:0.1:0.3
     m = 1000;
-    ratio=0.2;
+    ratio=0.1;
     n = floor( ratio * m);
     A = 2 * rand(m , n)-1;
     b = 2 * rand(m , 1)-1;
     x0 = zeros(n , 1);
-    maxIter = 30;
+    maxIter = 50;
     nf = 3;
     str = ['D','C','R','P'];
     [xkh,rkh,countFMh,countNWh,beginNWh,tfh,vkh,rkArrh]=han(x0,A,b,maxIter);
@@ -34,7 +34,7 @@
         if isempty(beginN)
             beginN=0;
         end
-        %fprintf('%s $ %d \\times %d $ & %g & %g & %g & %g & %g & %g\n',type,m,n,dD,gD,tfD,iter*nf,sumiter,beginN(1));
+        fprintf('%s $ %d \\times %d $ & %g & %g & %g & %g & %g & %g\n',type,m,n,dD,gD,tfD,iter*nf,sumiter,beginN(1));
         iterA(i,1:iter+1)=resvec;
         if maxIterA < iter+1
             maxIterA = iter+1;
@@ -46,13 +46,18 @@
 % end
 
 type=['r','g','k','c'];
+typet=['+','o','v','.'];
 beginp = 1;
 figure
-semilogy(beginp:maxIterA,iterA(1,beginp:maxIterA),'b.');
+%maxIterA = 70;
+h=semilogy(beginp:maxIterA,iterA(1,beginp:maxIterA),'bx');
+h.LineStyle = '--';
 hold on
 for i=2:4
-    semilogy(beginp:maxIterA,iterA(i,beginp:maxIterA),[type(i) '.']);
+    h=semilogy(beginp:maxIterA,iterA(i,beginp:maxIterA),[type(i) typet(i)]);
+    h.LineStyle = '--';
 end
-legend('DHA','CHA','PHA','RHA');
+legend('DHA','CHA','RHA','PHA');
 xlabel('Iteration Number');
-ylabel('Relative Residual');
+ylabel('the norm of the gradient');
+    
