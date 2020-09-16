@@ -46,7 +46,7 @@
 % end
 
 type=['r','g','k','c'];
-typet=['+','o','v','.'];
+typet=['+','o','v','s'];
 beginp = 1;
 figure
 %maxIterA = 70;
