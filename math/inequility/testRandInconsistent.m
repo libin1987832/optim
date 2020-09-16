@@ -1,12 +1,13 @@
 % for m = 1000:1000:2000
 % for ratio = 0.1:0.1:0.3
+
     m = 1000;
     ratio=0.1;
     n = floor( ratio * m);
     A = 2 * rand(m , n)-1;
     b = 2 * rand(m , 1)-1;
     x0 = zeros(n , 1);
-    maxIter = 50;
+    maxIter = 100;
     nf = 3;
     str = ['D','C','R','P'];
     [xkh,rkh,countFMh,countNWh,beginNWh,tfh,vkh,rkArrh]=han(x0,A,b,maxIter);

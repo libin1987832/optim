@@ -1,10 +1,10 @@
 function isSub = strategies(A,b,Qn,iter,type,rkp,xA)
 [m,n] = size(A);
 isSub = false;
-eIter = 3;
+eIter = 2;
 con1 = 0.95;
-con2 = 0.6;
-diff = eps;
+con2 = 0.2;
+diff = 100*eps;
 tol = 1e-13;
 Daxiter = floor(max(33,(m+n)/4));
 switch upper(type)

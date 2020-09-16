@@ -1,9 +1,14 @@
 function [xs,rpk,len,flag]=sm(A,b,n,rpk,x0)
-AA = (rpk>0);
+% lsqr tollera
+tol = 1e-15;
+lsqrTol = 1e-15;
+maxIter = 5;
+
+AA = (rpk>tol);
 AI = A(AA,:);
 bI = rpk(AA);
-tol = 1e-15;
-[u,flag,relres,iter,resvec,lsvec,out] = lsqrm(AI,bI,1e-13,5,[],[],zeros(n,1),A,b,x0,AA);
+
+[u,flag,relres,iter,resvec,lsvec,out] = lsqrm(AI,bI,lsqrTol,maxIter,[],[],zeros(n,1),A,b,x0,AA);
 if ~out
     xs = x0 + u;
     len = iter;

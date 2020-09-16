@@ -1,7 +1,10 @@
 function [xk,flag,relres,iter,resvec,arvec,itersm,tf] = hybridA(A,b,x0,maxit,nf,type)
 t=clock;
-[m,n] = size(A);
+
+% stop criterion
 tol = 1e-15;
+[m,n] = size(A);
+
 % if n/m < 0.81
 %     tol = 1e-12;
 % else
@@ -15,11 +18,15 @@ r0(r0<0) = 0;
 normAr = norm(A' * r0);
 normr = norm(r0);
 iter = 0;
+% residual vector
 resvec = zeros(1,maxit + 1);
+% the normal gradient 
 arvec = zeros(1,maxit + 1);
+% subspace minization
 itersm = zeros(1,maxit + 1);
 resvec(1) = normr;
 indexsm = 0;
+% flag 0-4 return lsqr flag
 flag = 5;
 [Q,R]=qr(A);
 Qn=Q(:,1:n);
