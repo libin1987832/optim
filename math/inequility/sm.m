@@ -19,7 +19,7 @@ else
     xs = x0 + aa * u;
     rpk = b - A * xs;
     x0=xs;
-    for i=1:4
+    for i=1:6
         I = find(rpk>=tol);
         AI = A(I,:);
         hk = AI \ rpk(I);

@@ -1,8 +1,8 @@
-for m = 1000:1000:2000
-    for ratio = 0.6:0.1:0.8
+% for m = 1000:1000:2000
+%     for ratio = 0.6:0.1:0.8
 
-%     m = 1000;
-%     ratio=0.1;
+     m = 2000;
+     ratio=0.6;
     n = floor( ratio * m);
     A = 2 * rand(m , n)-1;
     b = 2 * rand(m , 1)-1;
@@ -54,8 +54,8 @@ for m = 1000:1000:2000
     
 %    fprintf('$ %d \\times %d $ & %g & %4.4f & %g & %4.4f & %g & %4.4f & %g & %4.4f\\\\\n'...
  %       ,m,n,fprintA(1),fprintA(2),fprintA(3),fprintA(4),fprintA(5),fprintA(6),fprintA(7),fprintA(8));
- end
-end
+%  end
+% end
 
 
 %% plot picture
