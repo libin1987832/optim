@@ -35,7 +35,7 @@ Qn=Q(:,1:n);
 while normAr > tol  && normr > tol
     iter = iter + 1;
     [xfA,rpk] = fmnf(A,b,x0,n,Q,R,rpk,nf);
-    isSub = strategies(A,b,Qn,iter*nf,type,rpk,xfA);
+    isSub = strategies(A,b,Qn,type,iter,nf,rpk,xfA);
     if isSub
         xf = xfA(:, end);
 %        for j=1:5

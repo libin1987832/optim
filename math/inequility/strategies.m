@@ -1,4 +1,4 @@
-function isSub = strategies(A,b,Qn,iter,type,rkp,xA)
+function isSub = strategies(A,b,Qn,type,iter,nf,rkp,xA)
 [m,n] = size(A);
 isSub = false;
 eIter = 2;
@@ -6,7 +6,7 @@ con1 = 0.95;
 con2 = 0.2;
 diff = 100*eps;
 tol = 1e-13;
-Daxiter = floor(max(33,(m+n)/4));
+Daxiter = floor(max(33,(m+n)/4)/nf);
 switch upper(type)
     case 'DHA'
         if mod(iter,Daxiter) == 0
