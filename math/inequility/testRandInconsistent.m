@@ -1,12 +1,15 @@
 % [A,rows,cols,entries,rep,field,symm]=mmread('../util/well1033.mtx');
 addpath('./util/');
-[A,rows,cols,entries,rep,field,symm]=mmread('well1850.mtx');
+% [A,rows,cols,entries,rep,field,symm]=mmread('illc1850.mtx');
+% [A,rows,cols,entries,rep,field,symm]=mmread('illc1033.mtx');
+%[A,rows,cols,entries,rep,field,symm]=mmread('well1850.mtx');
+ [A,rows,cols,entries,rep,field,symm]=mmread('well1033.mtx');
 m=rows;
 n=cols;
 % A(20:20:end,:)=0;
 %b=rand(rows,1);
 b=ones(m,1);
-% b(1:2:end)=-1;
+ b(1:2:end)=-1;
 
 % for m = 1000:1000:2000
 %     for ratio = 0.6:0.1:0.8
@@ -16,7 +19,7 @@ b=ones(m,1);
    % n = floor( ratio * m);
    % A = 2 * rand(m , n)-1;
    % b = 2 * rand(m , 1)-1;
-    x0 = zeros(n , 1);
+    x0 = ones(n , 1);
     maxIter = 300;
     nf = 3;
     str = ['D','C','R','P'];

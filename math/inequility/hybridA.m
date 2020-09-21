@@ -11,7 +11,7 @@ tol = 1e-15;
 %     tol = 1e-10;
 % end
 
-normA = norm(A,2);
+%normA = norm(A,2);
 rpk = b-A * x0;
 r0 = rpk;
 r0(r0<0) = 0;
