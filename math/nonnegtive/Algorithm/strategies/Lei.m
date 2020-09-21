@@ -3,7 +3,7 @@ t=clock;
 tol=1e-15;
 %compute hybrid uIter
 [m,n]=size(A);
-[Q,R]=qr(A);
+%[Q,R]=qr(A);
 %FM need a qr decompose
 r0=b-A*x0;
 r0(r0<0)=0;
