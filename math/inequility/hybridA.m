@@ -25,6 +25,7 @@ arvec = zeros(1,maxit + 1);
 % subspace minization
 itersm = zeros(1,maxit + 1);
 resvec(1) = normr;
+arvec(1) = normAr;
 indexsm = 0;
 % flag 0-4 return lsqr flag
 flag = 5;

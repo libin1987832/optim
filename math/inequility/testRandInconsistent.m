@@ -1,11 +1,21 @@
+% [A,rows,cols,entries,rep,field,symm]=mmread('../util/well1033.mtx');
+addpath('./util/');
+[A,rows,cols,entries,rep,field,symm]=mmread('well1850.mtx');
+m=rows;
+n=cols;
+% A(20:20:end,:)=0;
+%b=rand(rows,1);
+b=ones(m,1);
+% b(1:2:end)=-1;
+
 % for m = 1000:1000:2000
 %     for ratio = 0.6:0.1:0.8
 
-     m = 2000;
-     ratio=0.6;
-    n = floor( ratio * m);
-    A = 2 * rand(m , n)-1;
-    b = 2 * rand(m , 1)-1;
+    % m = 1000;
+    % ratio=0.7;
+   % n = floor( ratio * m);
+   % A = 2 * rand(m , n)-1;
+   % b = 2 * rand(m , 1)-1;
     x0 = zeros(n , 1);
     maxIter = 300;
     nf = 3;
@@ -45,33 +55,24 @@
             maxIterA = iter+1;
         end
     end
-%    fprintf('\multirow{4}{*}{$%d\times %d$}& DHA & %g & %g & (%d,%d) & %g \\\\\n...',m,n,dD,gD,tfD,iter*nf,sumiter,beginN(1));
-%     fprintf('\multirow{4}{*}{$%d\times %d$}& DHA & %g & %g & (%d,%d) & %g \\\\\n...',m,n,dD,gD,tfD,iter*nf,sumiter,beginN(1));  
-%  \multirow{4}{*}{$1000\times 100$} & DHA & 1 & 1 & 1&1\\ 
-% 		& DHA & 1 & 1 & 1&1\\ 
-% 		& DHA & 1 & 1 & 1&1\\ 
-% 		& DHA & 1 & 1 & 1&1\\    
-    
-%    fprintf('$ %d \\times %d $ & %g & %4.4f & %g & %4.4f & %g & %4.4f & %g & %4.4f\\\\\n'...
- %       ,m,n,fprintA(1),fprintA(2),fprintA(3),fprintA(4),fprintA(5),fprintA(6),fprintA(7),fprintA(8));
 %  end
 % end
 
 
 %% plot picture
-% type=['r','g','k','c'];
-% typet=['+','o','v','s'];
-% beginp = 1;
-% figure
-% %maxIterA = 70;
-% h=semilogy(beginp:maxIterA,iterA(1,beginp:maxIterA),'bx');
-% h.LineStyle = '--';
-% hold on
-% for i=2:4
-%     h=semilogy(beginp:maxIterA,iterA(i,beginp:maxIterA),[type(i) typet(i)]);
-%     h.LineStyle = '--';
-% end
-% legend('DHA','CHA','RHA','PHA');
-% xlabel('Iteration Number');
-% ylabel('the norm of the gradient');
+type=['r','g','k','c'];
+typet=['+','o','v','s'];
+beginp = 1;
+figure
+%maxIterA = 70;
+h=semilogy(beginp:maxIterA,iterA(1,beginp:maxIterA),'bx');
+h.LineStyle = '--';
+hold on
+for i=2:4
+    h=semilogy(beginp:maxIterA,iterA(i,beginp:maxIterA),[type(i) typet(i)]);
+    h.LineStyle = '--';
+end
+legend('DHA','CHA','RHA','PHA');
+xlabel('Iteration Number');
+ylabel('the norm of the gradient');
     
