@@ -1,8 +1,8 @@
-% for m = 1000:1000:2000
-% for ratio = 0.1:0.1:0.3
+for m = 1000:1000:2000
+    for ratio = 0.1:0.1:0.3
 
-    m = 1000;
-    ratio=0.1;
+%     m = 1000;
+%     ratio=0.1;
     n = floor( ratio * m);
     A = 2 * rand(m , n)-1;
     b = 2 * rand(m , 1)-1;
@@ -21,6 +21,7 @@
     iterA=size(4,maxIter+2);
     maxIterA = 0;
     fprintA=zeros(1,8);
+    record=zeros(4,5);
     for i=1:4
         type = str(i);
         [xkD,flag,relres,iter,resvec,arvec,itersm,tfD]=hybridA(A,b,x0,maxIter,nf,[type,'HA']);
@@ -35,30 +36,41 @@
         if isempty(beginN)
             beginN=0;
         end
-        fprintf('%s $ %d \\times %d $ & %g & %g & %g & %g & %g & %g\n',type,m,n,dD,gD,tfD,iter*nf,sumiter,beginN(1));
-        iterA(i,1:iter+1)=resvec;
+        record(i,:)=[dD,gD,iter*nf,sumiter,tfD];
+       % fprintf('%s $ %d \\times %d $ & %g & %g & %g & %g & %g & %g\n',type,m,n,dD,gD,tfD,iter*nf,sumiter,beginN(1));
+       fprintf('%s & %g & %g & (%d,%d)  & %g \\\\\n',[type,'HA'],dD,gD,iter*nf,sumiter,tfD);
+       iterA(i,1:iter+1)=resvec;
         if maxIterA < iter+1
             maxIterA = iter+1;
         end
     end
-    fprintf('$ %d \\times %d $ & %g & %4.4f & %g & %4.4f & %g & %4.4f & %g & %4.4f\\\\\n'...
-        ,m,n,fprintA(1),fprintA(2),fprintA(3),fprintA(4),fprintA(5),fprintA(6),fprintA(7),fprintA(8));
-% end
-% end
-
-type=['r','g','k','c'];
-typet=['+','o','v','s'];
-beginp = 1;
-figure
-%maxIterA = 70;
-h=semilogy(beginp:maxIterA,iterA(1,beginp:maxIterA),'bx');
-h.LineStyle = '--';
-hold on
-for i=2:4
-    h=semilogy(beginp:maxIterA,iterA(i,beginp:maxIterA),[type(i) typet(i)]);
-    h.LineStyle = '--';
+%    fprintf('\multirow{4}{*}{$%d\times %d$}& DHA & %g & %g & (%d,%d) & %g \\\\\n...',m,n,dD,gD,tfD,iter*nf,sumiter,beginN(1));
+%     fprintf('\multirow{4}{*}{$%d\times %d$}& DHA & %g & %g & (%d,%d) & %g \\\\\n...',m,n,dD,gD,tfD,iter*nf,sumiter,beginN(1));  
+%  \multirow{4}{*}{$1000\times 100$} & DHA & 1 & 1 & 1&1\\ 
+% 		& DHA & 1 & 1 & 1&1\\ 
+% 		& DHA & 1 & 1 & 1&1\\ 
+% 		& DHA & 1 & 1 & 1&1\\    
+    
+%    fprintf('$ %d \\times %d $ & %g & %4.4f & %g & %4.4f & %g & %4.4f & %g & %4.4f\\\\\n'...
+ %       ,m,n,fprintA(1),fprintA(2),fprintA(3),fprintA(4),fprintA(5),fprintA(6),fprintA(7),fprintA(8));
+ end
 end
-legend('DHA','CHA','RHA','PHA');
-xlabel('Iteration Number');
-ylabel('the norm of the gradient');
+
+
+%% plot picture
+% type=['r','g','k','c'];
+% typet=['+','o','v','s'];
+% beginp = 1;
+% figure
+% %maxIterA = 70;
+% h=semilogy(beginp:maxIterA,iterA(1,beginp:maxIterA),'bx');
+% h.LineStyle = '--';
+% hold on
+% for i=2:4
+%     h=semilogy(beginp:maxIterA,iterA(i,beginp:maxIterA),[type(i) typet(i)]);
+%     h.LineStyle = '--';
+% end
+% legend('DHA','CHA','RHA','PHA');
+% xlabel('Iteration Number');
+% ylabel('the norm of the gradient');
     
