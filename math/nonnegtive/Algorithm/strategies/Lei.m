@@ -25,7 +25,8 @@ if Ar<delt*rn || rn<delt
     disp('input x is satisfied all constrain!(Ar<delt*rn|| rn<delt)') %ceases execution
 end
 %||A'(r)+||<=delt||(r)+|| ||(r)+||<=de
-while Ar>delt*rn && rn>delt
+% while Ar>delt*rn && rn>delt
+while rn>1e-15
     uk=krylovk(A,r0,k);
     xk=x0+uk;
     rk=b-A*xk;
