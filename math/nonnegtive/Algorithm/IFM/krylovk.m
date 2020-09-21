@@ -1,5 +1,6 @@
 function xk=krylovk(A,y,k)
-u1=0;  
+u1=0; 
+
 beta1=norm(y);q1=y/beta1;v1=A'*q1;alph1=norm(v1);v1=v1/alph1;
 
 ro_1=alph1;

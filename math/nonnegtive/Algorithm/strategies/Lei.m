@@ -3,7 +3,7 @@ t=clock;
 tol=1e-15;
 %compute hybrid uIter
 [m,n]=size(A);
-
+[Q,R]=qr(A);
 %FM need a qr decompose
 r0=b-A*x0;
 r0(r0<0)=0;
@@ -13,7 +13,7 @@ rn=norm(r0);
 am=max(max(A));
 ee=1e-15;% computer floating point arithmetic
 delt=am*m*n*10*ee;
-k=3;
+k=6;
 countFM=0;
 countNW=0;
 beginNW=0;
@@ -30,6 +30,7 @@ while rn>1e-15
     uk=krylovk(A,r0,k);
     xk=x0+uk;
     rk=b-A*xk;
+   % xk=x0+uk;
     rk(rk<0)=0;
     Ar=norm(A'*rk);
     rn=norm(rk);
