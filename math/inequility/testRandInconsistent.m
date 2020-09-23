@@ -20,7 +20,7 @@ b=ones(m,1);
    % A = 2 * rand(m , n)-1;
    % b = 2 * rand(m , 1)-1;
     x0 = ones(n , 1);
-    maxIter = 300;
+    maxIter = 900;
     nf = 3;
     str = ['D','C','R','P'];
     [xkh,rkh,countFMh,countNWh,beginNWh,tfh,vkh,rkArrh]=han(x0,A,b,maxIter);
@@ -61,6 +61,13 @@ b=ones(m,1);
 %  end
 % end
 
+
+[xkLei,rkLei,countFMLei,countNWLei,beginNWLei,tfLei,vkLei]=Lei(x0,A,b,maxIter);
+rkLei=b-A*xkLei;
+rkLei(rkLei<0)=0;
+dLei=norm(rkLei);
+gLei=norm(A'*rkLei);
+fprintf('Lei$ %d \\times %d $ & %g & %g & %4.5f & %d & %d & %g,%g&\n',m,n,dLei,gLei,tfLei,countFMLei,countNWLei,sum(rkLei>1e-13),sum(rkLei>=0));
 
 %% plot picture
 type=['r','g','k','c'];

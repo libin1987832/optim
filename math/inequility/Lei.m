@@ -1,6 +1,6 @@
 function [xk,rk,countFM,countNW,beginNW,tf,vk]=Lei(x0,A,b,maxIter)
 t=clock;
-tol=1e-15;
+tol=1e-16;
 %compute hybrid uIter
 [m,n]=size(A);
 
@@ -11,9 +11,9 @@ r0(r0<0)=0;
 Ar=norm(A'*r0);
 rn=norm(r0);
 am=max(max(A));
-ee=1e-15;% computer floating point arithmetic
+ee=1e-16;% computer floating point arithmetic
 delt=am*m*n*10*ee;
-k=3;
+k=6;
 countFM=0;
 countNW=0;
 beginNW=0;
@@ -25,7 +25,8 @@ if Ar<delt*rn || rn<delt
     disp('input x is satisfied all constrain!(Ar<delt*rn|| rn<delt)') %ceases execution
 end
 %||A'(r)+||<=delt||(r)+|| ||(r)+||<=de
-while Ar>delt*rn && rn>delt
+%while Ar>delt*rn && rn>delt
+  while  rn>tol  
     uk=krylovk(A,r0,k);
     xk=x0+uk;
     rk=b-A*xk;

@@ -42,26 +42,26 @@ x0=xk;
 end
 rkn=b-A*x0
 
-% d=lineData(A,b,[-2,1],[-1.5,3]);
-% line(d(:,1:2)',d(:,3:4)')
-% line([-2/3,1],[2/3,-1],'LineStyle','--');
-% hold on
-% for i=0:10
-% [xk,r0,rk,fk,fm,fr]=FM(x0,Q,R,A,b);
-% c=num2str(i);
-% plot(x0(1),x0(2),'*')
-% c=[' ',c];
-% 
-% text(x0(1),x0(2),c)
-% hold on
-% x0=xk;
-% rkn=b-A*x0;
-% p=find(rkn>0);
-% o=zeros(4,1);
-% o(p)=1;
-% xkP=[xkP o];
-% xkA=[xkA xk];
-% end
+d=lineData(A,b,[-2,1],[-1.5,3]);
+line(d(:,1:2)',d(:,3:4)')
+line([-2/3,1],[2/3,-1],'LineStyle','--');
+hold on
+for i=0:10
+[xk,r0,rk,fk,fm,fr]=FM(x0,Q,R,A,b);
+c=num2str(i);
+plot(x0(1),x0(2),'*')
+c=[' ',c];
+
+text(x0(1),x0(2),c)
+hold on
+x0=xk;
+rkn=b-A*x0;
+p=find(rkn>0);
+o=zeros(4,1);
+o(p)=1;
+xkP=[xkP o];
+xkA=[xkA xk];
+end
 % 
 % xkA
 % xkP
