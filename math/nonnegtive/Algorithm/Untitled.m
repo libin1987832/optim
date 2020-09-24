@@ -1,0 +1,10 @@
+Ak=[1,3,4,5];
+AkL=zeros(1,5);
+AkL(Ak)=1;
+m=2;
+sort(zk);
+zk=[-1,3,5,-7,-2];
+K=find(zk>0);
+Ak1=and(AkL,K);
+IK1=~AKL;
+find(AKL>0)
