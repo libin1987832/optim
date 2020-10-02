@@ -51,10 +51,10 @@
 
         for i = 1:p
             d([i,p+1:n]) = d([i,p+1:n]) - (H(:,i)'*d([i,p+1:n]))*H(:,i);
-        end  %  for i = 1:p
+        end  %  for i = 1:p 
 
         d(E) = d;
-
+    
       end  %  if (method == 0) 
     
 %
