@@ -1,4 +1,4 @@
-% ---------> Usual header stuff for code development <----------
+    % ---------> Usual header stuff for code development <----------
    format compact
    format short e
    dbstop if error
