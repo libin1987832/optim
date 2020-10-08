@@ -1,6 +1,6 @@
 addpath('./util')
 gamm1 = 0.5;
-[A1,b1,A2,b2,At1,At2] = readBreast(gamm1);
+[A1,b1,A2,b2,At1, At2, fm1, fm2, AL1, bL1, AL2, bL2] = readBreast(gamm1);
 maxIter = 900;
 str = ['D','C','R','P'];
 x0=zeros(size(A1,2),1);
@@ -19,9 +19,15 @@ for i = 1:2
     [-count21+count22 percent2]
 end
 
+AL1 = [-A1,-eye(size(A1,1))];
+bL1 = -b1;
+fL1 = [zeros(1, 9), ones(1, fm1)/fm1, ones(1, fm2)/fm2];
+lbL1 = [-ones(9,1)*Inf, zeros(fm1+fm2 , 1)];
 
-AL1 = [A1 -eye(size(A1,1))];
-bL1 = b1;
+% m = size(A1,1);
+% k = size()
+% f=[zeros(1,size(xkh1, 1)) 0 ones(size(A1,))]
+
 
 
 

@@ -1,4 +1,4 @@
-function [A1, b1, A2, b2, At1, At2] = readBreast(gamm)
+function [A1, b1, A2, b2, At1, At2, fm1, fm2, AL1, bL1, AL2, bL2] = readBreast(gamm)
 filename = 'breast-cancer-wisconsin.data';
 format = '%n%n%n%n%n%n%n%n%n%n%n';
 [data1,data2,data3,data4,data5,data6,data7,data8,data9,data10,data11] = textread(filename , format , 'delimiter', ',');
@@ -21,3 +21,13 @@ A2 = [-A(rm1(1:fm1),:), ones(fm1,1);B(rm2(1:fm2),:), -ones(fm2,1)];
 b2 = ones(fm1+fm2, 1);
 At1 = A(rm1(fm1+1:end),:);
 At2 = B(rm2(fm2+1:end),:);
+
+AL1 = -[B(rm2(1:fm2),:);-A(rm1(1:fm1),:)];
+AL1 = [AL1, -eye(size(AL1,1))];
+bL1 = [-(1+gamm)*ones(fm2,1);-(1 - gamm)*ones(fm1,1)];
+
+AL2 = -[B(rm2(1:fm2),:) -ones(fm2,1);-A(rm1(1:fm1),:) ones(fm2,1)];
+AL2 = [AL2, -eye(size(AL2,1))];
+bL2 = [-ones(fm2,1);-ones(fm1,1)];
+
+
