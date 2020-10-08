@@ -20,6 +20,9 @@ for i = 1:2
 end
 
 
+AL1 = [A1 -eye(size(A1,1))];
+bL1 = b1;
+
 
 
 %flops(0)           %start global flop count at 0
