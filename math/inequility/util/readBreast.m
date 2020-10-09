@@ -26,7 +26,7 @@ AL1 = -[B(rm2(1:fm2),:);-A(rm1(1:fm1),:)];
 AL1 = [AL1, -eye(size(AL1,1))];
 bL1 = [-(1+gamm)*ones(fm2,1);-(1 - gamm)*ones(fm1,1)];
 
-AL2 = -[B(rm2(1:fm2),:) -ones(fm2,1);-A(rm1(1:fm1),:) ones(fm2,1)];
+AL2 = -[B(rm2(1:fm2),:) -ones(fm2,1);-A(rm1(1:fm1),:) ones(fm1,1)];
 AL2 = [AL2, -eye(size(AL2,1))];
 bL2 = [-ones(fm2,1);-ones(fm1,1)];
 
