@@ -34,9 +34,10 @@ bL2 = -b2;
 fL2 = [zeros(1, 10), ones(1, fm1)/fm1, ones(1, fm2)/fm2];
 lbL2 = [-ones(10,1)*Inf; zeros(fm1+fm2 , 1)];
 [xkh2, f2, exit2] = linprog(fL2,AL2,bL2,[],[],lbL2,[],[x0;0]);
-
+xw = [xkh; gamm]; 
 xkh = [xkh1(1:9,1) xkh2(1:9,1)];
 gamm = [gamm1,xkh2(10,1)];
+xw = [xw [xkh;gamm]];
 for i = 1:2
     count1 = sum(At1*xkh(:,i) < gamm(1,i));
     count2 = size(At1,1);
@@ -52,15 +53,22 @@ end
 
 
 source_train = [-1*A1(1:fm1,:);A1(fm1+1:fm1+fm2,:)];
-label_train = [ones(fm1,1);-1*ones(fm2,1)];
+ label_train = [ones(fm1,1);-1*ones(fm2,1)];
+%label_train = round(rand(fm1+fm2,1));
 SVMModel = fitcsvm(source_train,label_train,'BoxConstraint',30);
 [ans1,~]=predict(SVMModel, At1);
 [ans2,~]=predict(SVMModel, At2);
-errorcount1 = sum(ans1 < 0);
-errorcount2 = sum(ans2 > 0);
+errorcount1 = sum(ans1 < 0.5);
+errorcount2 = sum(ans2 > 0.5);
 sumerror = errorcount1 + errorcount2;
 output
 output2 = [sumerror,sumcount,1-sumerror/sumcount]
+xw = [xw [SVMModel.Beta;SVMModel.Bias]]'
+beta = xw(:,1:end-1);
+norms=repmat(sqrt(sum(beta.^2,2)),1,9);
+beta = beta./norms;
+beta*beta'
+
 % m = size(A1,1);
 % k = size()
 % f=[zeros(1,size(xkh1, 1)) 0 ones(size(A1,))]
