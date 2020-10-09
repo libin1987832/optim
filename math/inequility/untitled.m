@@ -1,6 +1,8 @@
 addpath('./util')
 gamm1 = 0.5;
-[A1,b1,A2,b2,At1, At2, fm1, fm2, AL1, bL1, AL2, bL2] = readBreast(gamm1);
+ [A1,b1,A2,b2,At1, At2, fm1, fm2, AL1, bL1, AL2, bL2] = readBreast(gamm1);
+% [A1,b1,A2,b2,At1, At2, fm1, fm2, AL1, bL1, AL2, bL2] = readHeart(gamm1);
+numberOfbeta = size(A1,2);
 maxIter = 900;
 str = ['D','C','R','P'];
 x0=zeros(size(A1,2),1);
@@ -23,20 +25,22 @@ for i = 1:2
     output(1,3*i-2:i*3) = [sumerror, sumcount, 1-sumerror/sumcount];
 end
 
+% numberOfbeta = 9;
+% numberOfbeta = 13;
 AL1 = [-A1,-eye(size(A1,1))];
 bL1 = -b1;
-fL1 = [zeros(1, 9), ones(1, fm1)/fm1, ones(1, fm2)/fm2];
-lbL1 = [-ones(9,1)*Inf; zeros(fm1+fm2 , 1)];
+fL1 = [zeros(1, numberOfbeta), ones(1, fm1)/fm1, ones(1, fm2)/fm2];
+lbL1 = [-ones(numberOfbeta,1)*Inf; zeros(fm1+fm2 , 1)];
 [xkh1, f1, exit1] = linprog(fL1,AL1,bL1,[],[],lbL1,[],x0);
 
 AL2 = [-A2,-eye(size(A2,1))];
 bL2 = -b2;
-fL2 = [zeros(1, 10), ones(1, fm1)/fm1, ones(1, fm2)/fm2];
-lbL2 = [-ones(10,1)*Inf; zeros(fm1+fm2 , 1)];
+fL2 = [zeros(1, numberOfbeta+1), ones(1, fm1)/fm1, ones(1, fm2)/fm2];
+lbL2 = [-ones(numberOfbeta+1,1)*Inf; zeros(fm1+fm2 , 1)];
 [xkh2, f2, exit2] = linprog(fL2,AL2,bL2,[],[],lbL2,[],[x0;0]);
 xw = [xkh; gamm]; 
-xkh = [xkh1(1:9,1) xkh2(1:9,1)];
-gamm = [gamm1,xkh2(10,1)];
+xkh = [xkh1(1:numberOfbeta,1) xkh2(1:numberOfbeta,1)];
+gamm = [gamm1,xkh2(numberOfbeta+1,1)];
 xw = [xw [xkh;gamm]];
 for i = 1:2
     count1 = sum(At1*xkh(:,i) < gamm(1,i));
@@ -63,11 +67,11 @@ errorcount2 = sum(ans2 > 0.5);
 sumerror = errorcount1 + errorcount2;
 output
 output2 = [sumerror,sumcount,1-sumerror/sumcount]
-xw = [xw [SVMModel.Beta;SVMModel.Bias]]'
-beta = xw(:,1:end-1);
-norms=repmat(sqrt(sum(beta.^2,2)),1,9);
-beta = beta./norms;
-beta*beta'
+%xw = [xw [SVMModel.Beta;SVMModel.Bias]]'
+%beta = xw(:,1:end-1);
+%norms=repmat(sqrt(sum(beta.^2,2)),1,numberOfbeta);
+%beta = beta./norms;
+%beta*beta'
 
 % m = size(A1,1);
 % k = size()
