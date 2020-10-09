@@ -49,7 +49,18 @@ for i = 1:2
     sumcount = count2+count22;
     output(2,3*i-2:i*3) = [sumerror, sumcount, 1-sumerror/sumcount];
 end
+
+
+source_train = [-1*A1(1:fm1,:);A1(fm1+1:fm1+fm2,:)];
+label_train = [ones(fm1,1);-1*ones(fm2,1)];
+SVMModel = fitcsvm(source_train,label_train,'BoxConstraint',30);
+[ans1,~]=predict(SVMModel, At1);
+[ans2,~]=predict(SVMModel, At2);
+errorcount1 = sum(ans1 < 0);
+errorcount2 = sum(ans2 > 0);
+sumerror = errorcount1 + errorcount2;
 output
+output2 = [sumerror,sumcount,1-sumerror/sumcount]
 % m = size(A1,1);
 % k = size()
 % f=[zeros(1,size(xkh1, 1)) 0 ones(size(A1,))]
