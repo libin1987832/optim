@@ -10,7 +10,9 @@ x0=zeros(size(A1,2),1);
 [xkh2,rkh,countFMh,countNWh,beginNWh,tfh,vkh,rkArrh]=han([x0;0],A2,b2,maxIter);
 xkh = [xkh1 xkh2(1:end-1)];
 gamm = [gamm1,xkh2(end,1)];
-output = zeros(2,6);
+output = zeros(3,6*2);
+At1 = [A1(1:fm1,:) At1];
+for k=1:2
 for i = 1:2
     count1 = sum(At1*xkh(:,i) < gamm(1,i));
     count2 = size(At1,1);
@@ -22,9 +24,9 @@ for i = 1:2
 %     [-count21+count22 percent2]
     sumerror = -count21+count22-count1+count2;
     sumcount = count2+count22;
-    output(1,3*i-2:i*3) = [sumerror, sumcount, 1-sumerror/sumcount];
+    output(1,3*i*k-2:i*3*k) = [sumerror, sumcount, 1-sumerror/sumcount];
 end
-
+end
 % numberOfbeta = 9;
 % numberOfbeta = 13;
 AL1 = [-A1,-eye(size(A1,1))];
