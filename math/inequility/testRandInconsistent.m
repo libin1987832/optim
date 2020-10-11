@@ -11,6 +11,11 @@ n=cols;
 b=ones(m,1);
  b(1:2:end)=-1;
 
+ [A1,b1,A2,b2,At1, At2, fm1, fm2, AL1, bL1, AL2, bL2] = readBreast(gamm1);
+% [A1,b1,A2,b2,At1, At2, fm1, fm2, AL1, bL1, AL2, bL2] = readHeart(gamm1); 
+A = A1;
+b = b1;
+[m,n] = size(A);
 % for m = 1000:1000:2000
 %     for ratio = 0.6:0.1:0.8
 
