@@ -109,7 +109,7 @@
           bval = 0.5*z'*z;     %  bdval = Ad'*z;
           for i = 1:numknots;
 % Only need to check knot if it is smaller than current b.
-             if (knots(i) < bnode)
+             if (knots(i) < bnode )
                  z = max(knots(i)*Ad(INQ)-r(INQ),zeros(ninq,1));
                  z = [z;knots(i)*Ad(EQ)-r(EQ)];
                  temp = Ad'*z;  % temp is the derivative at current knot point.
