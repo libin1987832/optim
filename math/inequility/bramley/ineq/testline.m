@@ -1,4 +1,4 @@
-A = [1;-1;1;1];
+A = [1;-1;1;1]*5;
 b = [-4;3;-2;-7];
 x0 = 0;
 d = -1;
@@ -20,7 +20,8 @@ dd = 0.5*rMP'*rMP;
 yy=diag(dd);
 plot(x,yy);
  [stepsize,newfval,newderiv,err] = linesrch(-A,x0,d,r,fval,epsline,linemeth,neq,printlevel);
-addpath('../../.');
+ addpath('../../.');
 addpath('../../util');
 [xk,flag,relres,iter,resvec,arvec,itersm,tf] = hybridA(A,b,x0,10,3,'DHA');
-[stepsize xk]
+alph=spiecewise(A,b,-1,x0);
+[stepsize alph,xk]

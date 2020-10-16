@@ -1,4 +1,4 @@
-function alph=piecewise(A,b,p,x)
+function alph=spiecewise(A,b,p,x)
 r=b-A*x;
 ap=A*p;
 ai=r./ap;

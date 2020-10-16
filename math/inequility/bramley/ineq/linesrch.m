@@ -114,6 +114,12 @@
                  z = [z;knots(i)*Ad(EQ)-r(EQ)];
                  temp = Ad'*z;  % temp is the derivative at current knot point.
                  if (temp >= 0 & knots(i) < bnode)
+                    if (i>1)
+                        anode = knots(i-1);
+                        za = max(anode*Ad(INQ)-r(INQ),zeros(ninq,1));
+                        za = [za;anode*Ad(EQ)-r(EQ)];
+                        aval = 0.5 * za' * za;
+                    end
                     bnode = knots(i);
                     bval = 0.5*z'*z;      %   bdval = temp;
                  end; % if
