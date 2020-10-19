@@ -3,11 +3,12 @@ r=b-A*x;
 ap=A*p;
 ai=r./ap;
 as=sort(ai(ai>0));
+tas=[0;as];
 [am,an]=size(as);
 for i =1:am
     t=as(i);
     if t<1
-     rt=r-t*ap;
+     rt=r-0.5*(t+tas(i))*ap;
      Ad=A(rt>0,:)*p;
      Ar=A(rt>0,:)'*r(rt>0);
      alph=(p'*Ar)/(Ad'*Ad);

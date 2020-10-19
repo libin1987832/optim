@@ -18,7 +18,7 @@ rM=bM-AM*xM;
 rMP = max(rM,zeros(size(rM)));
 dd = 0.5*rMP'*rMP;
 yy=diag(dd);
-plot(x,yy);
+% plot(x,yy);
  [stepsize,newfval,newderiv,err] = linesrch(-A,x0,d,r,fval,epsline,linemeth,neq,printlevel);
  addpath('../../.');
 addpath('../../util');
