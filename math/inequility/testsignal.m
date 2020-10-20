@@ -25,7 +25,10 @@ x0=zeros(64,1);
 maxIter = 30;
   [xkh,rkh,countFMh,countNWh,beginNWh,tfh,vkh,rkArrh]=han(x0,A,b,maxIter);
   plot(t,xkh','b');
-% 
+xff = fft(x);
+stem(1:64, xff);  
+  
+  % 
 % [x,Fs] = wavread('test1');%∂¡»°“Ù∆µ ˝æ›
 % x = x(:,1);
 % x = x';
