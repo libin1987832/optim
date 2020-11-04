@@ -14,7 +14,7 @@ if ~out
     len = iter;
     rpk = b - A * xs;
 else
-   u = AI\bI;
+    u = AI\bI;
     aa = spiecewise(A,b,u,x0);
     xs = x0 + aa * u;
     rpk = b - A * xs;
