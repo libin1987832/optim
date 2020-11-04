@@ -4,7 +4,7 @@ addpath('./util/');
 % [A,rows,cols,entries,rep,field,symm]=mmread('illc1850.mtx');
 %[A,rows,cols,entries,rep,field,symm]=mmread('illc1033.mtx');
 %[A,rows,cols,entries,rep,field,symm]=mmread('well1850.mtx');
-[A,rows,cols,entries,rep,field,symm]=mmread('well1033.mtx');
+%[A,rows,cols,entries,rep,field,symm]=mmread('well1033.mtx');
 m=rows;
 n=cols;
 % A(20:20:end,:)=0;
@@ -19,14 +19,14 @@ b=ones(m,1);
 % [m,n] = size(A);
 
 % may be for many example 
-% for m = 1000:1000:2000
-%     for ratio = 0.6:0.1:0.8
+ for m = 1000:1000:2000
+     for ratio = 0.6:0.1:0.8
 
     % m = 1000;
     % ratio=0.7;
-   % n = floor( ratio * m);
-   % A = 2 * rand(m , n)-1;
-   % b = 2 * rand(m , 1)-1;
+    n = floor( ratio * m);
+    A = 2 * rand(m , n)-1;
+    b = 2 * rand(m , 1)-1;
 
 %% run program
 % initialize the parameter
@@ -76,8 +76,8 @@ b=ones(m,1);
             maxIterA = iter+1;
         end
     end
-%  end
-% end
+  end
+ end
 
 
 [xkLei,rkLei,countFMLei,countNWLei,beginNWLei,tfLei,vkLei]=Lei(x0,A,b,maxIter);
