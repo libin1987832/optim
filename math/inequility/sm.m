@@ -14,7 +14,8 @@ if ~out
     len = iter;
     rpk = b - A * xs;
 else
-    u = AI\bI;
+  %  u = AI\bI;
+    u = lsqminnorm(AI,bI);
     aa = spiecewise(A,b,u,x0);
     xs = x0 + aa * u;
     rpk = b - A * xs;
@@ -22,7 +23,8 @@ else
     for i=1:6
         I = find(rpk>=tol);
         AI = A(I,:);
-        hk = AI \ rpk(I);
+        hk = lsqminnorm(AI,rpk(I));
+ %       hk = AI \ rpk(I);
         aa = spiecewise(A,b,hk,x0);
         xs = x0 + aa * hk;
         x0 = xs;
