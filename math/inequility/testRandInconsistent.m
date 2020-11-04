@@ -1,3 +1,4 @@
+%% read data 
 % [A,rows,cols,entries,rep,field,symm]=mmread('../util/well1033.mtx');
 addpath('./util/');
 % [A,rows,cols,entries,rep,field,symm]=mmread('illc1850.mtx');
@@ -17,7 +18,7 @@ b=ones(m,1);
 % b = b1;
 % [m,n] = size(A);
 
-
+% may be for many example 
 % for m = 1000:1000:2000
 %     for ratio = 0.6:0.1:0.8
 
@@ -26,10 +27,14 @@ b=ones(m,1);
    % n = floor( ratio * m);
    % A = 2 * rand(m , n)-1;
    % b = 2 * rand(m , 1)-1;
+
+%% run program
+% initialize the parameter
     x0 = ones(n , 1);
     maxIter = 900;
     nf = 3;
     str = ['D','C','R','P'];
+% for the solution so here    
     [xkh,rkh,countFMh,countNWh,beginNWh,tfh,vkh,rkArrh]=han(x0,A,b,maxIter);
      rkh=b-A*xkh;
      rkh(rkh<0)=0;
@@ -43,10 +48,13 @@ b=ones(m,1);
     fprintA=zeros(1,8);
     record=zeros(4,5);
     fprintf('\\hline \n \\multirow{4}{*}{$ %d\\times %d $}',m,n);
+% there are four methods to run
     for i=1:4
         type = str(i);
+%         
         [xkD,flag,relres,iter,resvec,arvec,itersm,tfD]=hybridA(A,b,x0,maxIter,nf,[type,'HA']);
         resvec = arvec;
+% check the solution
         rkD=b-A*xkD;
         rkD(rkD<0)=0;
         dD=norm(rkD);
@@ -58,7 +66,8 @@ b=ones(m,1);
             beginN=0;
         end
         record(i,:)=[dD,gD,iter*nf,sumiter,tfD];
-       % fprintf('%s $ %d \\times %d $ & %g & %g & %g & %g & %g & %g\n',type,m,n,dD,gD,tfD,iter*nf,sumiter,beginN(1));
+% print for tex      
+        % fprintf('%s $ %d \\times %d $ & %g & %g & %g & %g & %g & %g\n',type,m,n,dD,gD,tfD,iter*nf,sumiter,beginN(1));
        fprintf('& %s & %g & %g & (%d,%d)  & %g \\\\\n',[type,'HA'],dD,gD,iter*nf,sumiter,tfD);
        iterA(i,1:iter+1)=resvec;
         if maxIterA < iter+1
