@@ -4,7 +4,7 @@ addpath('./util/');
 % [A,rows,cols,entries,rep,field,symm]=mmread('illc1850.mtx');
 %[A,rows,cols,entries,rep,field,symm]=mmread('illc1033.mtx');
 %[A,rows,cols,entries,rep,field,symm]=mmread('well1850.mtx');
-% [A,rows,cols,entries,rep,field,symm]=mmread('well1033.mtx');
+[A,rows,cols,entries,rep,field,symm]=mmread('well1033.mtx');
 m=rows;
 n=cols;
 % A(20:20:end,:)=0;
@@ -32,8 +32,10 @@ b=ones(m,1);
 % initialize the parameter
     x0 = ones(n , 1);
     maxIter = 900;
-    nf = 3;
-    str = ['D','C','R','P'];
+    nf = 2;
+    str = ['D','G','R','P'];
+    ATA = A'*A;
+    steplength = 1/(max(eig(ATA))+0.0001);
 % for the solution so here    
     [xkh,rkh,countFMh,countNWh,beginNWh,tfh,vkh,rkArrh]=han(x0,A,b,maxIter);
      rkh=b-A*xkh;
@@ -52,7 +54,7 @@ b=ones(m,1);
     for i=1:4
         type = str(i);
 %         
-        [xkD,flag,relres,iter,resvec,arvec,itersm,tfD]=hybridA(A,b,x0,maxIter,nf,[type,'HA']);
+        [xkD,flag,relres,iter,resvec,arvec,itersm,tfD]=hybridA(A,b,x0,steplength,maxIter,nf,[type,'HA']);
         resvec = arvec;
 % check the solution
         rkD=b-A*xkD;
@@ -86,7 +88,7 @@ gLei=norm(A'*rkLei);
 fprintf('Lei$ %d \\times %d $ & %g & %g & %4.5f & %d & %d & %g,%g&\n',m,n,dLei,gLei,tfLei,countFMLei,countNWLei,sum(rkLei>1e-13),sum(rkLei>=0));
 
 %% plot picture
-type=['r','g','k','c'];
+type=['r','g','k','g'];
 typet=['+','o','v','s'];
 beginp = 1;
 figure
@@ -98,7 +100,7 @@ for i=2:4
     h=semilogy(beginp:maxIterA,iterA(i,beginp:maxIterA),[type(i) typet(i)]);
     h.LineStyle = '--';
 end
-legend('DHA','CHA','RHA','PHA');
+legend('DHA','GHA','RHA','PHA');
 xlabel('Iteration Number');
 ylabel('the norm of the gradient');
     
