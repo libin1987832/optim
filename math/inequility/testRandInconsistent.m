@@ -2,10 +2,10 @@
 % [A,rows,cols,entries,rep,field,symm]=mmread('../util/well1033.mtx');
 addpath('./util/');
 rand_example = false;
-[A,rows,cols,entries,rep,field,symm]=mmread('illc1850.mtx');
+%[A,rows,cols,entries,rep,field,symm]=mmread('illc1850.mtx');
 %[A,rows,cols,entries,rep,field,symm]=mmread('illc1033.mtx');
 %[A,rows,cols,entries,rep,field,symm]=mmread('well1850.mtx');
-%[A,rows,cols,entries,rep,field,symm]=mmread('well1033.mtx');
+[A,rows,cols,entries,rep,field,symm]=mmread('well1033.mtx');
 m=rows;
 n=cols;
 % A(20:20:end,:)=0;
@@ -32,8 +32,8 @@ b(1:2:end)=-1;
 % initialize the parameter
     x0 = ones(n , 1);
     maxIter = 900;
-    nf = 2;
-    str = ['D','G','R','P'];
+    nf = 5;
+    str = ['D','C','R','P'];
     ATA = A'*A;
     steplength = 1/(max(eig(ATA))+0.0001);
 % for the solution so here    
@@ -81,7 +81,7 @@ b(1:2:end)=-1;
 %    end % for m
 
 
-[xkLei,rkLei,countFMLei,countNWLei,beginNWLei,tfLei,vkLei]=Lei(x0,A,b,maxIter);
+[xkLei,rkLei,countFMLei,countNWLei,beginNWLei,tfLei,vkLei]=Lei(x0,A,b,maxIter,3);
 rkLei=b-A*xkLei;
 rkLei(rkLei<0)=0;
 dLei=norm(rkLei);

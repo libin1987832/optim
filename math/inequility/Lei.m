@@ -1,4 +1,4 @@
-function [xk,rk,countFM,countNW,beginNW,tf,vk]=Lei(x0,A,b,maxIter)
+function [xk,rk,countFM,countNW,beginNW,tf,vk]=Lei(x0,A,b,maxIter,k)
 t=clock;
 tol=1e-16;
 %compute hybrid uIter
@@ -13,7 +13,7 @@ rn=norm(r0);
 am=max(max(A));
 ee=1e-16;% computer floating point arithmetic
 delt=am*m*n*10*ee;
-k=6;
+
 countFM=0;
 countNW=0;
 beginNW=0;
