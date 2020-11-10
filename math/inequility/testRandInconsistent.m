@@ -1,7 +1,8 @@
 %% read data 
 % [A,rows,cols,entries,rep,field,symm]=mmread('../util/well1033.mtx');
 addpath('./util/');
-% [A,rows,cols,entries,rep,field,symm]=mmread('illc1850.mtx');
+rand_example = false;
+[A,rows,cols,entries,rep,field,symm]=mmread('illc1850.mtx');
 %[A,rows,cols,entries,rep,field,symm]=mmread('illc1033.mtx');
 %[A,rows,cols,entries,rep,field,symm]=mmread('well1850.mtx');
 %[A,rows,cols,entries,rep,field,symm]=mmread('well1033.mtx');
@@ -10,7 +11,7 @@ n=cols;
 % A(20:20:end,:)=0;
 %b=rand(rows,1);
 b=ones(m,1);
- b(1:2:end)=-1;
+b(1:2:end)=-1;
 
 % [A1,b1,A2,b2,At1, At2, fm1, fm2, AL1, bL1, AL2, bL2] = readBreast(gamm1);
 % [A1,b1,A2,b2,At1, At2, fm1, fm2, AL1, bL1, AL2, bL2] = readHeart(gamm1); 
@@ -19,14 +20,13 @@ b=ones(m,1);
 % [m,n] = size(A);
 
 % may be for many example 
- for m = 1000:1000:2000
-     for ratio = 0.6:0.1:0.8
-
+% for m = 1000:1000:2000
+%     for ratio = 0.6:0.1:0.8
     % m = 1000;
     % ratio=0.7;
-    n = floor( ratio * m);
-    A = 2 * rand(m , n)-1;
-    b = 2 * rand(m , 1)-1;
+%    n = floor( ratio * m);
+%    A = 2 * rand(m , n)-1;
+%    b = 2 * rand(m , 1)-1;
 
 %% run program
 % initialize the parameter
@@ -76,8 +76,9 @@ b=ones(m,1);
             maxIterA = iter+1;
         end
     end
-  end
- end
+     
+%    end % for ration
+%    end % for m
 
 
 [xkLei,rkLei,countFMLei,countNWLei,beginNWLei,tfLei,vkLei]=Lei(x0,A,b,maxIter);
