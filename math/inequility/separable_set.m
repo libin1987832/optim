@@ -1,7 +1,7 @@
 clear
 clc
 
-n = 500;
+n = 5;
 w = [1,1];
 b = 1;
 x = rand( n , 2 );
@@ -18,12 +18,12 @@ p2 = x(~y,:);
 gamm = 0.5;
 fm1 = size(p1,1);
 fm2 = size(p2,1);
-A1(1:fm1,:) = -p1;
-A1(fm1+1:fm1+fm2,:) = p2;
+A1(1:fm1,:) = p1;
+A1(fm1+1:fm1+fm2,:) = -p2;
 A2 = [A1 ones(fm1+fm2,1)];
-b1 = [(1 - gamm)*ones(fm1,1);(1+gamm)*ones(fm2,1)];% 
+b1 = [(1 + gamm)*ones(fm1,1);(1-gamm)*ones(fm2,1)];% 
 b2 = ones(fm1+fm2,1);
-source_train = [-1*A1(1:fm1,:);A1(fm1+1:fm1+fm2,:)];
+source_train = [A1(1:fm1,:);-A1(fm1+1:fm1+fm2,:)];
  label_train = [ones(fm1,1);-1*ones(fm2,1)];
 %label_train = round(rand(fm1+fm2,1));
 SVMModel = fitcsvm(source_train,label_train,'BoxConstraint',30);
@@ -31,12 +31,14 @@ wsvn = SVMModel.Beta;
 bsvn = SVMModel.Bias;
 
 x0=zeros(size(A1,2),1);
-maxIter = 100;
+maxIter = 10;
 [xkh1,rkh,countFMh,countNWh,beginNWh,tfh,vkh,rkArrh]=han(x0,A1,b1,maxIter);
+rkh2 = b1-A1*xkh1;
+rkh3 = b1-A1*[1.5;1.5];
 [xkh2,rkh,countFMh,countNWh,beginNWh,tfh,vkh,rkArrh]=han([x0;0],A2,b2,maxIter);
 
-ww = [w;wsvn'; xkh1'; xkh2([1,2])'];
-bb = [b;-bsvn; gamm ; xkh2(3)];
+ww = [w; wsvn'; xkh1'; xkh2([1,2])'];
+bb = [b; -bsvn; gamm ; xkh2(3)];
 % ª≠∂‡Ãıœﬂ
 d = lineData(ww , bb, [0,1], [0,1]);
 plot(p1(:,1),p1(:,2),'r*',p2(:,1),p2(:,2),'+');
