@@ -18,7 +18,7 @@ fm1 = floor(m1/3*2);
 fm2 = floor(m2/3*2);
 A1 = [-A(rm1(1:fm1),:);B(rm2(1:fm2),:)];% train data
 b1 = [(1 - gamm)*ones(fm1,1);(1+gamm)*ones(fm2,1)];% 
-A2 = [-A(rm1(1:fm1),:), ones(fm1,1);B(rm2(1:fm2),:), -ones(fm2,1)];
+A2 = [-A(rm1(1:fm1),:), ones(fm1,1);B(rm2(1:fm2),:), -ones(fm2,1)];% gamm also is parametra
 b2 = ones(fm1+fm2, 1);
 % test data
 At1 = A(rm1(fm1+1:end),:);

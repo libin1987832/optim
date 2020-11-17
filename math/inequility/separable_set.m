@@ -1,7 +1,7 @@
 clear
 clc
 
-n = 200;
+n = 500;
 w = rand(1,2);
 b = rand(1);
 x = rand( n , 2 );
@@ -24,5 +24,6 @@ d = lineData(wsvn' , -bsvn, [0,1], [0,1]);
 plot(p1(:,1),p1(:,2),'r*',p2(:,1),p2(:,2),'+');
 hold on 
 line(d(1,[1,2])',d(1,[3,4])')
-%line([1,(-bsvn-wsvn(2))/wsvn(1)],[(-bsvn-wsvn(1))/wsvn(2),1])
+%line([1,(-bsvn-wsvn(1))/wsvn(2)],[(-bsvn-wsvn(2))/wsvn(1),1])
 %plot(d1)
+[w/norm(w);wsvn'/norm(wsvn)]
