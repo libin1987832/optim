@@ -1,7 +1,7 @@
 clear
 clc
 
-n = 5;
+n = 500;
 w = [1,1];
 b = 1;
 x = rand( n , 2 );
@@ -15,14 +15,14 @@ p2 = x(~y,:);
 
 %source_train = [p1;p2];
 %label_train = [ones(size(p1,1),1);-1*ones(size(p2,1),1)];
-gamm = 0.5;
+gamm = 0.8;
 fm1 = size(p1,1);
 fm2 = size(p2,1);
 A1(1:fm1,:) = p1;
 A1(fm1+1:fm1+fm2,:) = -p2;
-A2 = [A1 ones(fm1+fm2,1)];
+A2 = [[p1 -1*ones(fm1,1)];[-p2 ones(fm2,1)]];
 b1 = [(1 + gamm)*ones(fm1,1);(1-gamm)*ones(fm2,1)];% 
-b2 = ones(fm1+fm2,1);
+b2 = [ones(fm1,1);-ones(fm2,1)];
 source_train = [A1(1:fm1,:);-A1(fm1+1:fm1+fm2,:)];
  label_train = [ones(fm1,1);-1*ones(fm2,1)];
 %label_train = round(rand(fm1+fm2,1));
@@ -33,12 +33,11 @@ bsvn = SVMModel.Bias;
 x0=zeros(size(A1,2),1);
 maxIter = 10;
 [xkh1,rkh,countFMh,countNWh,beginNWh,tfh,vkh,rkArrh]=han(x0,A1,b1,maxIter);
-rkh2 = b1-A1*xkh1;
-rkh3 = b1-A1*[1.5;1.5];
+norm(rkh)
 [xkh2,rkh,countFMh,countNWh,beginNWh,tfh,vkh,rkArrh]=han([x0;0],A2,b2,maxIter);
-
+norm(rkh)
 ww = [w; wsvn'; xkh1'; xkh2([1,2])'];
-bb = [b; -bsvn; gamm ; xkh2(3)];
+bb = [b; -bsvn; 1 ; xkh2(3)];
 % ª≠∂‡Ãıœﬂ
 d = lineData(ww , bb, [0,1], [0,1]);
 plot(p1(:,1),p1(:,2),'r*',p2(:,1),p2(:,2),'+');
@@ -46,7 +45,7 @@ hold on
 line(d(:,[1,2])',d(:,[3,4])')
 %line([1,(-bsvn-wsvn(1))/wsvn(2)],[(-bsvn-wsvn(2))/wsvn(1),1])
 %plot(d1)
-[w/norm(w);wsvn'/norm(wsvn);xkh1'/norm(xkh1)]
+[w/norm(w);wsvn'/norm(wsvn);xkh1'/norm(xkh1);xkh2([1,2])'/norm(xkh2([1,2]))]
 
 
 
