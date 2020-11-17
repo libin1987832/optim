@@ -15,16 +15,16 @@ p2 = x(~y,:);
 
 %source_train = [p1;p2];
 %label_train = [ones(size(p1,1),1);-1*ones(size(p2,1),1)];
-gamm = 0.01;
+gamm = 0.3;
 fm1 = size(p1,1);
 fm2 = size(p2,1);
 A1(1:fm1,:) = p1;
 A1(fm1+1:fm1+fm2,:) = -p2;
-A2 = [[p1 -1*ones(fm1,1)];[-p2 -ones(fm2,1)]];
-b1 = [(1 + gamm)*ones(fm1,1);(-gamm-1)*ones(fm2,1)];% 
+A2 = [[p1 -1*ones(fm1,1)];[-p2 ones(fm2,1)]];
+b1 = [(1 + gamm)*ones(fm1,1);(1 - gamm)*ones(fm2,1)];% 
 b2 = [ones(fm1,1);-ones(fm2,1)];
 source_train = [A1(1:fm1,:);-A1(fm1+1:fm1+fm2,:)];
- label_train = [ones(fm1,1);-1*ones(fm2,1)];
+label_train = [ones(fm1,1);-1*ones(fm2,1)];
 %label_train = round(rand(fm1+fm2,1));
 SVMModel = fitcsvm(source_train,label_train,'BoxConstraint',30);
 wsvn = SVMModel.Beta;
@@ -37,7 +37,7 @@ norm(rkh)
 [xkh2,rkh,countFMh,countNWh,beginNWh,tfh,vkh,rkArrh]=han([x0;0],A2,b2,maxIter);
 norm(rkh)
 ww = [w; wsvn'; xkh1'; ];
-bb = [b; -bsvn; 1 ; ];
+bb = [b; -bsvn; gamm+1 ; ];
 % ª≠∂‡Ãıœﬂ
 d = lineData(ww , bb, [0,1], [0,1]);
 plot(p1(:,1),p1(:,2),'r*',p2(:,1),p2(:,2),'+');
