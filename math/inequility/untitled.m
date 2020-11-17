@@ -1,5 +1,6 @@
 addpath('./util')
 gamm1 = 0.5;
+% read data A1 b1 positive A2 b2 non positive fm1 fm2 
  [A1,b1,A2,b2,At1, At2, fm1, fm2, AL1, bL1, AL2, bL2] = readBreast(gamm1);
 % [A1,b1,A2,b2,At1, At2, fm1, fm2, AL1, bL1, AL2, bL2] = readHeart(gamm1);
 numberOfbeta = size(A1,2);
