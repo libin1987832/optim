@@ -1,10 +1,15 @@
 function alph=spiecewise(A,b,p,x)
 r=b-A*x;
+if p'*p<1e-15
+    alph = 0;
+    return
+end
 ap=A*p;
 ai=r./ap;
 as=sort(ai(ai>0));
 tas=[0;as];
 [am,an]=size(as);
+%alph=-1;
 for i =1:am
     t=as(i);
     if t<1
@@ -25,4 +30,6 @@ for i =1:am
         break;
     end    
 end
-
+% if alph <-0.5
+%     alph
+% end
