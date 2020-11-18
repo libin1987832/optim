@@ -11,15 +11,37 @@ x0=zeros(2,1);
 xkh1
 
 
-x = linspace(0,0.5);
-y = linspace(0,0.5);
+x = linspace(-0.1,0.1);
+y = linspace(-0.1,0.3);
 [X,Y] = meshgrid(x,y);
 XY = permute([X(:) Y(:)], [3 2 1]);
 XYsum = bsxfun(@times,[A1;B1], XY);
 XYs = sum(XYsum,2);
-XYnorm=reshape(XYs,[],numel(X));
-XYnorm(XYnorm<0)=0;
-Z=zeros(size(X));
+XYnorm = reshape(XYs,[],numel(X));
+XYnorm = ones(size(XYnorm))-XYnorm;
+XYnorm(XYnorm<0) = 0;
+XYn = sum(XYnorm.*XYnorm,1);
+Z = reshape(XYn,size(X));
+[m,n] = size(X);
+[row,column] = find(Z==min(Z(:))); 
+x(row)
+y(column)
+Z(row,column)
+% for i= 1:m
+%     for j=1:n
+%         n = [A1;B1]*[X(i,j);Y(i,j)];
+%         bn = 1 - n;
+%         bn(bn<0)=0;
+%         bn=bn'*bn;
+%         assert(abs(Z(i,j)-bn)<1e-15);
+%     end
+% end
+
+%contour(X,Y,Z)
+%surf(X,Y,Z)
+%level = 1;
+% s = isosurface(X,Y,Z,f,level);  
+% patch(s, 'EdgeColor','none','FaceColor','blue');  
 
   %  contour(X,Y,Z)
 
