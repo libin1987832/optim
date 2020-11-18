@@ -10,32 +10,40 @@ x0=zeros(2,1);
 [xkh1,rkh,countFMh,countNWh,beginNWh,tfh,vkh,rkArrh]=han(x0,[A1;B1],b1,maxIter);
 xkh1
 
+%% plot w b in one dimension
+% x = linspace(-0.1,0.1);
+% y = linspace(-0.1,0.3);
+% [X,Y] = meshgrid(x,y);
+% XY = permute([X(:) Y(:)], [3 2 1]);
+% % elementary wise mutilp
+% XYsum = bsxfun(@times,[A1;B1], XY);
+% XYs = sum(XYsum,2);
+% XYnorm = reshape(XYs,[],numel(X));
+% XYnorm = ones(size(XYnorm))-XYnorm;
+% XYnorm(XYnorm<0) = 0;
+% XYn = sum(XYnorm.*XYnorm,1);
+% Z = reshape(XYn,size(X));
+% [m,nn] = size(X);
+% [rows,columns] = find(Z==min(Z(:))); 
+% minbn =10;
 
-x = linspace(-0.1,0.1);
-y = linspace(-0.1,0.3);
-[X,Y] = meshgrid(x,y);
-XY = permute([X(:) Y(:)], [3 2 1]);
-XYsum = bsxfun(@times,[A1;B1], XY);
-XYs = sum(XYsum,2);
-XYnorm = reshape(XYs,[],numel(X));
-XYnorm = ones(size(XYnorm))-XYnorm;
-XYnorm(XYnorm<0) = 0;
-XYn = sum(XYnorm.*XYnorm,1);
-Z = reshape(XYn,size(X));
-[m,n] = size(X);
-[row,column] = find(Z==min(Z(:))); 
-x(row)
-y(column)
-Z(row,column)
+%% valid the data
 % for i= 1:m
-%     for j=1:n
+%     for j=1:nn
 %         n = [A1;B1]*[X(i,j);Y(i,j)];
 %         bn = 1 - n;
 %         bn(bn<0)=0;
 %         bn=bn'*bn;
-%         assert(abs(Z(i,j)-bn)<1e-15);
+%         if minbn > bn
+%             row = i;
+%             colm = j;
+%             minbn = bn;
+%         end
+%         assert(abs(Z(i,j)-bn)<1e-12);
 %     end
 % end
+% minbn
+
 
 %contour(X,Y,Z)
 %surf(X,Y,Z)
