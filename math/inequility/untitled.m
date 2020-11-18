@@ -10,13 +10,23 @@ x0=zeros(2,1);
 [xkh1,rkh,countFMh,countNWh,beginNWh,tfh,vkh,rkArrh]=han(x0,[A1;B1],b1,maxIter);
 xkh1
 
-x = linspace(0,0.5);
-y = linspace(0,0.5);
+x = linspace(0,0.01,0.5);
+y = linspace(0,0.01,0.5);
 [X,Y] = meshgrid(x,y);
-Z = sin(X)+cos(Y);
-contour(X,Y,Z)
+Z=zeros(size(X));
 
+    contour(X,Y,Z)
 
+A = rand(3);
+x = linspace(-1, 1,2); y = x; z = x;
+[XX,YY,ZZ] = meshgrid(x,y,z);                        %// step 1
+XYZ = [XX(:) YY(:) ZZ(:)];                           %// step 2
+XYZ2 = bsxfun(@times, XYZ, permute(XYZ, [1 3 2]));   %// step 3
+f = reshape(XYZ2,[],numel(A))*A(:);                  %// step 4
+f = reshape(f, size(XX));                            %// step 5
+level = 1;
+s = isosurface(XX,YY,ZZ,f,level);
+patch(s, 'EdgeColor','none','FaceColor','blue');  
 % gamm = 0;
 % px1 = 0:0.2:1;
 % p1 = [px1' -px1'+1.5];fm1 = size(p1,1);
