@@ -1,7 +1,7 @@
 clear
 clc
 gamm = 0.6;
-n = 1000;
+n = 5000;
 w = [1,1]+rand(1,2);
 b = 1+rand(1);
 x = rand( n , 2 );
@@ -52,6 +52,7 @@ b2 = [ones(fm1,1);ones(fm2,1)];
 source_train = [A1(1:fm1,:);-A1(fm1+1:fm1+fm2,:)];
 label_train = [ones(fm1,1);-1*ones(fm2,1)];
 %label_train = round(rand(fm1+fm2,1));
+
 tic
 SVMModel = fitcsvm(source_train,label_train,'BoxConstraint',600);
 toc
@@ -62,6 +63,8 @@ x0=zeros(size(A1,2),1);
 maxIter = 10;
 % there are some errors;
 %[xkh1,rkh,countFMh,countNWh,beginNWh,tfh,vkh,rkArrh]=han(x0,A1,b1,maxIter);
+
+
 numberOfbeta=2;
 AL2 = [-A2,-eye(size(A2,1))];
 bL2 = -b2;
@@ -73,21 +76,25 @@ toc
 
 
 maxIterA = 0;
-maxIter = 80;
+maxIter = 500;
 nf = 3;
 str = ['D','C','R','P','H'];
 steplength = 0;%1/(max(eig(ATA))+0.0001);
 A=A2;
  for i=1:5
-     type = str(i);   
+        type = str(i);   
         if i<5
         [xkD,flag,relres,iter,resvec,arvec,itersm,tfD]=hybridA(A2,b2,[x0;0],steplength,maxIter,nf,[type,'HA']);
         resvec = arvec;
         else
-        [xkD,rkh,countFMh,countNWh,itersm,tfD,vkh,rkArrh]=han([x0;0],A2,b2,maxIter); 
+        [xkD,rkh,countFMh,~,itersm,tfD,vkh,rkArrh]=han([x0;0],A2,b2,maxIter); 
         end%fprintf('& %s & %g \\\\\n',[type,'HA'],tfD);
-        % check the solution
-        rkD=b2-A*xkD;
+        % plot picture
+        A=A2;
+        b=b2;
+        resvec = arvec;
+% check the solution
+        rkD=b-A*xkD;
         rkD(rkD<0)=0;
         dD=norm(rkD);
         gD=norm(A'*rkD);
@@ -100,23 +107,21 @@ A=A2;
         record(i,:)=[dD,gD,iter*nf,sumiter,tfD];
 % print for tex      
         % fprintf('%s $ %d \\times %d $ & %g & %g & %g & %g & %g & %g\n',type,m,n,dD,gD,tfD,iter*nf,sumiter,beginN(1));
-       fprintf('& %s & %g & %g & (%d,%d)  & %g \\\\\n',[type,'HA'],dD,gD,iter*nf,sumiter,tfD);     
-       iterA(i,1:iter+1)=resvec;
-        if maxIterA < iter+1
-            maxIterA = iter+1;
-        end
-
+       fprintf('& %s & %g & %g & (%d,%d)  & %g \\\\\n',[type,'HA'],dD,gD,iter*nf,sumiter,tfD);
  end
 [xkh2,rkh,countFMh,countNWh,itersm,tfD,vkh,rkArrh]=han([x0;0],A2,b2,maxIter); 
+
+
 ww = [w; wsvn'; xkh2([1,2])';xkh2([1,2])'; xkh2([1,2])' ];
 bb = [b; -bsvn; xkh2(3)+1 ;xkh2(3)-1;xkh2(3)];
 display = [3,4,5];
+
 % »­¶àÌõÏß
-d = lineData(ww(display,:) , bb(display,:) , [0,1], [0,1]);
-plot(p1(:,1),p1(:,2),'r*',p2(:,1),p2(:,2),'+');
-hold on 
-line(d(:,[1,2])',d(:,[3,4])')
-[[w b]/norm(w);[wsvn' -bsvn]/norm(wsvn);[xkh2([1,2])' xkh2(3)]/norm(xkh2([1,2]))]
+% d = lineData(ww(display,:) , bb(display,:) , [0,1], [0,1]);
+% plot(p1(:,1),p1(:,2),'r*',p2(:,1),p2(:,2),'+');
+% hold on 
+% line(d(:,[1,2])',d(:,[3,4])')
+% [[w b]/norm(w);[wsvn' -bsvn]/norm(wsvn);[xkh2([1,2])' xkh2(3)]/norm(xkh2([1,2]))];
 
  
  
