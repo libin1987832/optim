@@ -20,7 +20,7 @@ else
     xs = x0 + aa * u;
     rpk = b - A * xs;
     x0=xs;
-    for i=1:6
+  %  for i=1:6
         I = find(rpk>=tol);
         AI = A(I,:);
         hk = lsqminnorm(AI,rpk(I));
@@ -29,7 +29,7 @@ else
         xs = x0 + aa * hk;
         x0 = xs;
         rpk = b - A * x0;
-    end
+ %   end
     len = aa;
     flag = flag + 6;
 end

@@ -73,14 +73,14 @@ toc
 
 
 maxIterA = 0;
-maxIter = 20;
+maxIter = 80;
 nf = 3;
-str = ['D','C','R','P'];
+str = ['D','C','R','P','H'];
 steplength = 0;%1/(max(eig(ATA))+0.0001);
 A=A2;
  for i=1:5
+     type = str(i);   
         if i<5
-        type = str(i);
         [xkD,flag,relres,iter,resvec,arvec,itersm,tfD]=hybridA(A2,b2,[x0;0],steplength,maxIter,nf,[type,'HA']);
         resvec = arvec;
         else
