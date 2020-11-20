@@ -92,7 +92,6 @@ b(1:2:end)=-1;
 [rk, rkLei,dLei, gLei] = residual(A,b,xkD);
 fprintf('Lei$ %d \\times %d $ & %g & %g & %4.5f & %d & %d & %g,%g&\n',m,n,dLei,gLei,tfLei,countFMLei,countNWLei,sum(rkLei>1e-13),sum(rkLei>=0));
 
-%% plot picture
 type=['r','c','k','g'];
 typet=['+','o','v','s'];
 beginp = 1;

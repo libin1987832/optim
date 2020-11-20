@@ -1,3 +1,4 @@
+% draw gradient contour
 function egdrawcontourNN()
 [X,Y] = meshgrid(-1:.05:0,0:.1:1);
 Z=der(X,Y);

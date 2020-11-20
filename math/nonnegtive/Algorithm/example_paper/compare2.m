@@ -1,4 +1,5 @@
 % compare our hybrid and Dax
+% draw picture to compare the different methods
 addpath('../FM');
 addpath('../util');
 addpath('../hybrid');

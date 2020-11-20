@@ -1,3 +1,4 @@
+% 内置算法 SVD要快 +  binary search step 
 function [xk,rk,fk,f0,lambe]=ssqr(x0,A,b)
 % take the binary search step length
 r=b-A*x0;

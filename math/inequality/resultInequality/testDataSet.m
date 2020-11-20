@@ -1,5 +1,4 @@
-function [] = 
-
+function output = testDataSet(A1,At1,At2,fm1,fm2,xkh,gamm)
 for k=1:2
     if k==2
     tAt1 = At1;
