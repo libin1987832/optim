@@ -1,4 +1,4 @@
-% Dax hybrid algorithm
+% Dax hybrid algorithm FMS + ssqrS
 function [xk,fk,xkArr,countFM,countNW,Q]=hybrid1S(x0,A,b)
 t=clock;
 %compute hybrid uIter

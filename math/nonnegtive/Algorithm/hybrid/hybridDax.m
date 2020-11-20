@@ -1,4 +1,4 @@
-% Dax hybrid algorithm
+% Dax hybrid algorithm + ssqr
 function [xk,fk,xkArr,countFM,countNW,Q]=hybrid1(x0,A,b,maxIter)
 t=clock;
 
