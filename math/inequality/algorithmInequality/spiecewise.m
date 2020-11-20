@@ -1,4 +1,4 @@
-% computation A(rt>0,:)*p A(rt>0,:)'*r(rt>0)
+% computation A(rt>0,:)*p(n) A(rt>0,:)'*r(rt>0)(n)
 function alph=spiecewise(A,b,p,x)
 r=b-A*x;
 if p'*p<1e-15

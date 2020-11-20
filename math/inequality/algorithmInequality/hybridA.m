@@ -66,7 +66,7 @@ while normAr > tol  && normr > tol
 %     r(r<0) = 0;
 %     normAr = norm(A' * r);
 %     normr = norm( r );
-    [rpk, r0, normr, normAr] = residual(A,b,x0);
+    [rpk, r, normr, normAr] = residual(A,b,x0,rpk);
     % record the value of objection function
     resvec(iter + 1) = normr;
     % record the value of the gradient function
