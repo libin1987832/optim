@@ -1,17 +1,14 @@
-function plotSemilogy(beginp,maxIterA,iterA,type,typet)
+function plotSemilogy(res,type,typet)
 %% plot picture
-type=['r','c','k','g'];
-typet=['+','o','v','s'];
-beginp = 1;
+[m,n]=size(res);
 figure
 %maxIterA = 70;
-h=semilogy(beginp:maxIterA,iterA(1,beginp:maxIterA),'bx');
+h=semilogy(1:n,res(1,1:n),'bx');
 h.LineStyle = '--';
 hold on
-for i=2:4
-    h=semilogy(beginp:maxIterA,iterA(i,beginp:maxIterA),[type(i) typet(i)]);
+for i=2:m
+    h=semilogy(1:n,res(i,1:n),[type(i) typet(i)]);
     h.LineStyle = '--';
 end
-legend('DHA','GHA','RHA','PHA');
 xlabel('Iteration Number');
 ylabel('the norm of the gradient');
