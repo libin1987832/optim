@@ -5,7 +5,7 @@
 % arvec
 % itersm
 % tf
-function [xk,flag,relres,iter,resvec,arvec,itersm,tf] = hybridNqr(A,b,x0,steplength,maxit,nf,type)
+function [xk,flag,relres,iter,resvec,arvec,itersm,tf] = hybridNqr(A,b,x0,steplengthOrk,maxit,nf,type)
 t=clock;
 
 % stop criterion
@@ -34,22 +34,14 @@ arvec(1) = normAr;
 indexsm = 0;
 % flag 0-4 return lsqr flag
 flag = 5;
-switch(type)
-    case 'GHA'
-        Qn = steplength;
-        R = steplength;
-        Q = Qn;
-    otherwise
-        [Q,R]=qr(A);
-        Qn=Q(:,1:n);
-end
+
 % [xfA,rpk] = fmnf(A,b,x0,n,Q,R,rpk,nf);
 %while normAr > tol * normA * normr && normr > tol
 while normAr > tol  && normr > tol
     iter = iter + 1;
 %    [xfA,rpk] = fmnf(A,b,x0,n,Q,R,rpk,nf,type);
-    [xfA,rpk] = simple(A,b,x0,n,Q,R,rpk,nf,type);
-    isSub = strategies(A,b,Qn,type,iter,nf,rpk,xfA);
+    [xfA,rpk] = simpleNqr(A,b,x0,n,steplengthOrk,rpk,nf,type);
+    isSub = strategiesNqr(A,b,steplengthOrk,type,iter,nf,rpk,xfA);
     if isSub
         xf = xfA(:, end);
         [xs,rpk,len,flag] = sm(A, b, n, rpk, xf);

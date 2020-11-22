@@ -54,19 +54,20 @@ rangeMin = -1;
     maxIterA = 0;
     fprintA=zeros(1,8);
     record=zeros(4,5);
+    steplengthOrk = 3;
     fprintf('\\hline \n \\multirow{4}{*}{$ %d\\times %d $}',m,n);
 % there are four methods to run
     for i=1:4
         type = str(i);
 %         
-        [xkD,flag,relres,iter,resvec,arvec,itersm,tfD]=hybridA(A,b,x0,steplength,maxIter,nf,[type,'HA']);
-        [rk, rkD, dD, gD] = residual(A,b,xkD);
+        [xkD,flag,relres,iter,resvec,arvec,itersm,tfD]=hybridNqr(A,b,x0,steplengthOrk,maxIter,nf,[type,'HA']);
+  %      [rk, rkD, dD, gD] = residual(A,b,xkD);
         resvec = arvec;
 % check the solution
-%         rkD=b-A*xkD;
-%         rkD(rkD<0)=0;
-%         dD=norm(rkD);
-%         gD=norm(A'*rkD);
+        rkD=b-A*xkD;
+        rkD(rkD<0)=0;
+        dD=norm(rkD);
+        gD=norm(A'*rkD);
         beginN=find(itersm>0);
         sumiter=sum(itersm>0);
         fprintA(2*i-1:2*i)=[gD,tfD];
