@@ -8,18 +8,18 @@ n = 500;
 [A,b,x0]=randInequality(m,n,2,-1);
 
 iter = 20;
-res = zeros(5,iter);
+res = zeros(6,iter);
 rk0 = b - A * x0;
 tic
 %D = zeros(n,1);
 D = A.*A;
-D = sum(D,2);
+D = sum(D,1);
 rk = rk0;
 xk = x0;
 for i = 1:iter
     [rk, rkN, nRkN, nGARk] = residual(A,b,xk,rk);
     res(1,i) = nRkN;
-    [xk,rk] = FixedGS(xk,A,b,D,rk,1);
+    [xk,rk] = FixedGS(xk,A,b,D,rk,3);
 end
 toc
 
@@ -65,6 +65,26 @@ for i = 1:iter
 end
 toc
 
-type=['r','c','k','g','w'];
-typet=['+','o','v','s','.'];
+tic
+xk = x0;
+rk = rk0;
+ATA = A' * A;
+D = diag(diag(ATA));
+L = tril(ATA) - D;
+U = triu(ATA) - D;
+iDL = inv(D+L);
+for i = 1:iter
+    [rk, rkN, nRkN, nGARk] = residual(A,b,xk,rk);
+    res(6,i) = nRkN;
+    zk = -rk;
+    zk(zk<0) = 0;
+    ATb = A' * ( b + zk );
+    xk = -iDL * ( U * xk -  ATb);
+    rk = b - A * xk;
+end
+toc
+
+
+type=['r','c','k','g','w','b'];
+typet=['+','o','v','s','.','+'];
 plotSemilogy(res,type,typet);

@@ -10,7 +10,7 @@ zk(zk<0)=0;
 for j=1:niter
     for i=1:n
         r=rk+zk;
-        xk(i)=xk(i)+(A(:,i)'*r)/D(i);
+        xk(i) = xk(i) + (A(:,i)'*r)/D(i);
         rk = b - A*xk;
     end
 end

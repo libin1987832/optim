@@ -1,6 +1,7 @@
 %% read data 
 % [A,rows,cols,entries,rep,field,symm]=mmread('../util/well1033.mtx');
-addpath('./util/');
+addpath('./dataInequality/');
+addpath('./algorithmInequality/')
 rand_example = false;
 %[A,rows,cols,entries,rep,field,symm]=mmread('illc1850.mtx');
 %[A,rows,cols,entries,rep,field,symm]=mmread('illc1033.mtx');
@@ -31,7 +32,9 @@ b(1:2:end)=-1;
 %% run program
 % initialize the parameter
 %    x0 = ones(n , 1);
-[A,b,x0]=randInequality(m,n,rangeMax,rangeMin)
+rangeMax = 2;
+rangeMin = -1;
+[A,b,x0]=randInequality(m,n,rangeMax,rangeMin);
     maxIter = 900;
     nf = 5;
     str = ['D','C','R','P'];
