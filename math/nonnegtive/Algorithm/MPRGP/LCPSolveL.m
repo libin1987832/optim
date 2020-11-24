@@ -26,22 +26,24 @@ else
                                      % 2*dimen+1 (last of tableau)
     Ie=zeros(dimen,1);
     Ie(locat) = -1;
-    tableau = [eye(dimen), M, Ie, q];                                 
-                                     
+  %  tableau = [eye(dimen), M, Ie, q];                                 
+    tableauN = [eye(dimen), M, Ie, q];                                   
     % 选择基向量的索引                               
     basis(locat) = 2*dimen+1; % Replace that index with the column
     
     % 选择基向量的索引   
     cand = locat + dimen;
     
-    pivot =  tableau(locat,:)/tableau(locat,2*dimen+1);
+    pivot =  tableauN(locat,:)/tableau(locat,2*dimen+1);
+     
     % From each column subtract the column 2*dimen+1, multiplied by pivot
     % P = I - pivot
-    tableau = tableau - tableau(:,2*dimen+1)*pivot; 
-    tableau(locat,:) = pivot; % set all elements of row locat to pivot
+    tableauN = tableauN - tableau(:,2*dimen+1)*pivot; 
+    tableauN(locat,:) = -pivot; % set all elements of row locat to pivot
     % Perform complementary pivoting
     while max(basis) == 2*dimen+1 && loopcount < maxits
         loopcount = loopcount + 1;
+        tableau = tableauN;
         eMs = tableau(:,cand); % This is used to check convergence (pivtol)
         missmask = eMs >= 0;  % Check if elements of eMs are less than zero
         quots = tableau(:,2*dimen+2)./eMs;
@@ -49,10 +51,12 @@ else
         [~,locat] = max(quots);
         % Check if at least one element is not missing
         if  sum(missmask)~=dimen && abs(eMs(locat)) > pivtol 
+            tableauN(:,cand) = zeros(dimen,1); 
+            tableauN(locat,cand) = -1; 
             % Reduce tableau
-            pivot =  tableau(locat,:)/tableau(locat,cand);
-            tableau = tableau - tableau(:,cand)*pivot;
-            tableau(locat,:) = pivot;
+            pivot =  tableauN(locat,:)/tableau(locat,cand);
+            tableauN = tableauN - tableau(:,cand)*pivot;
+            tableauN(locat,:) = -pivot;
             oldVar = basis(locat);
             % New variable enters the basis
             basis(locat) = cand;
