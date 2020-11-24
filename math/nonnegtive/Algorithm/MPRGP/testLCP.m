@@ -4,4 +4,6 @@
 
 M = [10,0,-2;2,0.1,-0.4;0,0.2,0.1];
 q = [10;1;-1];
-[w,z,retcode] = Bard(M,q)
+% [w,z,retcode] = Bard(M,q)
+% [w,z,retcode] = Murty(M,q)
+[w,z,retcode] = Graves(M,q)

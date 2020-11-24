@@ -1,11 +1,9 @@
-function  [w,z,retcode] = Bard(M,q,pivtol,maxits)
-
+function [w,z,retcode] = Graves(M,q,pivtol,maxits)
 if nargin<3, pivtol = 1e-8; maxits = 1e4; end;
 if nargin<4, maxits = 1e3; end;
 n = length(q);
 if size(M)~=[n n]; error('Matrices are not compatible'); end;
 
-rayTerm = false;
 loopcount = 1;
 
 if min(q)>=0 % If all elements are positive a trivial solution exists
@@ -15,23 +13,18 @@ if min(q)>=0 % If all elements are positive a trivial solution exists
      retcode = [1, loopcount]; 
 else
     dimen = size(M,1); % Number of rows
-    cycle = zeros(maxits,dimen);
     I = eye(dimen);
     % Let artificial variable enter the basis
     basis = 1:dimen; % A set of row indices in the tableau
-    Mq = [M,q];
-    cycle(1, : ) = basis;
+    MqI = [I,M,q];
     % Perform complementary pivoting
-    while min(Mq(:,end))<0 && loopcount < maxits
-        diff = cycle(1:loopcount-1, : ) - repmat(basis,loopcount-1,1);
-        diffs = sum(abs(diff),2);
-        if find(diffs == 0) >0 & loopcount > 1
-            retcode = [2, loopcount]; 
-            error('cycle!'); 
-            break;
-        end
+    while min(MqI(:,end))<0 && loopcount < maxits
         loopcount = loopcount + 1;
-        [~,locat] = min(Mq(:,end)); % Row of minimum element in column
+
+        test = MqI(:,dimen)./repmat(MqI(:,end),1,dimen);
+        y = all(diff(test'),2);
+        index = find(y >0);
+        [~,locat] = min(test(:,index));
         % 2*dimen+1 (last of tableau)
 
         P = -Mq(:,locat)/Mq(locat,locat);
@@ -48,7 +41,6 @@ else
         else
             basis(locat) = oldVar + dimen;
         end
-        cycle( loopcount , : ) = basis;
     end
     % Return the solution to the LCP
     vars = zeros(2*dimen+1,1);
