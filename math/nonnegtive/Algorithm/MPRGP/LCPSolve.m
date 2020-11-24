@@ -70,13 +70,21 @@ if min(q)>=0 % If all elements are positive a trivial solution exists
 else 
     dimen = size(M,1); % Number of rows
     % Create initial tableau
+    % |   |    |    |   |
+    % | I | -M | -e | q |
     tableau = [eye(dimen), -M, -ones(dimen, 1), q];
+    
     % Let artificial variable enter the basis
     basis = 1:dimen; % A set of row indices in the tableau
+    
+    % 选择最小元素，作为输入变量
     [~,locat] = min(tableau(:,end)); % Row of minimum element in column 
                                      % 2*dimen+1 (last of tableau)
+    % 选择基向量的索引                               
     basis(locat) = 2*dimen+1; % Replace that index with the column
+    % 选择基向量的索引   
     cand = locat + dimen;
+    
     pivot = tableau(locat,:)/tableau(locat,2*dimen+1);
     % From each column subtract the column 2*dimen+1, multiplied by pivot
     tableau = tableau - tableau(:,2*dimen+1)*pivot; 
