@@ -16,24 +16,31 @@ else
     I = eye(dimen);
     % Let artificial variable enter the basis
     basis = 1:dimen; % A set of row indices in the tableau
-    MqI = [I,M,q];
+    MqI = [M,I,q];
     % Perform complementary pivoting
     while min(MqI(:,end))<0 && loopcount < maxits
         loopcount = loopcount + 1;
-
-        test = MqI(:,dimen)./repmat(MqI(:,end),1,dimen);
-        y = all(diff(test'),2);
-        index = find(y >0);
-        [~,locat] = min(test(:,index));
+        indexq = MqI(:,end) < 0;
+      
+        if sum(indexq) ==1
+            locat = find(indexq>0);
+        else
+            tMqI = MqI(:,dimen+1:2*dimen);
+            tMqI(~indexq,:) = -Inf;
+            test = tMqI(indexq,1:dimen)./repmat(MqI(indexq,end),1,dimen);
+            y = any(diff(test'),2);
+            index = find(y ~= 0);
+            [~,locat] = max(test(:,index(1)));
+        end
         % 2*dimen+1 (last of tableau)
 
-        P = -Mq(:,locat)/Mq(locat,locat);
-        P(locat) = -1/Mq(locat,locat);
-        Mq(:,locat) = -I(:,locat);
+        P = -MqI(:,locat)/MqI(locat,locat);
+        P(locat) = -1/MqI(locat,locat);
+        MqI(:,locat) = -I(:,locat);
         
-        pivot = Mq(locat,:);
-        Mq = Mq + P*pivot;
-        Mq(locat,:) = P(locat)*pivot;
+        pivot = MqI(locat,:);
+        MqI = MqI + P*pivot;
+        MqI(locat,:) = P(locat)*pivot;
         oldVar = basis(locat);
         % Select next candidate for entering the basis
         if oldVar > dimen
@@ -44,7 +51,7 @@ else
     end
     % Return the solution to the LCP
     vars = zeros(2*dimen+1,1);
-    vars(basis) = Mq(:,end).';
+    vars(basis) = MqI(:,end).';
     w = vars(1:dimen,1);
     z = vars(dimen+1:2*dimen,1);
     retcode = [1, loopcount]; 
