@@ -4,7 +4,7 @@ if nargin<3, pivtol = 1e-8; maxits = 1e4; end;
 if nargin<4, maxits = 1e3; end;
 n = length(q);
 if size(M)~=[n n]; error('Matrices are not compatible'); end;
-
+ 
 rayTerm = false;
 loopcount = 0;
 if min(q)>=0 % If all elements are positive a trivial solution exists
@@ -13,15 +13,14 @@ if min(q)>=0 % If all elements are positive a trivial solution exists
     z = zeros(size(q));
 else 
     dimen = size(M,1); % Number of rows
-    
+    I = eye(dimen);   
     % Let artificial variable enter the basis
     basis = 1:dimen; % A set of row indices in the tableau
     nonbasis = (dimen+1):(2*dimen+1);
     % 选择最小元素，作为输入变量
     [~,locat] = min(q); % Row of minimum element in column 
-                                     % 2*dimen+1 (last of tableau)
-    Ie=zeros(dimen,1);
-    Ie(locat) = -1;
+                             % 2*dimen+1 (last of tableau)
+    Ie= - I(:,locat);
    % Create initial tableau
     % |   |    |    |   |
     % | I | M | e | q |
@@ -52,8 +51,7 @@ else
         if  sum(missmask)~=dimen && abs(eMs(locat)) > pivtol 
             P = -tableau(:,cand3)/tableau(locat,cand3);
             P(locat) = -1/tableau(locat,cand3);
-            tableau(:,cand3) = zeros(dimen,1); 
-            tableau(locat,cand3) = -1; 
+            tableau(:,cand3) = -I(:,locat);
             % Reduce tableau
             pivot =  tableau(locat,:);
             tableau = tableau + P*pivot;
