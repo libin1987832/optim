@@ -21,7 +21,7 @@ else
     while min(MqI(:,end))<0 && loopcount < maxits
         loopcount = loopcount + 1;
         indexq = MqI(:,end) < 0;
-      
+    
         if sum(indexq) ==1
             locat = find(indexq>0);
         else
