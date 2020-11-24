@@ -87,6 +87,7 @@ else
     
     pivot = tableau(locat,:)/tableau(locat,2*dimen+1);
     % From each column subtract the column 2*dimen+1, multiplied by pivot
+    % P = I - pivot
     tableau = tableau - tableau(:,2*dimen+1)*pivot; 
     tableau(locat,:) = pivot; % set all elements of row locat to pivot
     % Perform complementary pivoting
