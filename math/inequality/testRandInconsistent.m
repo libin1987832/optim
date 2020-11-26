@@ -6,13 +6,13 @@ rand_example = false;
 %[A,rows,cols,entries,rep,field,symm]=mmread('illc1850.mtx');
 %[A,rows,cols,entries,rep,field,symm]=mmread('illc1033.mtx');
 %[A,rows,cols,entries,rep,field,symm]=mmread('well1850.mtx');
-[A,rows,cols,entries,rep,field,symm]=mmread('well1033.mtx');
-m=rows;
-n=cols;
-% A(20:20:end,:)=0;
-%b=rand(rows,1);
-b=ones(m,1);
-b(1:2:end)=-1;
+% [A,rows,cols,entries,rep,field,symm]=mmread('well1033.mtx');
+% m=rows;
+% n=cols;
+% % A(20:20:end,:)=0;
+% %b=rand(rows,1);
+% b=ones(m,1);
+% b(1:2:end)=-1;
 
 % [A1,b1,A2,b2,At1, At2, fm1, fm2, AL1, bL1, AL2, bL2] = readBreast(gamm1);
 % [A1,b1,A2,b2,At1, At2, fm1, fm2, AL1, bL1, AL2, bL2] = readHeart(gamm1); 
@@ -32,6 +32,8 @@ b(1:2:end)=-1;
 %% run program
 % initialize the parameter
 %    x0 = ones(n , 1);
+m = 1000;
+n = 200;
 rangeMax = 2;
 rangeMin = -1;
 [A,b,x0]=randInequality(m,n,rangeMax,rangeMin);

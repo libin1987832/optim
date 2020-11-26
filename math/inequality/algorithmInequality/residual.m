@@ -8,5 +8,5 @@ end
 rkN = rk;
 rkN(rkN<0) = 0;
 GARk = A' * rkN;
-nGARk = GARk'*GARk;
-nRkN = rkN'*rkN;
+nGARk = sqrt(GARk'*GARk);
+nRkN = sqrt(rkN'*rkN);
