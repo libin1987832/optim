@@ -1,6 +1,7 @@
 % 精确方法求解（中间使用MATLAB自带的算法求解带约束的最小二乘问题）
 % 将非负最小二乘问题转变成 普通的最小二乘问题?
-function [x0,f0]=alg1(A,b,x0,e)
+function [x0,res,tf]=alg1(A,b,x0,maxIter,tol)
+
 [m,n]=size(x0);
 options = optimoptions('LSQLIN'); 
  options.OptimalityTolerance=e;
