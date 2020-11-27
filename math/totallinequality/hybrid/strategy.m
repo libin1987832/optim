@@ -30,11 +30,15 @@ switch upper(type)
         xk1 = xA(:,end - 1);
         uk =  xk - xk1;
         rkn=rkp - eIter * A * uk;
-        ssign=sum(~xor(rk>tol, rkn>tol));
-        [xk2,~]=krylov(A,b,x0,rkn);
-        constraint = ~all(xk2>-1e15);
-        if ssign==m & constraint
-            isSub = true;
+        Irkn = rkn>tol;
+        ssign=sum(~xor(rk>tol, Irkn));
+        if ssign==m 
+            brkp = b - rkp;
+            AI = A(Irkn,:);
+            bI = brkp(Irkn);
+            [xk2,flag,relres,iter,resvec,lsvec,out] = lsqrm(AI,bI,[],[],[],[],xk,[],[],[],[],0);
+            constraint = all(xk2>-1e15);
+            isSub = constraint;
         end
     case 'CHA'
         x0 = xA(:,end - 1);

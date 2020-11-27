@@ -1,4 +1,4 @@
-function [xk,resvec,arvec,tf] = hybridnnls(A,b,x0,alpha,nf,maxit)
+function [xk,resvec,arvec,face1vec,face2vec,tf] = hybridnnls(A,b,x0,alpha,nf,maxit)
 t=clock;
 
 % stop criterion
@@ -6,7 +6,7 @@ tol = 1e-13;
 [m,n] = size(A);
 lsqrTol = 1e-13;
 maxIter = 20;
-[rpk, normr, xmin, Ar, normKKT] = kktResidual(A, b, x0,[],1);
+[rpk, normr, xmin, Ar, normKKT,face1,face2] = kktResidual(A, b, x0,[],1);
 iter = 0;
 % the residual vector
 resvec = zeros(1,(maxit + 1)*(nf+1));
@@ -14,8 +14,14 @@ resvec = zeros(1,(maxit + 1)*(nf+1));
 arvec = zeros(1,(maxit + 1)*(nf+1));
 % subspace minization
 itersm = zeros(1,maxit + 1);
+% face b-Ax
+face1vec = zeros(1,(maxit + 1)*(nf+1));
+% face x
+face2vec = zeros(1,(maxit + 1)*(nf+1));
 resvec(1) = xmin;
 arvec(1) = normKKT;
+face1vec(1) =face1;
+face2vec(1) =face2;
 indexsm = 0;
 % flag 0-4 return lsqr flag
 flag = 5;
@@ -31,15 +37,18 @@ while normKKT > tol
     % subspace
     AI = A(AA,:);
     bI = rpk(AA);
-    [u,flag,relres,iter,resvec,lsvec,out] = lsqrm(AI,bI,lsqrTol,maxIter,[],[],zeros(n,1),A,b,x0,AA,2);
+    [u,flag,relres,~,resvec,lsvec,out] = lsqrm(AI,bI,lsqrTol,maxIter,[],[],zeros(n,1),A,b,x0,AA,2);
     xls = x0 + u;
     [x,rpk] = projectfixed(A,b,xls,rpk,alpha);
     x0 = x;
-    [rpk, normr, xmin, Ar, normKKT] = kktResidual(A, b, x ,rpk,1);
-    resvec((iter-1)*nf + i - 1) = normr;
+    [rpk, normr, xmin, Ar, normKKT, face1, face2] = kktResidual(A, b, x ,rpk,1);
+    resvec((iter-1)*(nf+1) + i-1) = normr;
     % record the value of the gradient function
-    arvec((iter-1)*nf + i - 1) = normKKT;
-    xfA(:,i) = x;
+    arvec((iter-1)*(nf+1) + i-1) = normKKT;
+    face1vec((iter-1)*(nf+1) + i-1) = face1;
+    face2vec((iter-1)*(nf+1) + i-1) = face2;
+    
+    xfA(:,i-1) = x;
     end
     isSub = strategy(A,b,x0,[],'PHA',iter,nf,rpk,xfA);
     %isSub = strategy(A,b,steplengthOrk,2,iter,nf,rpk,xfA);
@@ -48,21 +57,20 @@ while normKKT > tol
         % subspace
         AI = A(AA,:);
         bI = rpk(AA);
-        [u,flag,relres,iter,resvec,lsvec,out] = lsqrm(AI,bI,lsqrTol,maxIter,[],[],zeros(n,1),A,b,x0,AA,3);
+        [u,flag,relres,~,resvec,lsvec,out] = lsqrm(AI,bI,lsqrTol,maxIter,[],[],zeros(n,1),A,b,x0,AA,3);
         indexsm = indexsm + 1;
-        % record step length and statistic to number of sm
-        itersm(iter + 1) = len;
-        x0 = x0 + u;
+        xls = x0 + u;
+        x0 = xls;
     else
- %       [xfA,rpk] = fmnf(A,b,x0,n,Q,R,rpk,nf);
-        itersm(iter + 1) = -1;
         x0 = xfA(:, end);
     end
-    [rpk, normr, xmin, Ar, normKKT] = kktResidual(A, b, x0 , [], 1);
+    [rpk, normr, xmin, Ar, normKKT, face1, face2] = kktResidual(A, b, x0 , [], 1);
     % record the value of objection function
-    resvec(iter*nf + 1) = normr;
+    resvec((iter-1)*(nf+1) + nf+1) = normr;
     % record the value of the gradient function
-    arvec(iter*nf + 1) = normKKT;
+    arvec((iter-1)*(nf+1) + nf+1) = normKKT;
+    face1vec((iter-1)*(nf+1) + nf + 1) = face1;
+    face2vec((iter-1)*(nf+1) + nf + 1) = face2;
     if iter > maxit || flag == 0
         break;
     end
@@ -74,8 +82,5 @@ while normKKT > tol
     end
 end
 xk = x0;
-relres = normr;
-resvec = resvec(1:iter + 1);
-itersm = itersm(1:iter + 1);
-arvec = arvec(1:iter + 1);
+
 tf = etime(clock,t);

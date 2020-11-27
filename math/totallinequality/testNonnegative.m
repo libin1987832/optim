@@ -37,7 +37,7 @@ A=[A1;-A2];
 b=[b1;-b2];
 x0=ones(n,1);
 det=ones(n,1);
-maxIterA = 30;
+maxIterA = 10;
 beginp = 1;
 options = optimoptions('lsqlin','Algorithm','interior-point','Display','iter');
 options.Display = 'off';
@@ -47,7 +47,7 @@ options.StepTolerance = 1e-4;
 % h.LineStyle = '--';
 % hold on 
 alpha = min(eig(A'*A));
-[xk,resvec,arvec,tf] = hybridnnls(A,b,x0,alpha,5,maxIterA);
+[xk,resvec,arvec,face1,face2,tf] = hybridnnls(A,b,x0,alpha,5,maxIterA);
 % A2(A2<0)=0.5;
 % A1(A1<0)=1;
 % A=[2,1;2,-1];
