@@ -57,7 +57,13 @@ while normKKT > tol
         % subspace
         AI = A(AA,:);
         bI = rpk(AA);
-        [u,flag,relres,~,resvec,lsvec,out] = lsqrm(AI,bI,lsqrTol,maxIter,[],[],zeros(n,1),A,b,x0,AA,3);
+        u = lsqminnorm(AI,bI);
+        alpha = 1;
+        while
+        f = funmin(A,b,x0,u,alpha)
+        
+        %u = AI\bI;
+        %[u,flag,relres,~,resvec,lsvec,out] = lsqrm(AI,bI,lsqrTol,maxIter,[],[],zeros(n,1),A,b,x0,AA,3);
         indexsm = indexsm + 1;
         xls = x0 + u;
         x0 = xls;
@@ -82,5 +88,14 @@ while normKKT > tol
     end
 end
 xk = x0;
+resvec = resvec(resvec>0);
+% the normal gradient 
+arvec = arvec(arvec>0);
+% subspace minization
+itersm = itersm(itersm>0);
+% face b-Ax
+face1vec = face1vec(face1vec>0);
+% face x
+face2vec = face2vec(face2vec>0);
 
 tf = etime(clock,t);
