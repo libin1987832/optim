@@ -54,8 +54,9 @@ while normKKT > tol
     %isSub = strategy(A,b,steplengthOrk,2,iter,nf,rpk,xfA);
     if isSub
         AA = (rpk>tol);
+        RR = (x0>0);
         % subspace
-        AI = A(AA,:);
+        AI = A(AA,RR);
         bI = rpk(AA);
         u = lsqminnorm(AI,bI);
 %         f1 = funmin(A,b,x0,u,1);
@@ -63,8 +64,10 @@ while normKKT > tol
 %             x0=x0+u;
 %             x0(x0<0)=0;
 %         end
+        uz=zeros(n,1);
+        uz(RR) = u;
          alphat = 1;
-        f1 = funmin(A,b,x0,u,0);
+        f1 = funmin(A,b,x0,uz,0);
         while alphat>1e-10
             f = funmin(A,b,x0,u,alphat);
             if f < f1

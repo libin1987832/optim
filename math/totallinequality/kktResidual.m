@@ -15,8 +15,8 @@ if nargin == 5
     Ar = -A' * r;
    
     mxAr = min( x , Ar );
-    normKKT = sqrt( mxAr' * mxAr );
-    %normKKT = max(abs(x.*Ar));
+    %normKKT = sqrt( mxAr' * mxAr );
+    normKKT = max(abs(x.*Ar));
     Ar = min(Ar);
     face1 = sum(rpk>-1e-15);
     face2 = sum(x>1e-10);
