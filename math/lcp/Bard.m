@@ -5,15 +5,14 @@ if nargin<4, maxits = 1e3; end;
 n = length(q);
 if size(M)~=[n n]; error('Matrices are not compatible'); end;
 
-rayTerm = false;
-loopcount = 1;
 
 if min(q)>=0 % If all elements are positive a trivial solution exists
     %  As w - Mz = q, if q >= 0 then w = q a, and z = 0
     w = q;
     z = zeros(size(q));
-     retcode = [1, loopcount]; 
+    retcode = [1, 0]; 
 else
+    loopcount = 1;
     dimen = size(M,1); % Number of rows
     cycle = zeros(maxits,dimen);
     I = eye(dimen);
