@@ -292,14 +292,14 @@ for ii = 1 : maxit
     v = v / alpha;
     normar = alpha * abs( s * phi);
     if ~out & type >0
-        xk = xs + x;
-        rkp = bLL - ALL * xk;
-        AAk = (rkp>1e-15);
-        empty = sum( xor( AA, AAk));
         if type == 2
            empty = ~all(x>-1e15);
         end
         if type == 3
+            xk = xs + x;
+            rkp = bLL - ALL * xk;
+            AAk = (rkp>1e-15);
+            empty = sum( xor( AA, AAk));
             constraint = ~all(x>-1e15);
             empty = empty | constraint;
         end

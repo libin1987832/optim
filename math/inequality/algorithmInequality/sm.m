@@ -5,8 +5,9 @@ function [xs,rpk,len,flag]=sm(A,b,n,rpk,x0)
 tol = 1e-15;
 lsqrTol = 1e-15;
 maxIter = 5;
-
+% AA indice of active set
 AA = (rpk>tol);
+% subspace
 AI = A(AA,:);
 bI = rpk(AA);
 

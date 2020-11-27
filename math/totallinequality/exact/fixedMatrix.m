@@ -1,9 +1,9 @@
 % 精确方法求解（中间使用MATLAB自带的算法求解带约束的最小二乘问题）
 % 将非负最小二乘问题转变成 普通的最小二乘问题?
-function [x0, resvec, arvec, tf]=fixedMatrix(A,b,x0,maxit,tol)
+function [x0, resvec, arvec, tf]=fixedMatrix(A,b,x0,maxit,tol,options)
 [m,n]=size(A);
-options = optimoptions('LSQLIN');
-options.OptimalityTolerance=tol;
+
+
 index = 1;
 
 % the residual vector
@@ -22,7 +22,7 @@ while KKT > tol && index < maxit
     z(z<0) = 0;
     bk = b + z;
     %内置使用MATLAB自带的算法
-    [x1,f1,residual,exitflag]=lsqlin(A,bk,[],[],[],[],zeros(n,1),Inf*ones(n,1),x0,options);
+    [x1,f1,residual,exitflag,output,ff]=lsqlin(A,bk,[],[],[],[],zeros(n,1),Inf*ones(n,1),x0,options);
     %[x1,f1,residual,exitflag]=lsqlin(A,bk,[],[],[],[],[],[],x0,options);
     x0=x1;
     [r, normr, xmin,Ar, KKT] = kktResidual(A, b, x0 ,1);

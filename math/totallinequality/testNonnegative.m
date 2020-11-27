@@ -16,6 +16,7 @@
 % %°¸Àý2
 % A=[1 2 3;4 5 6;-7 -8 -9];
 % b=[10 11 -12]';
+
 % x0=[1 1 1]';
 % e=0.00001;
 % det=[1 1 1]';
@@ -23,6 +24,7 @@
 % %
 addpath('./IPG')
 addpath('./exact')
+addpath('./hybrid')
 clear 
 clc
 m1 = 1000; 
@@ -35,8 +37,17 @@ A=[A1;-A2];
 b=[b1;-b2];
 x0=ones(n,1);
 det=ones(n,1);
-[x0, resvec, arvec, tf]=fixedMatrix(A,b,x0,20,1e-15);
-tf
+maxIterA = 30;
+beginp = 1;
+options = optimoptions('lsqlin','Algorithm','interior-point','Display','iter');
+options.Display = 'off';
+options.StepTolerance = 1e-4;
+%[x0, resvec, arvec, tf]=fixedMatrix(A,b,x0,maxIterA,1e-15,options);
+% h=semilogy(beginp:maxIterA,arvec(beginp:maxIterA),'b+');
+% h.LineStyle = '--';
+% hold on 
+alpha = min(eig(A'*A));
+[xk,resvec,arvec,tf] = hybridnnls(A,b,x0,alpha,5,maxIterA);
 % A2(A2<0)=0.5;
 % A1(A1<0)=1;
 % A=[2,1;2,-1];

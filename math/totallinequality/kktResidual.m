@@ -1,5 +1,6 @@
-function [r, normr, xmin, Ar, normKKT] = kktResidual(A, b, x , type)
-r = b - A * x;
+function [rpk, normr, xmin, Ar, normKKT] = kktResidual(A, b, x , type)
+rpk = b - A * x;
+r = rpk;
 r(r<0) = 0;
 normr = sqrt( r' * r );
 xmin = min( x );
