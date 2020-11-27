@@ -27,8 +27,6 @@ indexsm = 0;
 flag = 5;
 xfA = zeros(n,nf);
 xfA(:,1) = x0;
-% [xfA,rpk] = fmnf(A,b,x0,n,Q,R,rpk,nf);
-%while normAr > tol * normA * normr && normr > tol
 while normKKT > tol 
     iter = iter + 1;
     for i = 2:nf+1
@@ -46,8 +44,7 @@ while normKKT > tol
     % record the value of the gradient function
     arvec((iter-1)*(nf+1) + i-1) = normKKT;
     face1vec((iter-1)*(nf+1) + i-1) = face1;
-    face2vec((iter-1)*(nf+1) + i-1) = face2;
-    
+    face2vec((iter-1)*(nf+1) + i-1) = face2;    
     xfA(:,i-1) = x;
     end
     isSub = strategy(A,b,x0,[],'PHA',iter,nf,rpk,xfA);
@@ -59,25 +56,26 @@ while normKKT > tol
         AI = A(AA,RR);
         bI = rpk(AA);
         u = lsqminnorm(AI,bI);
-%         f1 = funmin(A,b,x0,u,1);
-%         if f1 < normr
-%             x0=x0+u;
-%             x0(x0<0)=0;
-%         end
         uz=zeros(n,1);
         uz(RR) = u;
-         alphat = 1;
-        f1 = funmin(A,b,x0,uz,0);
-        while alphat>1e-10
-            f = funmin(A,b,x0,u,alphat);
-            if f < f1
-                x0 = x0 + alphat * u;
-                x0(x0 < 0) = 0;
-                break;
-            end
-            alphat = 0.5 * alphat ;
+        % prevent problem from ill pose
+        Iu = abs(u) > 1e-15;
+        xRR = x0(RR);
+        alphaA = -xRR(Iu)./u(Iu);
+        % 
+        alphas = sort(alphaA(alphaA>0));
+        if isempty(alphas)
+            alphas = 1;
         end
-        
+        alphas=unique([0,alphas]);
+        for i = 2:length(alphas)
+            last = alphas(i-1);
+            t = alphas(i);
+            x0
+            p = 
+            alph=spiecewise(A,b,uz,x0+last*uz,t);
+        end
+            
         %u = AI\bI;
         %[u,flag,relres,~,resvec,lsvec,out] = lsqrm(AI,bI,lsqrTol,maxIter,[],[],zeros(n,1),A,b,x0,AA,3);
         indexsm = indexsm + 1;
