@@ -6,12 +6,12 @@ tol = 1e-13;
 [m,n] = size(A);
 lsqrTol = 1e-13;
 maxIter = 20;
-[rpk, normr, xmin, Ar, normKKT] = kktResidual(A, b, x0 , 1);
+[rpk, normr, xmin, Ar, normKKT] = kktResidual(A, b, x0,[],1);
 iter = 0;
 % the residual vector
-resvec = zeros(1,maxit + 1);
+resvec = zeros(1,(maxit + 1)*(nf+1));
 % the normal gradient 
-arvec = zeros(1,maxit + 1);
+arvec = zeros(1,(maxit + 1)*(nf+1));
 % subspace minization
 itersm = zeros(1,maxit + 1);
 resvec(1) = xmin;
@@ -31,18 +31,19 @@ while normKKT > tol
     % subspace
     AI = A(AA,:);
     bI = rpk(AA);
-    
     [u,flag,relres,iter,resvec,lsvec,out] = lsqrm(AI,bI,lsqrTol,maxIter,[],[],zeros(n,1),A,b,x0,AA,2);
     xls = x0 + u;
-    [rpk, normr, xmin, Ar, normKKT] = kktResidual(A, b, xls , type)
-    rpk = b - A * xls;
     [x,rpk] = projectfixed(A,b,xls,rpk,alpha);
-    [rpk, normr, xmin, Ar, normKKT] = kktResidual(A, b, x , type)
+    x0 = x;
+    [rpk, normr, xmin, Ar, normKKT] = kktResidual(A, b, x ,rpk,1);
+    resvec((iter-1)*nf + i - 1) = normr;
+    % record the value of the gradient function
+    arvec((iter-1)*nf + i - 1) = normKKT;
     xfA(:,i) = x;
     end
-    isSub = strategy(A,b,steplengthOrk,2,iter,nf,rpk,xfA);
+    isSub = strategy(A,b,x0,[],'PHA',iter,nf,rpk,xfA);
+    %isSub = strategy(A,b,steplengthOrk,2,iter,nf,rpk,xfA);
     if isSub
-        xf = xfA(:, end);
         AA = (rpk>tol);
         % subspace
         AI = A(AA,:);
@@ -51,21 +52,17 @@ while normKKT > tol
         indexsm = indexsm + 1;
         % record step length and statistic to number of sm
         itersm(iter + 1) = len;
-        x0 = xs;
+        x0 = x0 + u;
     else
  %       [xfA,rpk] = fmnf(A,b,x0,n,Q,R,rpk,nf);
         itersm(iter + 1) = -1;
         x0 = xfA(:, end);
     end
-%     r = rpk;
-%     r(r<0) = 0;
-%     normAr = norm(A' * r);
-%     normr = norm( r );
-    [rpk, r, normr, normAr] = residual(A,b,x0,rpk);
+    [rpk, normr, xmin, Ar, normKKT] = kktResidual(A, b, x0 , [], 1);
     % record the value of objection function
-    resvec(iter + 1) = normr;
+    resvec(iter*nf + 1) = normr;
     % record the value of the gradient function
-    arvec(iter + 1) = normAr;
+    arvec(iter*nf + 1) = normKKT;
     if iter > maxit || flag == 0
         break;
     end

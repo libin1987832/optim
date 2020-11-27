@@ -1,5 +1,4 @@
-
-function isSub = strategiegy(A,b,x0,steplengthOr,type,iter,nf,rkp,xA)
+function isSub = strategy(A,b,x0,steplengthOr,type,iter,nf,rkp,xA)
 [m,n] = size(A);
 isSub = false;
 eIter = 2;
