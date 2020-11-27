@@ -22,9 +22,11 @@
 % 
 % %
 addpath('./IPG')
-e=0.0001;
-m1 =10; 
-m2 =10; n =3;
+addpath('./exact')
+clear 
+clc
+m1 = 1000; 
+m2 = 1000; n = 300;
 A1=sprand(m1,n,0.1,1/100);
 A2=sprand(m2,n,0.1,1/100);
 b1=rand(m1,1);
@@ -33,8 +35,10 @@ A=[A1;-A2];
 b=[b1;-b2];
 x0=ones(n,1);
 det=ones(n,1);
-A2(A2<0)=0.5;
-A1(A1<0)=1;
-A=[2,1;2,-1];
-b=[5;-3];
-[x,fk]=fsearchx(A,b,[1;1],0.000001,0.0001)
+[x0, resvec, arvec, tf]=fixedMatrix(A,b,x0,20,1e-15);
+tf
+% A2(A2<0)=0.5;
+% A1(A1<0)=1;
+% A=[2,1;2,-1];
+% b=[5;-3];
+% [x,fk]=fsearchx(A,b,[1;1],0.000001,0.0001)
