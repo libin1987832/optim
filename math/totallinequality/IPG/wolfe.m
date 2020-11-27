@@ -17,8 +17,7 @@ alpha = alphaMin; aa = 0; bb = Inf;
 index=1;
 while (1)
     if ~(fq(A,b,xk+alpha*dk)<=fq(A,b,xk)+rho*alpha*fdetq(A,b,xk)'*dk)
-%         bb = alpha;
-%         alpha = (alpha+aa)/2;
+        
         alpha=alpha/2;
         continue;
     end

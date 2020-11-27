@@ -58,18 +58,32 @@ while normKKT > tol
         AI = A(AA,:);
         bI = rpk(AA);
         u = lsqminnorm(AI,bI);
-        alpha = 1;
-        while
-        f = funmin(A,b,x0,u,alpha)
+%         f1 = funmin(A,b,x0,u,1);
+%         if f1 < normr
+%             x0=x0+u;
+%             x0(x0<0)=0;
+%         end
+         alphat = 1;
+        f1 = funmin(A,b,x0,u,0);
+        while alphat>1e-10
+            f = funmin(A,b,x0,u,alphat);
+            if f < f1
+                x0 = x0 + alphat * u;
+                x0(x0 < 0) = 0;
+                break;
+            end
+            alphat = 0.5 * alphat ;
+        end
         
         %u = AI\bI;
         %[u,flag,relres,~,resvec,lsvec,out] = lsqrm(AI,bI,lsqrTol,maxIter,[],[],zeros(n,1),A,b,x0,AA,3);
         indexsm = indexsm + 1;
-        xls = x0 + u;
-        x0 = xls;
+%         xls = x0 + u;
+%         x0 = xls;
     else
         x0 = xfA(:, end);
     end
+    [rpk1, normr1, xmin1, Ar1, normKKT1, face12, face22] = kktResidual(A, b, xfA(:, end) , [], 1);
     [rpk, normr, xmin, Ar, normKKT, face1, face2] = kktResidual(A, b, x0 , [], 1);
     % record the value of objection function
     resvec((iter-1)*(nf+1) + nf+1) = normr;
@@ -77,13 +91,14 @@ while normKKT > tol
     arvec((iter-1)*(nf+1) + nf+1) = normKKT;
     face1vec((iter-1)*(nf+1) + nf + 1) = face1;
     face2vec((iter-1)*(nf+1) + nf + 1) = face2;
-    if iter > maxit || flag == 0
+%    if iter > maxit || flag == 0
+if iter > maxit
         break;
     end
     if flag < 5 || flag > 6 
-        if flag < 12
-            disp(['flag:',num2str(flag)]);
-        end
+%         if flag < 12
+%             disp(['flag:',num2str(flag)]);
+%         end
         flag = 5;
     end
 end

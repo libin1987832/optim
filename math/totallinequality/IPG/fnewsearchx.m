@@ -1,4 +1,4 @@
-%IPG ¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿ ¿¿¿¿¿¿¿¿¿¿
+%IPG ¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿? ¿¿¿¿¿¿¿¿¿¿
 function x=fnewsearchx(A,b,x0,e,det)
 %Ê¹ÓÃ²»ËÑË÷²½³¤·½·¨£¬ÕÒ×îÓÅx
 g=fdetq(A,b,x0);
@@ -24,8 +24,7 @@ while norm(x0.*g,inf)>e
     x0=x0+s;
     g=fdetq(A,b,x0);  
     i=i+1;
-    if i==10000
-        
+    if i==100        
         break;
     end
 end
