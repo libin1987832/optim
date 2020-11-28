@@ -67,14 +67,24 @@ while normKKT > tol
         if isempty(alphas)
             alphas = 1;
         end
-        alphas=unique([0,alphas]);
-        for i = 2:length(alphas)
+        alphas=unique(sort([0,alphas',1]));
+        for i = 2:length(alphas(alphas<=1))
             last = alphas(i-1);
             t = alphas(i);
-            x0
-            p = 
-            alph=spiecewise(A,b,uz,x0+last*uz,t);
+            xl = x0 + last * uz;
+            xl(xl<0) = 0;
+            xt = x0 + t * uz;
+            xt(xt<0) = 0;
+            p = xt - xl;
+            alpha=spiecewise(A,b,p,xl,t-last);
+            if alpha < t-last
+                alpha = alpha + last;
+                break;
+            end
         end
+        x0 = x0 + alpha*uz;
+        [rpk1, normr1, xmin1, Ar1, normKKT1, face12, face22] = kktResidual(A, b, xfA(:, end) , [], 1);
+        [rpk, normr, xmin, Ar, normKKT, face1, face2] = kktResidual(A, b, x0 , [], 1);
             
         %u = AI\bI;
         %[u,flag,relres,~,resvec,lsvec,out] = lsqrm(AI,bI,lsqrTol,maxIter,[],[],zeros(n,1),A,b,x0,AA,3);
@@ -84,7 +94,6 @@ while normKKT > tol
     else
         x0 = xfA(:, end);
     end
-    [rpk1, normr1, xmin1, Ar1, normKKT1, face12, face22] = kktResidual(A, b, xfA(:, end) , [], 1);
     [rpk, normr, xmin, Ar, normKKT, face1, face2] = kktResidual(A, b, x0 , [], 1);
     % record the value of objection function
     resvec((iter-1)*(nf+1) + nf+1) = normr;
