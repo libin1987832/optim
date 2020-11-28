@@ -1,4 +1,4 @@
-function plotSemilogy(res,type,typet)
+gifunction plotSemilogy(res,type,typet)
 %% plot picture
 [m,n]=size(res);
 figure
