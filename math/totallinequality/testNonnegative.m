@@ -1,26 +1,4 @@
 % %°¸Àı1
-%  e=0.0001;
-%  m1=500;
-% m2=500;
-% n=700;
-% A1=sprand(m1,n,0.1,1/100);
-% A2=sprand(m2,n,0.1,1/100);
-% b1=rand(m1,1);
-% b2=rand(m2,1);
-% A=[A1;-A2];
-% b=[b1;-b2];
-% x0=ones(n,1);
-% det=ones(n,1);
-% A2(A2<0)=0.5;
-% A1(A1<0)=1;
-% %°¸Àı2
-% A=[1 2 3;4 5 6;-7 -8 -9];
-% b=[10 11 -12]';
-
-% x0=[1 1 1]';
-% e=0.00001;
-% det=[1 1 1]';
-% 
 % %
 addpath('./IPG')
 addpath('./exact')
@@ -29,22 +7,24 @@ clear
 clc
 m1 = 500; 
 m2 = 500; n = 700;
-A1=sprand(m1,n,0.1,1/100);
-A2=sprand(m2,n,0.1,1/100);
-% A1=rand(m1,n);
-% A2=rand(m2,n);
+% A1=sprand(m1,n,0.1,1/100);
+% A2=sprand(m2,n,0.1,1/100);
+A1=rand(m1,n);
+A2=rand(m2,n);
+
 b1=rand(m1,1);
 b2=rand(m2,1);
 A=[A1;-A2];
 b=[b1;-b2];
 x0=ones(n,1);
-%load('test.mat')
+% load('test2.mat')
+% n=700;
 det=ones(n,1);
- maxIterA = 50;
+ maxIterA = 20;
 % beginp = 1;
-% options = optimoptions('lsqlin','Algorithm','interior-point','Display','iter');
-% options.Display = 'off';
-% options.StepTolerance = 1e-4;
+options = optimoptions('lsqlin','Algorithm','interior-point','Display','iter');
+options.Display = 'off';
+options.StepTolerance = 1e-13;
 % [xk1, resvec, arvec,face1v,face2v, tf1]=fixedMatrix(A,b,x0,maxIterA*5,1e-15,options);
 % r = b - A * xk1;
 % r(r<0) = 0;
@@ -57,8 +37,11 @@ det=ones(n,1);
 % h.LineStyle = '--';
 % hold on 
  alpha = 1/max(eig(A'*A));
-[xk2,resvec,arvec,face1h,face2h,tf2] = hybridnnls(A,b,x0,alpha,5,maxIterA);
+[xk2,resvec,arvec,face1h,face2h,tf2] = hybridnnls(A,b,x0,alpha,2,maxIterA,options);
 [rpk2, normr2, xmin2, Ar, normKKT2 , face12, face22] = kktResidual(A, b, xk2 , [], 1);
+[xk3,fk]=fsearchx(A,b,x0,1e-5,1e-8,40);
+[rpk3, normr3, xmin3, Ar3, normKKT3 , face13, face23] = kktResidual(A, b, xk2 , [], 1);
+
 % 
 %  fprintf('& %s & %g & %g & %g & %g &%g \\\\\n',['Hybrid'],normr2,xmin2,normKKT2,Ar,tf2);
       

@@ -33,12 +33,13 @@ switch upper(type)
         Irkn = rkn>tol;
         ssign=sum(~xor(rk>tol, Irkn));
         if ssign==m 
-            brkp = b - rkp;
-            AI = A(Irkn,:);
-            bI = brkp(Irkn);
-            [xk2,flag,relres,iter,resvec,lsvec,out] = lsqrm(AI,bI,[],[],[],[],xk,[],[],[],[],0);
-            constraint = all(xk2>-1e15);
-            isSub = constraint;
+%             brkp = b - rkp;
+%             AI = A(Irkn,:);
+%             bI = brkp(Irkn);
+%             [xk2,flag,relres,iter,resvec,lsvec,out] = lsqrm(AI,bI,[],[],[],[],xk,[],[],[],[],0);
+%             constraint = all(xk2>-1e15);
+%             isSub = constraint;
+isSub= true;
         end
     case 'CHA'
         x0 = xA(:,end - 1);
