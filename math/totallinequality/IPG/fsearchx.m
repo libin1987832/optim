@@ -28,7 +28,7 @@ while norm(x0.*g,inf)>e||min(g)<-e
     if index >maxit
         break;
     end
-    D=max(diag(A*x0-b),0);
+    D=max(diag(b-A*x0),0);
     D(D>0)=1;
 		% d=x/(A'DAx+det)
     d=x0./(A'*D*A*x0+det);
@@ -40,7 +40,7 @@ while norm(x0.*g,inf)>e||min(g)<-e
 %    [alpha,x0,fx0,g]=wolfe(A, b, x0, p, 0.9); 
     [alpha, minf, knot] = arraySpiecewise(A,b,x0,p);  
      x0 = x0 + alpha*p;
-     
+   g=fdetq(A,b,x0);  
      [rpk, normr, xmin, Ar, normKKT, face1, face2] = kktResidual(A, b, x0 , [], 1);
     % record the value of objection function
     resvec(index) = normr;

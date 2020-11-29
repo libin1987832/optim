@@ -5,15 +5,15 @@ addpath('./exact')
 addpath('./hybrid')
 clear 
 clc
-m1 = 100; 
-m2 = 100; n = 70;
-A1=sprand(m1,n,0.1,1/100);
-A2=sprand(m2,n,0.1,1/100);
-% A1=rand(m1,n);
-% A2=rand(m2,n);
+m1 = 600; 
+m2 = 600; n = 700;
+A1=sprand(m1,n,0.1,1/100)+1;
+A2=sprand(m2,n,0.1,1/100)+1;
+% A1=rand(m1,n) + 1 ;
+% A2=rand(m2,n) + 1;
 
-b1=rand(m1,1);
-b2=rand(m2,1);
+b1=rand(m1,1)+1;
+b2=rand(m2,1)+1;
 A=[A1;-A2];
 b=[b1;-b2];
 x0=ones(n,1);
@@ -35,16 +35,21 @@ options.StepTolerance = 1e-13;
 % [normKKT1 max(abs(KKT)) min(xk1) min(Ar)]
 % h=semilogy(beginp:maxIterA,arvec(beginp:maxIterA),'b+');
 % h.LineStyle = '--';
-% hold on 
+% hold on k1
  alpha = 1/max(eig(A'*A));
+ maxit = 200;
+ [xk1, resvec, arvec, face1vec, face2vec, tf1]=fixedMatrix(A,b,x0,maxit,1e-15,options)
+[rpk1, normr1, xmin1, Ar1, normKKT1 , face12, face22] = kktResidual(A, b, xk1 , [], 1); 
 [xk2,resvec,arvec,face1h,face2h,tf2] = hybridnnls(A,b,x0,alpha,5,maxIterA,options);
-[rpk2, normr2, xmin2, Ar, normKKT2 , face12, face22] = kktResidual(A, b, xk2 , [], 1);
- [xk3,resvec3,arvec3,face1vec3,face2vec3,tf3]=fsearchx(-A,-b,x0,1e-13,1e-13,500);
+[rpk2, normr2, xmin2, Ar2, normKKT2 , face12, face22] = kktResidual(A, b, xk2 , [], 1);
+ [xk3,resvec3,arvec3,face1vec3,face2vec3,tf3]=fsearchx(A,b,x0,1e-13,1e-13,1000);
 [rpk3, normr3, xmin3, Ar3, normKKT3 , face13, face23] = kktResidual(A, b, xk3 , [], 1);
 [tf2 normKKT2 normr2
  tf3 normKKT3 normr3]
-% 
-%  fprintf('& %s & %g & %g & %g & %g &%g \\\\\n',['Hybrid'],normr2,xmin2,normKKT2,Ar,tf2);
+%
+fprintf('& %s & %g & %g & %g & %g &%g \\\\\n',['FM'],normr1,xmin1,normKKT1,Ar1,tf1);
+  fprintf('& %s & %g & %g & %g & %g &%g \\\\\n',['Hybrid'],normr2,xmin2,normKKT2,Ar2,tf2);
+  fprintf('& %s & %g & %g & %g & %g &%g \\\\\n',['IPG'],normr3,xmin3,normKKT2,Ar3,tf3);
       
 %[norm(xk1-xk2)]
 %[normKKT1 normKKT2;normr1 normr2]

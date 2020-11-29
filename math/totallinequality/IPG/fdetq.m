@@ -1,9 +1,9 @@
-%计算非负函数的梯度
+%计算非负函数的梯�?
 % f=1/2*norm(Ax-b)+
 % fdetq=A'(Ax-b)+
 function g=fdetq(A,b,x0)
-Y=A*x0-b;
+Y=b-A*x0;
 Y(Y<0)=0;
-g=A'*Y;
+g=-A'*Y;
 end
 
