@@ -87,8 +87,8 @@ while normKKT > tol
 % [alpha,Ar'*p]
 
         x0 = x0 + alpha*p;
-        [rpk1, normr1, xmin1, Ar1, normKKT1, face12, face22] = kktResidual(A, b, xfA(:, end) , [], 1);
-        [rpk, normr, xmin, Ar, normKKT, face1, face2] = kktResidual(A, b, x0 , [], 1);
+   %     [rpk1, normr1, xmin1, Ar1, normKKT1, face12, face22] = kktResidual(A, b, xfA(:, end) , [], 1);
+    %    [rpk, normr, xmin, Ar, normKKT, face1, face2] = kktResidual(A, b, x0 , [], 1);
             
         %u = AI\bI;
         %[u,flag,relres,~,resvec,lsvec,out] = lsqrm(AI,bI,lsqrTol,maxIter,[],[],zeros(n,1),A,b,x0,AA,3);

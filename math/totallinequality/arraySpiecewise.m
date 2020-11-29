@@ -54,9 +54,9 @@ for i = 2 : length(knot)
          if alpha < 0
             alpha = knot(i-1);
          end
-         minf = funmin(A,b,x0,p,alpha);
+ %        minf = funmin(A,b,x0,p,alpha);
          break;
      end
 end
-
+minf = funmin(A,b,x0,p,alpha);
 
