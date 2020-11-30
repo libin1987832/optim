@@ -1,6 +1,5 @@
 function [xk,resvec,arvec,face1vec,face2vec,tf] = hybridnnls(A,b,x0,alpha,nf,maxit,options)
 t=clock;
-
 % stop criterion
 tol = 1e-13;
 [m,n] = size(A);
@@ -64,38 +63,14 @@ while normKKT > tol
         u = lsqminnorm(AI,bI);
         p = zeros(n,1);
         p(RR) = u;
-        [alpha, minf, aranges, retcode] = arraySpiece(A,b,x0,p);
-    %    [alpha, minf, knot] = arraySpiecewise(A,b,x0,p);
-%         
-% %         knoty = arrayfun(@(alpha) funmin(A,b,x0,u,alpha), knot);
-% 
-%         xa = [0.019:0.00001:0.021];
-% ya = arrayfun(@(alpha) funmin(A,b,x0,p,alpha), xa);
-%  pxy={};
-% % pxy(1).X = knot;
-% % pxy(1).Y = knoty;
-% pxy(1).X = xa;
-% pxy(1).Y = ya;
-% figure
-% hold on
-% p1 = arrayfun(@(a) plot(a.X,a.Y),pxy);
-% p1(1).Marker = 'o';
-% %p1(2).Marker = '+';
-% hold off
-% r = b - A * x0;
-% r(r<0)=0;
-% Ar = A'*r;
-% [alpha,Ar'*p]
-
+ %       debug for test.m nf = 2
+        [alpha, aranges, retcode] = arraySpiece(A,b,x0,p);
         x0 = x0 + alpha*p;
    %     [rpk1, normr1, xmin1, Ar1, normKKT1, face12, face22] = kktResidual(A, b, xfA(:, end) , [], 1);
-    %    [rpk, normr, xmin, Ar, normKKT, face1, face2] = kktResidual(A, b, x0 , [], 1);
-            
+    %    [rpk, normr, xmin, Ar, normKKT, face1, face2] = kktResidual(A, b, x0 , [], 1);         
         %u = AI\bI;
         %[u,flag,relres,~,resvec,lsvec,out] = lsqrm(AI,bI,lsqrTol,maxIter,[],[],zeros(n,1),A,b,x0,AA,3);
         indexsm = indexsm + 1;
-%         xls = x0 + u;
-%         x0 = xls;
     else
         x0 = xfA(:, end);
     end
@@ -129,3 +104,26 @@ face1vec = face1vec(face1vec>0);
 face2vec = face2vec(face2vec>0);
 
 tf = etime(clock,t);
+
+
+%    [alpha, minf, knot] = arraySpiecewise(A,b,x0,p);
+%         
+% %         knoty = arrayfun(@(alpha) funmin(A,b,x0,u,alpha), knot);
+% 
+%         xa = [0.019:0.00001:0.021];
+% ya = arrayfun(@(alpha) funmin(A,b,x0,p,alpha), xa);
+%  pxy={};
+% % pxy(1).X = knot;
+% % pxy(1).Y = knoty;
+% pxy(1).X = xa;
+% pxy(1).Y = ya;
+% figure
+% hold on
+% p1 = arrayfun(@(a) plot(a.X,a.Y),pxy);
+% p1(1).Marker = 'o';
+% %p1(2).Marker = '+';
+% hold off
+% r = b - A * x0;
+% r(r<0)=0;
+% Ar = A'*r;
+% [alpha,Ar'*p]

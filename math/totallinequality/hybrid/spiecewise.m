@@ -20,7 +20,7 @@ for i = 1:length(knot)-1
     % the derive Ap'(r-alpha*Ap)=0
     Ar = Apr' * r(rknot > 0);
     % alpha = (Ap*r)^T/(Ap'*Ap)
-    steplength =( Ar )/( Apr' * Apr );
+    steplength = Ar / ( Apr' * Apr );
     % the right point
     if steplength >= beta
         steplength = beta;

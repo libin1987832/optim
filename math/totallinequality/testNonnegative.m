@@ -47,8 +47,8 @@ options.StepTolerance = 1e-13;
 %[rpk1, normr1, xmin1, Ar1, normKKT1 , face12, face22] = kktResidual(A, b, xk1 , [], 1); 
 [xk2,resvec,arvec,face1h,face2h,tf2] = hybridnnls(A,b,x0,alpha,2,maxIterA,options);
 [rpk2, normr2, xmin2, Ar2, normKKT2 , face12, face22] = kktResidual(A, b, xk2 , [], 1);
-%[xk3,resvec3,arvec3,face1vec3,face2vec3,tf3]=fsearchx(A,b,x0,1e-13,1e-13,1000);
-%[rpk3, normr3, xmin3, Ar3, normKKT3 , face13, face23] = kktResidual(A, b, xk3 , [], 1);
+[xk3,resvec3,arvec3,face1vec3,face2vec3,tf3]=IPG(A,b,x0,1e-13,1e-13,1000);
+[rpk3, normr3, xmin3, Ar3, normKKT3 , face13, face23] = kktResidual(A, b, xk3 , [], 1);
 %[tf2 normKKT2 normr2
  %tf3 normKKT3 normr3]
 
