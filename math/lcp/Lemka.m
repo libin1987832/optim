@@ -1,4 +1,4 @@
-function [w,z,retcode] = LCPSolveL(M,q,pivtol,maxits)
+function [w,z,retcode] = Lemka(M,q,pivtol,maxits)
 
 if nargin<3, pivtol = 1e-8; maxits = 1e4; end;
 if nargin<4, maxits = 1e3; end;
