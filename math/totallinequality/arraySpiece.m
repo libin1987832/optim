@@ -8,22 +8,12 @@ aranges = sort(arange(arange > tol & arange < 1));
 aranges = [0;aranges;1];
 aranges = unique(aranges);
 for i = 2:length(aranges)
-    f1 = funmin(A,b,x0,p,aranges( i - 1 ));
-    f2 = funmin(A,b,x0,p,aranges( i ));
-    if f1 < f2
-        alpha = aranges(i-1);
-        minf = f1;
-        return;
-    end
     % take the middle value for active set
-    u = p;
-    x = x0 + aranges( i - 1 )*u;
+    x = x0 + 0.5*(aranges(i - 1)+aranges(i))*p;
     % x active setss
     Iu = x < 1e-15;
-    x(Iu) = 0;
-    u(Iu) = 0;
-    [alpha,retcode] = spiecewise(A,b,u,x,aranges( i )-aranges( i - 1 ));
-    if retcode(1) == 1 && retcode(2) == 0
+    [alpha,retcode] = spiecewise(A(:,~Iu),b,p(~Iu),x0(~Iu),aranges( i-1 ) , aranges( i ));
+    if retcode(1) == 1 
         break;
     end
 end

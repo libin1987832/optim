@@ -52,8 +52,8 @@ while normKKT > tol
     face2vec((iter-1)*(nf+1) + i-1) = face2;    
     xfA(:,i-1) = x;
     end
-   % isSub = true;
-    isSub = strategy(A,b,x0,[],'PHA',iter,nf,rpk,xfA);
+    isSub = true;
+%    isSub = strategy(A,b,x0,[],'PHA',iter,nf,rpk,xfA);
     %isSub = strategy(A,b,steplengthOrk,2,iter,nf,rpk,xfA);
     if isSub
         AA = (rpk>tol);
@@ -64,11 +64,12 @@ while normKKT > tol
         u = lsqminnorm(AI,bI);
         p = zeros(n,1);
         p(RR) = u;
-        [alpha, minf, knot] = arraySpiecewise(A,b,x0,p);
+        [alpha, minf, aranges, retcode] = arraySpiece(A,b,x0,p);
+    %    [alpha, minf, knot] = arraySpiecewise(A,b,x0,p);
 %         
 % %         knoty = arrayfun(@(alpha) funmin(A,b,x0,u,alpha), knot);
 % 
-%         xa = [0:0.001:0.1];
+%         xa = [0.019:0.00001:0.021];
 % ya = arrayfun(@(alpha) funmin(A,b,x0,p,alpha), xa);
 %  pxy={};
 % % pxy(1).X = knot;
