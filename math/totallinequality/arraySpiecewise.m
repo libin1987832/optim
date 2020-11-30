@@ -7,7 +7,7 @@ arange = -x0(nonzerou)./p(nonzerou);
 aranges = sort(arange(arange > tol & arange < 1));
 aranges = [0;aranges;1];
 aranges = unique(aranges);
-all = zeros(m*n,1);
+all = [];
 for i = 2:length(aranges)
     % take the middle value for active set
     u = p;
