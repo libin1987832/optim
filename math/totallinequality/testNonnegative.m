@@ -5,12 +5,12 @@ addpath('./exact')
 addpath('./hybrid')
 clear 
 clc
-m1 = 600; 
-m2 = 600; n = 700;
-A1=sprand(m1,n,0.1,1/100)+1;
-A2=sprand(m2,n,0.1,1/100)+1;
-% A1=rand(m1,n) + 1 ;
-% A2=rand(m2,n) + 1;
+m1 = 100; 
+m2 = 100; n = 70;
+% A1=sprand(m1,n,0.1,1/100)+1;
+% A2=sprand(m2,n,0.1,1/100)+1;
+A1=rand(m1,n) + 1 ;
+A2=rand(m2,n) + 1;
 
 b1=rand(m1,1)+1;
 b2=rand(m2,1)+1;

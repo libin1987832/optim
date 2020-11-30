@@ -52,8 +52,8 @@ while normKKT > tol
     face2vec((iter-1)*(nf+1) + i-1) = face2;    
     xfA(:,i-1) = x;
     end
-    isSub = true;
-   % isSub = strategy(A,b,x0,[],'PHA',iter,nf,rpk,xfA);
+   % isSub = true;
+    isSub = strategy(A,b,x0,[],'PHA',iter,nf,rpk,xfA);
     %isSub = strategy(A,b,steplengthOrk,2,iter,nf,rpk,xfA);
     if isSub
         AA = (rpk>tol);
