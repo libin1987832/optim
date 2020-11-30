@@ -2,10 +2,7 @@
 % 将非负最小二乘问题转变成 普通的最小二乘问题?
 function [x0, resvec, arvec, face1vec, face2vec, tf]=fixedMatrix(A,b,x0,maxit,tol,options)
 [m,n]=size(A);
-
-
 index = 1;
-
 % the residual vector
 resvec = zeros(1,maxit + 1);
 % the normal gradient 
@@ -13,14 +10,11 @@ arvec = zeros(1,maxit + 1);
 face1vec = zeros(1,(maxit + 1));
 % face x
 face2vec = zeros(1,(maxit + 1));
-
-
 [r, normr, xmin, Ar, KKT, face1, face2] = kktResidual(A, b, x0 , [],1);
 resvec(index) = normr;
 arvec(index) = KKT;
 face1vec(index) = face1;
 face2vec(index) = face2;
-    
 t=clock;
 while KKT > tol && index < maxit
     z = -r;

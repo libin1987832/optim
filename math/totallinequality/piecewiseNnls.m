@@ -1,5 +1,5 @@
 % interv [0,1] for choose a 
-function [alpha, minf, knot,retcode] = arraySpiecewise(A,b,x0,p,tol,maxits)
+function [alpha, minf, knot,retcode] = piecewiseNnls(A,b,x0,p,tol,maxits)
 if nargin<5, tol = 1e-15; maxits = 1e4; end
 [m,n] = size(A);
 nonzerou = p < 0;
@@ -8,6 +8,7 @@ aranges = sort(arange(arange > tol & arange < 1));
 aranges = [0;aranges;1];
 aranges = unique(aranges);
 all = zeros(m*n,1);
+[] = arrayfun(@(x) xa = x0 + x.a; xa(xa<tol)=0; r =b-A*xa;r)
 for i = 2:length(aranges)
     % take the middle value for active set
     u = p;

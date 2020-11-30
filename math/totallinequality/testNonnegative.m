@@ -38,8 +38,12 @@ options.StepTolerance = 1e-13;
 % hold on k1
  alpha = 1/max(eig(A'*A));
  maxit = 200;
-
- [xk1, resvec, arvec, face1vec, face2vec, tf1]=fixedMatrix(A,b,x0,maxit,1e-15,options)
+ 
+[x1,f1,residual,exitflag,output,ff]=lsqlin([A,-eye(m1+m2)],b,[],[],[],[],zeros(n+m1+m2,1),Inf*ones(n+m1+m2,1),x0,options);
+    
+ xk0 = x1(1:n);
+[rpk0, normr0, xmin0, Ar0, normKKT0 , face120, face220] = kktResidual(A, b, xk0 , [], 1); 
+[xk1, resvec, arvec, face1vec, face2vec, tf1]=fixedMatrix(A,b,x0,maxit,1e-15,options);
 [rpk1, normr1, xmin1, Ar1, normKKT1 , face12, face22] = kktResidual(A, b, xk1 , [], 1); 
 [xk2,resvec,arvec,face1h,face2h,tf2] = hybridnnls(A,b,x0,alpha,5,maxIterA,options);
 [rpk2, normr2, xmin2, Ar2, normKKT2 , face12, face22] = kktResidual(A, b, xk2 , [], 1);
