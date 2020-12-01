@@ -13,7 +13,6 @@ normKKT = -1;
 % if the parametre is greater than 4 , save the computation of  Ar 
 if nargin == 5
     Ar = -A' * r;
-   
     mxAr = min( x , Ar );
     %normKKT = sqrt( mxAr' * mxAr );
     normKKT = max(abs(x.*Ar));

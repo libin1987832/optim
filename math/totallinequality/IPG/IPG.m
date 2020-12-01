@@ -1,9 +1,9 @@
 %[xk,resvec,arvec,face1vec,face2vec,tf]
-function [xk,resvec,arvec,face1vec,face2vec,tf] = IPG(A,b,x0,tol,det,tou,maxits)
+function [xk,resvec,arvec,face1vec,face2vec,tf] = IPG(A,b,x0,tol,det,tou,maxit)
 %x
 t=clock;
 loopcount = 1;
-[rpk, normr, xmin, Ar, normKKT, face1, face2] = kktResidual(A, b, x0 , [], 1);
+[rpk, normr, xmin, g, normKKT, face1, face2] = kktResidual(A, b, x0 , [], 1);
 % the residual vector
 resvec = zeros(1,maxit);
 % the normal gradient
@@ -41,13 +41,13 @@ while norm(x0.*g,inf) > tol || min(g)< -tol
     else
         x0 = x0 + talphak*p;
     end
-    [rpk, normr, xmin, Ar, normKKT, face1, face2] = kktResidual(A, b, x0 , [], 1);
+    [rpk, normr, xmin, g, normKKT, face1, face2] = kktResidual(A, b, x0 , [], 1);
     % record the value of objection function
-    resvec(index) = normr;
+    resvec(loopcount) = normr;
     % record the value of the gradient function
-    arvec(index) = normKKT;
-    face1vec(index) = face1;
-    face2vec(index) = face2;
+    arvec(loopcount) = normKKT;
+    face1vec(loopcount) = face1;
+    face2vec(loopcount) = face2;
 end
 xk=x0;
 tf = etime(clock,t);
