@@ -1,8 +1,8 @@
-function [X,IT,errornorm,Ynorm]=randkaczmarz(A,b,y,K,x0)
+function [X,IT,errornorm,Ynorm]=randkaczmarz(A,b,y,maxit,x0)
 [m,n]=size(A);
 
 if nargin < 4   
-    K=10000;
+    maxit=1e4;
     x0 = zeros(n,1);
 end
 if nargin < 5 || isempty(x0)   
@@ -16,24 +16,22 @@ elseif size(x0,1) ~= n || size(x0,2) ~= 1
 end
 
 number=1:m;
-prob=zeros(1,m);
-F=1/(norm(A,'fro'))^2;
-for i=1:m
-    number(i)=i;
-    prob(i)=norm(A(i,:))^2*F;
-end
+As = A.*A;
+F=sum(sum(As));
+prob = sum(As,2)/F;
 
 
-IT=zeros(1,K);
-X=zeros(n,K);
-errornorm=zeros(1,K);
-Ynorm=zeros(1,K);
+
+IT=zeros(1,maxit);
+X=zeros(n,maxit);
+errornorm=zeros(1,maxit);
+Ynorm=zeros(1,maxit);
 x=x0; 
 k=0;
 ynorm1=norm(y);
 ynorm=norm(y-x)/norm(y);
 
-while ynorm>=1e-3&&k<K
+while ynorm>=1e-3 && k < maxit
 %while norm(A*x-b,2)>=1e-3&&k<=K
     k=k+1;
     X(:,k)=x;
@@ -41,11 +39,12 @@ while ynorm>=1e-3&&k<K
     errornorm(k)= norm(A*x-b);
     Ynorm(k)=ynorm;
     i=randsrc(1,1,[number;prob]);
-    x=x+(b(i)-A(i,:)*x)/(prob(i)/F)*A(i,:)'; 
+    t = (b(i)-A(i,:)*x)/sum(As(i,:));
+    x=x+ t * A(i,:)'; 
     ynorm=norm(y-x)/ynorm1;
 end
-IT=IT(:,1:k);
-X = X(:,1:k);
-errornorm=errornorm(1,1:k);
-Ynorm=Ynorm(1,1:k);
+IT = IT(:,1:maxit);
+X = X(:,1:maxit);
+errornorm=errornorm(1,1:maxit);
+Ynorm=Ynorm(1,1:maxit);
 
