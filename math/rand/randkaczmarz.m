@@ -1,4 +1,4 @@
-function [x0, resvec, randp]=randkaczmarz(A, b, x0, tol, maxit)
+function [x0, resvec, xvec, randp]=randkaczmarz(A, b, x0, tol, maxit)
 [m,n]=size(A);
 
 if nargin < 4   
@@ -16,18 +16,25 @@ number = 1 : m;
 As = A .* A;
 Ah = sum(As, 2);
 F = sum(Ah);
-prob = Ah / F;
+prob = Ah' / F;
 
 resvec = zeros(1, maxit);
-loopcount = 0;
+xvec = zeros(n, maxit);
+loopcount = 1;
 randp = randsrc(maxit, 1, [number;prob]);
-
+randp = repmat(number, maxit, 1);
+r = b - A * x0;
+resvec( loopcount )= norm(r);
+xvec(:, loopcount )= x0;
 while resvec( loopcount ) >= tol && loopcount < maxit
     loopcount = loopcount + 1;
-    r = A * x0 - b;
+    t = r(randp(loopcount)) / Ah(randp( loopcount ));
+    x1 = x0 + t * A(randp(loopcount),:)';
+    r = b - A * x1;
     resvec( loopcount )= norm(r);
-    t = - r(randp(loopcount)) / Ah(randp( loopcount ));
-    x0 = x0 + t * A(randp(loopcount),:)';
+    xvec(:, loopcount )= x1;
+    x0 = x1;
 end
-resvec(resvec < eps ) = 0;
+resvec = resvec(resvec > eps );
+xvec = xvec(:, resvec > eps );
 
