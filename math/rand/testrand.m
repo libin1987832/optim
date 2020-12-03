@@ -1,9 +1,10 @@
 clc
 clear
-m = 10;
-n = 2;
+m = 3000;
+n = 20;
 A = rand(m, n);
-b = rand(m, 1);
+x = rand(n, 1);
+b = A*x;
 x0 = zeros(n, 1);
 tol = 1e-13;
 
@@ -20,15 +21,23 @@ Axv1 = A * xv1 - repmat(b, 1, size(xv1,2));
 xl = xv1 - repmat(x,1,size(xv1,2));
 xxs = sum(xl .* xl, 1);
 
-d=lineData(A,b,[0,1],[0,1]);
-hold on 
-line(d(:,[1,2])',d(:,[3,4])')
+% [d,out]=lineData(A,b,[-1,1],[-1,1]);
+% hold on 
+% line(d(out,[1,2])',d(out,[3,4])')
+% c = num2str([1:10]);
+% for i = 1:10
+% line([xv1(1,i) xv1(1,i+1)],[xv1(2,i),xv1(2,i+1)])
+% text(xv1(1,i), xv1(2,i),num2str(i));
+% end
 
-% semilogy(0:length(rv0)-1,rv0/norm(b),'-o')
+% arrayfun(@(a) text(a.X,a.Y,a.C),s);
 
-% hold on
-% semilogy(0:length(rv1)-1,rv1/norm(b),'-o')
-% % yline(tol,'r--'); 2018b
-% legend('pcg','kaczmarz','Tolerance','Location','East')
-% xlabel('Iteration number')
-% ylabel('Relative residual')
+
+
+semilogy(0:length(rv0)-1,rv0/norm(b),'-o')
+hold on
+semilogy(0:length(rv1)-1,rv1/norm(b),'-o')
+% yline(tol,'r--'); 2018b
+legend('pcg','kaczmarz','Tolerance','Location','East')
+xlabel('Iteration number')
+ylabel('Relative residual')

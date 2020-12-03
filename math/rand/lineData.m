@@ -1,7 +1,9 @@
 % generate point in the range x=[xmin xmax] y=[ymin ymax]
-% b-a(1)x = A(2)y A must two column
+% b-a(1)x = A(2)y A must two column 
+% out stand whethe the line is in the range 1 in 0 out
 function [d,out]=lineData(A,b,x,y)
 [m,n]=size(A);
+out=zeros(m,1,'logical');
 d=repmat([x(1),y(1),x(2),y(2)],[m,1]);
 for i=1:m
     if abs(A(i,1))>1e-8 && abs(A(i,2))>1e-8
@@ -38,8 +40,12 @@ for i=1:m
         d(i,2)=x(2);
         d(i,3)=b(i,1)/A(i,2);
         d(i,4)=b(i,1)/A(i,2);   
-    end  
-    out = 
+    end
+    leftbutton = [x(1);y(1)];
+    rightup = [x(2);y(2)];
+    s1 = b(i) - A(i,:)*leftbutton;
+    s2 = b(i) - A(i,:)*rightup;
+    out(i) = logical(s1*s2 < 0);
 end
 
 % valid data
