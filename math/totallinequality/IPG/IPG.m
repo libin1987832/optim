@@ -3,7 +3,7 @@ function [xk, resvec, arvec, faceXvec, tf] = IPG(A,b,x0,tol,det,tou,maxit)
 %x
 t=clock;
 loopcount = 1;
-[rpk, normr, ~, g, normKKT, faceX, ~] = kktResidual(A, b, x0 , [], 1);
+[rpk, normr, ~, g, normKKT, faceX, ~] = kktResidual2(A, b, x0 , [], 1);
 % the residual vector
 resvec = zeros(1,maxit);
 % the normal gradient
@@ -25,8 +25,9 @@ while norm( x0 .* g, inf) > tol || min( g )< -tol
     %I = rpk >0;
     %Ax = b(I) - rpk(I);
     Ax = A * x0;
-    I = Ax <= b;
+    I = Ax > b;
     ADA = A(I,:)' * Ax(I);
+    sum(sum(A'*A < 0))
     d = x0./(ADA+det);
     p = - d .* g;
     alphaAll = - x0./p;
@@ -38,19 +39,19 @@ while norm( x0 .* g, inf) > tol || min( g )< -tol
 
     [alpha, allalpha, ~] = wolfe(A, b, x0, p, talphak, 20);
     
-    xa = [0:talphak/50:talphak]; 
-    ya = arrayfun(@(alpha) func(A,b,x0,p,alpha), xa);   
-    ya2 = arrayfun(@(alpha) normr + alpha * 0.5 * g' * p , xa);
-    ya3 = arrayfun(@(alpha) func(A,b,x0,p,alpha), allalpha);
-    plot(xa,ya,'+',xa,ya2,'o',allalpha,ya3,'x');
-    hold on
+%     xa = [0:talphak/50:talphak]; 
+%     ya = arrayfun(@(alpha) func(A,b,x0,p,alpha), xa);   
+%     ya2 = arrayfun(@(alpha) normr + alpha * 0.5 * g' * p , xa);
+%     ya3 = arrayfun(@(alpha) func(A,b,x0,p,alpha), allalpha);
+%     plot(xa,ya,'+',xa,ya2,'o',allalpha,ya3,'x');
+%     hold on
 %     
     %[alpha, knots, retcode] = arraySpiece(A,b,x0,p);
-    [rpk1, normr1, ~, g1, normKKT1, faceX1, ~] = kktResidual(A, b, x0 , [], 1);
+    [rpk1, normr1, ~, g1, normKKT1, faceX1, ~] = kktResidual2(A, b, x0 , [], 1);
     x0 = x0 + alpha*p;
-    [rpk, normr, ~, g, normKKT, faceX, ~] = kktResidual(A, b, x0 , [], 1);
+    [rpk, normr, ~, g, normKKT, faceX, ~] = kktResidual2(A, b, x0 , [], 1);
     if normr1 < normr
-        norm1
+        normr1
     end
     %xa = [0.019:0.00001:0.021]; 
     %ya = arrayfun(@(alpha) func(A,b,x0,p,alpha), xa);
@@ -66,7 +67,7 @@ xk=x0;
 tf = etime(clock,t);
 end
 function fvalue = func(A,b,x0,p,alpha)
-r = b - A * (x0 + alpha * p);
+r = A * (x0 + alpha * p) - b;
 r( r < 0 ) = 0;
 fvalue = 0.5 * (r' * r);
 end

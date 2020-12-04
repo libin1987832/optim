@@ -8,17 +8,20 @@ clear
 clc
 m1 = 1000; 
 m2 = 1000; n = 1500;
- A1=sprand(m1,n,0.1,1/100)+1;
- A2=sprand(m2,n,0.1,1/100)+1;
+ A1=sprand(m1,n,0.1,1/100);
+ A2=sprand(m2,n,0.1,1/100);
 %A1=rand(m1,n) + 1 ;
 %A2=rand(m2,n) + 1;
 
-b1=rand(m1,1)+1;
-b2=rand(m2,1)+1;
+b1=rand(m1,1);
+b2=rand(m2,1);
 A=[A1;-A2];
 b=[b1;-b2];
+sum(sum(A'*A<0))
 x0=ones(n,1);
-
+% loA = A>0;
+% sloA = sum(loA,2);
+% find(sloA ~= 0 & sloA ~= n)
 %  load('test2.mat')
 %  n=700;
 %det=ones(n,1);
@@ -56,21 +59,22 @@ maxIterA = 30;
 % [rpk2, normr2, xmin2, Ar2, normKKT2 , faceX2, faceA2] = kktResidual(A, b, xk2 , [], 1); 
 % h=semilogy(1:maxIterA,resvec2(1:maxIterA),'bo');
 %  hold on 
-clc
-clear
-load('testAbx0toldettoumaxitforconvergenceipg.mat');
-maxIterA = 20;
- [xk3, resvec3, arvec3, faceXvec3, tf3]  = IPG(A/2+1, b/2+1, x0, 1e-13, 1e-8, 1-1e-10, 2*maxIterA);
- [rpk3, normr3, xmin3, Ar3, normKKT3 , faceX3, faceA3] = kktResidual(A, b, xk3, [], 1);
+% clc
+% clear
+% load('testAbx0toldettoumaxitforconvergenceipg.mat');
+%maxIterA = 10;
+[xk3, resvec3, arvec3, faceXvec3, tf3]  = IPG(A, b, x0, 1e-13, 1e-8, 1-1e-10, 2*maxIterA);
+ %[rpk3, normr3, xmin3, Ar3, normKKT3 , faceX3, faceA3] = kktResidual2(A, b, xk3, [], 1);
 %  h=semilogy(1:maxIterA,resvec3(1:maxIterA),'b+');
 
 %[tf2 normKKT2 normr2
  %tf3 normKKT3 normr3]
-
+% A'*A<0
 %
 % fprintf('& %s & %g & %g & %g & %g &%g \\\\\n','FM',normr1,xmin1,normKKT1,min(Ar1),tf1);
-% fprintf('& %s & %g & %g & %g & %g &%g \\\\\n','Hybrid',normr2,xmin2,normKKT2,min(Ar2),tf2);
-fprintf('& %s & %g & %g & %g & %g &%g \\\\\n','IPG',normr3,xmin3,normKKT3,min(Ar3),tf3);
+% fprintf('& %s & %g & %g & %g & %g &%g
+% \\\\\n','Hybrid',normr2,xmin2,normKKT2,min(Ar2),tf2);%
+% fprintf('& %s & %g & %g & %g & %g &%g \\\\\n','IPG',normr3,xmin3,normKKT3,min(Ar3),tf3);
       
 %[norm(xk1-xk2)]
 %[normKKT1 normKKT2;normr1 normr2]

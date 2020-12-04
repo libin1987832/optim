@@ -2,7 +2,7 @@
 function [alpha, allalpha, retcode] = wolfe(A,b,xk, dk, range, maxit)
 % alphaMin=t*min(-1.*xk./dk);
 rho = 0.5; sigma = 0.6;
-[~, normr, ~, Ar, ~ , ~, ~] = kktResidual(A, b, xk , [], []);
+[~, normr, ~, Ar, ~ , ~, ~] = kktResidual2(A, b, xk , [], []);
 qpc1 = rho * Ar' * dk;
 qpc2 = sigma * Ar' * dk;
 alpha = range;
@@ -22,12 +22,12 @@ end
 sumloop = loopcount; 
 loopcount = 0;
 beta = 2 * alpha;
-[~, ~, ~, Ar, ~ , ~, ~] = kktResidual(A, b, xk + alpha * dk , [], []);
+[~, ~, ~, Ar, ~ , ~, ~] = kktResidual2(A, b, xk + alpha * dk , [], []);
 while Ar' * dk < qpc2 
     loopcount = loopcount + 1;    
     alpha=alpha/2;
     allalpha(sumloop + loopcount) = alpha; 
-    [~, ~, ~, Ar, ~ , ~, ~] = kktResidual(A, b, xk + alpha * dk , [], []);
+    [~, ~, ~, Ar, ~ , ~, ~] = kktResidual2(A, b, xk + alpha * dk , [], []);
     if loopcount > maxit
         alpha = range;
         retcode = [3,sumloop];
@@ -35,7 +35,7 @@ while Ar' * dk < qpc2
     end
 end
 middle = 0.5 * (alpha + beta);
-[~, ~, ~, Ar, ~ , ~, ~] = kktResidual(A, b, xk + middle * dk , [], []);
+[~, ~, ~, Ar, ~ , ~, ~] = kktResidual2(A, b, xk + middle * dk , [], []);
 Ardk = Ar' * dk; 
 sumloop = sumloop + loopcount; 
 loopcount = 0;
@@ -48,7 +48,7 @@ while Ardk < qpc2
     end
     middle = 0.5 * (alpha + beta);
     allalpha(sumloop + loopcount) = alpha; 
-    [~, ~, ~, Ar, ~ , ~, ~] = kktResidual(A, b, xk + middle * dk , [], []);
+    [~, ~, ~, Ar, ~ , ~, ~] = kktResidual2(A, b, xk + middle * dk , [], []);
     Ardk = Ar' * dk; 
     if loopcount > maxit
         alpha = range;
@@ -59,7 +59,7 @@ end
 retcode = [1,sumloop + loopcount];
 end 
 function fvalue = func(A,b,x0,p,alpha)
-r = b - A * (x0 + alpha * p);
+r = A * (x0 + alpha * p) - b;
 r( r < 0 ) = 0;
 fvalue = 0.5 * (r' * r);
 end
