@@ -29,37 +29,18 @@ xfA(:,1) = x0;
 while norm( x0 .* g, inf) > tol || min( g )< -tol
 %while normKKT > tol 
     iter = iter + 1;
-    for i = 2:nf+1
-        z = -rpk;
-        z(z<0) = 0;
-        bk = b + z;
-        [x,f1,residual,exitflag,output,ff]=lsqlin(A,bk,[],[],[],[],zeros(n,1),Inf*ones(n,1),xls,options);
-        x0 = x;
-        rpk = b - A * x;
-        [rpk, normr, ~, g, normKKT, face1, face2] = kktResidual(A, b, x ,rpk,1);
-        resvec((iter-1)*(nf+1) + i-1) = normr;
-        % record the value of the gradient function
-        arvec((iter-1)*(nf+1) + i-1) = normKKT;
-        face1vec((iter-1)*(nf+1) + i-1) = face1;
-        face2vec((iter-1)*(nf+1) + i-1) = face2;    
-        xfA(:,i-1) = x;
-    end
+    simple()
+    [rpk, normr, ~, g, normKKT, face1, face2] = kktResidual(A, b, x ,rpk,1);
+    resvec((iter-1)*(nf+1) + i-1) = normr;
+    % record the value of the gradient function
+    arvec((iter-1)*(nf+1) + i-1) = normKKT;
+    face1vec((iter-1)*(nf+1) + i-1) = face1;
+    face2vec((iter-1)*(nf+1) + i-1) = face2;
+    xfA(:,i-1) = x;
 %    isSub = true;
      isSub = strategy(A,b,x0,[],'PHA',iter,nf,rpk,xfA);
     %isSub = strategy(A,b,steplengthOrk,2,iter,nf,rpk,xfA);
     if isSub
-        AA = (rpk>tol);
-        RR = (x0>0);
-        % subspace
-        AI = A(AA,RR);
-        bI = rpk(AA);
-        u = lsqminnorm(AI,bI);
-        p = zeros(n,1);
-        p(RR) = u;
- %       debug for test.m nf = 2
-        [alpha, aranges, retcode] = arraySpiece(A,b,x0,p);
-        x0 = x0 + alpha*p;
-        indexsm = indexsm + 1;
     else
         x0 = xfA(:, end);
     end
