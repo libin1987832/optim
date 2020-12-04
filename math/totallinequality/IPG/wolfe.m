@@ -58,14 +58,14 @@ while Ardk < qpc2
 end
 retcode = [1,sumloop + loopcount];
 
-%     xa = [0:range/50:range]; 
-%     ya = arrayfun(@(alpha) func(A,b,xk,dk,alpha), xa);   
-%     ya2 = arrayfun(@(alpha) normr + alpha * qpc1 , xa);
-%     ya4 = arrayfun(@(alpha) dfunc(A,b,xk,dk,alpha) >= qpc2 , xa);
-%     ya3 = arrayfun(@(alpha) func(A,b,xk,dk,alpha), allalpha);
-%     plot(alpha,func(A,b,xk,dk,alpha),'v',...
-%         xa,ya,'+',xa,ya2,'o',allalpha,ya3,'x',...
-%         xa(ya4),ones(size(xa(ya4)))*ya(1),'-');
+    xa = [0:range/50:range]; 
+    ya = arrayfun(@(alpha) func(A,b,xk,dk,alpha), xa);   
+    ya2 = arrayfun(@(alpha) normr + alpha * qpc1 , xa);
+    ya4 = arrayfun(@(alpha) dfunc(A,b,xk,dk,alpha) >= qpc2 , xa);
+    ya3 = arrayfun(@(alpha) func(A,b,xk,dk,alpha), allalpha);
+    plot(alpha,func(A,b,xk,dk,alpha),'v',...
+        xa,ya,'+',xa,ya2,'o',allalpha,ya3,'x',...
+        xa(ya4),ones(size(xa(ya4)))*ya(1),'-');
 %     hold on
 
 end 
