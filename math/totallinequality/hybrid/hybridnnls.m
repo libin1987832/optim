@@ -22,7 +22,7 @@ flag = 5;
 while norm( x0 .* g, inf) > tol || min( g )< -tol
 %while normKKT > tol 
     iter = iter + 2;
-    [xkA, rpk] = simple(A, b, x0, n, rpk, nf, tol, options, type);
+    [xkA, rpk] = simple(A, b, x0, n, rpk, nf, 100*tol, options, type);
     [rpk, normr, ~, g, normKKT, face1, face2] = kktResidual(A, b, xkA(:, end), rpk, 1);
     resvec(iter) = normr;
     % record the value of the gradient function

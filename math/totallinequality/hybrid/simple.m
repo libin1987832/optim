@@ -14,7 +14,7 @@ switch type
         end
     case 'IPG'
         for i = 2:nf+1
-            maxit = 20;
+            maxit = 8;
             tou = 0.9;
             z = -rpk;
             z(z<0) = 0;

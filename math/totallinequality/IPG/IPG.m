@@ -36,13 +36,13 @@ while norm( x0 .* g, inf) > tol || min( g )< -tol
 
     [alpha, allalpha, ~] = wolfe(A, b, x0, p, talphak, 20);
     
-%     xa = [0:0.0001:talphak]; 
+%     xa = [0:talphak/50:talphak]; 
 %     ya = arrayfun(@(alpha) func(A,b,x0,p,alpha), xa);   
 %     ya2 = arrayfun(@(alpha) normr + alpha * 0.25 * g' * p , xa);
 %     ya3 = arrayfun(@(alpha) func(A,b,x0,p,alpha), allalpha);
 %     plot(xa,ya,'+',xa,ya2,'o',allalpha,ya3,'x');
 %     hold on
-    
+%     
     %[alpha, knots, retcode] = arraySpiece(A,b,x0,p);
     x0 = x0 + alpha*p;
     [rpk, normr, ~, g, normKKT, faceX, ~] = kktResidual(A, b, x0 , [], 1);
