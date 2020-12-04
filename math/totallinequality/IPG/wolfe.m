@@ -3,10 +3,11 @@ function [alpha, retcode] = wolfe(A,b,xk, dk, range, maxit)
 % alphaMin=t*min(-1.*xk./dk);
 rho = 0.25; sigma = 0.75;
 [~, normr, ~, Ar, ~ , ~, ~] = kktResidual(A, b, xk , [], []);
-qp = rho * Ar' * dk;
+qpc1 = rho * Ar' * dk;
+qpc2 = sigma * Ar' * dk;
 alpha = range;
 loopcount = 0;
-while func(A , b, xk, dk ,alpha) > normr +  alpha * qp   
+while func(A , b, xk, dk ,alpha) > normr +  alpha * qpc1   
     loopcount = loopcount + 1;    
     alpha=alpha/2;
     if loopcount > maxit
@@ -15,28 +16,42 @@ while func(A , b, xk, dk ,alpha) > normr +  alpha * qp
         return;
     end
 end
+sumloop = loopcount; 
 loopcount = 0;
-while func(A , b, xk, dk ,alpha) > normr +  alpha * qp
-        alpha=alpha/2;
-end
 beta = 2 * alpha;
-if ~(fdetq(A,b,xk+alpha*dk)'*dk >= sigma*fdetq(A,b,xk)'*dk)
-%         aa = alpha;
-%         alpha = min([2*alpha, (bb+alpha)/2]);
-        alpha=alpha/2;
-        continue;
+[~, ~, ~, Ar, ~ , ~, ~] = kktResidual(A, b, xk + alpha * dk , [], []);
+while Ar' * dk < qpc2 
+    loopcount = loopcount + 1;    
+    alpha=alpha/2;
+    [~, ~, ~, Ar, ~ , ~, ~] = kktResidual(A, b, xk + alpha * dk , [], []);
+    if loopcount > maxit
+        alpha = range;
+        retcode = [3,sumloop];
+        return;
     end
-%     if alpha<0 || alpha>alphaMin
-%         index=index+1;
-%         alpha=alphaMin-index*detAlpha;
-%         continue;
-%     end
-    break;
-
-
-newxk = xk+alpha*dk;
-newfdetqk = fdetq(A,b,newxk);
-newfk = fq(A,b,newxk);
+end
+middle = 0.5 * (alpha + beta);
+[~, ~, ~, Ar, ~ , ~, ~] = kktResidual(A, b, xk + middle * dk , [], []);
+Ardk = Ar' * dk; 
+sumloop = sumloop + loopcount; 
+loopcount = 0;
+while Ardk < qpc2 
+    loopcount = loopcount + 1;    
+    if Ardk > 0
+    beta = middle;
+    else
+    alpha = middle;    
+    end
+    middle = 0.5 * (alpha + beta);
+    [~, ~, ~, Ar, ~ , ~, ~] = kktResidual(A, b, xk + middle * dk , [], []);
+    Ardk = Ar' * dk; 
+    if loopcount > maxit
+        alpha = range;
+        retcode = [4,sumloop];
+        return;
+    end
+end
+retcode = [1,sumloop + loopcount];
 end 
 function fvalue = func(A,b,x0,p,alpha)
 r = b - A * (x0 + alpha * p);
