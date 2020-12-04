@@ -43,18 +43,24 @@ options.StepTolerance = 1e-13;
 %  b = b + 700;
 maxIterA = 30;
 % tic
-[x1,f1,residual,exitflag,output,ff]=lsqlin([A,-eye(m1+m2)],b,[],[],[],[],zeros(n+m1+m2,1),Inf*ones(n+m1+m2,1),x0,options);
- tf1=toc;
-% xk0 = x1(1:n);
-% [rpk0, normr0, xmin0, Ar0, normKKT0 , faceX0, faceA0] = kktResidual(A, b, xk0 , [], 1); 
-% [xk1, resvec, arvec, face1vec, face2vec, tf1]=fixedMatrix(A,b,x0,maxIterA,1e-15,options);
+% [x1,f1,residual,exitflag,output,ff] = lsqlin([A,-eye(m1+m2)],b,[],[],[],[],zeros(n+m1+m2,1),Inf*ones(n+m1+m2,1),x0,options);
+%  tf0=toc;
+%  xk0 = x1(1:n);
+%  [rpk0, normr0, xmin0, Ar0, normKKT0 , faceX0, faceA0] = kktResidual(A, b, xk0 , [], 1); 
+%  fprintf('& %s & %g & %g & %g & %g &%g \\\\\n','ls',normr0,xmin0,normKKT0,min(Ar0),tf0);
+
+ % [xk1, resvec, arvec, face1vec, face2vec, tf1]=fixedMatrix(A,b,x0,maxIterA,1e-15,options);
 % [rpk1, normr1, xmin1, Ar1, normKKT1 , faceX1, faceA1] = kktResidual(A, b, xk1 , [], 1); 
 % %(A, b, x0, tol, nf, maxit, options, type)
 % [xk2,resvec2,arvec2,face1h,face2h,tf2] = hybridnnls(A,b,x0,1e-5,3, maxIterA, options, 'IPG');
 % [rpk2, normr2, xmin2, Ar2, normKKT2 , faceX2, faceA2] = kktResidual(A, b, xk2 , [], 1); 
 % h=semilogy(1:maxIterA,resvec2(1:maxIterA),'bo');
 %  hold on 
- [xk3, resvec3, arvec3, faceXvec3, tf3]  = IPG(A, b, x0, 1e-13, 1e-8, 0.98, 2*maxIterA);
+clc
+clear
+load('testAbx0toldettoumaxitforconvergenceipg.mat');
+maxIterA = 20;
+ [xk3, resvec3, arvec3, faceXvec3, tf3]  = IPG(A/2+1, b/2+1, x0, 1e-13, 1e-8, 1-1e-10, 2*maxIterA);
  [rpk3, normr3, xmin3, Ar3, normKKT3 , faceX3, faceA3] = kktResidual(A, b, xk3, [], 1);
 %  h=semilogy(1:maxIterA,resvec3(1:maxIterA),'b+');
 
@@ -63,7 +69,6 @@ maxIterA = 30;
 
 %
 % fprintf('& %s & %g & %g & %g & %g &%g \\\\\n','FM',normr1,xmin1,normKKT1,min(Ar1),tf1);
- fprintf('& %s & %g & %g & %g & %g &%g \\\\\n','ls',normr0,xmin0,normKKT0,min(Ar0),tf0);
 % fprintf('& %s & %g & %g & %g & %g &%g \\\\\n','Hybrid',normr2,xmin2,normKKT2,min(Ar2),tf2);
 fprintf('& %s & %g & %g & %g & %g &%g \\\\\n','IPG',normr3,xmin3,normKKT3,min(Ar3),tf3);
       
