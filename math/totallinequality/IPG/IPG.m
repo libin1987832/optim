@@ -24,14 +24,15 @@ while norm( x0 .* g, inf) > tol || min( g )< -tol
     loopcount = loopcount +1;
     I = rpk > 0;
     Ax = b - rpk;
-  %   Ax = A * x0;
-  %  I = b - Ax > 1e-15;
- %   ADA = A'*diag(I)*A*x0;
     ADA = A(I,:)' * Ax(I);
     d = x0./(ADA+det);
     assert(sum(abs(d<0))==0);
     p = - d .* g;
     assert( g'*p < 0);
+    cos1 = g'*p / (norm(g)*norm(p));
+    np = -(A(I,:)'*A(I,:))\g;  
+    cos2 =  np'*p / (norm(np)*norm(p))
+    
     alphaAll = - x0./p;
     alphak = min(alphaAll(alphaAll>0));
     if isempty(alphak)
@@ -39,29 +40,9 @@ while norm( x0 .* g, inf) > tol || min( g )< -tol
     end
     talphak = tou * alphak;
 
-    [alpha, allalpha, ~] = wolfe(A, b, x0, p, talphak, 20);
-    
-    xa = [0:talphak/50:talphak]; 
-    ya = arrayfun(@(alpha) func(A,b,x0,p,alpha), xa);   
-    ya2 = arrayfun(@(alpha) normr + alpha * 0.5 * g' * p , xa);
-    ya3 = arrayfun(@(alpha) func(A,b,x0,p,alpha), allalpha);
-    plot(xa,ya,'+',xa,ya2,'o',allalpha,ya3,'x');
-    hold on
-%     
-    %[rpk1, normr1, ~, g1, normKKT1, faceX1, ~] = kktResidual2(A, b, x0 , [], 1);
-;g/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////bbbbbbbbbbbb/bb/b/b//b/b/b/b/b/b//b/bb//b.v;ff;;f;f;f;f;f;f;p;f
-f
-f
-
-fjff
-F[f[f[x0 = x0 + alpha * p;
+    [alpha, ~, ~] = wolfe(A, b, x0, p, talphak, 20);
+    x0 = x0 + alpha * p;
     [rpk, normr, ~, g, normKKT, faceX, ~] = kktResidual(A, b, x0 , [], 1);
-%     if normr1 < normr
-%         normr1
-%     end
-%     %xa = [0.019:0.00001:0.021]; 
-    %ya = arrayfun(@(alpha) func(A,b,x0,p,alpha), xa);
-
     % record the value of objection function
     resvec(loopcount) = normr;
     % record the value of the gradient function
@@ -70,10 +51,5 @@ F[f[f[x0 = x0 + alpha * p;
 end
 xk=x0;
 tf = etime(clock,t);
-end
-function fvalue = func(A,b,x0,p,alpha)
-r = b - A * (x0 + alpha * p) ;
-r( r < 0 ) = 0;
-fvalue =  0.5*(r' * r);
 end
 
