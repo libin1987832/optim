@@ -12,13 +12,14 @@ m2 = 500; n = 70;
 %A1=rand(m1,n) + 1 ;
 %A2=rand(m2,n) + 1;
 
-b1=rand(m1,1)+1;
-b2=rand(m2,1)+1;
-A=[A1;-A2];
-b=[b1;-b2];
-x0=ones(n,1);
-% load('test2.mat')
-% n=700;
+% b1=rand(m1,1)+1;
+% b2=rand(m2,1)+1;
+% A=[A1;-A2];
+% b=[b1;-b2];
+% x0=ones(n,1);
+
+ load('test2.mat')
+ n=700;
 %det=ones(n,1);
  maxIterA = 20;
 % beginp = 1;
@@ -45,9 +46,9 @@ options.StepTolerance = 1e-13;
 %[rpk0, normr0, xmin0, Ar0, normKKT0 , face120, face220] = kktResidual(A, b, xk0 , [], 1); 
 %[xk1, resvec, arvec, face1vec, face2vec, tf1]=fixedMatrix(A,b,x0,maxit,1e-15,options);
 %[rpk1, normr1, xmin1, Ar1, normKKT1 , face12, face22] = kktResidual(A, b, xk1 , [], 1); 
-[xk2,resvec,arvec,face1h,face2h,tf2] = hybridnnls(A,b,x0,alpha,2,maxIterA,options);
-[rpk2, normr2, xmin2, Ar2, normKKT2 , face12, face22] = kktResidual(A, b, xk2 , [], 1);
-[xk3,resvec3,arvec3,face1vec3,face2vec3,tf3]=IPG(A,b,x0,1e-4,1e-5,0.5,5000);
+% [xk2,resvec,arvec,face1h,face2h,tf2] = hybridnnls(A,b,x0,2,maxIterA,options);
+%[rpk2, normr2, xmin2, Ar2, normKKT2 , face12, face22] = kktResidual(A, b, xk2 , [], 1);
+ [xk3, resvec3, arvec3, faceXvec3, tf3]  =IPG(A,b,x0,1e-4,1e-5,0.5,5000);
 [rpk3, normr3, xmin3, Ar3, normKKT3 , face13, face23] = kktResidual(A, b, xk3 , [], 1);
 %[tf2 normKKT2 normr2
  %tf3 normKKT3 normr3]

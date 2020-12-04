@@ -1,15 +1,18 @@
 % 网上下载的一个wolf条件实现算法
-function [alpha, retcode] = wolfe(A,b,xk, dk, range, maxit)
+function [alpha, allalpha, retcode] = wolfe(A,b,xk, dk, range, maxit)
 % alphaMin=t*min(-1.*xk./dk);
 rho = 0.25; sigma = 0.75;
 [~, normr, ~, Ar, ~ , ~, ~] = kktResidual(A, b, xk , [], []);
 qpc1 = rho * Ar' * dk;
 qpc2 = sigma * Ar' * dk;
 alpha = range;
-loopcount = 0;
+loopcount = 1;
+allalpha = zeros(3 * maxit ,1);
+allalpha(1) = alpha; 
 while func(A , b, xk, dk ,alpha) > normr +  alpha * qpc1   
     loopcount = loopcount + 1;    
     alpha=alpha/2;
+    allalpha(loopcount) = alpha; 
     if loopcount > maxit
         alpha = range;
         retcode = [2,loopcount];
@@ -23,6 +26,7 @@ beta = 2 * alpha;
 while Ar' * dk < qpc2 
     loopcount = loopcount + 1;    
     alpha=alpha/2;
+    allalpha(sumloop + loopcount) = alpha; 
     [~, ~, ~, Ar, ~ , ~, ~] = kktResidual(A, b, xk + alpha * dk , [], []);
     if loopcount > maxit
         alpha = range;
@@ -43,6 +47,7 @@ while Ardk < qpc2
     alpha = middle;    
     end
     middle = 0.5 * (alpha + beta);
+    allalpha(sumloop + loopcount) = alpha; 
     [~, ~, ~, Ar, ~ , ~, ~] = kktResidual(A, b, xk + middle * dk , [], []);
     Ardk = Ar' * dk; 
     if loopcount > maxit
