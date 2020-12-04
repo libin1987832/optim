@@ -1,74 +1,62 @@
-function [xk,resvec,arvec,face1vec,face2vec,tf] = hybridnnls(A,b,x0,nf,maxit,options)
+function [xk, resvec, arvec, face1vec, face2vec, tf] = hybridnnls(A, b, x0, tol, nf, maxit, options, type)
 t=clock;
 % stop criterion
-tol = 1e-13;
 [m,n] = size(A);
-lsqrTol = 1e-13;
-maxIter = maxit;
-[rpk, normr, ~, g, normKKT,face1,face2] = kktResidual(A, b, x0,[],1);
-iter = 0;
+[rpk, normr, ~, g, normKKT, face1, face2] = kktResidual(A, b, x0,[],1);
+iter = 1;
 % the residual vector
-resvec = zeros(1,(maxit + 1)*(nf+1));
+resvec = zeros(1,maxit);
 % the normal gradient 
-arvec = zeros(1,(maxit + 1)*(nf+1));
-% subspace minization
-itersm = zeros(1,maxit + 1);
+arvec = zeros(1,maxit);
 % face b-Ax
-face1vec = zeros(1,(maxit + 1)*(nf+1));
+face1vec = zeros(1,maxit);
 % face x
-face2vec = zeros(1,(maxit + 1)*(nf+1));
+face2vec = zeros(1,maxit);
 resvec(1) = normr;
 arvec(1) = normKKT;
 face1vec(1) =face1;
 face2vec(1) =face2;
-indexsm = 0;
+
 % flag 0-4 return lsqr flag
 flag = 5;
-xfA = zeros(n,nf);
-xfA(:,1) = x0;
 while norm( x0 .* g, inf) > tol || min( g )< -tol
 %while normKKT > tol 
-    iter = iter + 1;
-    simple()
-    [rpk, normr, ~, g, normKKT, face1, face2] = kktResidual(A, b, x ,rpk,1);
-    resvec((iter-1)*(nf+1) + i-1) = normr;
+    iter = iter + 2;
+    [xkA, rpk] = simple(A, b, x0, n, rpk, nf, tol, options, type);
+    [rpk, normr, ~, g, normKKT, face1, face2] = kktResidual(A, b, xkA(:, end), rpk, 1);
+    resvec(iter) = normr;
     % record the value of the gradient function
-    arvec((iter-1)*(nf+1) + i-1) = normKKT;
-    face1vec((iter-1)*(nf+1) + i-1) = face1;
-    face2vec((iter-1)*(nf+1) + i-1) = face2;
-    xfA(:,i-1) = x;
+    arvec(iter) = normKKT;
+    face1vec(iter) = face1;
+    face2vec(iter) = face2;
 %    isSub = true;
-     isSub = strategy(A,b,x0,[],'PHA',iter,nf,rpk,xfA);
-    %isSub = strategy(A,b,steplengthOrk,2,iter,nf,rpk,xfA);
+     isSub = strategy(A,b,x0,[],'PHA',iter,nf,rpk,xkA);
     if isSub
+        [x0, rpk] = newton(A, b, n, rpk, xkA(:, end));
+        [rpk, normr, ~, g, normKKT, face1, face2] = kktResidual(A, b, x0 , rpk, 1);
+        % record the value of objection function
+        resvec(iter +1) = normr;
+        % record the value of the gradient function
+        arvec(iter +1) = normKKT;
+        face1vec(iter +1) = face1;
+        face2vec(iter +1) = face2;
     else
-        x0 = xfA(:, end);
+        x0 = xkA(:, end);
     end
-    [rpk, normr, xmin, Ar, normKKT, face1, face2] = kktResidual(A, b, x0 , [], 1);
-    % record the value of objection function
-    resvec((iter-1)*(nf+1) + nf+1) = normr;
-    % record the value of the gradient function
-    arvec((iter-1)*(nf+1) + nf+1) = normKKT;
-    face1vec((iter-1)*(nf+1) + nf + 1) = face1;
-    face2vec((iter-1)*(nf+1) + nf + 1) = face2;
+    
 %    if iter > maxit || flag == 0
-if iter > maxit
+    if iter > maxit
         break;
-    end
-    if flag < 5 || flag > 6 
-        flag = 5;
     end
 end
 xk = x0;
-resvec = resvec(resvec>0);
-% the normal gradient 
-arvec = arvec(arvec>0);
-% subspace minization
-itersm = itersm(itersm>0);
-% face b-Ax
-face1vec = face1vec(face1vec>0);
-% face x
-face2vec = face2vec(face2vec>0);
+% resvec = resvec(resvec>0);
+% % the normal gradient 
+% arvec = arvec(arvec>0);
+% % face b-Ax
+% face1vec = face1vec(face1vec>0);
+% % face x
+% face2vec = face2vec(face2vec>0);
 tf = etime(clock,t);
 
 

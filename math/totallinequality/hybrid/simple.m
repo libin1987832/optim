@@ -1,4 +1,4 @@
-function [xkA, rpk] = simple(A, b, x0, n, rpk, nf, options, type)
+function [xkA, rpk] = simple(A, b, x0, n, rpk, nf, tol, options, type)
 xkA = zeros(n,nf+1);
 xkA(:, 1) = x0;
 switch type
@@ -14,42 +14,19 @@ switch type
         end
     case 'IPG'
         for i = 2:nf+1
+            maxit = 20;
+            tou = 0.9;
             z = -rpk;
             z(z<0) = 0;
             bk = b + z;
-            Ax = b - rpk;
-            ATb = A' * bk;
-            
-            ATAx = A' * Ax;
-            Ar = ATAx - ATb;
-            d = x0./ATAx;
-            p = - d .* Ar;
-            alphaAll = - x0./p;
-            alphak = min(alphaAll(alphaAll>0));
-            if isempty(alphak)
-                alphak = 1;
-            end
-            talphak = tou * alphak;
-            Ap = A * p;
-            Apn = Ap' * Ap;
-            alphaStar = - (p' * Ar) / Apn;
-            alpha = min(talphak, alphaStar);
-            x0 = x0 + alpha * p;
-            
+            [x0,~] = IPGnnls(A, bk, x0, rpk, tol, tou,maxit);
+            rpk = b - A * x0;
             xkA(:,i) = x0;
-        end
-        %     xa = [0:0.0001:talphak];
-        %     ya = arrayfun(@(alpha) func(A,b,x0,p,alpha), xa);
-        %     ya2 = arrayfun(@(alpha) normr + alpha * 0.25 * g' * p , xa);
-        %     ya3 = arrayfun(@(alpha) func(A,b,x0,p,alpha), allalpha);
-        %     plot(xa,ya,'+',xa,ya2,'o',allalpha,ya3,'x');
-        %     hold on
-        
-        %[alpha, knots, retcode] = arraySpiece(A,b,x0,p);
-        x0 = x0 + alpha*p;
-        
+        end        
     case 'lsqrlsqlin'
 end
+
+
 
 
 % for i = 2:nf+1

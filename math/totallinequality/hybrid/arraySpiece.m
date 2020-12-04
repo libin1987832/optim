@@ -10,8 +10,10 @@ knot = unique(knot);
 left = 1;
 right = length(knot)-1;
 loopcount = 1;
+alpha = 1;
+retcode = [1, 0];
 %for i = 2:length(aranges)
-while left+1  ~= right && loopcount < maxits
+while left+1  < right && loopcount < maxits
     loopcount = loopcount + 1;
     i = floor(0.5*(left + right));
     % take the middle value for active set
