@@ -2,7 +2,7 @@
 function [xk, resvec, arvec, faceXvec, tf] = IPG(A,b,x0,tol,det,tou,maxit)
 %x
 t=clock;
-loopcount = 0;
+loopcount = 1;
 [rpk, normr, ~, g, normKKT, faceX, ~] = kktResidual(A, b, x0 , [], 1);
 % the residual vector
 resvec = zeros(1,maxit);
@@ -15,6 +15,9 @@ arvec(1) = normKKT;
 faceXvec(1) =faceX;
 
 while norm( x0 .* g, inf) > tol || min( g )< -tol
+%     if normr <157
+%         dd=1;
+%     end
     if loopcount > maxit
         break;
     end
@@ -26,11 +29,20 @@ while norm( x0 .* g, inf) > tol || min( g )< -tol
     p = - d .* g;
     alphaAll = - x0./p;
     alphak = min(alphaAll(alphaAll>0));
+    if isempty(alphak)
+        alphak = 1;
+    end
     talphak = tou * alphak;
-    xa = [0.019:0.00001:0.021]; 
-    ya = arrayfun(@(alpha) func(A,b,x0,p,alpha), xa);
 
     [alpha, allalpha, ~] = wolfe(A, b, x0, p, talphak, 20);
+    
+%     xa = [0:0.0001:talphak]; 
+%     ya = arrayfun(@(alpha) func(A,b,x0,p,alpha), xa);   
+%     ya2 = arrayfun(@(alpha) normr + alpha * 0.25 * g' * p , xa);
+%     ya3 = arrayfun(@(alpha) func(A,b,x0,p,alpha), allalpha);
+%     plot(xa,ya,'+',xa,ya2,'o',allalpha,ya3,'x');
+%     hold on
+    
     %[alpha, knots, retcode] = arraySpiece(A,b,x0,p);
     x0 = x0 + alpha*p;
     [rpk, normr, ~, g, normKKT, faceX, ~] = kktResidual(A, b, x0 , [], 1);
