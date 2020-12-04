@@ -44,12 +44,12 @@ options.StepTolerance = 1e-13;
 %  A = A + 1;
 %  b = b + 700;
 maxIterA = 100;
-% tic
-% [x1,f1,residual,exitflag,output,ff] = lsqlin([A,-eye(m1+m2)],b,[],[],[],[],zeros(n+m1+m2,1),Inf*ones(n+m1+m2,1),x0,options);
-%  tf0=toc;
-%  xk0 = x1(1:n);
-%  [rpk0, normr0, xmin0, Ar0, normKKT0 , faceX0, faceA0] = kktResidual(A, b, xk0 , [], 1); 
-%  fprintf('& %s & %g & %g & %g & %g &%g \\\\\n','ls',normr0,xmin0,normKKT0,min(Ar0),tf0);
+tic
+[x1,f1,residual,exitflag,output,ff] = lsqlin([A,-eye(m1+m2)],b,[],[],[],[],zeros(n+m1+m2,1),Inf*ones(n+m1+m2,1),x0,options);
+ tf0=toc;
+ xk0 = x1(1:n);
+ [rpk0, normr0, xmin0, Ar0, normKKT0 , faceX0, faceA0] = kktResidual(A, b, xk0 , [], 1); 
+ fprintf('& %s & %g & %g & %g & %g &%g \\\\\n','ls',normr0,xmin0,normKKT0,min(Ar0),tf0);
 
  % [xk1, resvec, arvec, face1vec, face2vec, tf1]=fixedMatrix(A,b,x0,maxIterA,1e-15,options);
 % [rpk1, normr1, xmin1, Ar1, normKKT1 , faceX1, faceA1] = kktResidual(A, b, xk1 , [], 1); 
@@ -61,7 +61,7 @@ maxIterA = 100;
 % clc
 % clear
 % load('testAbx0toldettoumaxitforconvergenceipg.mat');
-%maxIterA = 10;
+maxIterA = 20;
 [xk3, resvec3, arvec3, faceXvec3, tf3]  = IPG(A, b, x0, 1e-13, 1e-8, 1-1e-10, 2*maxIterA);
 [rpk3, normr3, xmin3, Ar3, normKKT3 , faceX3, faceA3] = kktResidual2(A, b, xk3, [], 1);
  fprintf('& %s & %g & %g & %g & %g &%g \\\\\n','IPG',normr3,xmin3,normKKT3,min(Ar3),tf3);
