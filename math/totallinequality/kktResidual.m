@@ -3,6 +3,11 @@ function [rpk, normr, xmin, Ar, normKKT , faceX, faceA] = kktResidual(A, b, x , 
 if nargin < 4 || isempty(rpk)
 rpk = b - A * x;
 end
+switch type
+    case 10
+        
+
+
 r = rpk;
 r(r<0) = 0;
 normr = 0.5*norm(r,2)^2;

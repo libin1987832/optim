@@ -35,23 +35,33 @@ while norm( x0 .* g, inf) > tol || min( g )< -tol
             Ax = b - rpk;
             ADA = A(I,:)' * Ax(I);
             d = x0./(ADA + det);
-            if sum(abs(d<0))>0
+            if sum(abs(d<0)) < 0
             assert(sum(abs(d<0)) > 0);
             end
             p = - d .* g;
-            assert( g'*p < 0);
-            
+            if g'*p > 0
+                assert( g'*p < 0);
+            end            
     end
-    x0(x0<1e-15) = 0;
-    p(x0<1e-15) = 0;
+%     x0(x0<1e-10) = 0;
+%     p(x0<1e-10) = 0;
+%    alphaAll = - x0(x0>1e-10)./p(x0>1e-10);
     alphaAll = - x0./p;
     alphak = min(alphaAll(alphaAll>0));
     if isempty(alphak)
         alphak = 10;
     end
     talphak = tou * alphak;
-    
-    [alpha, ~, ~] = wolfe(A, b, x0, p, talphak, 20);
+    %[alpha, knot, retcode] = arraySpiece(A,b,x0,p,1e-5,30);
+    [alpha, ~, retcode] = wolfe(A, b, x0, p, talphak, 30);
+     faceXvec(loopcount) = alpha; 
+%     if retcode(1) ~= 1  
+%         [~, normrr, ~, ~, ~, ~, ~] = kktResidual(A, b, x0 + alpha * p , [], 1);
+%         warning("wolfe failed");
+%         if normrr > normr
+%         break;
+%         end
+%     end
     x0 = x0 + alpha * p;
     
     
@@ -60,7 +70,7 @@ while norm( x0 .* g, inf) > tol || min( g )< -tol
     resvec(loopcount) = normr;
     % record the value of the gradient function
     arvec(loopcount) = normKKT;
-    faceXvec(loopcount) = faceX;
+  %  faceXvec(loopcount) = faceX;
 end
 xk=x0;
 tf = etime(clock,t);
