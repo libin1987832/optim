@@ -1,7 +1,7 @@
 % 网上下载的一个wolf条件实现算法
 function [alpha, allalpha, retcode] = wolfe(A,b,xk, dk, range, maxit)
 % alphaMin=t*min(-1.*xk./dk);
-rho = 0.3; sigma = 0.5;
+rho = 0.3; sigma = 0.31;
 [~, normr, ~, Ar, ~ , ~, ~] = kktResidual(A, b, xk , [], []);
 qpc1 = rho * Ar' * dk;
 qpc2 = sigma * Ar' * dk;
@@ -58,14 +58,14 @@ while Ardk < qpc2
 end
 retcode = [1,sumloop + loopcount];
 
-    xa = [0:range/50:range]; 
-    ya = arrayfun(@(alpha) func(A,b,xk,dk,alpha), xa);   
-    ya2 = arrayfun(@(alpha) normr + alpha * qpc1 , xa);
-    ya4 = arrayfun(@(alpha) dfunc(A,b,xk,dk,alpha) >= qpc2 , xa);
-    ya3 = arrayfun(@(alpha) func(A,b,xk,dk,alpha), allalpha);
-    plot(alpha,func(A,b,xk,dk,alpha),'v',...
-        xa,ya,'+',xa,ya2,'o',allalpha,ya3,'x',...
-        xa(ya4),ones(size(xa(ya4)))*ya(1),'-');
+%     xa = [0:range/50:range]; 
+%     ya = arrayfun(@(alpha) func(A,b,xk,dk,alpha), xa);   
+%     ya2 = arrayfun(@(alpha) normr + alpha * qpc1 , xa);
+%     ya4 = arrayfun(@(alpha) dfunc(A,b,xk,dk,alpha) >= qpc2 , xa);
+%     ya3 = arrayfun(@(alpha) func(A,b,xk,dk,alpha), allalpha);
+%     plot(alpha,func(A,b,xk,dk,alpha),'v',...
+%         xa,ya,'+',xa,ya2,'o',allalpha,ya3,'x',...
+%         xa(ya4),ones(size(xa(ya4)))*ya(1),'-');
 %     hold on
 
 end 
