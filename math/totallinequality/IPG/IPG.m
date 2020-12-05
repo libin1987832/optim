@@ -35,11 +35,15 @@ while norm( x0 .* g, inf) > tol || min( g )< -tol
             Ax = b - rpk;
             ADA = A(I,:)' * Ax(I);
             d = x0./(ADA + det);
-            assert(sum(abs(d<0))==0);
+            if sum(abs(d<0))>0
+            assert(sum(abs(d<0)) > 0);
+            end
             p = - d .* g;
             assert( g'*p < 0);
             
     end
+    x0(x0<1e-15) = 0;
+    p(x0<1e-15) = 0;
     alphaAll = - x0./p;
     alphak = min(alphaAll(alphaAll>0));
     if isempty(alphak)
@@ -64,5 +68,6 @@ end
 %% test example
 % A = [1 3;2 4;-5 -6]; b = [5;6;-3]; x0 = [1;1];
 % -g = [39;45]; ADA = [26 33;33 45]; ADAx = [59;78];
-% p = [39/59;45/78] pnt = [30/9; -13/9]
+% p = [39/59;45/78] pnt = [30/9; -13/9] 
+% alpha = +inf alpha = 9/13  alpha =1 f = 8+39*5/59+180/78=13.6128^2
 

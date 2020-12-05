@@ -43,6 +43,7 @@ options.StepTolerance = 1e-13;
 %  alpha = 1/max(eig(A'*A));
 %  A = A + 1;
 %  b = b + 700;
+ A = [1 3;2 4;-5 -6]; b = [5;6;-3]; x0 = [1;1];m1=2;m2=1;n=2;
 maxIterA = 100;
 tic
 [x1,f1,residual,exitflag,output,ff] = lsqlin([A,-eye(m1+m2)],b,[],[],[],[],zeros(n+m1+m2,1),Inf*ones(n+m1+m2,1),x0,options);
@@ -65,7 +66,7 @@ maxIterA = 20;
 % [xk3, resvec3, arvec3, faceXvec3, tf3]  = IPG(A, b, x0, 1e-13, 1e-8, 1-1e-10, 2*maxIterA,'IPG');
 % [rpk3, normr3, xmin3, Ar3, normKKT3 , faceX3, faceA3] = kktResidual(A, b, xk3, [], 1);
 %  fprintf('& %s & %g & %g & %g & %g &%g \\\\\n','IPG',normr3,xmin3,normKKT3,min(Ar3),tf3);
-[xk3, resvec3, arvec3, faceXvec3, tf3]  = IPG(A, b, x0, 1e-13, 1e-8, 1-1e-10, 2*maxIterA,'NT');
+[xk3, resvec3, arvec3, faceXvec3, tf3]  = IPG(A, b, x0, 1e-13, 1e-8, 1-1e-10, 2*maxIterA,'IPG');
 [rpk3, normr3, xmin3, Ar3, normKKT3 , faceX3, faceA3] = kktResidual(A, b, xk3, [], 1);
  fprintf('& %s & %g & %g & %g & %g &%g \\\\\n','NT',normr3,xmin3,normKKT3,min(Ar3),tf3);
 % [xk3, resvec3, arvec3, faceXvec3, tf3]  = IPG(A, b, x0, 1e-13, 1e-8, 1-1e-10, 2*maxIterA,'ST');
