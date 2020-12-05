@@ -3,8 +3,9 @@ function [xk, resvec, arvec, faceXvec, tf] = IPG(A,b,x0,tol,det,tou,maxit,dtype)
 %x
 t=clock;
 loopcount = 1;
-[rpk, normr, ~, g, normKKT, faceX, ~] = kktResidual(A, b, x0 , [], 1);
+%[rpk, normr, ~, g, normKKT, faceX, ~] = kktResidual(A, b, x0 , [], 1);
 % the residual vector
+
 resvec = zeros(1,maxit);
 % the normal gradient
 arvec = zeros(1,maxit);
@@ -75,6 +76,22 @@ end
 xk=x0;
 tf = etime(clock,t);
 end
+
+function fvalue = func(A,b,x0,p,alpha)
+Ap = A * (x0 + alpha * p);
+r = b - Ap;
+r( r < 0 ) = 0;
+fvalue = 0.5 * (r' * r);
+end
+
+function fvalue = dfunc(A,b,x0,p,alpha)
+Ap = A * (x0 + alpha * p);
+r = b - Ap ;
+r( r < 0 ) = 0;
+Ap = A * p;
+fvalue =  -Ap' * r;
+end
+
 %% test example
 % A = [1 3;2 4;-5 -6]; b = [5;6;-3]; x0 = [1;1];
 % -g = [39;45]; ADA = [26 33;33 45]; ADAx = [59;78];

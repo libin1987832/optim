@@ -17,7 +17,7 @@ b1=rand(m1,1);
 b2=rand(m2,1);
 A=[A1;-A2];
 b=[b1;-b2];
-x0=ones(n,1);
+x0=sparse(ones(n,1));
 % loA = A>0;
 % sloA = sum(loA,2);
 % find(sloA ~= 0 & sloA ~= n)
