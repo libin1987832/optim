@@ -29,7 +29,8 @@ while norm( x0 .* g, inf) > tol || min( g )< -tol
     %cos1 = -g'*p / (norm(g)*norm(p));
     switch dtype
         case 'NT'
-            p = -(A(I,:)'*A(I,:)+det)\g;
+%             p = -(A(I,:)'*A(I,:)+det)\g;
+             p = lsqminnorm(A(I,:)'*A(I,:), -g);
             %  cos2 =  np'*p / (norm(np)*norm(p));
         case 'ST'
             p = -g;
