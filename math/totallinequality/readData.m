@@ -1,8 +1,6 @@
-function [A,b,x0] = readData(type)
+function [A,b,x0] = readData(type,m1,m2,n)
 switch type
     case 1
-        m1 = 1000;
-        m2 = 1000; n = 200;
         A1=abs(sprand(m1,n,0.1,1/100))/100;
         A2=abs(sprand(m2,n,0.1,1/100))/100;
         %A1=rand(m1,n) + 1 ;
@@ -11,7 +9,7 @@ switch type
         b2=rand(m2,1);
         A=[A1;-A2];
         b=[b1;-b2];
-        x0=sparse(ones(n,1));
+        x0=ones(n,1);
     case 2
          load('test')
          m1 = 5;m2=5;n=7;

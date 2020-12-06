@@ -1,4 +1,4 @@
-function [x,flag,relres,iter,resvec,lsvec,out] = lsqrm(A,b,tol,maxit,M1,M2,x0,ALL,bLL,xs,AA,type,varargin)
+function [x,flag,relres,iter,resvec,lsvec,out] = lsqrmx(A,b,tol,maxit,M1,M2,x0,ALL,bLL,xs,AA,type,varargin)
 out = false;
 % Check for an acceptable number of input arguments
 if nargin < 2

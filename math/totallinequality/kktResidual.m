@@ -7,7 +7,7 @@ r = rpk;
 r(r<0) = 0;
 normr = 0.5*norm(r,2)^2;
 %xmin = min( x );
-xmin = norm( x );
+xmin = min( x );
 Ar = -1;
 normKKT = -1;
 % if the parametre is greater than 4 , save the computation of  Ar 

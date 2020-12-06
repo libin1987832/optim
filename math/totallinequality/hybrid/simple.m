@@ -28,37 +28,28 @@ switch type
             z = -rpk;
             z(z<0) = 0;
             bk = b + z;
+            
             AA = (rpk>tol);
             % subspace
             AI = A(AA,:);
             bI = rpk(AA);
-
-            [u,flag,relres,iter,resvec,lsvec,out] = lsqrm(AI,bI,lsqrTol,maxIter,[],[],zeros(n,1),A,b,x0,AA);
-            if ~out
+            lsqrTol= 1e-5;
+            maxIter =10;
+            [u,flag,relres,iter,resvec,lsvec,out] = lsqrmx(AI,bI,lsqrTol,maxIter,[],[],zeros(n,1),A,b,x0,AA,3);
+            if ~out && all(x0 + u > 0) 
                 xs = x0 + u;
-                len = iter;
                 rpk = b - A * xs;
             else
                 u = AI\bI;
-                %     u = lsqminnorm(AI,bI);
-                aa = spiecewise(A,b,u,x0);
+                 %    u = lsqminnorm(AI,bI);
+                [aa, knot, retcode] = arraySpiece(A,b,x0,u,1e-5,30);
+%                 aa = spiecewise(A,b,u,x0);
                 xs = x0 + aa * u;
+                xs(xs<0) = 0;
                 rpk = b - A * xs;
                 x0=xs;
-                %  for i=1:6
-                %         I = find(rpk>=tol);
-                %         AI = A(I,:);
-                %         hk = lsqminnorm(AI,rpk(I));
-                %  %       hk = AI \ rpk(I);
-                %         aa = spiecewise(A,b,hk,x0);
-                %         xs = x0 + aa * hk;
-                %         x0 = xs;
-                %         rpk = b - A * x0;
-                %   end
-                len = aa;
-                flag = flag + 6;
+                xkA(:,i) = x0;
             end
-            
         end
 end
 

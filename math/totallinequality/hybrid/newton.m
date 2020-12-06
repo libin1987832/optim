@@ -13,11 +13,12 @@ p = zeros(n, 1);
 p(RR) = u;
 [rpk, normr, ~, g, normKKT, face1, face2] = kktResidual(A, b, x0 , rpk, 1);
 if p'*g > 0
-assert(p'*g < 0)
+    assert(p'*g < 0)
 end
 % debug for test.m nf = 2
 [alpha, aranges, retcode] = arraySpiece(A, b, x0, p);
 xs = x0 + alpha * p;
+xs(xs<0) = 0;
 % rpk = b - A * xs;
 % xa = [0:alpha/100:alpha*1.4];
 % ya = arrayfun(@(alpha) funmin(A,b,x0,p,alpha), xa);
