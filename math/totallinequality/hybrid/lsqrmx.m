@@ -1,5 +1,5 @@
 function [x,flag,relres,iter,resvec,lsvec,out] = lsqrmx(A,b,tol,maxit,M1,M2,x0,ALL,bLL,xs,AA,type,varargin)
-display = true;
+display = false;
 out = false;
 % Check for an acceptable number of input arguments
 if nargin < 2
@@ -320,7 +320,6 @@ for ii = 1 : maxit
             else
                 x = y;
                 iter = ii;
-             
                 flag = 6;
                 out = true;
                 break;

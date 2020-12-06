@@ -1,6 +1,6 @@
 % interv [0,1] for choose a 
 function [alpha, knot, retcode] = arraySpiece(A,b,x0,p,tol,maxits)
-display = true;
+display = false;
 if nargin<5, tol = 1e-15; maxits = 1e4; end
 [m,n] = size(A);
 nonzerou = p < 0;
@@ -23,15 +23,15 @@ while left+1  < right && loopcount < maxits
     Iu = x < 1e-15;
     [alpha,retcode] = spiecewise(A(:,~Iu),b,p(~Iu),x0(~Iu),knot( i-1 ) , knot( i ));
     if retcode(1) == 1 && retcode(2) == 0
-        if display
-            fprintf("newton arrayspiece min alpha in the left, so stop\n");
-        end
+%         if display
+%             fprintf("newton arrayspiece min alpha in the left, so stop\n");
+%         end
         break;
     end
     if retcode(1) == 2 && retcode(2) == 0
-        if display
-            fprintf("newton arrayspiece p is close to zeros\n");
-        end
+%         if display
+%             fprintf("newton arrayspiece p is close to zeros\n");
+%         end
         break;
     end
     if retcode(1) == 1 && retcode(2) ==1

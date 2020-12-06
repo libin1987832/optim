@@ -5,8 +5,8 @@ addpath('./subproblem')
 addpath('./GNP')
 clear 
 clc
-example = 2;
-[A,b,x0] = readData(1,1000,1000,1500);
+example = 11;
+[A,b,x0] = readData(1,1500,1500,2000);
 [m,n] =size(A);
 options = optimoptions('lsqlin','Algorithm','interior-point','Display','iter');
 options.Display = 'off';

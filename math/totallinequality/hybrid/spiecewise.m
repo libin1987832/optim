@@ -1,6 +1,6 @@
 % computation A(rt>0,:)*p(n) A(rt>0,:)'*r(rt>0)(n)
 function [steplength, retcode] = spiecewise(A,b,p,x,minrange,maxrange)
-display = true;
+display = false;
 if p' * p < 1e-15
     steplength = 0;
     retcode = [2,0];

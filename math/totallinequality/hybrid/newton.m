@@ -1,5 +1,5 @@
 function [xs,rpk] = newton(A,b,n,rpk,x0)
-display = true;
+display = false;
 tol = 1e-10;
  
 AA = (rpk > -tol);
@@ -22,7 +22,7 @@ xs = x0 + alpha * p;
 xs(xs<0) = 0;
 [rpk, normr, ~, g, normKKT, face1, face2] = kktResidual(A, b, x0 , rpk, 1);
 if display
-    fprintf('newton lsqin:p*g(%g),alpha(%g),minf(%g),KKT(%g)\n',p'*g,alpha,normr,normKKT);
+    fprintf('newton(lsqin): p*g(%g),alpha(%g),minf(%g),KKT(%g)\n',p'*g,alpha,normr,normKKT);
 end
 % rpk = b - A * xs;
 % xa = [0:alpha/100:alpha*1.4];
