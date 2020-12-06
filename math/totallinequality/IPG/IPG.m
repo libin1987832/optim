@@ -27,7 +27,7 @@ while norm( x0 .* g, inf) > tol || min( g )< -tol
     end
     loopcount = loopcount +1;
     %I = rpk > 0;
-     I = b > Ax;       
+    I = b > Ax;       
     %cos1 = -g'*p / (norm(g)*norm(p));
     switch dtype
         case 'NT'
@@ -38,19 +38,13 @@ while norm( x0 .* g, inf) > tol || min( g )< -tol
             p = -g;
         otherwise
             ADA = AT(:,I) * Ax(I);
-%             ADA = A(I,:)' * Ax(I);
+%           ADA = A(I,:)' * Ax(I);
             d = x0./(ADA + det);
-%             if sum(abs(d<0)) < 0
-%             assert(sum(abs(d<0)) > 0);
-%             end
-            p = - d .* g;
-%             if g'*p > 0
-%                 assert( g'*p < 0);
-%             end            
+            if display && sum(abs(d<0)) < 0
+                assert(sum(abs(d<0)) > 0);
+            end
+            p = - d .* g;            
     end
-%     x0(x0<1e-10) = 0;
-%     p(x0<1e-10) = 0;
-%    alphaAll = - x0(x0>1e-10)./p(x0>1e-10);
     alphaAll = - x0./p;
     alphak = min(alphaAll(alphaAll>0));
     if isempty(alphak)
@@ -60,9 +54,9 @@ while norm( x0 .* g, inf) > tol || min( g )< -tol
   % tou = tou - 1/100;
     touk = tou + rand()*(1-tou);
     talphak = touk * alphak;
-    [alpha, knot, retcode] = arraySpiece(A,b,x0,p,1e-5,30);
-%     [alpha, ~, retcode] = wolfe(A, b, x0, p, talphak, 30);
-     faceXvec(loopcount) = alpha; 
+ %   [alpha, knot, retcode] = arraySpiece(A,b,x0,p,1e-5,30);
+     [alpha, ~, retcode] = wolfe(A, b, x0, p, talphak, 30);
+    faceXvec(loopcount) = alpha; 
 %     if retcode(1) ~= 1  
 %         [~, normrr, ~, ~, ~, ~, ~] = kktResidual(A, b, x0 + alpha * p , [], 1);
 %         warning("wolfe failed");
@@ -74,7 +68,7 @@ while norm( x0 .* g, inf) > tol || min( g )< -tol
     pg = g'*p;
     [normr,g,normKKT,Ax] = dtffunc(A,AT,b,x0);
     if display
-        fprintf('IPG normr(%g),kkt(%g),gp(%g),alpha(%g)\n', normr, normKKT,pg,alpha);
+        fprintf('IPG(%d end): normr(%g),kkt(%g),gp(%g),alpha(%g),talpha(%g)\n', loopcount, normr, normKKT,pg,alpha,alphak);
     end
     %    [normr,g,normKKT,Ax] = dffunc(A,b,x0);
 %     [rpk, normr, ~, g, normKKT, faceX, ~] = kktResidual(A, b, x0 , [], 1);
