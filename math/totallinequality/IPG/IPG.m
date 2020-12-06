@@ -6,6 +6,7 @@ loopcount = 1;
 %[rpk, normr, ~, g, normKKT, faceX, ~] = kktResidual(A, b, x0 , [], 1);
 % the residual vector
 AT = A';
+
 [normr,g,normKKT,Ax] = dffunc(A,b,x0);
 resvec = zeros(1,maxit);
 % the normal gradient

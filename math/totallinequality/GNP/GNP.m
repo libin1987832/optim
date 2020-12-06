@@ -9,6 +9,7 @@ loopcount = 1;
 AT = A';
 [m,n] =size(A);
 MD = speye(n)*M;
+Ddelt = speye(n)*delt;
 [normr,g,normKKT,Ax] = dffunc(A,b,x0);
 resvec = zeros(1,maxit);
 % the normal gradient
@@ -19,23 +20,32 @@ resvec(1) = normr;
 arvec(1) = normKKT;
 
 while norm( x0 .* g, inf) > tol || min( g )< -tol
-    ADA = AT(:,I) * Ax(I);
-    Ix = x > 1e-10;
-    ADA = ;
-    %             ADA = A(I,:)' * Ax(I);
-    d = x0./(ADA + det);
-    fk=fq(A,b,x0);
-    AA=det2F(x0,A,b,M)+diag(ones(size(A',1),1)).*delt;
+    I = b > Ax;
+    ADA = AT(:,I) * A(I,:);
+    Ix = x0 > 1e-10;
+    MD0 = MD;
+    MD0(Ix,Ix) = 0;
+    ADA = ADA + 2 * MD0 + Ddelt;
+    % ADA = A(I,:)' * Ax(I);
     % 计算方向
-    p=-1*AA\d1;
+ %   p = lsqminnorm(ADA, -g);
+    p = -ADA \ g;
+   [alpha, knot, retcode] = arraySpiece(A,b,x0,p,1e-5,30);
     % 计算步长
-    k=k+1;
-    
+    loopcount=loopcount+1;
+    x0 = x0 + alpha * p;
+    x0(x0<0) = 0;
+    [normr,g,normKKT,Ax] = dtffunc(A,AT,b,x0);
+    %    [normr,g,normKKT,Ax] = dffunc(A,b,x0);
+%     [rpk, normr, ~, g, normKKT, faceX, ~] = kktResidual(A, b, x0 , [], 1);
+    % record the value of objection function
+    resvec(loopcount) = normr;
+    % record the value of the gradient function
+    arvec(loopcount) = normKKT;
 end
-toc(t);
+tf = etime(clock,t);
 x0(x0<0)=0;
-x=x0;
-fk=fq(A,b,x);
+xk = x0;
 end
 
 function [fvalue,gvalue,normKKT,Ax] = dtffunc(A,AT,b,x0)

@@ -2,9 +2,10 @@ addpath('./IPG')
 addpath('./exact')
 addpath('./hybrid')
 addpath('./subproblem')
+addpath('./GNP')
 clear 
 clc
-[A,b,x0] = readData(1,1000,1000,200);
+[A,b,x0] = readData(1,1000,1000,1500);
 [m,n] =size(A);
 options = optimoptions('lsqlin','Algorithm','interior-point','Display','iter');
 options.Display = 'off';
@@ -50,6 +51,12 @@ maxIterA = 50;
  [xk5, resvec5, arvec5, faceXvec5, tf5]  = IPG(A, b, x0, 1e-13, 1e-8, 1-1e-10, maxIterA,'NT');
  [rpk5, normr5, xmin5, Ar5, normKKT5 , faceX5, faceA5] = kktResidual(A, b, xk3, [], 1);
   fprintf('& %s & %g & %g & %g & %g &%g \\\\\n','NT',normr5,full(xmin5),full(normKKT5),min(Ar5),tf5);
+  
+ M = 1e6;tol = 1e-4; delt = 1e-5;maxIterA = 3;
+ [xkG, resvecG, arvecG, faceXvecG, tfG]  = GNP(A,b,x0,M,delt,tol,maxIterA);
+ [rpkG, normrG, xminG, ArG, normKKTG , faceXG, faceAG] = kktResidual(A, b, xkG, [], 1);
+  fprintf('& %s & %g & %g & %g & %g &%g \\\\\n','GNP',normrG,full(xminG),full(normKKTG),min(ArG),tfG);
+ 
   
  % for i = 20:30
 %     tou = i/31;
