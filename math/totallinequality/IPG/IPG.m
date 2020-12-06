@@ -1,5 +1,6 @@
 %[xk,resvec,arvec,face1vec,face2vec,tf]
 function [xk, resvec, arvec, faceXvec, tf] = IPG(A,b,x0,tol,det,tou,maxit,dtype)
+display = true;
 %x
 t=clock;
 loopcount = 1;
@@ -70,7 +71,11 @@ while norm( x0 .* g, inf) > tol || min( g )< -tol
 %         end
 %     end
     x0 = x0 + alpha * p;
+    pg = g'*p;
     [normr,g,normKKT,Ax] = dtffunc(A,AT,b,x0);
+    if display
+        fprintf('IPG normr(%g),kkt(%g),gp(%g),alpha(%g)\n', normr, normKKT,pg,alpha);
+    end
     %    [normr,g,normKKT,Ax] = dffunc(A,b,x0);
 %     [rpk, normr, ~, g, normKKT, faceX, ~] = kktResidual(A, b, x0 , [], 1);
     % record the value of objection function

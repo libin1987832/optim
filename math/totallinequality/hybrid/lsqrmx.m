@@ -1,4 +1,5 @@
 function [x,flag,relres,iter,resvec,lsvec,out] = lsqrmx(A,b,tol,maxit,M1,M2,x0,ALL,bLL,xs,AA,type,varargin)
+display = true;
 out = false;
 % Check for an acceptable number of input arguments
 if nargin < 2
@@ -309,6 +310,12 @@ for ii = 1 : maxit
                 iter = ii;
                 flag = 5;
                 out = false;
+                if display && type == 3
+                    fprintf('simple lsqrmx x out %d iter(%d)\n',empty,ii);
+                end
+                 if display && type == 2
+                    fprintf('simple lsqrmx x out %d,b out %d iter(%d)\n',constraint,empty,ii);
+                end
                 break;
             else
                 x = y;

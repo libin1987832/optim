@@ -24,13 +24,13 @@ while left+1  < right && loopcount < maxits
     [alpha,retcode] = spiecewise(A(:,~Iu),b,p(~Iu),x0(~Iu),knot( i-1 ) , knot( i ));
     if retcode(1) == 1 && retcode(2) == 0
         if display
-            fprintf("min alpha in the left, so stop\n");
+            fprintf("newton arrayspiece min alpha in the left, so stop\n");
         end
         break;
     end
     if retcode(1) == 2 && retcode(2) == 0
         if display
-            fprintf("p is close to zeros\n");
+            fprintf("newton arrayspiece p is close to zeros\n");
         end
         break;
     end

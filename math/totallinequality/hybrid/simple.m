@@ -1,4 +1,5 @@
 function [xkA, rpk] = simple(A, b, x0, n, rpk, nf, tol, options, type)
+display = true;
 xkA = zeros(n,nf+1);
 xkA(:, 1) = x0;
 switch type
@@ -46,8 +47,12 @@ switch type
 %                 aa = spiecewise(A,b,u,x0);
                 xs = x0 + aa * u;
                 xs(xs<0) = 0;
-                rpk = b - A * xs;
+%                 rpk = b - A * xs;
                 x0=xs;
+                [rpk, normr, minx, g, normKKT, face1, face2] = kktResidual(A, b, x0, rpk, 1);
+                if display
+                    fprintf('simple(lsqmx end):norm(%g),alpha(%g)\n',normr,aa);
+                end
                 xkA(:,i) = x0;
             end
         end

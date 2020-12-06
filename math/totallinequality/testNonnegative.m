@@ -5,12 +5,14 @@ addpath('./subproblem')
 addpath('./GNP')
 clear 
 clc
+example = 2;
 [A,b,x0] = readData(1,1000,1000,1500);
 [m,n] =size(A);
 options = optimoptions('lsqlin','Algorithm','interior-point','Display','iter');
 options.Display = 'off';
 options.StepTolerance = 1e-13;
-maxIterA = 4;
+if example == 1 || example >10
+maxIterA = 6;
 [xk1, resvec, arvec,face1v,face2v, tf1] = fixedMatrix(A,b,x0,maxIterA,1e-15,options);
 [rpk1, normr1, xmin1, Ar, normKKT1 , face11, face21] = kktResidual(A, b, xk1 , [], 1);
 fprintf('& %s & %g & %g & %g & %g & %g  \n','FM',normr1,xmin1,normKKT1,min(Ar),tf1); 
@@ -18,12 +20,15 @@ fprintf('& %s & %g & %g & %g & %g & %g  \n','FM',normr1,xmin1,normKKT1,min(Ar),t
 %  fprintf('& %s & %g & %g & %g & %g &%g /n','FM',normr0,xmin0,normKKT0,min(Ar0));
 %h=semilogy(beginp:maxIterA,arvec(beginp:maxIterA),'b+');
 %h.LineStyle = '--';
+end
 %%
+if example == 0 || example > 10  
 tic;[x1,f1,residual,exitflag,output,ff] = lsqlin([A,-eye(m)],b,...
     [],[],[],[],zeros(n+m,1),Inf*ones(n+m,1),x0,options);tf0=toc;xk0 = x1(1:n);
  [rpk0, normr0, xmin0, Ar0, normKKT0 , faceX0, faceA0] = kktResidual(A, b, xk0 , [], 1); 
  fprintf('& %s & %g & %g & %g & %g &%g \\\\\n','ls',normr0,xmin0,normKKT0,min(Ar0),tf0);
-
+end
+if example == 2 || example > 10  
  maxIterA = 20;
 [xk2,resvec2,arvec2,face1h,face2h,tf2] = hybridnnls(A,b,x0,1e-5,3, maxIterA, options, 'lsqr');
 [rpk2, normr2, xmin2, Ar2, normKKT2 , faceX2, faceA2] = kktResidual(A, b, xk2 , [], 1); 
@@ -32,31 +37,38 @@ tic;[x1,f1,residual,exitflag,output,ff] = lsqlin([A,-eye(m)],b,...
 %  hold on
 %  semilogy(2:2:2*maxIterA,arvec2(2:2:2*maxIterA),'bo')
   fprintf('& %s & %g & %g & %g & %g &%g\n','HybridIsqr',normr2,xmin2,normKKT2,min(Ar2),tf2);%
-
+end
+if example == 6 || example > 10
  [xk6,resvec6,arvec6,face6h,face6h,tf6] = hybridnnls(A,b,x0,1e-5,3, maxIterA, options, 'IPG');
 [rpk6, normr6, xmin6, Ar6, normKKT6 , faceX6, faceA6] = kktResidual(A, b, xk6 , [], 1); 
 % h=semilogy(1:2:2*maxIterA,resvec2(1:2:2*maxIterA),'r+');
 %  hold on
 %  semilogy(2:2:2*maxIterA,arvec2(2:2:2*maxIterA),'bo')
   fprintf('& %s & %g & %g & %g & %g &%g\n','HybridIPG',normr6,xmin6,normKKT6,min(Ar6),tf6);%
-  
+end
+if example == 3 || example > 10
 maxIterA = 50;
 [xk3, resvec3, arvec3, faceXvec3, tf3]  = IPG(A, b, x0, 1e-13, 1e-8, 1-1e-10, maxIterA,'lsqr');
 [rpk3, normr3, xmin3, Ar3, normKKT3 , faceX3, faceA3] = kktResidual(A, b, xk3, [], 1);
  fprintf('& %s & %g & %g & %g & %g &%g \\\\\n','IPG',normr3,full(xmin3),full(normKKT3),min(Ar3),tf3);
+end 
+if example == 4 || example > 10
  [xk4, resvec4, arvec4, faceXvec4, tf4]  = IPG(A, b, x0, 1e-13, 1e-8, 1-1e-10, maxIterA,'ST');
  [rpk4, normr4, xmin4, Ar4, normKKT4 , faceX4, faceA4] = kktResidual(A, b, xk3, [], 1);
   fprintf('& %s & %g & %g & %g & %g &%g \\\\\n','ST',normr4,full(xmin4),full(normKKT4),min(Ar4),tf4);
-  maxIterA = 1;
+end
+if example == 5 || example > 10
+    maxIterA = 1;
  [xk5, resvec5, arvec5, faceXvec5, tf5]  = IPG(A, b, x0, 1e-13, 1e-8, 1-1e-10, maxIterA,'NT');
  [rpk5, normr5, xmin5, Ar5, normKKT5 , faceX5, faceA5] = kktResidual(A, b, xk3, [], 1);
   fprintf('& %s & %g & %g & %g & %g &%g \\\\\n','NT',normr5,full(xmin5),full(normKKT5),min(Ar5),tf5);
-  
+end
+if example == 7 || example > 10
  M = 1e6;tol = 1e-4; delt = 1e-5;maxIterA = 1;
  [xkG, resvecG, arvecG, faceXvecG, tfG]  = GNP(A,b,x0,M,delt,tol,maxIterA);
  [rpkG, normrG, xminG, ArG, normKKTG , faceXG, faceAG] = kktResidual(A, b, xkG, [], 1);
   fprintf('& %s & %g & %g & %g & %g &%g \\\\\n','GNP',normrG,full(xminG),full(normKKTG),min(ArG),tfG);
- 
+end
   
  % for i = 20:30
 %     tou = i/31;
