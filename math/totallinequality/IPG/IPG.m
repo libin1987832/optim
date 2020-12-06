@@ -55,7 +55,7 @@ while norm( x0 .* g, inf) > tol || min( g )< -tol
     touk = tou + rand()*(1-tou);
     talphak = touk * alphak;
  %   [alpha, knot, retcode] = arraySpiece(A,b,x0,p,1e-5,30);
-     [alpha, ~, retcode] = wolfe(A, b, x0, p, talphak, 30);
+     [alpha, ~, retcode] = wolfe(A, b, x0, p, talphak, normr,g,30);
     faceXvec(loopcount) = alpha; 
 %     if retcode(1) ~= 1  
 %         [~, normrr, ~, ~, ~, ~, ~] = kktResidual(A, b, x0 + alpha * p , [], 1);
@@ -65,10 +65,12 @@ while norm( x0 .* g, inf) > tol || min( g )< -tol
 %         end
 %     end
     x0 = x0 + alpha * p;
-    pg = g'*p;
     [normr,g,normKKT,Ax] = dtffunc(A,AT,b,x0);
     if display
-        fprintf('IPG(%d end): normr(%g),kkt(%g),gp(%g),alpha(%g),talpha(%g)\n', loopcount, normr, normKKT,pg,alpha,alphak);
+        pg = g'*p;
+        [minx,loc]=min(x0);
+        fprintf('IPG(%d end): normr(%g),kkt(%g),gp(%g),alpha(%g),talpha(%g),minx(%g,%d)\n'...
+            , loopcount, normr, normKKT,pg,alpha,alphak,minx,loc);
     end
     %    [normr,g,normKKT,Ax] = dffunc(A,b,x0);
 %     [rpk, normr, ~, g, normKKT, faceX, ~] = kktResidual(A, b, x0 , [], 1);

@@ -1,9 +1,9 @@
 % 网上下载的一个wolf条件实现算法
-function [alpha, allalpha, retcode] = wolfe(A,b,xk, dk, range, maxit)
+function [alpha, allalpha, retcode] = wolfe(A,b,xk, dk, range, normr,Ar,maxit)
 % alphaMin=t*min(-1.*xk./dk);
 rho = 0.1; sigma = 0.5;
 %[~, normr, ~, Ar, ~ , ~, ~] = kktResidual(A, b, xk , [], []);
-[normr,Ar,~,~] = dffunc(A,b,xk);
+%[normr,Ar,~,~] = dffunc(A,b,xk);
 qpc1 = rho * Ar' * dk;
 qpc2 = sigma * Ar' * dk;
 alpha = range;
