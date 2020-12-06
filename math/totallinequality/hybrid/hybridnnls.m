@@ -4,6 +4,7 @@ t=clock;
 [m,n] = size(A);
 [rpk, normr, ~, g, normKKT, face1, face2] = kktResidual(A, b, x0,[],1);
 iter = 1;
+maxit = 2 * maxit; 
 % the residual vector
 resvec = zeros(1,maxit);
 % the normal gradient 

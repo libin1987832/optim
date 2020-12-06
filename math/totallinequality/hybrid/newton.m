@@ -12,3 +12,13 @@ p(RR) = u;
 [alpha, aranges, retcode] = arraySpiece(A, b, x0, p);
 xs = x0 + alpha * p;
 rpk = b - A * xs;
+xa = [0.019:0.00001:0.021];
+ya = arrayfun(@(alpha) funmin(A,b,x0,p,alpha), xa);
+ pxy={};
+% pxy(1).X = knot;
+% pxy(1).Y = knoty;
+pxy(1).X = xa;
+pxy(1).Y = ya;
+figure
+p1 = arrayfun(@(a) plot(a.X,a.Y),pxy);
+hold on

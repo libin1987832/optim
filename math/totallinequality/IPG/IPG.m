@@ -5,6 +5,7 @@ t=clock;
 loopcount = 1;
 %[rpk, normr, ~, g, normKKT, faceX, ~] = kktResidual(A, b, x0 , [], 1);
 % the residual vector
+AT = A';
 [normr,g,normKKT,Ax] = dffunc(A,b,x0);
 resvec = zeros(1,maxit);
 % the normal gradient
@@ -33,7 +34,8 @@ while norm( x0 .* g, inf) > tol || min( g )< -tol
         case 'ST'
             p = -g;
         otherwise
-            ADA = A(I,:)' * Ax(I);
+            ADA = AT(:,I) * Ax(I);
+%             ADA = A(I,:)' * Ax(I);
             d = x0./(ADA + det);
 %             if sum(abs(d<0)) < 0
 %             assert(sum(abs(d<0)) > 0);
@@ -51,9 +53,12 @@ while norm( x0 .* g, inf) > tol || min( g )< -tol
     if isempty(alphak)
         alphak = 10;
     end
-    talphak = tou * alphak;
-    %[alpha, knot, retcode] = arraySpiece(A,b,x0,p,1e-5,30);
-    [alpha, ~, retcode] = wolfe(A, b, x0, p, talphak, 30);
+    %tou = toustrategy(tou,loopcount,x0);
+  % tou = tou - 1/100;
+    touk = tou + rand()*(1-tou);
+    talphak = touk * alphak;
+    [alpha, knot, retcode] = arraySpiece(A,b,x0,p,1e-5,30);
+%     [alpha, ~, retcode] = wolfe(A, b, x0, p, talphak, 30);
      faceXvec(loopcount) = alpha; 
 %     if retcode(1) ~= 1  
 %         [~, normrr, ~, ~, ~, ~, ~] = kktResidual(A, b, x0 + alpha * p , [], 1);
@@ -63,7 +68,8 @@ while norm( x0 .* g, inf) > tol || min( g )< -tol
 %         end
 %     end
     x0 = x0 + alpha * p;
-    [normr,g,normKKT,Ax] = dffunc(A,b,x0);
+    [normr,g,normKKT,Ax] = dtffunc(A,AT,b,x0);
+    %    [normr,g,normKKT,Ax] = dffunc(A,b,x0);
 %     [rpk, normr, ~, g, normKKT, faceX, ~] = kktResidual(A, b, x0 , [], 1);
     % record the value of objection function
     resvec(loopcount) = normr;
@@ -75,6 +81,14 @@ xk=x0;
 tf = etime(clock,t);
 end
 
+function [fvalue,gvalue,normKKT,Ax] = dtffunc(A,AT,b,x0)
+Ax = A * x0;
+r = b - Ax;
+r( r < 0 ) = 0;
+gvalue =  -AT * r;
+normKKT = norm( x0 .* gvalue, inf);
+fvalue = 0.5 * (r' * r);
+end
 function [fvalue,gvalue,normKKT,Ax] = dffunc(A,b,x0)
 Ax = A * x0;
 r = b - Ax;

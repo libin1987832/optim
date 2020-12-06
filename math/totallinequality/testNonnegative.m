@@ -55,23 +55,28 @@ maxIterA = 300;
  % [xk1, resvec, arvec, face1vec, face2vec, tf1]=fixedMatrix(A,b,x0,maxIterA,1e-15,options);
 % [rpk1, normr1, xmin1, Ar1, normKKT1 , faceX1, faceA1] = kktResidual(A, b, xk1 , [], 1); 
 % %(A, b, x0, tol, nf, maxit, options, type)
-% [xk2,resvec2,arvec2,face1h,face2h,tf2] = hybridnnls(A,b,x0,1e-5,3, maxIterA, options, 'IPG');
-% [rpk2, normr2, xmin2, Ar2, normKKT2 , faceX2, faceA2] = kktResidual(A, b, xk2 , [], 1); 
-% h=semilogy(1:maxIterA,resvec2(1:maxIterA),'bo');
+maxIterA = 50;
+[xk2,resvec2,arvec2,face1h,face2h,tf2] = hybridnnls(A,b,x0,1e-5,3, maxIterA, options, 'IPG');
+[rpk2, normr2, xmin2, Ar2, normKKT2 , faceX2, faceA2] = kktResidual(A, b, xk2 , [], 1); 
+%arvec2(arvec2 ==0 ) = mean(arvec2);
+h=semilogy(1:2:2*maxIterA,arvec2(1:2:2*maxIterA),'r+');
+hold on
+semilogy(2:2:2*maxIterA,arvec2(2:2:2*maxIterA),'bo')
+ fprintf('& %s & %g & %g & %g & %g &%g\n','Hybrid',normr2,xmin2,normKKT2,min(Ar2),tf2);%
 %  hold on 
 % clc
 % clear
 % load('testAbx0toldettoumaxitforconvergenceipg.mat');
-maxIterA = 40;
+maxIterA = 400;
 % [xk3, resvec3, arvec3, faceXvec3, tf3]  = IPG(A, b, x0, 1e-13, 1e-8, 1-1e-10, 2*maxIterA,'IPG');
 % [rpk3, normr3, xmin3, Ar3, normKKT3 , faceX3, faceA3] = kktResidual(A, b, xk3, [], 1);
 %  fprintf('& %s & %g & %g & %g & %g &%g \\\\\n','IPG',normr3,xmin3,normKKT3,min(Ar3),tf3);
 % for i = 20:30
 %     tou = i/31;
-[xk3, resvec3, arvec3, faceXvec3, tf3]  = IPG(A, b, x0, 1e-5, 1e-8, 30/31, maxIterA,'IPG');
-[rpk3, normr3, xmin3, Ar3, normKKT3 , faceX3, faceA3] = kktResidual(A, b, xk3, [], 1);
- fprintf('& %s & %g & %g & %g & %g &%g \\\\\n','IPG',normr3,xmin3,full(normKKT3),min(Ar3),tf3);
-semilogy(1:maxIterA,resvec3(1:maxIterA),'b+');
+% [xk3, resvec3, arvec3, faceXvec3, tf3]  = IPG(A, b, x0, 1e-8, 1e-5, 20/31, maxIterA,'IPG');
+% [rpk3, normr3, xmin3, Ar3, normKKT3 , faceX3, faceA3] = kktResidual(A, b, xk3, [], 1);
+%  fprintf('& %s & %g & %g & %g & %g &%g \\\\\n','IPG',normr3,xmin3,full(normKKT3),min(Ar3),tf3);
+% semilogy(1:maxIterA,arvec3(1:maxIterA),'b+');
  % end
 % [xk3, resvec3, arvec3, faceXvec3, tf3]  = IPG(A, b, x0, 1e-13, 1e-8, 1-1e-10, 2*maxIterA,'ST');
 % [rpk3, normr3, xmin3, Ar3, normKKT3 , faceX3, faceA3] = kktResidual(A, b, xk3, [], 1);
