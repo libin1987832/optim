@@ -6,64 +6,49 @@ addpath('./hybrid')
 addpath('./subproblem')
 clear 
 clc
-m1 = 5; 
-m2 = 5; n = 7;
- A1=abs(sprand(m1,n,0.1,1/100))/100;
- A2=abs(sprand(m2,n,0.1,1/100))/100;
-%A1=rand(m1,n) + 1 ;
-%A2=rand(m2,n) + 1;
+[A,b,x0] = readData(type);
 
-b1=rand(m1,1);
-b2=rand(m2,1);
-A=[A1;-A2];
-b=[b1;-b2];
-x0=sparse(ones(n,1));
-
-% loA = A>0;
-% sloA = sum(loA,2);
-% find(sloA ~= 0 & sloA ~= n)
-%  load('test2.mat')
-%  n=700;
-%det=ones(n,1);
- %maxIterA = 20;
-% beginp = 1;
 options = optimoptions('lsqlin','Algorithm','interior-point','Display','iter');
 options.Display = 'off';
 options.StepTolerance = 1e-13;
 % [xk1, resvec, arvec,face1v,face2v, tf1]=fixedMatrix(A,b,x0,maxIterA*5,1e-15,options);
-% r = b - A * xk1;
-% r(r<0) = 0;
-% Ar = A' * r;
-% KKT = xk1 .* Ar;
-
 % [rpk1, normr1, xmin1, Ar, normKKT1 , face11, face21] = kktResidual(A, b, xk1 , [], 1);
-% [normKKT1 max(abs(KKT)) min(xk1) min(Ar)]
 % h=semilogy(beginp:maxIterA,arvec(beginp:maxIterA),'b+');
 % h.LineStyle = '--';
 % hold on k1
-%  alpha = 1/max(eig(A'*A));
-%  A = A + 1;
-%  b = b + 700;
-%  A = [1 3;2 4;-5 -6]; b = [5;6;-3]; x0 = [1;1];m1=2;m2=1;n=2;
-maxIterA = 300;
+[rpk0, normr0, xmin0, Ar0, normKKT0 , faceX0, faceA0] = kktResidual(A, b, [0;57/61] , [], 1); 
+ fprintf('& %s & %g & %g & %g & %g &%g /n','kk',normr0,xmin0,normKKT0,min(Ar0));
+
+% maxIterA = 300;
 tic
 [x1,f1,residual,exitflag,output,ff] = lsqlin([A,-eye(m1+m2)],b,[],[],[],[],zeros(n+m1+m2,1),Inf*ones(n+m1+m2,1),x0,options);
  tf0=toc;
  xk0 = x1(1:n);
  [rpk0, normr0, xmin0, Ar0, normKKT0 , faceX0, faceA0] = kktResidual(A, b, xk0 , [], 1); 
  fprintf('& %s & %g & %g & %g & %g &%g \\\\\n','ls',normr0,xmin0,normKKT0,min(Ar0),tf0);
-
+return 
  % [xk1, resvec, arvec, face1vec, face2vec, tf1]=fixedMatrix(A,b,x0,maxIterA,1e-15,options);
 % [rpk1, normr1, xmin1, Ar1, normKKT1 , faceX1, faceA1] = kktResidual(A, b, xk1 , [], 1); 
 % %(A, b, x0, tol, nf, maxit, options, type)
-maxIterA = 100;
-[xk2,resvec2,arvec2,face1h,face2h,tf2] = hybridnnls(A,b,x0,1e-5,3, maxIterA, options, 'IPG');
-[rpk2, normr2, xmin2, Ar2, normKKT2 , faceX2, faceA2] = kktResidual(A, b, xk2 , [], 1); 
-%arvec2(arvec2 ==0 ) = mean(arvec2);
-h=semilogy(1:2:2*maxIterA,arvec2(1:2:2*maxIterA),'r+');
-hold on
-semilogy(2:2:2*maxIterA,arvec2(2:2:2*maxIterA),'bo')
- fprintf('& %s & %g & %g & %g & %g &%g\n','Hybrid',normr2,xmin2,normKKT2,min(Ar2),tf2);%
+
+% maxIterA = 200;
+% [xk2,resvec2,arvec2,face1h,face2h,tf2] = hybridnnls(A,b,x0,1e-5,3, maxIterA, options, 'IPG');
+% [rpk2, normr2, xmin2, Ar2, normKKT2 , faceX2, faceA2] = kktResidual(A, b, xk2 , [], 1); 
+% %arvec2(arvec2 ==0 ) = mean(arvec2);
+% h=semilogy(1:2:2*maxIterA,arvec2(1:2:2*maxIterA),'r+');
+% hold on
+% semilogy(2:2:2*maxIterA,arvec2(2:2:2*maxIterA),'bo')
+%  fprintf('& %s & %g & %g & %g & %g &%g\n','Hybrid',normr2,xmin2,normKKT2,min(Ar2),tf2);%
+ 
+ AI = A([1,5,7,10],[1,3,5,6,7]);
+ bI = b([1,5,7,10]);
+%  xs = AT\bI;
+ xs = lsqminnorm(AI, bI);
+ xss = zeros(7,1);
+ xss([1,3,5,6,7]) = xs;
+[rpks, normrs, xmins, Ars, normKKTs , faceXs, faceAs] = kktResidual(A, b, xss , [], 1); 
+ fprintf('& %s & %g & %g & %g & %g \n','xs',normrs,xmins,normKKTs,min(Ars));%
+ AI*x1([1,3,5,6,7])-bI
 %  hold on 
 % clc
 % clear
