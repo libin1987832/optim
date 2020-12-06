@@ -15,7 +15,7 @@ switch type
     case 'IPG'
         for i = 2:nf+1
             maxit = 8;
-            tou = 0.9;
+            tou = 0.6;
             z = -rpk;
             z(z<0) = 0;
             bk = b + z;
