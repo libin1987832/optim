@@ -52,7 +52,7 @@ maxIterA = 50;
  [rpk5, normr5, xmin5, Ar5, normKKT5 , faceX5, faceA5] = kktResidual(A, b, xk3, [], 1);
   fprintf('& %s & %g & %g & %g & %g &%g \\\\\n','NT',normr5,full(xmin5),full(normKKT5),min(Ar5),tf5);
   
- M = 1e6;tol = 1e-4; delt = 1e-5;maxIterA = 3;
+ M = 1e6;tol = 1e-4; delt = 1e-5;maxIterA = 1;
  [xkG, resvecG, arvecG, faceXvecG, tfG]  = GNP(A,b,x0,M,delt,tol,maxIterA);
  [rpkG, normrG, xminG, ArG, normKKTG , faceXG, faceAG] = kktResidual(A, b, xkG, [], 1);
   fprintf('& %s & %g & %g & %g & %g &%g \\\\\n','GNP',normrG,full(xminG),full(normKKTG),min(ArG),tfG);
