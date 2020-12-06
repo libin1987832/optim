@@ -1,6 +1,7 @@
 function [xk, resvec, arvec, face1vec, face2vec, tf] = hybridnnls(A, b, x0, tol, nf, maxit, options, type)
 t=clock;
 % stop criterion
+display = true;
 [m,n] = size(A);
 [rpk, normr, ~, g, normKKT, face1, face2] = kktResidual(A, b, x0,[],1);
 iter = 1;
@@ -26,23 +27,29 @@ while norm( x0 .* g, inf) > tol || min( g )< -tol
 %     p(x0<1e-10) = 0;
     iter = iter + 2;
     [xkA, rpk] = simple(A, b, x0, n, rpk, nf, 100*tol, options, type);
-    [rpk, normr, ~, g, normKKT, face1, face2] = kktResidual(A, b, xkA(:, end), rpk, 1);
+    [rpk, normr, minx, g, normKKT, face1, face2] = kktResidual(A, b, xkA(:, end), rpk, 1);
     resvec(iter) = normr;
     % record the value of the gradient function
     arvec(iter) = normKKT;
     face1vec(iter) = face1;
     face2vec(iter) = face2;
+    if display
+        fprintf('simple: norm(%g),normKKT(%g),minx(%g),xa(%d),ba(%d)\n',normr,normKKT,minx,face1,face2);
+    end
 %    isSub = true;
      isSub = strategy(A,b,x0,[],'PHA',iter,nf,rpk,xkA);
     if isSub
         [x0, rpk] = newton(A, b, n, rpk, xkA(:, end));
-        [rpk, normr, ~, g, normKKT, face1, face2] = kktResidual(A, b, x0 , rpk, 1);
+        [rpk, normr, minx, g, normKKT, face1, face2] = kktResidual(A, b, x0 , rpk, 1);
         % record the value of objection function
         resvec(iter +1) = normr;
         % record the value of the gradient function
         arvec(iter +1) = normKKT;
         face1vec(iter +1) = face1;
         face2vec(iter +1) = face2;
+        if display
+            fprintf('newton: norm(%g),normKKT(%g),minx(%g),xa(%d),ba(%d)\n',normr,normKKT,minx,face1,face2);
+        end
     else
         x0 = xkA(:, end);
     end
