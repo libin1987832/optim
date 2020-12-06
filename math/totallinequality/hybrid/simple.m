@@ -1,5 +1,8 @@
 function [xkA, rpk] = simple(A, b, x0, n, rpk, nf, tol, options, type)
-display = false;
+display = true;
+if display
+rpkOld = rpk;
+end
 xkA = zeros(n,nf+1);
 xkA(:, 1) = x0;
 switch type
@@ -38,12 +41,13 @@ switch type
             maxIter =10;
             [u,flag,relres,iter,resvec,lsvec,out] = lsqrmx(AI,bI,lsqrTol,maxIter,[],[],zeros(n,1),A,b,x0,AA,3);
             if ~out && all(x0 + u > 0) 
-                xs = x0 + u;
-%                 rpk = b - A * xs;
-                [rpk, normr, minx, g, normKKT, face1, face2] = kktResidual(A, b, xs, [], 1);
+                x0 = x0 + u;
                 
+%                 rpk = b - A * xs;
+                [rpk, normr, minx, g, normKKT, face1, face2] = kktResidual(A, b, x0, [], 1);
                 if display
-                    fprintf('simple(lsqmx end): iter(lsqr) norm(%g),alpha(%g)\n',normr,aa);
+                    r = rpkOld; r(r < 0) = 0; g0 = -A' * r; pg = g0'*u; [minx,loc]=min(x0);
+                    fprintf('simple(lsqmx lsqr): normr(%g),pg(%g),min(%g,%d)\n',normr,pg,minx,loc);
                 end
             else
 %                 u = AI\bI;
@@ -56,10 +60,11 @@ switch type
                 x0=xs;
                 [rpk, normr, minx, g, normKKT, face1, face2] = kktResidual(A, b, xs, [], 1);
                 if display
-                    fprintf('simple(lsqmx end):iter(AI/bI) norm(%g),alpha(%g)\n',normr,aa);
+                    r = rpkOld; r(r < 0) = 0; g0 = -A' * r; pg = g0'*u; [minx,loc]=min(x0);
+                    fprintf('simple(project): norm(%g),pg(%g),min(%g,%d),alpha(%g)\n',normr,pg,minx,loc,aa);
                 end
-                xkA(:,i) = x0;
             end
+             xkA(:,i) = x0;
         end
 end
 
