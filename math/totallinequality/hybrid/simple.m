@@ -1,8 +1,5 @@
 function [xkA, rpk] = simple(A, b, x0, n, rpk, nf, tol, options, type)
-display = true;
-if display
-rpkOld = rpk;
-end
+display = false;
 xkA = zeros(n,nf+1);
 xkA(:, 1) = x0;
 switch type
@@ -41,8 +38,7 @@ switch type
             maxIter =10;
             [u,flag,relres,iter,resvec,lsvec,out] = lsqrmx(AI,bI,lsqrTol,maxIter,[],[],zeros(n,1),A,b,x0,AA,3);
             if ~out && all(x0 + u > 0) 
-                x0 = x0 + u;
-                
+                x0 = x0 + u;                
 %                 rpk = b - A * xs;
                 [rpk, normr, minx, g, normKKT, face1, face2] = kktResidual(A, b, x0, [], 1);
                 if display
@@ -66,6 +62,23 @@ switch type
             end
              xkA(:,i) = x0;
         end
+    case 'ST'
+        for i = 2:nf+1
+            r = rpk;
+            r(r<0) = 0;
+            u = A' * r;
+            [~,xs, knot, retcode] = arraySpiece(A,b,x0,u,1e-5,30);
+            %                 aa = spiecewise(A,b,u,x0);
+            [rpk, normr, minx, g, normKKT, face1, face2] = kktResidual(A, b, xs, rpk, 1);
+            x0 = xs;
+            if display
+                [~, normr, ~, g0, normKKT, face1, face2] = kktResidual(A, b, x0, [], 1);
+                pg = g0' * u; [minx,loc]=min(x0);
+                fprintf('simple(steepdown): normr(%g),pg(%g),min(%g,%d)\n',normr,pg,minx,loc);
+            end
+            xkA(:,i) = x0;
+        end
+        
 end
 
 

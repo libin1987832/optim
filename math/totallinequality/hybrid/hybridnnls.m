@@ -1,7 +1,7 @@
 function [xk, resvec, arvec, face1vec, face2vec, tf] = hybridnnls(A, b, x0, tol, nf, maxit, options, type)
 t=clock;
 % stop criterion
-display = true;
+display = false;
 [m,n] = size(A);
 [rpk, normr, ~, g, normKKT, face1, face2] = kktResidual(A, b, x0,[],1);
 iter = 1;
@@ -27,7 +27,7 @@ while norm( x0 .* g, inf) > tol || min( g )< -tol
     %     p(x0<1e-10) = 0;
     iter = iter + 2;
     [xkA, rpk] = simple(A, b, x0, n, rpk, nf, 100*tol, options, type);
-    [rpk, normr, minx, g, normKKT, face1, face2] = kktResidual(A, b, xkA(:, end), rpk, 1);
+    [rpk, normr, minx, g, normKKT, face1, face2] = kktResidual(A, b, xkA(:, end), [], 1);
     resvec(iter) = normr;
     % record the value of the gradient function
     arvec(iter) = normKKT;

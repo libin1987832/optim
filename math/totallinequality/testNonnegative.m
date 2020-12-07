@@ -6,8 +6,8 @@ addpath('./GNP')
 clear 
 clc
 % 1:fixed 0:lsqin 2:hybrid lsqr 6:hybrd IPG 3: IPG 4: steep decent 5:Newton 7:GNP  
-example = 2;
-[A,b,x0] = readData(3,1000,1000,1500);
+example = 11;
+[A,b,x0] = readData(1,1000,1000,1500);
 [m,n] =size(A);
 options = optimoptions('lsqlin','Algorithm','interior-point','Display','iter');
 options.Display = 'off';
@@ -30,8 +30,8 @@ tic;[x1,f1,residual,exitflag,output,ff] = lsqlin([A,-eye(m)],b,...
  fprintf('& %s & %g & %g & %g & %g &%g \\\\\n','ls',normr0,xmin0,normKKT0,min(Ar0),tf0);
 end
 if example == 2 || example > 10  
- maxIterA = 20;
-[xk2,resvec2,arvec2,face1h,face2h,tf2] = hybridnnls(A,b,x0,1e-5,3, maxIterA, options, 'lsqr');
+ maxIterA = 5;
+[xk2,resvec2,arvec2,face1h,face2h,tf2] = hybridnnls(A,b,x0,1e-5,3, maxIterA, options, 'ST');
 [rpk2, normr2, xmin2, Ar2, normKKT2 , faceX2, faceA2] = kktResidual(A, b, xk2 , [], 1); 
 
 % h=semilogy(1:2:2*maxIterA,resvec2(1:2:2*maxIterA),'r+');

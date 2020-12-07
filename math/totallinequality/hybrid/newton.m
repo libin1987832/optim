@@ -14,14 +14,14 @@ p = zeros(n, 1);
 p(RR) = u;
 % debug for test.m nf = 2
 [~, xs, aranges, retcode] = arraySpiece(A, b, x0, p);
-[rpk, normr1, ~, Ar1, normKKT, face1, face2] = kktResidual(A, b, xs , rpk, 1);
+[rpk, normr1, ~, Ar1, ~, face21, face22] = kktResidual(A, b, xs , [], 1);
 if display
-    [rpk, normr, ~, g, normKKT, face1, face2] = kktResidual(A, b, x0 , rpk, 1);
+    [~, normr0, ~, Ar0, normKKT, face11, face12] = kktResidual(A, b, x0 , [], 1);
     if p'*g > 0
         assert(p'*g < 0)
     end
-    fprintf('newton(lsqin): normB(%g),normF(%g),gB(%g),gF(%g),xa(%d,%d),ba(%d,%d)',...
-        normr0,normr1,Ar0,Ar1,face11, face21,face12, face22);
+    fprintf('newton(lsqin): normB(%g),normF(%g),gB(%g),gF(%g),xa(%d,%d),ba(%d,%d)\n',...
+        normr0,normr1,norm(Ar0),norm(Ar1),face11, face21,face12, face22);
 end
 % rpk = b - A * xs;
 % xa = [0:alpha/100:alpha*1.4];

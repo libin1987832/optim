@@ -1,12 +1,13 @@
 % interv [0,1] for choose a the projectedsearch but less one 
-function [alpha,x0,knot, retcode] = arraySpiece(A,b,x0,p,tol,maxits)
-display = true;
+function [alpha,xk,knot, retcode] = arraySpiece(A,b,x0,p,tol,maxits)
+display = false;
 if nargin<5, tol = 1e-15; maxits = 1e4; end
 [m,n] = size(A);
 nonzerou = p < 0;
 knot = -x0(nonzerou)./p(nonzerou);
-knot = sort(knot( knot > tol & knot < 1));
-knot = [0;knot;1];
+maxknot = 1e5;
+knot = sort(knot( knot > tol & knot < 1e5));
+knot = [0;knot;1e5];
 knot = unique(knot);
 left = 1;
 right = length(knot);
@@ -45,10 +46,20 @@ end
 xk = x0 + alpha * p;
 xk(xk<0) =0;
 if display
+%     if alpha <1e-10;
+%         xa = [1e-12:1e-14:2*1e-12];
+%         ya = arrayfun(@(alpha) funmin(A,b,x0,p,alpha), xa);
+%         pxy={};
+%         pxy(1).X = xa;
+%         pxy(1).Y = ya;
+%         figure
+%         hold on
+%         p1 = arrayfun(@(a) plot(a.X,a.Y),pxy);
+%     end
     knotL = length(knot);
     [rpk0, normr0, xmin0, Ar0, normKKT0 , face11, face12] = kktResidual(A, b, x0, [], 1);
     [rpk1, normr1, xmin1, Ar1, normKKT1 , face21, face22] = kktResidual(A, b, xk , [], 1);
-    fprintf('___projected(0,1): alpha(%g),knot_numb(%d),normB(%g),normF(%g),gB(%g),gF(%g),xa(%d,%d),ba(%d,%d)',...
-        alpha,knotL,normr0,normr1,Ar0,Ar1,face11, face21,face12, face22);
+    fprintf('___projected(0,1): alpha_num(%g,%d),normBF(%g,%g),gBFP(%g,%g,%g),xa(%d,%d,%d,%d)\n',...
+        alpha,knotL,normr0,normr1,norm(Ar0),norm(Ar1),Ar0'*p/(norm(Ar0)*norm(p)),face11, face21,face12, face22);
 end
 %minf = funmin(A,b,x0,p,alpha);
