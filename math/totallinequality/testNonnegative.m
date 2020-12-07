@@ -7,7 +7,7 @@ clear
 clc
 % 1:fixed 0:lsqin 2:hybrid lsqr 6:hybrd IPG 3: IPG 4: steep decent 5:Newton 7:GNP  
 example = 2;
-[A,b,x0] = readData(1,1000,1000,1500);
+[A,b,x0] = readData(3,1000,1000,1500);
 [m,n] =size(A);
 options = optimoptions('lsqlin','Algorithm','interior-point','Display','iter');
 options.Display = 'off';

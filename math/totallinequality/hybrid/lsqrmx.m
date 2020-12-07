@@ -311,10 +311,13 @@ for ii = 1 : maxit
                 flag = 5;
                 out = false;
                 if display && type == 3
-                    fprintf('simple lsqrmx x out %d iter(%d)\n',empty,ii);
+                    empty = sum( xor( AA, AAk));
+                    constraint = ~all(xs+x>-1e-15);
+                    fprintf('____lsqr(x,r): xout(%d),bout(%d),iter(%d)\n',empty,constraint,ii);
                 end
                  if display && type == 2
-                    fprintf('simple lsqrmx x out %d,b out %d iter(%d)\n',constraint,empty,ii);
+                     empty = ~all((xs + x)>-1e-15);
+                  fprintf('____lsqr(x,r): xout(%d),iter(%d)\n',empty,ii);
                 end
                 break;
             else

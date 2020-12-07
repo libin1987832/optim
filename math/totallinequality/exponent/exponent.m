@@ -23,7 +23,8 @@ for im = 1:(2^m - 1)
        if all(xz(bin) > -tol) &  all( rb < tol  ) & all(Ar < tol)
             count = count + 1;
             solution(:,count) = xz;
-            index(:,count) = [bim,bin]'; 
+            index(:,count) = [bim,bin]';
+     %       break;
         end
     end
 end

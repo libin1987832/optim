@@ -33,7 +33,7 @@ switch type
             z(z<0) = 0;
             bk = b + z;
             
-            AA = (rpk>tol);
+            AA = (rpk>-tol);
             % subspace
             AI = A(AA,:);
             bI = rpk(AA);
