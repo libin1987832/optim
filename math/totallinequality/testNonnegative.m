@@ -5,11 +5,11 @@ addpath('./subproblem')
 addpath('./GNP')
 addpath('./exponent')
 clc
-for i = 1:10
+for i = 1:1
 clear 
 
 % 1:fixed 0:lsqin 2:hybrid lsqr 6:hybrd IPG 3: IPG 4: steep decent 5:Newton 7:GNP  
-example = 11;
+example = 3;
 [A,b,x0] = readData(1,1000,1000,1500);
 [m,n] =size(A);
 options = optimoptions('lsqlin','Algorithm','interior-point','Display','iter');
@@ -42,7 +42,8 @@ if example == 2 || example > 10
 %  semilogy(2:2:2*maxIterA,arvec2(2:2:2*maxIterA),'bo')
   fprintf('& %s & %g & %g & %g & %g &%g\n','HybridIsqr',normr2,xmin2,normKKT2,min(Ar2),tf2);%
 end
-if example == 6 || example > 10
+if example == 6 || example > 100
+    maxIterA = 10;
  [xk6,resvec6,arvec6,face6h,face6h,tf6] = hybridnnls(A,b,x0,1e-5,3, maxIterA, options, 'IPG');
 [rpk6, normr6, xmin6, Ar6, normKKT6 , faceX6, faceA6] = kktResidual(A, b, xk6 , [], 1); 
 % h=semilogy(1:2:2*maxIterA,resvec2(1:2:2*maxIterA),'r+');
@@ -51,20 +52,20 @@ if example == 6 || example > 10
   fprintf('& %s & %g & %g & %g & %g &%g\n','HybridIPG',normr6,xmin6,normKKT6,min(Ar6),tf6);%
 end
 if example == 3 || example > 10
-maxIterA = 500;
+maxIterA = 1000;
 [xk3, resvec3, arvec3, faceXvec3, tf3]  = IPG(A, b, x0, 1e-5, 1e-2, 0.8, maxIterA,'IPG');
 [rpk3, normr3, xmin3, Ar3, normKKT3 , faceX3, faceA3] = kktResidual(A, b, xk3, [], 1);
  fprintf('& %s & %g & %g & %g & %g &%g \\\\\n','IPG',normr3,full(xmin3),full(normKKT3),min(Ar3),tf3);
 end 
 if example == 4 || example > 10
  [xk4, resvec4, arvec4, faceXvec4, tf4]  = IPG(A, b, x0, 1e-13, 1e-8, 1-1e-10, maxIterA,'ST');
- [rpk4, normr4, xmin4, Ar4, normKKT4 , faceX4, faceA4] = kktResidual(A, b, xk3, [], 1);
+ [rpk4, normr4, xmin4, Ar4, normKKT4 , faceX4, faceA4] = kktResidual(A, b, xk4, [], 1);
   fprintf('& %s & %g & %g & %g & %g &%g \\\\\n','ST',normr4,full(xmin4),full(normKKT4),min(Ar4),tf4);
 end
 if example == 5 || example > 10
     maxIterA = 1;
  [xk5, resvec5, arvec5, faceXvec5, tf5]  = IPG(A, b, x0, 1e-13, 1e-8, 1-1e-10, maxIterA,'NT');
- [rpk5, normr5, xmin5, Ar5, normKKT5 , faceX5, faceA5] = kktResidual(A, b, xk3, [], 1);
+ [rpk5, normr5, xmin5, Ar5, normKKT5 , faceX5, faceA5] = kktResidual(A, b, xk5, [], 1);
   fprintf('& %s & %g & %g & %g & %g &%g \\\\\n','NT',normr5,full(xmin5),full(normKKT5),min(Ar5),tf5);
 end
 if example == 7 || example > 100

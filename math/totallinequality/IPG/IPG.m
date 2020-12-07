@@ -40,9 +40,6 @@ while norm( x0 .* g, inf) > tol || min( g )< -tol
             ADA = AT(:,I) * Ax(I);
 %           ADA = A(I,:)' * Ax(I);
             d = x0./(ADA + det);
-            if display && sum(abs(d<0)) < 0
-                assert(sum(abs(d<0)) > 0);
-            end
             p = - d .* g;            
     end
     alphaAll = - x0./p;
@@ -87,8 +84,9 @@ end
 function [fvalue,gvalue,normKKT,Ax] = dtffunc(A,AT,b,x0)
 Ax = A * x0;
 r = b - Ax;
-r( r < 0 ) = 0;
-gvalue =  -AT * r;
+I = r > 1e-15;
+gvalue =  - AT(:,I) * r(I);
+r(r<0) = 0;
 normKKT = norm( x0 .* gvalue, inf);
 fvalue = 0.5 * (r' * r);
 end
