@@ -1,5 +1,5 @@
 % 网上下载的一个wolf条件实现算法
-function [alpha, allalpha, retcode] = wolfe(A,b,xk, dk, range, normr,Ar,maxit)
+function [alpha, allalpha, retcode] = wolfe(A,b,xk, dk, range, Ax, Adk, normr,Ar,maxit)
 % alphaMin=t*min(-1.*xk./dk);
 rho = 0.1; sigma = 0.5;
 %[~, normr, ~, Ar, ~ , ~, ~] = kktResidual(A, b, xk , [], []);
@@ -10,7 +10,7 @@ alpha = range;
 loopcount = 1;
 allalpha = zeros(3 * maxit ,1);
 allalpha(1) = alpha; 
-while func(A , b, xk, dk ,alpha) > normr +  alpha * qpc1   
+while func(A, b, Ax, Adk ,alpha) > normr +  alpha * qpc1   
     loopcount = loopcount + 1;    
     alpha=alpha/2;
     allalpha(loopcount) = alpha; 
@@ -75,8 +75,8 @@ retcode = [1,sumloop + loopcount];
 %     hold on
 
 end 
-function fvalue = func(A,b,x0,p,alpha)
-r = b - A * (x0 + alpha * p);
+function fvalue = func(A,b,Ax,Ap,alpha)
+r = b - Ax - alpha * Ap;
 r( r < 0 ) = 0;
 fvalue = 0.5 * (r' * r);
 end
