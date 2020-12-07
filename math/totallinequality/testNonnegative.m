@@ -6,13 +6,13 @@ addpath('./GNP')
 clear 
 clc
 % 1:fixed 0:lsqin 2:hybrid lsqr 6:hybrd IPG 3: IPG 4: steep decent 5:Newton 7:GNP  
-example = 11;
+example = 2;
 [A,b,x0] = readData(1,1000,1000,1500);
 [m,n] =size(A);
 options = optimoptions('lsqlin','Algorithm','interior-point','Display','iter');
 options.Display = 'off';
 options.StepTolerance = 1e-13;
-if example == 1 || example >10
+if example == 1 || example >100
 maxIterA = 6;
 [xk1, resvec, arvec,face1v,face2v, tf1] = fixedMatrix(A,b,x0,maxIterA,1e-15,options);
 [rpk1, normr1, xmin1, Ar, normKKT1 , face11, face21] = kktResidual(A, b, xk1 , [], 1);
@@ -30,7 +30,7 @@ tic;[x1,f1,residual,exitflag,output,ff] = lsqlin([A,-eye(m)],b,...
  fprintf('& %s & %g & %g & %g & %g &%g \\\\\n','ls',normr0,xmin0,normKKT0,min(Ar0),tf0);
 end
 if example == 2 || example > 10  
- maxIterA = 5;
+ maxIterA = 50;
 [xk2,resvec2,arvec2,face1h,face2h,tf2] = hybridnnls(A,b,x0,1e-5,3, maxIterA, options, 'ST');
 [rpk2, normr2, xmin2, Ar2, normKKT2 , faceX2, faceA2] = kktResidual(A, b, xk2 , [], 1); 
 
@@ -64,7 +64,7 @@ if example == 5 || example > 10
  [rpk5, normr5, xmin5, Ar5, normKKT5 , faceX5, faceA5] = kktResidual(A, b, xk3, [], 1);
   fprintf('& %s & %g & %g & %g & %g &%g \\\\\n','NT',normr5,full(xmin5),full(normKKT5),min(Ar5),tf5);
 end
-if example == 7 || example > 10
+if example == 7 || example > 100
  M = 1e6;tol = 1e-4; delt = 1e-5;maxIterA = 1;
  [xkG, resvecG, arvecG, faceXvecG, tfG]  = GNP(A,b,x0,M,delt,tol,maxIterA);
  [rpkG, normrG, xminG, ArG, normKKTG , faceXG, faceAG] = kktResidual(A, b, xkG, [], 1);

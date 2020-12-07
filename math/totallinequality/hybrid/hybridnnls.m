@@ -1,7 +1,7 @@
 function [xk, resvec, arvec, face1vec, face2vec, tf] = hybridnnls(A, b, x0, tol, nf, maxit, options, type)
 t=clock;
 % stop criterion
-display = false;
+display = true;
 [m,n] = size(A);
 [rpk, normr, ~, g, normKKT, face1, face2] = kktResidual(A, b, x0,[],1);
 iter = 1;
@@ -43,7 +43,7 @@ while norm( x0 .* g, inf) > tol || min( g )< -tol
          fprintf('simple(%d end): norm(%g),normKKT(%g),minx(%g,%d),xa(%d),ba(%d)\n',...
              (iter-1)/2,normr,normKKT,minx,loc,face1,face2);
     end
-    %    isSub = true;
+      %  isSub = true;
     isSub = strategy(A,b,x0,[],'PHA',iter,nf,rpk,xkA);
     if isSub
         [x0, rpk] = newton(A, b, n, rpk, xkA(:, end));

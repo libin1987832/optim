@@ -69,7 +69,7 @@ switch type
             u = A' * r;
             [~,xs, knot, retcode] = arraySpiece(A,b,x0,u,1e-5,30);
             %                 aa = spiecewise(A,b,u,x0);
-            [rpk, normr, minx, g, normKKT, face1, face2] = kktResidual(A, b, xs, rpk, 1);
+            [rpk, normr, minx, g, normKKT, face1, face2] = kktResidual(A, b, xs, [], 1);
             x0 = xs;
             if display
                 [~, normr, ~, g0, normKKT, face1, face2] = kktResidual(A, b, x0, [], 1);
