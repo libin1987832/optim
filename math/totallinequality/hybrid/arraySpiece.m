@@ -1,6 +1,6 @@
 % interv [0,1] for choose a the projectedsearch but less one 
 function [alpha,xk,knot, retcode] = arraySpiece(A,b,x0,p,tol,maxits)
-display = true;
+display = false;
 if nargin<5, tol = 1e-15; maxits = 1e4; end
 [m,n] = size(A);
 nonzerou = p < 0;

@@ -1,6 +1,6 @@
 function [xs,rpk] = newton(A,b,n,rpk,x0)
-display = true;
-tol = 1e-10;
+display = false;
+tol = 1e-2;
 
 AA = (rpk > -tol);
 RR = (x0 > tol);

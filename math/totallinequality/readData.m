@@ -16,6 +16,8 @@ switch type
     case 3
         A = [1 3;2 4;-5 -6]; b = [5;6;-3]; x0 = [1;1];m1=2;m2=1;n=2;
     otherwise
+         load('test7')
+         m1 = 100;m2=100;n=200;x0=ones(200,1);
 end
 %  hold on 
 % clc
