@@ -12,7 +12,7 @@ clear
 % 1:fixed 0:lsqin 2:hybrid lsqr 6:hybrd IPG 3: IPG 4: steep decent 5:Newton
 % 7:GNP  8 hybridfast
 example = 11;
-[A,b,x0] = readData(1,1000,1000,1500);
+[A,b,x0] = readData(1,1000,1000,200);
 [m,n] =size(A);
 options = optimoptions('lsqlin','Algorithm','interior-point','Display','iter');
 options.Display = 'off';
@@ -57,7 +57,7 @@ end
 
 
 if example == 3 || example > 10
-maxIterA = 30000;
+maxIterA = 60000;
 [xk3, resvec3, arvec3, faceXvec3, tf3]  = IPG(A, b, x0, 1e-10, 1e-2, 0.8, maxIterA,'IPG');
 [rpk3, normr3, xmin3, Ar3, normKKT3 , faceX3, faceA3] = kktResidual(A, b, xk3, [], 1);
  fprintf('& %s & %g & %g & %g & %g &%g \\\\\n','IPG',normr3,full(xmin3),full(normKKT3),min(Ar3),tf3);
@@ -80,7 +80,7 @@ if example == 7 || example > 100
   fprintf('& %s & %g & %g & %g & %g &%g \\\\\n','GNP',normrG,full(xminG),full(normKKTG),min(ArG),tfG);
 end
 if example == 8 || example > 10
-    maxIterA = 600;
+    maxIterA = 400;
  [xk8,resvec8,arvec8,face8h,face8h,tf8] = hybridfast(A,b,x0,1e-5,6, maxIterA);
 [rpk8, normr8, xmin8, Ar8, normKKT8 , faceX8, faceA8] = kktResidual(A, b, xk8 , [], 1); 
 % h=semilogy(1:2:2*maxIterA,resvec2(1:2:2*maxIterA),'r+');
