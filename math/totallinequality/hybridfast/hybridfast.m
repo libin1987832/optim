@@ -33,6 +33,8 @@ testalphab = zeros(20);
 maxits = 10;
 eIter = 3;
  xz = zeros(n,1);
+ newton = 'ml';
+ iterlsqr = 1;
 while norm( x0 .* g, inf) > tol || min( g )< -tol
     iter = iter + 2;
     for i = 2:nf+1
@@ -80,11 +82,11 @@ while norm( x0 .* g, inf) > tol || min( g )< -tol
                 if steplength >= beta
                     steplength = beta;
                     leftb = knotri;
-                    retcode = [2,1];
+                    left = knoti;
                 elseif steplength <= alpha
                     steplength = alpha;
                     rightb = knotri;
-                    retcode = [1,1];
+                    right = knoti;
                 else
                     retcode = [1,0];
                     break;
@@ -92,15 +94,6 @@ while norm( x0 .* g, inf) > tol || min( g )< -tol
             end
             if retcode(1) == 1 && retcode(2) == 0
                 break;
-            end
-            if retcode(1) == 2 && retcode(2) == 0
-                break;
-            end
-            if retcode(1) == 1 && retcode(2) ==1
-                right = knoti;
-            end
-            if retcode(1) == 2 && retcode(2) ==1
-                left = knoti;
             end
         end    
         
@@ -155,39 +148,45 @@ while norm( x0 .* g, inf) > tol || min( g )< -tol
     
     if ssign==m
         RR = x0 > 1e-5;
-%         bI = r(I);
-%         AI = A(I,RR);
-% %         [u,flag,relres,iterlsqr,resvec,lsvec,out] = lsqrmx( AI ,bI,lsqrTol,maxIter,[],[],zeros(size(AI,2),1),A(:,RR),b,x0(RR),I,3);
-%         if norm(u) > 1e-10
-%             x0(RR) = x0(RR) + u;
-%         end
-         xz(:) = 0;
-         xz(RR) = (AT(RR, I) * A(I,RR))\(AT(RR, I) * b(I));     
-         r = b - A(:,RR) * xz(RR);
-         rb = r( ~I );
-         r(r < 0) = 0;
-         Ar = AT * r;
-%        if all(xz(in) > -tol) & all( AT * r < tol) & all(b( ~bim ) < A(~bim,:) * xz )
+        bI = r(I);
+        AI = A(I,RR);
+        switch(newton)
+            case 'Lsqr'
+                [u,flag,relres,fs,resvec,lsvec,out] = lsqrmx( AI ,bI,lsqrTol,maxIter,[],[],zeros(size(AI,2),1),A(:,RR),b,x0(RR),I,3);
+               if norm(u) > 1e-10
+%                     x0(:) = 0;
+                    x0(RR) = x0(RR) + u;
+               end
+            case 'ml'
+                xz(:) = 0;
+                xz(RR) = (AT(RR, I) * A(I,RR))\(AT(RR, I) * b(I));
+                r = b - A(:,RR) * xz(RR);
+                rb = r( ~I );
+                r(r < 0) = 0;
+                Ar = AT * r;
+                fs = 0;
+                if all(xz(RR) > -tol) &  all( rb < tol  ) & all(Ar < tol)
+                    fs = 1;
+                    x0 = xz;
+                end
+        end
 
         if display
-            fs = all(xz(RR) > -tol) &  all( rb < tol  ) & all(Ar < tol);
-            [rpk, normr, minx, g, normKKTz, face1, face2] = kktResidual(A, b, xz , [], 1);
-            [rpk, normr, minx, g, normKKT, face1, face2] = kktResidual(A, b, x0 , [], 1);
-            % record the value of objection function
-            resvec(iter +1) = normr;
-            % record the value of the gradient function
-            arvec(iter +1) = normKKT;
-            face1vec(iter +1) = face1;
-            face2vec(iter +1) = face2;
             u = xz - x0;
+            [rpk, normrN, minx, g, normKKTN, face1N, face2N] = kktResidual(A, b, x0, [], 1);
+            % record the value of objection function
+            resvec(iter +1) = normrN;
+            % record the value of the gradient function
+            arvec(iter +1) = normKKTN;
+            face1vec(iter +1) = face1N;
+            face2vec(iter +1) = face2N;
             pg = g' * (xz-x0);
             [minx,loc]=min(x0);
-            fprintf('newton(%d end %d): norm(%g),normKKT(%g,%g),minx(%g,%d),gp(%g,%g),xa(%d,%d)\n',...
-                (iter-1)/2,fs,normr,normKKT,normKKTz,minx,loc,pg,norm(u),face1,face2);
+            fprintf('newton(%d end %d): norm(%g,%g),normKKT(%g,%g),minx(%g,%d),gp(%g,%g),xa(%d,%d),ba(%d,%d)\n',...
+                (iter-1)/2,fs,normr,normrN,normKKT,normKKTN,minx,loc,pg,norm(u),face1,face1N,face2,face2N);
         end
-       if all(xz(RR) > -tol) &  all( rb < tol  ) & all(Ar < tol)
-           x0 = xz;
-       end
+
+
     end
     
     
