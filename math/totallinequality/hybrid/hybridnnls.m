@@ -22,9 +22,6 @@ face2vec(1) =face2;
 % flag 0-4 return lsqr flag
 flag = 5;
 while norm( x0 .* g, inf) > tol || min( g )< -tol
-    %while normKKT > tol
-    %  x0(x0<1e-10) = 0;
-    %     p(x0<1e-10) = 0;
     iter = iter + 2;
     [xkA, rpk] = simple(A, b, x0, n, rpk, nf, 100*tol, options, type);
     [rpk, normr, minx, g, normKKT, face1, face2] = kktResidual(A, b, xkA(:, end), [], 1);
@@ -33,7 +30,6 @@ while norm( x0 .* g, inf) > tol || min( g )< -tol
     arvec(iter) = normKKT;
     face1vec(iter) = face1;
     face2vec(iter) = face2;
-    
     if display
         %pg = g'*p;
         [minx,loc]=min(x0);

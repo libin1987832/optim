@@ -14,7 +14,7 @@ example = 3;
 [m,n] =size(A);
 options = optimoptions('lsqlin','Algorithm','interior-point','Display','iter');
 options.Display = 'off';
-options.StepTolerance = 1e-13;
+%options.StepTolerance = 1e-13;
 if example == 1 || example >100
 maxIterA = 6;
 [xk1, resvec, arvec,face1v,face2v, tf1] = fixedMatrix(A,b,x0,maxIterA,1e-15,options);
