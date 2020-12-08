@@ -8,7 +8,7 @@ RR = (x0 > tol);
 % subspace
 options = optimoptions('lsqlin','Algorithm','interior-point','Display','iter');
 options.Display = 'off';
-options.StepTolerance = 1e-13;
+%options.StepTolerance = 1e-13;
 
 AI = A(AA, RR);
 bI = rpk( AA );

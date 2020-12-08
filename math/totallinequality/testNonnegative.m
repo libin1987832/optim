@@ -66,7 +66,7 @@ if example == 4 || example > 10
  [rpk4, normr4, xmin4, Ar4, normKKT4 , faceX4, faceA4] = kktResidual(A, b, xk4, [], 1);
   fprintf('& %s & %g & %g & %g & %g &%g \\\\\n','ST',normr4,full(xmin4),full(normKKT4),min(Ar4),tf4);
 end
-if example == 5 || example > 10
+if example == 5 || example > 100
     maxIterA = 1;
  [xk5, resvec5, arvec5, faceXvec5, tf5]  = IPG(A, b, x0, 1e-13, 1e-8, 1-1e-10, maxIterA,'NT');
  [rpk5, normr5, xmin5, Ar5, normKKT5 , faceX5, faceA5] = kktResidual(A, b, xk5, [], 1);
@@ -78,9 +78,9 @@ if example == 7 || example > 100
  [rpkG, normrG, xminG, ArG, normKKTG , faceXG, faceAG] = kktResidual(A, b, xkG, [], 1);
   fprintf('& %s & %g & %g & %g & %g &%g \\\\\n','GNP',normrG,full(xminG),full(normKKTG),min(ArG),tfG);
 end
-if example == 8 || example > 100
-    maxIterA = 10;
- [xk8,resvec8,arvec8,face8h,face8h,tf8] = hybridfast(A,b,x0,1e-5,3, maxIterA);
+if example == 8 || example > 10
+    maxIterA = 200;
+ [xk8,resvec8,arvec8,face8h,face8h,tf8] = hybridfast(A,b,x0,1e-5,10, maxIterA);
 [rpk8, normr8, xmin8, Ar8, normKKT8 , faceX8, faceA8] = kktResidual(A, b, xk8 , [], 1); 
 % h=semilogy(1:2:2*maxIterA,resvec2(1:2:2*maxIterA),'r+');
 %  hold on

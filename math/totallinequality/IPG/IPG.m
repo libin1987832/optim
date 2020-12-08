@@ -29,7 +29,7 @@ while norm( x0 .* g, inf) > tol || min( g )< -tol
     switch dtype
         case 'NT'
             %             p = -(A(I,:)'*A(I,:)+det)\g;
-            p = lsqminnorm(A(I,:)'*A(I,:), -g);
+            p = lsqminnorm(A(IP,:)'*A(IP,:), -g);
             %  cos2 =  np'*p / (norm(np)*norm(p));
         case 'ST'
             p = -g;
@@ -37,8 +37,8 @@ while norm( x0 .* g, inf) > tol || min( g )< -tol
             %           ADA = A(I,:)' * Ax(I);
             d = x0./(ADA + det);
             p = - d .* g;
-            Ap = A * p;
     end
+    Ap = A * p;
     alphaAll = - x0./p;
     alphak = min(alphaAll(alphaAll>0));
     if isempty(alphak)

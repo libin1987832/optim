@@ -28,7 +28,7 @@ maxKnot = 1e5;
 testalphax = zeros(20);
 testalphab = zeros(20);
 maxits = 10;
-eIter = 2;
+eIter = 3;
 while norm( x0 .* g, inf) > tol || min( g )< -tol
     iter = iter + 2;
     for i = 2:nf+1
@@ -98,35 +98,35 @@ while norm( x0 .* g, inf) > tol || min( g )< -tol
             if retcode(1) == 2 && retcode(2) ==1
                 left = knoti;
             end
-        end
+        end    
         
+        if display
+            [alpha, minf, knot,retcode] = arraySpiece(A,b,x0,p,tol,maxits);
+            [~, normrN, ~, g0, normKKT, faceN1, faceN2] = kktResidual(A, b, x0, [], 1);
+            pg = g0' * -g; 
+            fprintf('simple(steepdown,%d): normr(%g,%g),pg(%g),activeX(%d,%d),activeB(%d,%d) alpha(%g,%g)\n'...
+                ,i,normr,normrN,pg,face1,faceN1,face2,faceN2,steplength,alpha);
+            knoty = arrayfun(@(alpha) funmin(A,b,x0,p,alpha), [testalphax,testalphab]);
+            
+%             xa = [0 : steplength / 100 : steplength * 1.2];
+%             ya = arrayfun(@(alpha) funmin(A,b,x0,p,alpha), xa);
+%             pxy={};
+%             pxy(1).X = knot;
+%             pxy(1).Y = knoty;
+%             pxy(1).X = xa;
+%             pxy(1).Y = ya;
+%             figure
+%             hold on
+%             p1 = arrayfun(@(a) plot(a.X,a.Y),pxy,'UniformOutput',false);
+%             p1(1).Marker = 'o';
+%             p1(2).Marker = '+';
+%             hold off
+        end
         x0 = x0 + steplength * p;
         x0(x0<0) =0;  
         r = b - A * x0;
         I = r > 1e-10;
         p = AT(: , I) * r(I);
-        
-        if display
-            [~, normrN, ~, g0, normKKT, faceN1, faceN2] = kktResidual(A, b, x0, [], 1);
-            pg = g0' * -g; 
-            fprintf('simple(steepdown): normr(%g,),pg(%g),activeX(%d,%d),activeB(%d,%d) \n'...
-                ,normr,normrN,pg,face1,faceN1,face2,faceN2);
-            knoty = arrayfun(@(alpha) funmin(A,b,x0,p,alpha), [testalphax,testalphab]);
-            
-            xa = [0 : steplength / 100 : steplength * 1.2];
-            ya = arrayfun(@(alpha) funmin(A,b,x0,p,alpha), xa);
-            pxy={};
-            pxy(1).X = knot;
-            pxy(1).Y = knoty;
-            pxy(1).X = xa;
-            pxy(1).Y = ya;
-            figure
-            hold on
-            p1 = arrayfun(@(a) plot(a.X,a.Y),pxy,'UniformOutput',false);
-%             p1(1).Marker = 'o';
-%             p1(2).Marker = '+';
-            hold off
-        end
     end
     
     if display
@@ -140,7 +140,8 @@ while norm( x0 .* g, inf) > tol || min( g )< -tol
         face2vec(iter) = face2;
     end
     
-    rkn = r - eIter * A * p;
+%     rkn = r - eIter * A * p;
+    rkn = r - eIter * ApIu
     Irkn = rkn > tol;
     ssign=sum(~xor(I , Irkn));
     
@@ -148,7 +149,7 @@ while norm( x0 .* g, inf) > tol || min( g )< -tol
         RR = x0 > 1e-5;
         bI = r(I);
         AI = A(I,RR);
-        [u,flag,relres,iter,resvec,lsvec,out] = lsqrmx( AI ,bI,lsqrTol,maxIter,[],[],zeros(size(AI,2),1),A(:,RR),b,x0(RR),I,3);
+        [u,flag,relres,iterlsqr,resvec,lsvec,out] = lsqrmx( AI ,bI,lsqrTol,maxIter,[],[],zeros(size(AI,2),1),A(:,RR),b,x0(RR),I,3);
         
         if norm(u) > 1e-10
             x0(RR) = x0(RR) + u;
@@ -164,10 +165,10 @@ while norm( x0 .* g, inf) > tol || min( g )< -tol
             arvec(iter +1) = normKKT;
             face1vec(iter +1) = face1;
             face2vec(iter +1) = face2;
-            pg = g' * u;
+            pg = g(RR)' * u;
             [minx,loc]=min(x0);
-            fprintf('newton(%d end): norm(%g),normKKT(%g),minx(%g,%d),gp(%g),xa(%d),ba(%d)\n',...
-                (iter-1)/2,normr,normKKT,minx,loc,pg,face1,face2);
+            fprintf('newton(%d end): norm(%g),normKKT(%g),minx(%g,%d),gp(%g,%g),xa(%d,%d)\n',...
+                (iter-1)/2,normr,normKKT,minx,loc,pg,norm(u),face1,face2);
         end
     end
     

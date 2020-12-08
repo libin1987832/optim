@@ -1,4 +1,4 @@
-% interv [0,1] for choose a 
+% interv [0,1] for choose a  dicard
 function [alpha, minf, knot,retcode] = arraySpiecewise(A,b,x0,p,tol,maxits)
 if nargin<5, tol = 1e-15; maxits = 1e4; end
 [m,n] = size(A);
