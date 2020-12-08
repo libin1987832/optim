@@ -1,6 +1,6 @@
 %[xk,resvec,arvec,face1vec,face2vec,tf]
 function [xk, resvec, arvec, faceXvec, tf] = IPG(A,b,x0,tol,det,tou,maxit,dtype)
-display = true;
+display = false;
 %x
 t=clock;
 loopcount = 1;
@@ -54,26 +54,29 @@ while norm( x0 .* g, inf) > tol || min( g )< -tol
     
     x0 = x0 + alpha * p;
     Ax = Ax + alpha * Ap;
-    IP = b - Ax > 1e-15;
+    r = b - Ax;
+    IP =  r > 1e-15;
     ADA = AT(:,IP) * Ax(IP);
     if any(xor(IF,IP))
         ADb = AT(:,IP) * b(IP);
     end
     g = ADA - ADb;
     IF = IP;
+    normr = 0.5*r(IP)'*r(IP);
     %    [normr,g,normKKT,Ax] = dtffunc(A,AT,b,x0);
     
     if display
-        [normr,g1,normKKT,Ax1] = dtffunc(A,AT,b,x0);
-        pg = g'*p;
+        [normr,g1,normKKT11,Ax1] = dtffunc(A,AT,b,x0);
+        pg = g1'*p;
         [minx,loc]=min(x0);
         fprintf('IPG(%d end): normr(%g),kkt(%g),gp(%g),alpha(%g),talpha(%g),minx(%g,%d)\n'...
-            , loopcount, normr, normKKT,pg,alpha,alphak,minx,loc);
-    end
-    resvec(loopcount) = normr;
+            , loopcount, normr, normKKT11,pg,alpha,alphak,minx,loc);
+            resvec(loopcount) = normr;
     % record the value of the gradient function
-    arvec(loopcount) = normKKT;
+    arvec(loopcount) = normKKT11;
     faceXvec(loopcount) = alphak;
+    end
+
     
 end
 xk=x0;

@@ -52,7 +52,7 @@ if example == 6 || example > 100
   fprintf('& %s & %g & %g & %g & %g &%g\n','HybridIPG',normr6,xmin6,normKKT6,min(Ar6),tf6);%
 end
 if example == 3 || example > 10
-maxIterA = 1000;
+maxIterA = 3000;
 [xk3, resvec3, arvec3, faceXvec3, tf3]  = IPG(A, b, x0, 1e-5, 1e-2, 0.8, maxIterA,'IPG');
 [rpk3, normr3, xmin3, Ar3, normKKT3 , faceX3, faceA3] = kktResidual(A, b, xk3, [], 1);
  fprintf('& %s & %g & %g & %g & %g &%g \\\\\n','IPG',normr3,full(xmin3),full(normKKT3),min(Ar3),tf3);
