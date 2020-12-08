@@ -1,7 +1,10 @@
 function [xk, resvec, arvec, face1vec, face2vec, tf] = hybridfast(A, b, x0, tol, nf, maxit)
 t=clock;
 % stop criterion
-display = false;
+display = true;
+if display 
+    maxit = 2;
+end
 [m,n] = size(A);
 [rpk, normr, ~, g, normKKT, face1, face2] = kktResidual(A, b, x0,[],1);
 iter = 1;
@@ -32,101 +35,45 @@ eIter = 3;
 while norm( x0 .* g, inf) > tol || min( g )< -tol
     iter = iter + 2;
     for i = 2:nf+1
-        nonzerou = p < 0;
-        knot = -x0(nonzerou) ./ p(nonzerou);
-        knot = sort(knot( knot > tol & knot < maxKnot));
-        knot = [0 ; knot ; maxKnot];
-        knot = unique(knot);
-        left = 1;
-        right = length(knot);
-        loopcountX = 0;
-        while left+1  <= right && loopcountX < maxits
-            loopcountX = loopcountX + 1;
-            knoti = floor(0.5*(left + right));
-            
-            testalphax(loopcountX) = knot(knoti);
-            
-            x = x0 + 0.5*(knot(knoti) + knot(knoti+1))*p;
-            Iu = x > 1e-10;
-      
-            rIu = b - A(:,Iu) * x0(Iu);
-            ApIu = A(:,Iu) * p(Iu);
-            knotr = rIu ./ ApIu;
-            knotr = sort( knotr( knotr >= knot( knoti ) & knotr <= knot( knoti + 1 )));
-            knotr= unique([knot( knoti ); knotr ; knot( knoti + 1 )]);
-            leftb = 1;
-            rightb = length(knotr);
-            loopcountB = 0;
-            while leftb + 1  <= rightb && loopcountB < maxits
-                loopcountB = loopcountB + 1;
-                knotri = floor(0.5*(leftb + rightb));
-                alpha = knotr(knotri);
-                beta = knotr(knotri + 1);
-                
-                testalphab(loopcountB) = alpha;
-                
-                % middle point give the active set
-                rknot = rIu  - 0.5 * (knotr(knotri)+ knotr(knotri + 1)) * ApIu;
-                % the derive Ap'(r-alpha*Ap)=0
-                Apr = ApIu(rknot > 0);
-                Ar = Apr' * rIu(rknot > 0);
-                % alpha = (Ap*r)^T/(Ap'*Ap)
-                steplength = Ar / ( Apr' * Apr );
-                % the right point
-                if steplength >= beta
-                    steplength = beta;
-                    leftb = knotri;
-                    retcode = [2,1];
-                elseif steplength <= alpha
-                    steplength = alpha;
-                    rightb = knotri;
-                    retcode = [1,1];
-                else
-                    retcode = [1,0];
-                    break;
-                end
+        alphaAll = - x0./p;
+        alphak = man(alphaAll(alphaAll>0));
+        steplength = alphak;
+        rho = 0.1;
+        qpc1 = - rho * p' * dk;
+        alpha = steplength;
+        loopcount = 1;
+        allalpha = zeros(3 * maxit ,1);
+        allalpha(1) = alpha;
+        while func(A, b, Ax, Adk ,alpha) > normr +  alpha * qpc1
+            loopcount = loopcount + 1;
+            alpha=alpha/2;
+            allalpha(loopcount) = alpha;
+            if loopcount > maxit
+                alpha = range;
+                retcode = [2,loopcount];
+                return;
             end
-            if retcode(1) == 1 && retcode(2) == 0
-                break;
-            end
-            if retcode(1) == 2 && retcode(2) == 0
-                break;
-            end
-            if retcode(1) == 1 && retcode(2) ==1
-                right = knoti;
-            end
-            if retcode(1) == 2 && retcode(2) ==1
-                left = knoti;
-            end
-        end    
-        
+        end
+        retcode = [1,loopcount];
+        return
+        end
         if display
             [alpha, minf, knot,retcode] = arraySpiece(A,b,x0,p,tol,maxits);
-            [~, normrN, ~, g0, normKKT, faceN1, faceN2] = kktResidual(A, b, x0, [], 1);
+            [~, normr, ~, g, normKKT, face1, faceN] = kktResidual(A, b, x0, [], 1);
+            xt = x0 + steplength * p; xt(xt<0) =0;
+            [~, normrN, ~, g0, normKKT, faceN1, faceN2] = kktResidual(A, b, xt, [], 1);
             pg = g0' * -g; 
             fprintf('simple(steepdown,%d): normr(%g,%g),pg(%g),activeX(%d,%d),activeB(%d,%d) alpha(%g,%g)\n'...
                 ,i,normr,normrN,pg,face1,faceN1,face2,faceN2,steplength,alpha);
             knoty = arrayfun(@(alpha) funmin(A,b,x0,p,alpha), [testalphax,testalphab]);
-            
-%             xa = [0 : steplength / 100 : steplength * 1.2];
-%             ya = arrayfun(@(alpha) funmin(A,b,x0,p,alpha), xa);
-%             pxy={};
-%             pxy(1).X = knot;
-%             pxy(1).Y = knoty;
-%             pxy(1).X = xa;
-%             pxy(1).Y = ya;
-%             figure
-%             hold on
-%             p1 = arrayfun(@(a) plot(a.X,a.Y),pxy,'UniformOutput',false);
-%             p1(1).Marker = 'o';
-%             p1(2).Marker = '+';
-%             hold off
         end
         x0 = x0 + steplength * p;
-        x0(x0<0) =0;  
-        r = b - A * x0;
-        I = r > 1e-10;
-        p = AT(: , I) * r(I);
+        x0(x0<0) =0;
+        if i < nf+1
+            r = b - A * x0;
+            I = r > 1e-10;
+            p = AT(: , I) * r(I);
+        end
     end
     
     if display
@@ -141,7 +88,7 @@ while norm( x0 .* g, inf) > tol || min( g )< -tol
     end
     
 %     rkn = r - eIter * A * p;
-    rkn = r - eIter * ApIu
+    rkn = r - eIter * ApIu;
     Irkn = rkn > tol;
     ssign=sum(~xor(I , Irkn));
     
@@ -153,9 +100,6 @@ while norm( x0 .* g, inf) > tol || min( g )< -tol
         
         if norm(u) > 1e-10
             x0(RR) = x0(RR) + u;
-            r = b - A * x0;
-            I = r > 1e-10;
-            p = AT(: , I) * r(I);
         end
         if display
             [rpk, normr, minx, g, normKKT, face1, face2] = kktResidual(A, b, x0 , rpk, 1);
@@ -167,11 +111,16 @@ while norm( x0 .* g, inf) > tol || min( g )< -tol
             face2vec(iter +1) = face2;
             pg = g(RR)' * u;
             [minx,loc]=min(x0);
+            x0 + u;
             fprintf('newton(%d end): norm(%g),normKKT(%g),minx(%g,%d),gp(%g,%g),xa(%d,%d)\n',...
                 (iter-1)/2,normr,normKKT,minx,loc,pg,norm(u),face1,face2);
         end
     end
     
+    
+    r = b - A * x0;
+    I = r > 1e-10;
+    p = AT(: , I) * r(I);
     %    if iter > maxit || flag == 0
     if iter > maxit
         break;
@@ -187,6 +136,13 @@ f = b - A * xn;
 f(f<0) = 0;
 f = sqrt(f'*f);
 end
+
+function fvalue = func(A,b,Ax,Ap,alpha)
+r = b - Ax - alpha * Ap;
+r( r < 0 ) = 0;
+fvalue = 0.5 * (r' * r);
+end
+
 %    [alpha, minf, knot] = arraySpiecewise(A,b,x0,p);
 %
 % %         knoty = arrayfun(@(alpha) funmin(A,b,x0,u,alpha), knot);
