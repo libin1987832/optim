@@ -3,7 +3,7 @@ t=clock;
 % stop criterion
 display = true;
 if display 
-    maxit = 2;
+    maxit = 100;
 end
 [m,n] = size(A);
 [rpk, normr, ~, g, normKKT, face1, face2] = kktResidual(A, b, x0,[],1);
@@ -32,6 +32,7 @@ testalphax = zeros(20);
 testalphab = zeros(20);
 maxits = 10;
 eIter = 3;
+ xz = zeros(n,1);
 while norm( x0 .* g, inf) > tol || min( g )< -tol
     iter = iter + 2;
     for i = 2:nf+1
@@ -107,10 +108,10 @@ while norm( x0 .* g, inf) > tol || min( g )< -tol
             [alpha, minf, knot,retcode] = arraySpiece(A,b,x0,p,tol,maxits);
             [~, normr, ~, g, normKKT, face1, faceN] = kktResidual(A, b, x0, [], 1);
             xt = x0 + steplength * p; xt(xt<0) =0;
-            [~, normrN, ~, g0, normKKT, faceN1, faceN2] = kktResidual(A, b, xt, [], 1);
+            [~, normrN, ~, g0, normKKTN, faceN1, faceN2] = kktResidual(A, b, xt, [], 1);
             pg = g0' * -g; 
-            fprintf('simple(steepdown,%d): normr(%g,%g),pg(%g),activeX(%d,%d),activeB(%d,%d) alpha(%g,%g)\n'...
-                ,i,normr,normrN,pg,face1,faceN1,face2,faceN2,steplength,alpha);
+            fprintf('simple(steepdown,%d): normr(%g,%g,%g,%g),pg(%g),activeX(%d,%d),activeB(%d,%d) alpha(%g,%g)\n'...
+                ,i,normr,normrN,normKKT,normKKTN,pg,face1,faceN1,face2,faceN2,steplength,alpha);
             knoty = arrayfun(@(alpha) funmin(A,b,x0,p,alpha), [testalphax,testalphab]);
             
 %             xa = [0 : steplength / 100 : steplength * 1.2];
@@ -154,27 +155,39 @@ while norm( x0 .* g, inf) > tol || min( g )< -tol
     
     if ssign==m
         RR = x0 > 1e-5;
-        bI = r(I);
-        AI = A(I,RR);
-        [u,flag,relres,iterlsqr,resvec,lsvec,out] = lsqrmx( AI ,bI,lsqrTol,maxIter,[],[],zeros(size(AI,2),1),A(:,RR),b,x0(RR),I,3);
-        
-        if norm(u) > 1e-10
-            x0(RR) = x0(RR) + u;
-        end
+%         bI = r(I);
+%         AI = A(I,RR);
+% %         [u,flag,relres,iterlsqr,resvec,lsvec,out] = lsqrmx( AI ,bI,lsqrTol,maxIter,[],[],zeros(size(AI,2),1),A(:,RR),b,x0(RR),I,3);
+%         if norm(u) > 1e-10
+%             x0(RR) = x0(RR) + u;
+%         end
+         xz(:) = 0;
+         xz(RR) = (AT(RR, I) * A(I,RR))\(AT(RR, I) * b(I));     
+         r = b - A(:,RR) * xz(RR);
+         rb = r( ~I );
+         r(r < 0) = 0;
+         Ar = AT * r;
+%        if all(xz(in) > -tol) & all( AT * r < tol) & all(b( ~bim ) < A(~bim,:) * xz )
+
         if display
-            [rpk, normr, minx, g, normKKT, face1, face2] = kktResidual(A, b, x0 , rpk, 1);
+            fs = all(xz(RR) > -tol) &  all( rb < tol  ) & all(Ar < tol);
+            [rpk, normr, minx, g, normKKTz, face1, face2] = kktResidual(A, b, xz , [], 1);
+            [rpk, normr, minx, g, normKKT, face1, face2] = kktResidual(A, b, x0 , [], 1);
             % record the value of objection function
             resvec(iter +1) = normr;
             % record the value of the gradient function
             arvec(iter +1) = normKKT;
             face1vec(iter +1) = face1;
             face2vec(iter +1) = face2;
-            pg = g(RR)' * u;
+            u = xz - x0;
+            pg = g' * (xz-x0);
             [minx,loc]=min(x0);
-            x0 + u;
-            fprintf('newton(%d end): norm(%g),normKKT(%g),minx(%g,%d),gp(%g,%g),xa(%d,%d)\n',...
-                (iter-1)/2,normr,normKKT,minx,loc,pg,norm(u),face1,face2);
+            fprintf('newton(%d end %d): norm(%g),normKKT(%g,%g),minx(%g,%d),gp(%g,%g),xa(%d,%d)\n',...
+                (iter-1)/2,fs,normr,normKKT,normKKTz,minx,loc,pg,norm(u),face1,face2);
         end
+       if all(xz(RR) > -tol) &  all( rb < tol  ) & all(Ar < tol)
+           x0 = xz;
+       end
     end
     
     

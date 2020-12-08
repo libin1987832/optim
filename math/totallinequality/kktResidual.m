@@ -18,5 +18,5 @@ if nargin == 5
     normKKT = max(abs(x.*Ar));
     %Ar = min(Ar);
     faceA = sum(rpk>-1e-15);
-    faceX = sum(x>1e-10);
+    faceX = sum(x>1e-2);
 end
