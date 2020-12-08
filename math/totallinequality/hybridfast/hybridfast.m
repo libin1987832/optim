@@ -1,7 +1,7 @@
 function [xk, resvec, arvec, face1vec, face2vec, tf] = hybridfast(A, b, x0, tol, nf, maxit)
 t=clock;
 % stop criterion
-display = true;
+display = false;
 if display 
     maxit = 100;
 end
@@ -48,9 +48,12 @@ while norm( x0 .* g, inf) > tol || min( g )< -tol
         loopcountX = 0;
         while left+1  <= right && loopcountX < maxits
             loopcountX = loopcountX + 1;
-            knoti = floor(0.5*(left + right));
-            
-            testalphax(loopcountX) = knot(knoti);
+            if loopcountX == 1
+                knoti = right - 1;
+            else
+                knoti = floor(0.5*(left + right));
+            end
+%             testalphax(loopcountX) = knot(knoti);
             
             x = x0 + 0.5*(knot(knoti) + knot(knoti+1))*p;
             Iu = x > 1e-10;
@@ -65,11 +68,18 @@ while norm( x0 .* g, inf) > tol || min( g )< -tol
             loopcountB = 0;
             while leftb + 1  <= rightb && loopcountB < maxits
                 loopcountB = loopcountB + 1;
-                knotri = floor(0.5*(leftb + rightb));
+                if loopcountB == 1
+                    knotri = rightb - 1;
+                elseif loopcountB == 2
+                    knotri = leftb;
+                else
+                    knotri = floor(0.5*(leftb + rightb));
+                end
+                
                 alpha = knotr(knotri);
                 beta = knotr(knotri + 1);
                 
-                testalphab(loopcountB) = alpha;
+%                 testalphab(loopcountB) = alpha;
                 
                 % middle point give the active set
                 rknot = rIu  - 0.5 * (knotr(knotri)+ knotr(knotri + 1)) * ApIu;
@@ -83,14 +93,28 @@ while norm( x0 .* g, inf) > tol || min( g )< -tol
                     steplength = beta;
                     leftb = knotri;
                     left = knoti;
+                    retcode = [2,1];
+                    if loopcountB == 1
+                        retcode = [1,1];
+                        break;
+                    end
                 elseif steplength <= alpha
                     steplength = alpha;
                     rightb = knotri;
                     right = knoti;
+                    if loopcountB == 2
+                        retcode = [1,2];
+                        break;
+                    else
+                       retcode = [1,0]; 
+                    end
                 else
                     retcode = [1,0];
                     break;
                 end
+            end
+            if retcode(1) == 1 && retcode(2) == 1 && loopcountX == 1
+                break;
             end
             if retcode(1) == 1 && retcode(2) == 0
                 break;
