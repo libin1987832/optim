@@ -35,6 +35,7 @@ eIter = 3;
  xz = zeros(n,1);
  newton = 'ml';
  iterlsqr = 1;
+ 
 while norm( x0 .* g, inf) > tol || min( g )< -tol
     iter = iter + 2;
     for i = 2:nf+1
@@ -46,6 +47,7 @@ while norm( x0 .* g, inf) > tol || min( g )< -tol
         left = 1;
         right = length(knot);
         loopcountX = 0;
+        sumloopcountxb = 0;
         while left+1  <= right && loopcountX < maxits
             loopcountX = loopcountX + 1;
             if loopcountX == 1
@@ -53,7 +55,7 @@ while norm( x0 .* g, inf) > tol || min( g )< -tol
             else
                 knoti = floor(0.5*(left + right));
             end
-%             testalphax(loopcountX) = knot(knoti);
+             testalphax(loopcountX) = knot(knoti);
             
             x = x0 + 0.5*(knot(knoti) + knot(knoti+1))*p;
             Iu = x > 1e-10;
@@ -68,6 +70,7 @@ while norm( x0 .* g, inf) > tol || min( g )< -tol
             loopcountB = 0;
             while leftb + 1  <= rightb && loopcountB < maxits
                 loopcountB = loopcountB + 1;
+                sumloopcountxb = sumloopcountxb + 1;
                 if loopcountB == 1
                     knotri = rightb - 1;
                 elseif loopcountB == 2
@@ -79,7 +82,7 @@ while norm( x0 .* g, inf) > tol || min( g )< -tol
                 alpha = knotr(knotri);
                 beta = knotr(knotri + 1);
                 
-%                 testalphab(loopcountB) = alpha;
+                 testalphab(loopcountB) = alpha;
                 
                 % middle point give the active set
                 rknot = rIu  - 0.5 * (knotr(knotri)+ knotr(knotri + 1)) * ApIu;
@@ -95,8 +98,9 @@ while norm( x0 .* g, inf) > tol || min( g )< -tol
                         retcode = [1,1];
                         break;
                     else
+                         leftb = knotri+1;
                          left = knoti+1;
-                         retcode = [2,1];
+                         retcode = [1,0];
                     end
                 elseif steplength <= alpha
                     steplength = alpha;
@@ -126,24 +130,27 @@ while norm( x0 .* g, inf) > tol || min( g )< -tol
             [~, normr, ~, g, normKKT, face1, faceN] = kktResidual(A, b, x0, [], 1);
             xt = x0 + steplength * p; xt(xt<0) =0;
             [~, normrN, ~, ~, normKKTN, faceN1, faceN2] = kktResidual(A, b, xt, [], 1);
-            pg = p' * g; 
-            fprintf('simple(steepdown,%d): normr(%g,%g,%g,%g),pg(%g),activeX(%d,%d),activeB(%d,%d) alpha(%g,%g)\n'...
-                ,i,normr,normrN,normKKT,normKKTN,pg,face1,faceN1,face2,faceN2,steplength,alpha);
+            pg = p' * g;
+            fprintf('simple(search):xintival(%d),bintival(%d),ax(%d),b(%d),sum(%d)',length(knot),length(knotr),left,leftb,sumloopcountxb);
+            fprintf('simple(steepdown,%d): normr(%g,%g,%g,%g),pg(%g),activeX(%d,%d),activeB(%d,%d) alpha(%g,%g,%g,%g)\n'...
+                ,i,normr,normrN,normKKT,normKKTN,pg,face1,faceN1,face2,...
+                faceN2,steplength,alpha,funmin(A,b,x0,p,steplength),funmin(A,b,x0,p,alpha));
+%             if abs(steplength-alpha)>10
 %             knoty = arrayfun(@(alpha) funmin(A,b,x0,p,alpha), [testalphax,testalphab]);
-            
+%             
 %             xa = [0 : steplength / 100 : steplength * 1.2];
 %             ya = arrayfun(@(alpha) funmin(A,b,x0,p,alpha), xa);
 %             pxy={};
-%             pxy(1).X = knot;
-%             pxy(1).Y = knoty;
-%             pxy(1).X = xa;
-%             pxy(1).Y = ya;
+%             pxy(1).X = [testalphax,testalphab];pxy(1).Y = knoty;pxy(2).X = xa;pxy(2).Y = ya;
+%             pxy(3).X = steplength;pxy(3).Y = funmin(A,b,x0,p,steplength);
+%             pxy(4).X = alpha;pxy(4).Y = funmin(A,b,x0,p,alpha);
 %             figure
 %             hold on
-%             p1 = arrayfun(@(a) plot(a.X,a.Y),pxy,'UniformOutput',false);
-%             p1(1).Marker = 'o';
-%             p1(2).Marker = '+';
+%             p1 = arrayfun(@(a) plot(a.X,a.Y),pxy);
+%             p1(1).Marker = 'o';p1(2).Marker = '.';p1(3).Marker = '*';p1(4).Marker = 'x';
+%             p1(1).LineStyle = 'none';
 %             hold off
+%             end
         end
         x0 = x0 + steplength * p;
         x0(x0<0) =0;
