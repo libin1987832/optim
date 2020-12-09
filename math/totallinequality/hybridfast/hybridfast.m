@@ -106,11 +106,13 @@ while norm( x0 .* g, inf) > tol || min( g )< -tol
                     steplength = alpha;
                     rightb = knotri;
                     right = knoti;
-                    if loopcountB < 3 
+                    if loopcountB == 2
                         retcode = [1,2];
                         break;
-                    else
+                    elseif loopcountB >1
                        retcode = [1,0]; 
+                    else
+                        retcode = [1,3];
                     end
                 else
                     retcode = [1,0];
