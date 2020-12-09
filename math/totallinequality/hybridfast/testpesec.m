@@ -1,7 +1,7 @@
 clear
 clc
 load('testpresc');
-alpha1 = steplength * 1.002;%
+alpha1 = steplength * 1.02;%
 maxa = max(alpha1,steplength);
 mina = min(alpha1,steplength);
 % knoty = arrayfun(@(alpha) funmin(A,b,x0,p,alpha), [maxa,mina]);
