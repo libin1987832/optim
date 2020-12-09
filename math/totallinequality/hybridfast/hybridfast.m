@@ -1,7 +1,7 @@
 function [xk, resvec, arvec, face1vec, face2vec, tf] = hybridfast(A, b, x0, tol, nf, maxit)
 t=clock;
 % stop criterion
-display = true;
+display = false;
 if display 
     maxit = 5;
 end
@@ -55,11 +55,14 @@ while norm( x0 .* g, inf) > tol || min( g )< -tol
             else
                 knoti = floor(0.5*(left + right));
             end
-             testalphax(loopcountX) = knot(knoti);
+ %            testalphax(loopcountX) = knot(knoti);
             
             x = x0 + 0.5*(knot(knoti) + knot(knoti+1))*p;
             Iu = x > 1e-10;
-      
+            if sum(Iu)<1
+                right = knoti - 1;
+                continue;
+            end
             rIu = b - A(:,Iu) * x0(Iu);
             ApIu = A(:,Iu) * p(Iu);
             knotr = rIu ./ ApIu;
@@ -82,7 +85,7 @@ while norm( x0 .* g, inf) > tol || min( g )< -tol
                 alpha = knotr(knotri);
                 beta = knotr(knotri + 1);
                 
-                 testalphab(loopcountB) = alpha;
+%                 testalphab(loopcountB) = alpha;
                 
                 % middle point give the active set
                 rknot = rIu  - 0.5 * (knotr(knotri)+ knotr(knotri + 1)) * ApIu;
@@ -133,28 +136,13 @@ while norm( x0 .* g, inf) > tol || min( g )< -tol
             xt = x0 + steplength * p; xt(xt<0) =0;
             [~, normrN, ~, ~, normKKTN, faceN1, faceN2] = kktResidual(A, b, xt, [], 1);
             pg = p' * g;
-            fprintf('simple(steepdown,%d): normr(%g,%g,%g,%g),pg(%g),activeX(%d,%d),activeB(%d,%d) alpha(%g,%g,%g,%g)\n'...
-                ,i,normr,normrN,normKKT,normKKTN,pg,face1,faceN1,face2,...
-                faceN2,steplength,alpha1,funmin(A,b,x0,p,steplength),funmin(A,b,x0,p,alpha1));
-             if abs(steplength-alpha1)>10
-            fprintf('simple(search):xintival(%d),bintival(%d),ax(%d),b(%d),sum(%d)\n',length(knot),length(knotr),knoti,knotri,sumloopcountxb);     
-             end
-                 %             knoty = arrayfun(@(alpha) funmin(A,b,x0,p,alpha), [testalphax,testalphab]);
-%             
-%             xa = [0 : steplength / 100 : steplength * 1.2];
-%             ya = arrayfun(@(alpha) funmin(A,b,x0,p,alpha), xa);
-%             pxy={};
-%             pxy(1).X = [testalphax,testalphab];pxy(1).Y = knoty;pxy(2).X = xa;pxy(2).Y = ya;
-%             pxy(3).X = steplength;pxy(3).Y = funmin(A,b,x0,p,steplength);
-%             pxy(4).X = alpha1;pxy(4).Y = funmin(A,b,x0,p,alpha1);
-%             figure
-%             hold on
-%             p1 = arrayfun(@(a) plot(a.X,a.Y),pxy);
-%             p1(1).Marker = 'o';p1(2).Marker = '.';p1(3).Marker = '*';p1(4).Marker = 'x';
-%             p1(1).LineStyle = 'none';
-%             hold off
-%             end
-        end
+            fprintf('simple(steepdown,%d): normr(%g,%g,%g,%g),activeX(%d,%d),activeB(%d,%d),alpha(%g,%g,%g,%g),pg(%g),\n'...
+                ,i,normr,normrN,normKKT,normKKTN,face1,faceN1,face2,...
+                faceN2,steplength,alpha1,funmin(A,b,x0,p,steplength),funmin(A,b,x0,p,alpha1),pg);
+%              if abs(steplength-alpha1)>10
+%             fprintf('simple(search):xintival(%d),bintival(%d),ax(%d),b(%d),sum(%d)\n',length(knot),length(knotr),knoti,knotri,sumloopcountxb);     
+%              end
+         end
         x0 = x0 + steplength * p;
         x0(x0<0) =0;
         if i < nf+1
@@ -240,7 +228,7 @@ xn = x0 + alpha*u;
 xn( xn < 0) = 0;
 f = b - A * xn;
 f(f<0) = 0;
-f = sqrt(f'*f);
+f = 0.5*(f'*f);
 end
 %    [alpha, minf, knot] = arraySpiecewise(A,b,x0,p);
 %

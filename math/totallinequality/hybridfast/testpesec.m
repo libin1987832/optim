@@ -4,22 +4,25 @@ load('testpresc');
 alpha1 = steplength * 1.02;%
 maxa = max(alpha1,steplength);
 mina = min(alpha1,steplength);
+maxits = 20;
+[alpha12, ~, ~,retcode1] = arraySpiece(A,b,x0,p,10-5,maxits);
+
 % knoty = arrayfun(@(alpha) funmin(A,b,x0,p,alpha), [maxa,mina]);
 
-xa = [ mina: (maxa-mina) / 100 : maxa];
-ya = arrayfun(@(alpha) funmin(A,b,x0,p,alpha), xa);
-pxy={};
-% pxy(1).X = [testalphax,testalphab];pxy(1).Y = knoty;
-pxy(1).X = xa;pxy(1).Y = ya;
-pxy(2).X = steplength;pxy(2).Y = funmin(A,b,x0,p,steplength);
-pxy(3).X = alpha1;pxy(3).Y = funmin(A,b,x0,p,alpha1);
-figure
-hold on
-p1 = arrayfun(@(a) plot(a.X,a.Y),pxy);
-p1(1).Marker = 'o';p1(2).Marker = '.';p1(3).Marker = '*';%p1(4).Marker = 'x';
-p1(1).LineStyle = 'none';
-hold off
-
+% xa = [ mina: (maxa-mina) / 100 : maxa];
+% ya = arrayfun(@(alpha) funmin(A,b,x0,p,alpha), xa);
+% pxy={};
+% % pxy(1).X = [testalphax,testalphab];pxy(1).Y = knoty;
+% pxy(1).X = xa;pxy(1).Y = ya;
+% pxy(2).X = steplength;pxy(2).Y = funmin(A,b,x0,p,steplength);
+% pxy(3).X = alpha1;pxy(3).Y = funmin(A,b,x0,p,alpha1);
+% figure
+% hold on
+% p1 = arrayfun(@(a) plot(a.X,a.Y),pxy);
+% p1(1).Marker = 'o';p1(2).Marker = '.';p1(3).Marker = '*';%p1(4).Marker = 'x';
+% p1(1).LineStyle = 'none';
+% hold off
+% 
 
 function f = funmin(A,b,x0,u,alpha)
 xn = x0 + alpha*u;
