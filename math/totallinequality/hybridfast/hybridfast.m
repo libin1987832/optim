@@ -1,9 +1,9 @@
 function [xk, resvec, arvec, face1vec, face2vec, tf] = hybridfast(A, b, x0, tol, nf, maxit)
 t=clock;
 % stop criterion
-display = false;
+display = true;
 if display 
-    maxit = 100;
+    maxit = 2;
 end
 [m,n] = size(A);
 [rpk, normr, ~, g, normKKT, face1, face2] = kktResidual(A, b, x0,[],1);
@@ -91,12 +91,12 @@ while norm( x0 .* g, inf) > tol || min( g )< -tol
                 % the right point
                 if steplength >= beta
                     steplength = beta;
-                    leftb = knotri;
-                    left = knoti;
-                    retcode = [2,1];
                     if loopcountB == 1
                         retcode = [1,1];
                         break;
+                    else
+                         left = knoti+1;
+                         retcode = [2,1];
                     end
                 elseif steplength <= alpha
                     steplength = alpha;
@@ -122,14 +122,14 @@ while norm( x0 .* g, inf) > tol || min( g )< -tol
         end    
         
         if display
-            [alpha, minf, knot,retcode] = arraySpiece(A,b,x0,p,tol,maxits);
+            [alpha, ~, ~,retcode] = arraySpiece(A,b,x0,p,tol,maxits);
             [~, normr, ~, g, normKKT, face1, faceN] = kktResidual(A, b, x0, [], 1);
             xt = x0 + steplength * p; xt(xt<0) =0;
-            [~, normrN, ~, g0, normKKTN, faceN1, faceN2] = kktResidual(A, b, xt, [], 1);
-            pg = g0' * -g; 
+            [~, normrN, ~, ~, normKKTN, faceN1, faceN2] = kktResidual(A, b, xt, [], 1);
+            pg = p' * g; 
             fprintf('simple(steepdown,%d): normr(%g,%g,%g,%g),pg(%g),activeX(%d,%d),activeB(%d,%d) alpha(%g,%g)\n'...
                 ,i,normr,normrN,normKKT,normKKTN,pg,face1,faceN1,face2,faceN2,steplength,alpha);
-            knoty = arrayfun(@(alpha) funmin(A,b,x0,p,alpha), [testalphax,testalphab]);
+%             knoty = arrayfun(@(alpha) funmin(A,b,x0,p,alpha), [testalphax,testalphab]);
             
 %             xa = [0 : steplength / 100 : steplength * 1.2];
 %             ya = arrayfun(@(alpha) funmin(A,b,x0,p,alpha), xa);
