@@ -11,8 +11,8 @@ clear
 
 % 1:fixed 0:lsqin 2:hybrid lsqr 6:hybrd IPG 3: IPG 4: steep decent 5:Newton
 % 7:GNP  8 hybridfast
-example = 8;
-[A,b,x0] = readData(1,1000,1000,200);
+example =8;
+[A,b,x0] = readData(1,1000,1000,100);
 [m,n] =size(A);
 options = optimoptions('lsqlin','Algorithm','interior-point','Display','iter');
 options.Display = 'off';

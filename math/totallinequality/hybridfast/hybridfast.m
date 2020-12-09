@@ -3,7 +3,7 @@ t=clock;
 % stop criterion
 display = true;
 if display 
-    maxit = 2;
+    maxit = 5;
 end
 [m,n] = size(A);
 [rpk, normr, ~, g, normKKT, face1, face2] = kktResidual(A, b, x0,[],1);
