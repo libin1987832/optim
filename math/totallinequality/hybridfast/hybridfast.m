@@ -132,7 +132,7 @@ while norm( x0 .* g, inf) > tol || min( g )< -tol
         
         if funmin(A,b,x0,p,steplength) > funmin(A,b,x0,p,0)
             [steplength, ~, ~,retcode1] = arraySpiece(A,b,x0,p,tol,maxits);
-            fprintf('alpha error');
+            fprintf('alpha error\n');
         end
         
         if display
