@@ -1,4 +1,4 @@
-% interv [0,1] for choose a the projectedsearch but less one 
+% interv [0,maxknot] for choose a the projectedsearch but less maxknot
 function [alpha,xk,knot, retcode] = arraySpiece(A,b,x0,p,tol,maxits)
 display = false;
 if nargin<5, tol = 1e-15; maxits = 1e4; end
