@@ -25,6 +25,9 @@ switch type
         A=[A1;-A2];
         b=[b1;-b2];
         x0=ones(n,1);
+    case 5 
+        load('testface')
+        m1 = 300;m2=300;n=200;x0=ones(200,1);
     otherwise
          load('test15')
          m1 = 500;m2=500;n=300;x0=ones(300,1);

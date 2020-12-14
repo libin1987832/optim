@@ -8,4 +8,4 @@ q = [-8;-12;-14];
 [w2,z,retcode] = Murty(M,q);
 [w3,z,retcode] = Graves(M,q);
 [w1,z,retcode] = Bard(M,q);
-[w1';w2';w3']
+[w';w1';w2';w3']

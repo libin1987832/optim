@@ -1,4 +1,4 @@
-function [xk, resvec, arvec, face1vec, face2vec, tf] = hybridfast(A, b, x0, tol, nf, maxit)
+function [xk, resvec, arvec, face1vec, face2vec, tf] = hybridprojnls(A, b, x0, tol, nf, maxit)
 t=clock;
 % stop criterion
 display = true;

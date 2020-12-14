@@ -1,4 +1,4 @@
-function [xk, resvec, arvec, face1vec, face2vec, tf] = hybridfast(A, b, x0, tol, nf, maxit)
+function [xk, resvec, arvec, face1vec, face2vec, tf] = hybridprojnlss(A, b, x0, tol, nf, maxit)
 t=clock;
 % stop criterion
 display = true;
@@ -247,4 +247,3 @@ end
 % p1(1).Marker = 'o';
 % %p1(2).Marker = '+';
 % hold off
-
