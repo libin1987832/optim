@@ -1,7 +1,7 @@
 function [xk, resvec, arvec, face1vec, face2vec, tf] = hybridfast(A, b, x0, tol, nf, maxit)
 t=clock;
 % stop criterion
-display = false;
+display =false;
 % if display 
 %     maxit = 5;
 % end
@@ -132,10 +132,10 @@ while norm( x0 .* g, inf) > tol || min( g )< -tol
         
         if display
             [alpha1, ~, ~,retcode1] = arraySpiece(A,b,x0,p,tol,maxits);
-            [~, normr, ~, g, normKKT, face1, faceN] = kktResidual(A, b, x0, [], 1);
+            [~, normr, ~, g1, normKKT, face1, faceN] = kktResidual(A, b, x0, [], 1);
             xt = x0 + steplength * p; xt(xt<0) =0;
             [~, normrN, ~, ~, normKKTN, faceN1, faceN2] = kktResidual(A, b, xt, [], 1);
-            pg = p' * g;
+            pg = p' * g1;
             fprintf('simple(steepdown,%d): normr(%g,%g,%g,%g),activeX(%d,%d),activeB(%d,%d),alpha(%g,%g,%g,%g),pg(%g),\n'...
                 ,i,normr,normrN,normKKT,normKKTN,face1,faceN1,face2,...
                 faceN2,steplength,alpha1,funmin(A,b,x0,p,steplength),funmin(A,b,x0,p,alpha1),pg);
@@ -153,7 +153,7 @@ while norm( x0 .* g, inf) > tol || min( g )< -tol
     end
     
     if display
-        [rpk, normr, minx, g, normKKT, face1, face2] = kktResidual(A, b, x0, [], 1);
+        [rpk, normr, minx, g2, normKKT, face1, face2] = kktResidual(A, b, x0, [], 1);
         fprintf('simple(%d end): norm(%g),normKKT(%g),minx(%g),xa(%d),ba(%d)\n',...
             (iter-1)/2,normr,normKKT,minx,face1,face2);
         resvec(iter) = normr;
@@ -195,14 +195,14 @@ while norm( x0 .* g, inf) > tol || min( g )< -tol
 
         if display
             u = xz - x0;
-            [rpk, normrN, minx, g, normKKTN, face1N, face2N] = kktResidual(A, b, x0, [], 1);
+            [rpk, normrN, minx, gd, normKKTN, face1N, face2N] = kktResidual(A, b, x0, [], 1);
             % record the value of objection function
             resvec(iter +1) = normrN;
             % record the value of the gradient function
             arvec(iter +1) = normKKTN;
             face1vec(iter +1) = face1N;
             face2vec(iter +1) = face2N;
-            pg = g' * (xz-x0);
+            pg = gd' * (xz-x0);
             [minx,loc]=min(x0);
             fprintf('newton(%d end %d): norm(%g,%g),normKKT(%g,%g),minx(%g,%d),gp(%g,%g),xa(%d,%d),ba(%d,%d)\n',...
                 (iter-1)/2,fs,normr,normrN,normKKT,normKKTN,minx,loc,pg,norm(u),face1,face1N,face2,face2N);
@@ -215,6 +215,7 @@ while norm( x0 .* g, inf) > tol || min( g )< -tol
     r = b - A * x0;
     I = r > 1e-10;
     p = AT(: , I) * r(I);
+    g = -p;
     %    if iter > maxit || flag == 0
     if iter > maxit
         break;

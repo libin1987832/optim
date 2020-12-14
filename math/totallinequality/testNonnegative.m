@@ -13,13 +13,17 @@ clear
 
 % 1:fixed 0:lsqin 2:hybrid lsqr 6:hybrd IPG 3: IPG 4: steep decent 5:Newton
 % 7:GNP  8 hybridfast 9 hybridprojnnls
-example = 9;
-[A,b,x0] = readData(5,1000,1000,300);
+example = 11;
+[A,b,x0] = readData(4,1000,1000,300);
 [m,n] =size(A);
-options = optimoptions('lsqlin','Algorithm','interior-point','Display','iter');
+ options = optimoptions('lsqlin','Algorithm','interior-point','Display','iter');
+% options = optimoptions('Algorithm','interior-point','TolX',1e-13)
 options.Display = 'off';
 % options.StepTolerance = 1e-13;
 options.OptimalityTolerance = 1e-13;
+% options.ConstraintTolerance = 1e-13;
+options.MaxIterations = 600;
+% options.
 if example == 1 || example >100
 maxIterA = 6;
 [xk1, resvec, arvec,face1v,face2v, tf1] = fixedMatrix(A,b,x0,maxIterA,1e-15,options);
@@ -83,8 +87,8 @@ if example == 7 || example > 100
   fprintf('& %s & %g & %g & %g & %g &%g \\\\\n','GNP',normrG,full(xminG),full(normKKTG),min(ArG),tfG);
 end
 if example == 8 || example > 10
-    maxIterA = 400;
- [xk8,resvec8,arvec8,face8h,face8h,tf8] = hybridfast(A,b,x0,1e-5,6, maxIterA);
+    maxIterA =100;
+ [xk8,resvec8,arvec8,face8h,face8h,tf8] = hybridfast(A,b,x0,1e-6,6, maxIterA);
 [rpk8, normr8, xmin8, Ar8, normKKT8 , faceX8, faceA8] = kktResidual(A, b, xk8 , [], 1); 
 % h=semilogy(1:2:2*maxIterA,resvec2(1:2:2*maxIterA),'r+');
 %  hold on
@@ -93,7 +97,7 @@ if example == 8 || example > 10
 end
 if example == 9 || example > 10
     maxIterA = 100;
- [xk9,resvec9,arvec9,face9h,face9h,tf9] = hybridprojnlss(A,b,x0,1e-5,6, maxIterA);
+ [xk9,resvec9,arvec9,face9h,face9h,tf9] = hybridprojnlss(A,b,x0,1e-6,6, maxIterA);
 [rpk9, normr9, xmin9, Ar9, normKKT9 , faceX9, faceA9] = kktResidual(A, b, xk9 , [], 1); 
 % h=semilogy(1:2:2*maxIterA,resvec2(1:2:2*maxIterA),'r+');
 %  hold on
