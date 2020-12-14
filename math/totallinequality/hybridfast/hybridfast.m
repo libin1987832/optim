@@ -130,6 +130,11 @@ while norm( x0 .* g, inf) > tol || min( g )< -tol
             end
         end    
         
+        if funmin(A,b,x0,p,steplength) > funmin(A,b,x0,p,0)
+            [steplength, ~, ~,retcode1] = arraySpiece(A,b,x0,p,tol,maxits);
+            fprintf('alpha error');
+        end
+        
         if display
             [alpha1, ~, ~,retcode1] = arraySpiece(A,b,x0,p,tol,maxits);
             [~, normr, ~, g1, normKKT, face1, faceN] = kktResidual(A, b, x0, [], 1);

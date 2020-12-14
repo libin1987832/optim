@@ -139,6 +139,24 @@ while norm( x0 .* g, inf) > tol || min( g )< -tol
             fprintf('simple(steepdown,%d): normr(%g,%g,%g,%g),activeX(%d,%d),activeB(%d,%d),alpha(%g,%g,%g,%g),pg(%g),%g,%g,%g\n'...
                 ,i,normr,normrN,normKKT,normKKTN,face1,faceN1,faceN,...
                 faceN2,steplength,alpha1,funmin(A,b,x0,p,steplength),funmin(A,b,x0,p,alpha1),pg,xminN,min(full(ArN)),normKKTN);
+      
+
+%         knoty = arrayfun(@(alpha) funmin(A,b,x0,u,alpha), knot);
+if i == 6
+    steplength = alpha1;
+    xa = [0:1e5/1000:1e5];
+%         xa = [steplength*0.8:(steplength*1.2-steplength*0.8)/100:steplength*1.2];
+ya = arrayfun(@(alpha) funmin(A,b,x0,p,alpha), xa);
+ pxy={};
+pxy.X = xa;
+pxy.Y = ya;
+figure
+hold on
+plot(xa,ya)
+
+
+hold off
+end
             %              if abs(steplength-alpha1)>10
             %             fprintf('simple(search):xintival(%d),bintival(%d),ax(%d),b(%d),sum(%d)\n',length(knot),length(knotr),knoti,knotri,sumloopcountxb);
             %              end
