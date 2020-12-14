@@ -23,7 +23,7 @@ while left+1  <= right && loopcount < maxits
     x = x0 + 0.5*(knot(i) + knot(i+1))*p;
     % x active setss
     Iu = x < 1e-15;
-    [alpha,retcode] = spiecewise(A(:,~Iu),b,p(~Iu),x0(~Iu),knot( i ) , knot( i+1 ));
+    [alpha,retcode] = spiecewisennls(A(:,~Iu),b,p(~Iu),x0(~Iu),knot( i ) , knot( i+1 ));
     if retcode(1) == 1 && retcode(2) == 0
 %         if display
 %             fprintf("newton arrayspiece min alpha in the left, so stop\n");

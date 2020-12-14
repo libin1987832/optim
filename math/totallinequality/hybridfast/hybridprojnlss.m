@@ -114,6 +114,13 @@ while norm( x0 .* g, inf) > tol || min( g )< -tol
                         break;
                     elseif loopcountB >1
                        retcode = [1,0]; 
+                       As = A(:,Iu);
+                       [xt, flag, relres, iter, resvec, arvec, itersm, tfD]=hybridNqr(As,b, x(Iu),3,20,3,'PHA');
+                       xtt = x;
+                       xtt(Iu) = xt;
+                       steplength = 1;
+                       p = xtt - x0;
+                       break;
                     else
                         retcode = [1,3];
                     end
@@ -137,7 +144,7 @@ while norm( x0 .* g, inf) > tol || min( g )< -tol
             [~, normrN, ~, ~, normKKTN, faceN1, faceN2] = kktResidual(A, b, xt, [], 1);
             pg = p' * g;
             fprintf('simple(steepdown,%d): normr(%g,%g,%g,%g),activeX(%d,%d),activeB(%d,%d),alpha(%g,%g,%g,%g),pg(%g),\n'...
-                ,i,normr,normrN,normKKT,normKKTN,face1,faceN1,face2,...
+                ,i,normr,normrN,normKKT,normKKTN,face1,faceN1,faceN,...
                 faceN2,steplength,alpha1,funmin(A,b,x0,p,steplength),funmin(A,b,x0,p,alpha1),pg);
 %              if abs(steplength-alpha1)>10
 %             fprintf('simple(search):xintival(%d),bintival(%d),ax(%d),b(%d),sum(%d)\n',length(knot),length(knotr),knoti,knotri,sumloopcountxb);     

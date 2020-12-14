@@ -5,13 +5,15 @@ addpath('./subproblem')
 addpath('./GNP')
 addpath('./exponent')
 addpath('./hybridfast')
+addpath('../inequality')
+addpath('../inequality/algorithmInequality')
 clc
 for i = 1:1
 clear 
 
 % 1:fixed 0:lsqin 2:hybrid lsqr 6:hybrd IPG 3: IPG 4: steep decent 5:Newton
-% 7:GNP  8 hybridfast
-example =8;
+% 7:GNP  8 hybridfast 9 hybridprojnnls
+example = 9;
 [A,b,x0] = readData(5,1000,1000,300);
 [m,n] =size(A);
 options = optimoptions('lsqlin','Algorithm','interior-point','Display','iter');
@@ -87,6 +89,15 @@ if example == 8 || example > 10
 %  hold on
 %  semilogy(2:2:2*maxIterA,arvec2(2:2:2*maxIterA),'bo')
   fprintf('& %s & %g & %g & %g & %g &%g\n','Hybridfast',normr8,xmin8,normKKT8,min(Ar8),tf8);%
+end
+if example == 9 || example > 10
+    maxIterA = 100;
+ [xk9,resvec9,arvec9,face9h,face9h,tf9] = hybridprojnlss(A,b,x0,1e-5,6, maxIterA);
+[rpk9, normr9, xmin9, Ar9, normKKT9 , faceX9, faceA9] = kktResidual(A, b, xk9 , [], 1); 
+% h=semilogy(1:2:2*maxIterA,resvec2(1:2:2*maxIterA),'r+');
+%  hold on
+%  semilogy(2:2:2*maxIterA,arvec2(2:2:2*maxIterA),'bo')
+  fprintf('& %s & %g & %g & %g & %g &%g\n','Hybridfast',normr9,xmin9,normKKT9,min(Ar9),tf9);%
 end
 end
  % for i = 20:30
