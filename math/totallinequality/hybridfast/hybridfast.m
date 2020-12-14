@@ -1,7 +1,7 @@
 function [xk, resvec, arvec, face1vec, face2vec, tf] = hybridfast(A, b, x0, tol, nf, maxit)
 t=clock;
 % stop criterion
-display = true;
+display = false;
 % if display 
 %     maxit = 5;
 % end

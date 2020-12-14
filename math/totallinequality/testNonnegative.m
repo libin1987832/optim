@@ -18,7 +18,8 @@ example = 9;
 [m,n] =size(A);
 options = optimoptions('lsqlin','Algorithm','interior-point','Display','iter');
 options.Display = 'off';
-%options.StepTolerance = 1e-13;
+% options.StepTolerance = 1e-13;
+options.OptimalityTolerance = 1e-13;
 if example == 1 || example >100
 maxIterA = 6;
 [xk1, resvec, arvec,face1v,face2v, tf1] = fixedMatrix(A,b,x0,maxIterA,1e-15,options);
@@ -36,7 +37,7 @@ tic;[x1,f1,residual,exitflag,output,ff] = lsqlin([A,-eye(m)],b,...
  [rpk0, normr0, xmin0, Ar0, normKKT0 , faceX0, faceA0] = kktResidual(A, b, xk0 , [], 1); 
  fprintf('& %s & %g & %g & %g & %g &%g \\\\\n','ls',normr0,xmin0,normKKT0,min(Ar0),tf0);
 end
-if example == 2 || example > 10  
+if example == 2 || example > 100  
  maxIterA = 100;
 [xk2,resvec2,arvec2,face1h,face2h,tf2] = hybridnnls(A,b,x0,1e-5,3, maxIterA, options, 'ST');
 [rpk2, normr2, xmin2, Ar2, normKKT2 , faceX2, faceA2] = kktResidual(A, b, xk2 , [], 1); 
@@ -97,7 +98,7 @@ if example == 9 || example > 10
 % h=semilogy(1:2:2*maxIterA,resvec2(1:2:2*maxIterA),'r+');
 %  hold on
 %  semilogy(2:2:2*maxIterA,arvec2(2:2:2*maxIterA),'bo')
-  fprintf('& %s & %g & %g & %g & %g &%g\n','Hybridfast',normr9,xmin9,normKKT9,min(Ar9),tf9);%
+  fprintf('& %s & %g & %g & %g & %g &%g\n','Hybridfastnnls',normr9,xmin9,normKKT9,min(Ar9),tf9);%
 end
 end
  % for i = 20:30
