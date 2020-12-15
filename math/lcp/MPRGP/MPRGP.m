@@ -22,7 +22,7 @@ while bxn+fx'*fx>delta
             xk2=x0-af*p;r=r-af*A*p;
             fx2=fxf(xk2,m,l,tol,r);
             xk=xk2-a*fx2;
-            xk(xk<l)=l;
+            xk(xk<l)=l(xk<l);
             r=A*xk-b;[p,bx]=fbxf(xk,m,l,tol,r);
             fx=p;
             disp(['out range in the subspace:',num2str(r'*r)]);
