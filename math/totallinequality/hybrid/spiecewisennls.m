@@ -1,5 +1,5 @@
-% computation A(rt>0,:)*p(n) A(rt>0,:)'*r(rt>0)(n)
-function [steplength, retcode] = spiecewise(A,b,p,x,minrange,maxrange)
+% computation A(rt>0,:)*p(n) A(rt>0,:)'*r(rt>0)(n) just for b-ax
+function [steplength, retcode] = spiecewisennls(A,b,p,x,minrange,maxrange)
 display = true;
 if p' * p < 1e-15
     steplength = 0;

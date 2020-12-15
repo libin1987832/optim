@@ -54,8 +54,8 @@
 % We acknowledge the work LCPSolve.py in the OpenOpt python package by
 % Rob Dittmar, Enzo Michelangeli and IT Vision Ltd
 
-function [w,z,retcode] = LCPSolve(M,q,pivtol,maxits)
-
+function [w,z,retcode,tf] = LCPSolve(M,q,pivtol,maxits)
+t=clock;
 if nargin<3, pivtol = 1e-8; maxits = 1e4; end;
 if nargin<4, maxits = 1e3; end;
 n = length(q);
@@ -130,4 +130,4 @@ if rayTerm
 else
     retcode = [1, loopcount];  % Success
 end
-
+tf = etime(clock,t);
