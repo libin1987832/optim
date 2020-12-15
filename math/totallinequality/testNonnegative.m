@@ -14,7 +14,8 @@ clear
 % 1:fixed 0:lsqin 2:hybrid lsqr 6:hybrd IPG 3: IPG 4: steep decent 5:Newton
 % 7:GNP  8 hybridfast
 example =11;
-[A,b,x0] = readData(1,4000,4000,400);
+% 1 sparse matrix m1 m2 n 2 density matrix
+[A,b,x0] = readData(2,1000,1000,100);
 [m,n] =size(A);
  options = optimoptions('lsqlin','Algorithm','interior-point','Display','iter');
 % options = optimoptions('Algorithm','interior-point','TolX',1e-13)
