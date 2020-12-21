@@ -83,4 +83,12 @@ for i = 2 : length(knot)
      end
 end
 minf = funmin(A,b,x0,p,alpha);
+end
+function f = funmin(A,b,x0,u,alpha)
+xn = x0 + alpha*u;
+xn( xn < 0) = 0;
+f = b - A * xn;
+f(f<0) = 0;
+f = 0.5*(f'*f);
+end
 
