@@ -1,37 +1,28 @@
-<<<<<<< HEAD
-A=rand(6,5);
-x0=rand(5,1);
-XX=zeros(5,6);
-YY=zeros(6,6);
-XX(:,1)=x0;
-for i=2:6
-    YY(:,i-1)=A*XX(:,i-1);
-    XX(:,i)=A'*YY(:,i-1);
+function test()
+m=10;n=10;
+A = rand(m,n);
+b = rand(m,1);
+p = rand(n,1);
+x0 = rand(n,1);
+xa = [-10:0.01:10];
+ya = arrayfun(@(alpha) funmin(A,b,x0,p,alpha), xa);
+ pxy={};
+% pxy(1).X = knot;
+% pxy(1).Y = knoty;
+pxy(1).X = xa;
+pxy(1).Y = ya;
+figure
+hold on
+p1 = arrayfun(@(a) plot(a.X,a.Y),pxy,'UniformOutput',false);
+
+
+hold off
+ save('nonconvexalpha.mat','A','b','p','x0','xa','ya')
 end
-C=XX(:,1:5)\XX(:,6);
-C1=[[0;1;0;0;0] [0;0;1;0;0] [0;0;0;1;0] [0;0;0;0;1] C];
-[qx rx]=qr(XX(:,1:5));
-[qy ry]=qr(YY(:,1:5));
-qy=qy(:,1:5);
-ry=ry(1:5,:);
-crx=C1'*rx'
-iry=inv(ry')
-lsqr(qy,x1)
-% crx
-% A=[1 2 3;2 4 7;3 7 5];
-% x=[1;2;3];
-% x1=A*x;
-% x2=A*x1;
-% x3=A*x2;
-% XX=[x,x1,x2];
-% C=XX\x3;
-% C1=[[0;1;0] [0;0;1] C];
-% [Q,R]=qr(XX);
-% R*C1*inv(R)
-=======
-  n = 100; on = ones(n,1); A = spdiags([-2*on 4*on -on],-1:1,n,n);
-       b = sum(A,2); tol = 1e-8; maxit = 15;
-       M1 = spdiags([on/(-2) on],-1:0,n,n);
-       M2 = spdiags([4*on -on],0:1,n,n);
-       x = lsqr(A,b,tol,maxit,M1,M2);
->>>>>>> 3549d3553de72f184b11b3b578b8ea4f9b2f0497
+function f = funmin(A,b,x0,u,alpha)
+xn = x0 + alpha*u;
+xn( xn < 0) = 0;
+f = b - A * xn;
+f(f<0) = 0;
+f = 0.5*(f'*f);
+end
