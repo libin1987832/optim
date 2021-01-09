@@ -1,24 +1,31 @@
-function [A,b,x0]=test()
+function test()
 p=0;
+%load('test.mat','A','b','x0');
 while  norm(p) < 1e-10
-m=2;n=2;
-A = rand(m,n);
+m=20;n=10;
+A = rand(m,n)-0.5;
 b = rand(m,1);
+x = rand(n,1);
 x0 = rand(n,1);
 A = A;
 b = b.*10;
-x0 = x0.*10;
+x = -x.*10;
+b = A*x-0.001;
 r = (b-A*x0);
 r(r<0) = 0;
 p = (A'*A)\(A'*r);
-p = A'*r;
+%p = A'*r;
 end
+[x0,p]
+% save('test.mat','A','b','x0');
 f0 = funmin(A,b,x0,p,0);
-xa = [0.0001:0.1:2];
+xa = [0.001:0.1:2];
 ya2 = arrayfun(@(alpha)  funmin(A,b,x0,p,alpha), xa);
-ya2(1:5)
+
 ya = arrayfun(@(alpha) funnorm(A,x0,p,alpha), xa);
-ya(10:15)
+ya2(10:15)
+mya = mean(ya);
+ya(abs(ya-mya)<1e-10) = mya;
  pxy={};
 % pxy(1).X = knot;
 % pxy(1).Y = knoty;
@@ -44,7 +51,7 @@ end
 function f = funnorm(A,x0,u,alpha)
 xn = x0 + alpha*u;
 xn( xn < 0) = 0;
-f =  (xn-x0);
+f =  A*(xn-x0);
 f = sqrt((f'*f))/alpha;
 end
-save('test.mat','A','b','x0');
+
