@@ -17,7 +17,7 @@ p = (A'*A)\(A'*r);
 %p = A'*r;
 end
 [x0,p]
-% save('test.mat','A','b','x0');
+ save('test.mat','A','b','x0');
 f0 = funmin(A,b,x0,p,0);
 xa = [0.001:0.1:2];
 ya2 = arrayfun(@(alpha)  funmin(A,b,x0,p,alpha), xa);
