@@ -1,29 +1,33 @@
 function test()
 p=0;
-%load('test.mat','A','b','x0');
+load('test.mat','A','b','x0');
 while  norm(p) < 1e-10
 m=20;n=10;
-A = rand(m,n)-0.5;
-b = rand(m,1);
-x = rand(n,1);
-x0 = rand(n,1);
-A = A;
-b = b.*10;
-x = -x.*10;
-b = A*x-0.001;
+% A = rand(m,n)-0.5;
+% b = rand(m,1);
+% x = rand(n,1);
+% x0 = rand(n,1);
+% A = A;
+% b = b.*10;
+% x = -x.*10;
+% b = A*x-0.001;
 r = (b-A*x0);
 r(r<0) = 0;
 p = (A'*A)\(A'*r);
 %p = A'*r;
 end
-[x0,p]
- save('test.mat','A','b','x0');
+[x0,p,x0+0.0530*p,x0+0.0540*p -x0./p]
+%  save('test.mat','A','b','x0');
 f0 = funmin(A,b,x0,p,0);
-xa = [0.001:0.1:2];
+xa = [0.001:0.001:0.07];
 ya2 = arrayfun(@(alpha)  funmin(A,b,x0,p,alpha), xa);
 
 ya = arrayfun(@(alpha) funnorm(A,x0,p,alpha), xa);
-ya2(10:15)
+dn =60;
+[ya2(1:dn);
+ya(1:dn);
+xa(1:dn)]
+
 mya = mean(ya);
 ya(abs(ya-mya)<1e-10) = mya;
  pxy={};
