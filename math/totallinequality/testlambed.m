@@ -67,7 +67,7 @@ p0(If0) = 0;
 p'
 [xf1';xf2';xf0']
 f0 = funmin(A,b,x0,p,0);
-xa = [0.001:0.001:1];
+xa = [0.001:0.1:1.5];
 ya = arrayfun(@(alpha)  f0-funmin(A,b,x0,p,alpha), xa);
 ya3 = arrayfun(@(alpha)  0.5*funnorm2(A,x0,p,alpha), xa);
 ya2 = arrayfun(@(alpha)  0.5*funnorm(A,x0,p,alpha), xa);
@@ -115,7 +115,7 @@ function f = funnorm2(A,x0,u,alpha)
 xn = x0 + alpha*u;
 xn( xn < 0) = 0;
 f =  A*(xn-x0);
-f = sqrt((f'*f));
+f = (f'*f);
 end
 %<-df,x1-x>
 function f = funinner(A,b,x0,u,alpha)
