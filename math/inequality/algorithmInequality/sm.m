@@ -31,6 +31,8 @@ else
  %       hk = lsqminnorm(AI,rpk(I));
        hk = AI \ rpk(I);
         if hk'*hk<1e-13
+            aa = 1;
+            xs = x0;
             break
         end
         aa = spiecewise(A,b,hk,x0);

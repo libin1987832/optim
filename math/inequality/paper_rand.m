@@ -3,10 +3,10 @@
 addpath('./dataInequality/');
 addpath('./algorithmInequality/')
 m = 1000;
-n = 100;
+n = 600;
 rangeMax = 2;
 rangeMin = -2;
-count = 10;
+count = 3;
 record=zeros(4*count,5);
 for j = 1:count
 %     [A,b,x0]=randInequality(m,n,rangeMax,rangeMin);
