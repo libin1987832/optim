@@ -3,9 +3,12 @@
 addpath('./dataInequality/');
 addpath('./algorithmInequality/')
 rand_example = false;
-%[A,rows,cols,entries,rep,field,symm]=mmread('illc1850.mtx');
-%[A,rows,cols,entries,rep,field,symm]=mmread('illc1033.mtx');
-%[A,rows,cols,entries,rep,field,symm]=mmread('well1850.mtx');
+matrix_example = false;
+seperat_example = false;
+
+% [A,rows,cols,entries,rep,field,symm]=mmread('illc1850.mtx');
+% [A,rows,cols,entries,rep,field,symm]=mmread('illc1033.mtx');
+% [A,rows,cols,entries,rep,field,symm]=mmread('well1850.mtx');
 % [A,rows,cols,entries,rep,field,symm]=mmread('well1033.mtx');
 % m=rows;
 % n=cols;
