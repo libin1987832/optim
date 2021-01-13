@@ -3,21 +3,26 @@
 addpath('./dataInequality/');
 addpath('./algorithmInequality/')
 m = 1000;
-n = 300;
+n = 100;
 rangeMax = 2;
 rangeMin = -2;
-record=zeros(4*10,5);
-for j = 1:10
+count = 10;
+record=zeros(4*count,5);
+for j = 1:count
 %     [A,b,x0]=randInequality(m,n,rangeMax,rangeMin);
    A = 2 * rand(m , n)-1;
    b = 2 * rand(m , 1)-1;
-   x0 = ones(n , 1);
-    maxIter = 900;
-    nf = 20;
-    str = ['D','C','R','P'];
-% for the solution so here    
+   x0 = zeros(n , 1);
+   maxIter = 300;
+   nf = 5;
+   str = ['D','C','R','P'];
+% for the solution so here
+% debug = 1;
+% if debug
 %     [xkh,rkh,countFMh,countNWh,beginNWh,tfh,vkh,rkArrh]=han(x0,A,b,maxIter);
 %     [rk, rkh, dh, gh] = residual(A,b,x0);
+%     fprintf("active:%d",vkh);
+% end
     iterA=size(4,maxIter+2);
     maxIterA = 0;
     fprintA=zeros(1,8);
@@ -50,9 +55,9 @@ for j = 1:10
         end
     end
 end
-records = reshape(record,4,10,5);
+records = reshape(record,4,count,5);
 recordp = permute(records,[1,3,2]);
-meanp = squeeze(sum(recordp,3)/10);
+meanp = squeeze(sum(recordp,3)/count);
  fprintf('\\hline \n \\multirow{4}{*}{$ %d\\times %d $}',m,n);
 for i =1:4
     str = ['D','C','R','P'];

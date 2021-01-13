@@ -34,21 +34,18 @@ arvec(1) = normAr;
 indexsm = 0;
 % flag 0-4 return lsqr flag
 flag = 5;
-switch(type)
-    case 'GHA'
-        Qn = steplength;
-        R = steplength;
-        Q = Qn;
-    otherwise
-        [Q,R]=qr(A);
-        Qn=Q(:,1:n);
-end
+[Q,R]=qr(A);
+Qn=Q(:,1:n);
 % [xfA,rpk] = fmnf(A,b,x0,n,Q,R,rpk,nf);
 %while normAr > tol * normA * normr && normr > tol
 while normAr > tol  && normr > tol
     iter = iter + 1;
 %    [xfA,rpk] = fmnf(A,b,x0,n,Q,R,rpk,nf,type);
     [xfA,rpk] = simple(A,b,x0,n,Q,R,rpk,nf,type);
+%     debug = 0;
+%     if debug
+%        fprintf("active:%d\n",sum(sign(rpk)>0));
+%     end
     isSub = strategies(A,b,Qn,type,iter,nf,rpk,xfA);
     if isSub
         xf = xfA(:, end);
@@ -62,10 +59,6 @@ while normAr > tol  && normr > tol
         itersm(iter + 1) = -1;
         x0 = xfA(:, end);
     end
-%     r = rpk;
-%     r(r<0) = 0;
-%     normAr = norm(A' * r);
-%     normr = norm( r );
     [rpk, r, normr, normAr] = residual(A,b,x0,rpk);
     % record the value of objection function
     resvec(iter + 1) = normr;
@@ -75,10 +68,10 @@ while normAr > tol  && normr > tol
         break;
     end
     if flag < 5 || flag > 6 
-        if flag < 12
-            disp(['flag:',num2str(flag)]);
-        end
-        flag = 5;
+%         if flag < 12
+%             disp(['flag:',num2str(flag)]);
+%         end
+         flag = 5;
     end
 end
 xk = x0;
