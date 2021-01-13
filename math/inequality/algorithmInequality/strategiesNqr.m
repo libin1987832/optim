@@ -10,7 +10,7 @@
 function isSub = strategiesNqr(A,b,steplengthOr,type,iter,nf,rkp,xA)
 [m,n] = size(A);
 isSub = false;
-eIter = 2;
+eIter = 10;
 con1 = 0.95;
 con2 = 0.2;
 diff = 100*eps;
