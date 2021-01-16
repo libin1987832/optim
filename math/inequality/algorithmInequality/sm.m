@@ -25,22 +25,23 @@ else
 %     xs = x0 + aa * u;
 %     rpk = b - A * xs;
 %     x0=xs;
-   for i=1:6
+   for i=1:10
         I = find(rpk>=tol);
         AI = A(I,:);
        hk = lsqminnorm(AI,rpk(I));
    %    hk = AI \ rpk(I);
         if hk'*hk<1e-13
-            aa = 1;
+            steplength = 0;
             xs = x0;
             break
         end
-        aa = spiecewise(A,b,hk,x0);
-        xs = x0 + aa * hk;
+%         aa = spiecewise(A,b,hk,x0);
+        steplength = spiecefast(A,b,hk,x0);
+        xs = x0 + steplength * hk;
         x0 = xs;
         rpk = b - A * x0;
    end
-    len = aa;
+    len = steplength+1e-10;
     flag = flag + 6;
 end
 %rpk = b - A * xs;

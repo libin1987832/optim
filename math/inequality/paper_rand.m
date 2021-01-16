@@ -2,13 +2,15 @@
 % [A,rows,cols,entries,rep,field,symm]=mmread('../util/well1033.mtx');
 % 2000X800 is good
 addpath('./dataInequality/');
-addpath('./algorithmInequality/')
+addpath('./algorithmInequality/');
+
 m = 2000;
 n = 1200;
 rangeMax = 2;
 rangeMin = -2;
 count = 1;
 record=zeros(4*count,5);
+
 for j = 1:count
 %     [A,b,x0]=randInequality(m,n,rangeMax,rangeMin);
    A = 2 * rand(m , n)-1;
