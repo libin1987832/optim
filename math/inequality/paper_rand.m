@@ -6,7 +6,7 @@ m = 2000;
 n = 1200;
 rangeMax = 2;
 rangeMin = -2;
-count = 3;
+count = 1;
 record=zeros(4*count,5);
 for j = 1:count
 %     [A,b,x0]=randInequality(m,n,rangeMax,rangeMin);
@@ -17,12 +17,12 @@ for j = 1:count
    nf = 5;
    str = ['D','C','R','P'];
 % for the solution so here
-% debug = 1;
-% if debug
-%     [xkh,rkh,countFMh,countNWh,beginNWh,tfh,vkh,rkArrh]=han(x0,A,b,maxIter);
-%     [rk, rkh, dh, gh] = residual(A,b,x0);
-%     fprintf("active:%d",vkh);
-% end
+debug = 1;
+if debug
+    [xkh,rkh,countFMh,countNWh,beginNWh,tfh,vkh,rkArrh]=han(x0,A,b,maxIter);
+    [rk, rkh, dh, gh] = residual(A,b,x0);
+    fprintf("active:%d",vkh);
+end
     iterA=size(4,maxIter+2);
     maxIterA = 0;
     fprintA=zeros(1,8);
