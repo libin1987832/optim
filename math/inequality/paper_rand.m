@@ -1,5 +1,6 @@
 %% read data 
 % [A,rows,cols,entries,rep,field,symm]=mmread('../util/well1033.mtx');
+% 2000X800 is good
 addpath('./dataInequality/');
 addpath('./algorithmInequality/')
 m = 2000;
@@ -17,12 +18,12 @@ for j = 1:count
    nf = 10;
    str = ['D','C','R','P'];
 % for the solution so here
-debug = 1;
-if debug
-    [xkh,rkh,countFMh,countNWh,beginNWh,tfh,vkh,rkArrh]=han(x0,A,b,maxIter);
-    [rk, rkh, dh, gh] = residual(A,b,x0);
-    fprintf("active:%d,tf:%g",vkh,tfh);
-end
+% debug = 1;
+% if debug
+%     [xkh,rkh,countFMh,countNWh,beginNWh,tfh,vkh,rkArrh]=han(x0,A,b,maxIter);
+%     [rk, rkh, dh, gh] = residual(A,b,x0);
+%     fprintf("active:%d,tf:%g",vkh,tfh);
+% end
     iterA=size(4,maxIter+2);
     maxIterA = 0;
     fprintA=zeros(1,8);
