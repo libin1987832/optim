@@ -28,8 +28,8 @@ else
    for i=1:6
         I = find(rpk>=tol);
         AI = A(I,:);
- %       hk = lsqminnorm(AI,rpk(I));
-       hk = AI \ rpk(I);
+       hk = lsqminnorm(AI,rpk(I));
+   %    hk = AI \ rpk(I);
         if hk'*hk<1e-13
             aa = 1;
             xs = x0;

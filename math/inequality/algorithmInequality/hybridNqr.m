@@ -67,9 +67,9 @@ while normAr > tol  && normr > tol
         break;
     end
     if flag < 5 || flag > 6 
-        if flag < 12
-            disp(['flag:',num2str(flag)]);
-        end
+%         if flag < 12
+%             disp(['flag:',num2str(flag)]);
+%         end
         flag = 5;
     end
 end

@@ -3,7 +3,7 @@
 addpath('./dataInequality/');
 addpath('./algorithmInequality/')
 m = 2000;
-n = 1200;
+n = 800;
 rangeMax = 2;
 rangeMin = -2;
 count = 1;
@@ -14,14 +14,14 @@ for j = 1:count
    b = 2 * rand(m , 1)-1;
    x0 = zeros(n , 1);
    maxIter = 300;
-   nf = 5;
+   nf = 10;
    str = ['D','C','R','P'];
 % for the solution so here
 debug = 1;
 if debug
     [xkh,rkh,countFMh,countNWh,beginNWh,tfh,vkh,rkArrh]=han(x0,A,b,maxIter);
     [rk, rkh, dh, gh] = residual(A,b,x0);
-    fprintf("active:%d",vkh);
+    fprintf("active:%d,tf:%g",vkh,tfh);
 end
     iterA=size(4,maxIter+2);
     maxIterA = 0;
@@ -31,7 +31,7 @@ end
 % there are four methods to run
     for i=1:4
         type = str(i);
-        [xkD,flag,relres,iter,resvec,arvec,itersm,tfD]=hybridA(A,b,x0,steplengthOrk,maxIter,nf,[type,'HA']);
+        [xkD,flag,relres,iter,resvec,arvec,itersm,tfD]=hybridNqr(A,b,x0,steplengthOrk,maxIter,nf,[type,'HA']);
   %      [rk, rkD, dD, gD] = residual(A,b,xkD);
         resvec = arvec;
 % check the solution
