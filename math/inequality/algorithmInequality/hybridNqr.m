@@ -5,11 +5,15 @@
 % arvec
 % itersm
 % tf
-function [xk,flag,relres,iter,resvec,arvec,itersm,tf] = hybridNqr(A,b,x0,steplengthOrk,maxit,nf,type)
+function [xk,flag,relres,iter,resvec,arvec,itersm,tf] = hybridNqr(A,b,x0,param)
 t=clock;
-
+steplengthOrk = param.steplengthOrk;
+maxit = param.maxIter;
+nf = param.nf;
+type = param.type;
 % stop criterion
-tol = 1e-13;
+% tol = 1e-13;
+tol = param.tol;
 [m,n] = size(A);
 
 
@@ -40,11 +44,14 @@ flag = 5;
 while normAr > tol  && normr > tol
     iter = iter + 1;
 %    [xfA,rpk] = fmnf(A,b,x0,n,Q,R,rpk,nf,type);
-    [xfA,rpk] = simpleNqr(A,b,x0,n,steplengthOrk,rpk,nf,type);
-    isSub = strategiesNqr(A,b,steplengthOrk,type,iter,nf,rpk,xfA);
+%    [xfA,rpk] = simpleNqr(A,b,x0,n,steplengthOrk,rpk,nf,type);
+    [xfA,rpk] = simpleNqr(A,b,x0,n,rpk,param);
+%    isSub = strategiesNqr(A,b,steplengthOrk,type,iter,nf,rpk,xfA);
+    isSub = strategiesNqr(A,b,param);
     if isSub
         xf = xfA(:, end);
-        [xs,rpk,len,flag] = sm(A, b, n, rpk, xf);
+%         [xs,rpk,len,flag] = sm(A, b, n, rpk, xf);
+        [xs,rpk,len,flag] = sm(A, b, n, rpk, xf,param);
         indexsm = indexsm + 1;
         % record step length and statistic to number of sm
         itersm(iter + 1) = len;

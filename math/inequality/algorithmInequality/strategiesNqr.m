@@ -7,13 +7,19 @@
 % PHA:Qn(AA,:)'*rk(AA) Qn*qrkn 
 % CHA:
 % RHA:A * x0 A * xk
-function isSub = strategiesNqr(A,b,steplengthOr,type,iter,nf,rkp,xA)
+% function isSub = strategiesNqr(A,b,steplengthOr,type,iter,nf,rkp,xA)
+function isSub = strategiesNqr(A,b,rkp,xA,param)
 [m,n] = size(A);
 isSub = false;
-eIter = 10;
-con1 = 0.95;
-con2 = 0.9;
-diff = 100*eps;
+% eIter = 10;
+% con1 = 0.95;
+% con2 = 0.9;
+% diff = 100*eps;
+% tol = 1e-13;
+eIter = param.eIter;
+con1 = param.con1;
+con2 = param.con2;
+diff = param.diff;
 tol = 1e-13;
 Daxiter = floor(max(33,(m+n)/4)/nf);
 switch upper(type)

@@ -3,21 +3,29 @@
 % 2000X800 is good
 addpath('./dataInequality/');
 addpath('./algorithmInequality/');
-
+addpath('./class')
 m = 2000;
 n = 1200;
 rangeMax = 2;
 rangeMin = -2;
 count = 1;
 record=zeros(4*count,5);
+param.tol = 1e-15; 
+param.maxIter = 300;
+param.nf = 10;
+param.steplengthOrk = 3;
+param.lsqrIter = 5;
+param.smIsqmIter = 10;
+param.con1 = 0.95;
+param.con2 =0.9;
+param.diff = 10*eps;
+param.eIter = 10;
 
 for j = 1:count
 %     [A,b,x0]=randInequality(m,n,rangeMax,rangeMin);
    A = 2 * rand(m , n)-1;
    b = 2 * rand(m , 1)-1;
    x0 = zeros(n , 1);
-   maxIter = 300;
-   nf = 10;
    str = ['D','C','R','P'];
 % for the solution so here
 % debug = 1;
@@ -29,12 +37,12 @@ for j = 1:count
     iterA=size(4,maxIter+2);
     maxIterA = 0;
     fprintA=zeros(1,8);
-    steplengthOrk = 3;
     fprintf('\\hline \n \\multirow{4}{*}{$ %d\\times %d $}',m,n);
 % there are four methods to run
     for i=1:4
         type = str(i);
-        [xkD,flag,relres,iter,resvec,arvec,itersm,tfD]=hybridNqr(A,b,x0,steplengthOrk,maxIter,nf,[type,'HA']);
+        param.type = type;
+        [xkD,flag,relres,iter,resvec,arvec,itersm,tfD]=hybridNqr(A,b,x0,param);
   %      [rk, rkD, dD, gD] = residual(A,b,xkD);
         resvec = arvec;
 % check the solution

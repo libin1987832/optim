@@ -1,10 +1,10 @@
-
 % compuation lsqrm: A*x(n)   lsqminnorm: A*x(n) A*xs spiecewise A*x(n)
-function [xs,rpk,len,flag]=sm(A,b,n,rpk,x0)
+function [xs,rpk,len,flag]=sm(A,b,n,rpk,x0,param)
 % lsqr tollera
-tol = 1e-15;
-lsqrTol = 1e-15;
-maxIter = 5;
+tol = param.tol;%1e-15;
+lsqrTol = param.lsqrTol;
+maxIter = param.lsqrIter;
+smIsqmIter = param.smIsqmIter;
 % AA indice of active set
 AA = (rpk>tol);
 % subspace
@@ -25,12 +25,12 @@ else
 %     xs = x0 + aa * u;
 %     rpk = b - A * xs;
 %     x0=xs;
-   for i=1:10
+   for i=1:smIsqmIter
         I = find(rpk>=tol);
         AI = A(I,:);
        hk = lsqminnorm(AI,rpk(I));
    %    hk = AI \ rpk(I);
-        if hk'*hk<1e-13
+        if hk'*hk < tol
             steplength = 0;
             xs = x0;
             break
