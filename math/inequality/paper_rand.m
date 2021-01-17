@@ -10,17 +10,8 @@ rangeMax = 2;
 rangeMin = -2;
 count = 1;
 record=zeros(4*count,5);
-param.tol = 1e-15; 
-param.maxIter = 300;
-param.nf = 10;
-param.steplengthOrk = 3;
-param.lsqrIter = 5;
-param.smIsqmIter = 10;
-param.con1 = 0.95;
-param.con2 =0.9;
-param.diff = 10*eps;
-param.eIter = 10;
 
+param = parameter();
 for j = 1:count
 %     [A,b,x0]=randInequality(m,n,rangeMax,rangeMin);
    A = 2 * rand(m , n)-1;
@@ -40,7 +31,7 @@ for j = 1:count
     fprintf('\\hline \n \\multirow{4}{*}{$ %d\\times %d $}',m,n);
 % there are four methods to run
     for i=1:4
-        type = str(i);
+        type = [str(i) 'HA'];
         param.type = type;
         [xkD,flag,relres,iter,resvec,arvec,itersm,tfD]=hybridNqr(A,b,x0,param);
   %      [rk, rkD, dD, gD] = residual(A,b,xkD);
@@ -59,7 +50,7 @@ for j = 1:count
         record((j-1)*4+i,:)=[dD,gD,iter*nf,sumiter,tfD];
 % print for tex      
         % fprintf('%s $ %d \\times %d $ & %g & %g & %g & %g & %g & %g\n',type,m,n,dD,gD,tfD,iter*nf,sumiter,beginN(1));
-        fprintf('& %s & %g & %g & (%d,%d)  & %g \\\\\n',[type,'HA'],dD,gD,iter*nf,sumiter,tfD);
+        fprintf('& %s & %g & %g & (%d,%d)  & %g \\\\\n',type,dD,gD,iter*nf,sumiter,tfD);
        iterA(i,1:iter+1)=resvec;
         if maxIterA < iter+1
             maxIterA = iter+1;

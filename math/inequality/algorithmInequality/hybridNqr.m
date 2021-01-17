@@ -47,7 +47,7 @@ while normAr > tol  && normr > tol
 %    [xfA,rpk] = simpleNqr(A,b,x0,n,steplengthOrk,rpk,nf,type);
     [xfA,rpk] = simpleNqr(A,b,x0,n,rpk,param);
 %    isSub = strategiesNqr(A,b,steplengthOrk,type,iter,nf,rpk,xfA);
-    isSub = strategiesNqr(A,b,param);
+    isSub = strategiesNqr(A,b,rpk,xfA,iter,param);
     if isSub
         xf = xfA(:, end);
 %         [xs,rpk,len,flag] = sm(A, b, n, rpk, xf);

@@ -8,7 +8,7 @@
 % CHA:
 % RHA:A * x0 A * xk
 % function isSub = strategiesNqr(A,b,steplengthOr,type,iter,nf,rkp,xA)
-function isSub = strategiesNqr(A,b,rkp,xA,param)
+function isSub = strategiesNqr(A,b,rkp,xA,iter,param)
 [m,n] = size(A);
 isSub = false;
 % eIter = 10;
@@ -21,6 +21,8 @@ con1 = param.con1;
 con2 = param.con2;
 diff = param.diff;
 tol = 1e-13;
+nf = param.nf;
+type = param.type;
 Daxiter = floor(max(33,(m+n)/4)/nf);
 switch upper(type)
     case 'GHA'
