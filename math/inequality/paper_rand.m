@@ -8,15 +8,17 @@ m = 2000;
 n = 1200;
 rangeMax = 2;
 rangeMin = -2;
-count = 10;
+count = 1;
 record=zeros(4*count,5);
 
 param = parameter();
 for j = 1:count
-%     [A,b,x0]=randInequality(m,n,rangeMax,rangeMin);
-   A = 2 * rand(m , n)-1;
-   b = 2 * rand(m , 1)-1;
-   x0 = zeros(n , 1);
+     [A,b,x0]=randInequality(m,n,2,1);
+%    A = 2 * rand(m , n)-1;
+%    b = 2 * rand(m , 1)-1;
+%    x0 = zeros(n , 1);
+%    save('test.mat','A','b','x0');
+%     load('test.mat','A','b','x0');
    str = ['D','C','R','P'];
 % for the solution so here
 % debug = 1;
@@ -62,8 +64,24 @@ recordp = permute(records,[1,3,2]);
 meanp = squeeze(sum(recordp,3)/count);
  fprintf('\\hline \n \\multirow{4}{*}{$ %d\\times %d $}',m,n);
 for i =1:4
-    str = ['D','C','R','P'];
-fprintf('& %s & %g & %g & (%d,%d)  & %g \\\\\n',[str(i),'HA'],meanp(i,1),meanp(i,2),round(meanp(i,3)),round(meanp(i,4)),meanp(i,5));
+fprintf('& %s & %g & %g & (%d,%d)  & %g \\\\\n',[str(i) 'HA'],meanp(i,1),meanp(i,2),round(meanp(i,3)),round(meanp(i,4)),meanp(i,5));
 end      
+
+type=['r','c','k','g'];
+typet=['+','o','v','s'];
+beginp = 1;
+figure
+%maxIterA = 70;
+h=semilogy(beginp:maxIterA,iterA(1,beginp:maxIterA),'bx');
+h.LineStyle = '--';
+hold on
+for i=2:4
+    h=semilogy(beginp:maxIterA,iterA(i,beginp:maxIterA),[type(i) typet(i)]);
+    h.LineStyle = '--';
+end
+legend('DHA','CHA','RHA','PHA');
+xlabel('Iteration Number');
+ylabel('the norm of the gradient');
+
 %    end % for ration
 %    end % for m
