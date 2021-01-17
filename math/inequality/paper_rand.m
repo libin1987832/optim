@@ -5,10 +5,10 @@ addpath('./dataInequality/');
 addpath('./algorithmInequality/');
 addpath('./class')
 m = 2000;
-n = 1200;
+n = 1600;
 rangeMax = 2;
 rangeMin = -2;
-count = 1;
+count = 10;
 record=zeros(4*count,5);
 
 param = parameter();
@@ -30,6 +30,7 @@ for j = 1:count
     iterA=size(4,maxIter+2);
     maxIterA = 0;
     fprintA=zeros(1,8);
+    disp(num2str(j));
     fprintf('\\hline \n \\multirow{4}{*}{$ %d\\times %d $}',m,n);
 % there are four methods to run
     for i=1:4

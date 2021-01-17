@@ -17,6 +17,7 @@ isSub = false;
 % diff = 100*eps;
 % tol = 1e-13;
 eIter = param.eIter;
+eIter_num = param.eIter_num;
 con1 = param.con1;
 con2 = param.con2;
 diff = param.diff;
@@ -46,7 +47,8 @@ switch upper(type)
         uk =  xk - xk1;
         rkn=rkp - eIter * A * uk;
         ssign=sum(~xor(rk>tol, rkn>tol));
-        if ssign==m 
+%        if ssign==m
+         if ssign >= m * eIter_num
             isSub = true;
         end
     case 'CHA'
