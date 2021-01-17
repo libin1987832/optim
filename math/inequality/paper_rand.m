@@ -8,7 +8,7 @@ m = 2000;
 n = 1200;
 rangeMax = 2;
 rangeMin = -2;
-count = 1;
+count = 10;
 record=zeros(4*count,5);
 
 param = parameter();
