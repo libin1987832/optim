@@ -7,13 +7,15 @@ addpath('./exponent')
 addpath('./hybridfast')
 addpath('../inequality')
 addpath('../inequality/algorithmInequality')
+addpath('./mprgp')
+addpath('./class')
 clc
 for i = 1:1
 clear 
 
 % 1:fixed 0:lsqin 2:hybrid lsqr 6:hybrd IPG 3: IPG 4: steep decent 5:Newton
 % 7:GNP  8 hybridfast
-example =11;
+example = -1;
 % 1 sparse matrix m1 m2 n 2 density matrix
 [A,b,x0] = readData(2,1000,1000,100);
 [m,n] =size(A);
@@ -25,8 +27,8 @@ options.OptimalityTolerance = 1e-13;
 % options.ConstraintTolerance = 1e-13;
 options.MaxIterations = 600;
 % options.
+param = parameter();
 if example == 1 || example >100
-maxIterA = 6;
 [xk1, resvec, arvec,face1v,face2v, tf1] = fixedMatrix(A,b,x0,maxIterA,1e-15,options);
 [rpk1, normr1, xmin1, Ar, normKKT1 , face11, face21] = kktResidual(A, b, xk1 , [], 1);
 fprintf('& %s & %g & %g & %g & %g & %g  \n','FM',normr1,xmin1,normKKT1,min(Ar),tf1); 
@@ -36,6 +38,13 @@ fprintf('& %s & %g & %g & %g & %g & %g  \n','FM',normr1,xmin1,normKKT1,min(Ar),t
 %h.LineStyle = '--';
 end
 %%
+if example == -1 || example > 10
+param.mprgp_a = norm(A'*A,inf);
+[xkn1, resvecn1, arvecn1,facen11v,facen12v, tfn1] = fixedMprgp(A,b,x0,param);
+[rpk1, normr1, xmin1, Ar, normKKT1 , face11, face21] = kktResidual(A, b, xkn1 , [], 1);
+fprintf('& %s & %g & %g & %g & %g & %g  \n','FMprgp',normr1,xmin1,normKKT1,min(Ar),tfn1);
+end
+example = 0;
 if example == 0 || example > 10  
 tic;[x1,f1,residual,exitflag,output,ff] = lsqlin([A,-eye(m)],b,...
     [],[],[],[],zeros(n+m,1),Inf*ones(n+m,1),x0,options);tf0=toc;xk0 = x1(1:n);

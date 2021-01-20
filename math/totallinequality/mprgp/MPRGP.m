@@ -1,9 +1,11 @@
-function xk=MPRGP(A, b, x0, L, a, delta, Ftol, maxIter)
+function x0=MPRGP(A, b, x0, L, a, delta, Ftol, maxIter)
 [~,n]=size(A);
 Ax0 = A*x0;
 yk = b - Ax0;
 yk(yk<0) = 0;
-g = A' * yk;
+bk = yk + Ax0;
+r = Ax0 - bk;
+g = A' * r;
 F = x0 > Ftol;
 fx = zeros(n , 1);
 bx = zeros(n , 1);
@@ -11,8 +13,6 @@ f1x = zeros(n , 1);
 fx( F ) = g( F );
 bx( ~F ) = min(g( ~F ),0);
 iter = 0;
-bk = yk + Ax0;
-r = yk;
 p = fx;
 while bx' * bx + fx' * fx > delta && iter < maxIter
     iter = iter + 1;
@@ -30,8 +30,8 @@ while bx' * bx + fx' * fx > delta && iter < maxIter
             F = xk > Ftol;
             fx( : ) = 0;
             fx( F ) = g(F);
-            Afx = A' * fx;
-            grma=(Afx' * Ap)/(Ap' * Ap);
+            Afx = A * fx;
+            grma=(Afx' * Ap) / (Ap' * Ap);
             p = fx - grma * p;
             disp(['conject gradient:',num2str(r'*r)]);
         else
@@ -55,7 +55,7 @@ while bx' * bx + fx' * fx > delta && iter < maxIter
     else
         Ad = A * bx;
         acg = (Ad' * r) / (Ad' * Ad);
-        xk = x0 - acg * d; r = A * xk - bk;
+        xk = x0 - acg * bx; r = A * xk - bk;
         g = A' * r;
         F = xk > Ftol;
         p = g(F);
