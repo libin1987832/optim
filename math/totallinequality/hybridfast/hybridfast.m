@@ -54,7 +54,7 @@ while norm( x0 .* g, inf) > tol || min( g )< -tol
                 knoti = right - 1;
             else
                 knoti = floor(0.5*(left + right));
-            end
+            end                       
  %            testalphax(loopcountX) = knot(knoti);
             
             x = x0 + 0.5*(knot(knoti) + knot(knoti+1))*p;
