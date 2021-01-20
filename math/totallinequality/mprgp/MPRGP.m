@@ -1,36 +1,56 @@
 function xk=MPRGP(A,b,x0,yk,L,a,delta,maxIter)
-k=0;
 tol=1e-15;
+Ftol = 1e-10;
 [m,n]=size(A);
-p=fx;
-bxn=bx'*bx;
+g = A' * yk;
+F = x0 > Ftol;
+fx = zeros(n , 1);
+bx = zeros(n , 1);
+fx = g(F);
+bx = min(g(~F),0);
 iter = 0;
-while bxn+fx'*fx>delta && iter < maxIter
+bk = yk + A*x0;
+r = yk;
+p = fx;
+while bx' * bx + fx' * fx > delta && iter < maxIter
     iter = iter + 1;
-    f1x = min(x0./a , fx);
+    f1x = min( x0(F) / a , fx(F));
     if bxn <= L * f1x' * fx
-        Ap = A*p;
+        Ap = A*p; 
         acg = (r' * Ap) / (Ap' * Ap); y = x0 - acg * p;
-        I = p > 0;
-        af = max(x0(I) ./ p(I));
+        I = p > Ftol;
+        af = min(x0(I) ./ p(I));
         if acg < af
-            xk = y; r = r - acg * Ap;
-            
-            grma=(fy' * Ap)/(p' * Ap);
-            p=fy-grma*p;
-            fx=fy;
+            xk = y; 
+            r = r - acg * Ap;
+            g = A' * r;
+            F = xk > Ftol;
+            fx = 0;
+            fx = g(F);
+            Afx = A' * fx;
+            grma=(Afx' * Ap)/(Ap' * Ap);
+            p = fx - grma * p;
             disp(['conject gradient:',num2str(r'*r)]);
         else
-            xk2=x0-af*p;r=r-af*A*p;
-            fx2=fxf(xk2,m,l,tol,r);
-            xk=xk2-a*fx2;
-            xk(xk<l)=l;
-            r=A*xk-b;[p,bx]=fbxf(xk,m,l,tol,r);
-            fx=p;
+            afp = af * p;
+            xk2 = x0 - afp;
+            r = r - A * afp;
+            F = xk2 > Ftol;
+            g = A' * r;
+            fx = 0;
+            fx = g(F);
+            xk=xk2-a*fx;
+            F = xk > Ftol;
+            xk( ~F )=0;
+            r = A * xk - bk;
+            g = A' * r;
+            fx = 0;
+            fx = g(F);
+            p = fx;
             disp(['out range in the subspace:',num2str(r'*r)]);
         end
     else
-        d=bxf(x0,m,l,tol,r);
+        d=bx;
         acg=(r'*d)/(d'*A*d);
         xk=x0-acg*d;r=r-acg*A*d;[p,bx]=fbxf(xk,m,l,tol,r);
         fx=p;
@@ -42,39 +62,3 @@ while bxn+fx'*fx>delta && iter < maxIter
 end
 end
 
-function [amax,xc,res]=computeMaxStep(x0,d,l)
-grt0=(d>0);
-% if all indredient great 0 then natural sartisfied
-if sum(grt0)<1
-    amax=100;
-    res=0;
-else
-    amax=min((x0(grt0)-l)./d(grt0));
-    res=1;
-end
-xc=x0+amax*d;
-end
-
-function [f,b]=fbxf(x0,m,l,tol,p)
-AA=find(x0<l+tol);
-FF=setdiff(1:m,AA);
-b=zeros(m,1);
-f=zeros(m,1);
-b(AA)=p(AA);
-f(FF)=p(FF);
-b(b>0)=0;
-end
-
-
-function f=fxf(x0,m,l,tol,p)
-FF=find(x0>l+tol);
-f=zeros(m,1);
-f(FF)=p(FF);
-end
-
-function b=bxf(x0,m,l,tol,p)
-AA=find(x0<l+tol);
-b=zeros(m,1);
-b(AA)=p(AA);
-b(b>0)=0;
-end
