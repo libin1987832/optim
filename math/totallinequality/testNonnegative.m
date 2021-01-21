@@ -40,7 +40,7 @@ end
 %%
 
 if example == -1 || example > 10
-param.mprgp_a = norm(A'*A, inf);
+param.mprgp_a = norm(A'*A, inf)/4;
 [xkn1, resvecn1, arvecn1,facen11v,facen12v, tfn1] = fixedMprgp(A,b,x0,param);
 [rpk1, normr1, xmin1, Ar, normKKT1 , face11, face21] = kktResidual(A, b, xkn1 , [], 1);
 fprintf('& %s & %g & %g & %g & %g & %g  \n','FMprgp',normr1,xmin1,normKKT1,min(Ar),tfn1);
@@ -78,7 +78,7 @@ end
 example = 3;
 if example == 3 || example > 10
 maxIterA = 60000;
-[xk3, resvec3, arvec3, faceXvec3, tf3]  = IPG(A, b, x0, 1e-5, 1e-2, 0.8, maxIterA,'IPG');
+[xk3, resvec3, arvec3, faceXvec3, tf3]  = IPG(A, b, x0, 1e-10, 1e-2, 0.8, maxIterA,'IPG');
 [rpk3, normr3, xmin3, Ar3, normKKT3 , faceX3, faceA3] = kktResidual(A, b, xk3, [], 1);
  fprintf('& %s & %g & %g & %g & %g &%g \\\\\n','IPG',normr3,full(xmin3),full(normKKT3),min(Ar3),tf3);
 end 

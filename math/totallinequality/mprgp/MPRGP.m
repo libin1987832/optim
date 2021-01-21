@@ -28,6 +28,7 @@ while bx' * bx + fx' * fx > delta && iter < maxIter
            af = +inf;
         end
         if acg < af
+            %iter = iter - 1;
             xk = y;
             r = r - acg * Ap;
             g = A' * r;
@@ -37,7 +38,7 @@ while bx' * bx + fx' * fx > delta && iter < maxIter
             Afx = A * fx;
             grma=(Afx' * Ap) / (Ap' * Ap);
             p = fx - grma * p;
-  %          disp(['conject gradient:',num2str(r'*r)]);
+            disp(['conject gradient:',num2str(r'*r)]);
         else
             afp = af * p;
             xk2 = x0 - afp;
@@ -54,7 +55,8 @@ while bx' * bx + fx' * fx > delta && iter < maxIter
             fx( : ) = 0;
             fx( F ) = g( F );
             p = fx;
- %           disp(['out range in the subspace:',num2str(r'*r)]);
+             disp(['out range in the subspace:',num2str(r'*r)]);
+%              break;
         end
     else
         Ad = A * bx;
@@ -65,7 +67,8 @@ while bx' * bx + fx' * fx > delta && iter < maxIter
         fx( : ) = 0;
         fx( F ) = g( F );
         p = fx;
-   %     disp(['go to implement space:',num2str(r'*r)]);
+         disp(['go to implement space:',num2str(r'*r)]);
+%          break;
     end
     bx( : ) = 0;
     bx( ~F ) = min( g( ~F ) , 0);
