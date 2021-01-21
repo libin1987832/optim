@@ -17,13 +17,13 @@ clear
 % 7:GNP  8 hybridfast
 example = -1;
 % 1 sparse matrix m1 m2 n 2 density matrix
-[A,b,x0] = readData(2,1000,1000,100);
+[A,b,x0] = readData(4,1000,1000,100);
 [m,n] =size(A);
- options = optimoptions('lsqlin','Algorithm','interior-point','Display','iter');
+options = optimoptions('lsqlin','Algorithm','interior-point','Display','iter');
 % options = optimoptions('Algorithm','interior-point','TolX',1e-13)
 options.Display = 'off';
 % options.StepTolerance = 1e-13;
-options.OptimalityTolerance = 1e-13;
+options.OptimalityTolerance = 1e-5;
 % options.ConstraintTolerance = 1e-13;
 options.MaxIterations = 600;
 % options.
@@ -38,12 +38,14 @@ fprintf('& %s & %g & %g & %g & %g & %g  \n','FM',normr1,xmin1,normKKT1,min(Ar),t
 %h.LineStyle = '--';
 end
 %%
+
 if example == -1 || example > 10
-param.mprgp_a = norm(A'*A,inf);
+param.mprgp_a = norm(A'*A, inf);
 [xkn1, resvecn1, arvecn1,facen11v,facen12v, tfn1] = fixedMprgp(A,b,x0,param);
 [rpk1, normr1, xmin1, Ar, normKKT1 , face11, face21] = kktResidual(A, b, xkn1 , [], 1);
 fprintf('& %s & %g & %g & %g & %g & %g  \n','FMprgp',normr1,xmin1,normKKT1,min(Ar),tfn1);
 end
+
 example = 0;
 if example == 0 || example > 10  
 tic;[x1,f1,residual,exitflag,output,ff] = lsqlin([A,-eye(m)],b,...
@@ -61,6 +63,7 @@ if example == 2 || example > 100
 %  semilogy(2:2:2*maxIterA,arvec2(2:2:2*maxIterA),'bo')
   fprintf('& %s & %g & %g & %g & %g &%g\n','HybridIsqr',normr2,xmin2,normKKT2,min(Ar2),tf2);%
 end
+
 if example == 6 || example > 100
     maxIterA = 10;
  [xk6,resvec6,arvec6,face6h,face6h,tf6] = hybridnnls(A,b,x0,1e-5,3, maxIterA, options, 'IPG');
@@ -72,10 +75,10 @@ if example == 6 || example > 100
 end
 
 
-
+example = 3;
 if example == 3 || example > 10
 maxIterA = 60000;
-[xk3, resvec3, arvec3, faceXvec3, tf3]  = IPG(A, b, x0, 1e-10, 1e-2, 0.8, maxIterA,'IPG');
+[xk3, resvec3, arvec3, faceXvec3, tf3]  = IPG(A, b, x0, 1e-5, 1e-2, 0.8, maxIterA,'IPG');
 [rpk3, normr3, xmin3, Ar3, normKKT3 , faceX3, faceA3] = kktResidual(A, b, xk3, [], 1);
  fprintf('& %s & %g & %g & %g & %g &%g \\\\\n','IPG',normr3,full(xmin3),full(normKKT3),min(Ar3),tf3);
 end 

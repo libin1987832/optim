@@ -24,8 +24,8 @@ switch type
     case 3
         A = [1 3;2 4;-5 -6]; b = [5;6;-3]; x0 = [1;1];m1=2;m2=1;n=2;
     case 4
-         load('test')
-         m1 = 5;m2=5;n=7;
+         load('testFbug')
+%          m1 = 5;m2=5;n=7;
     case 5 
         load('testface')
         m1 = 300;m2=300;n=200;x0=ones(200,1);

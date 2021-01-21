@@ -20,7 +20,7 @@ while KKT > param.fixed_tol && index < param.fixed_maxit
     x1=MPRGP(A, b, x0, param.mprgp_L, param.mprgp_a, param.mprgp_delta, param.mprgp_Ftol, param.mprgp_maxIter);
     x0=x1;
     [r, normr, xmin,Ar, KKT,face1,face2] = kktResidual(A, b, x0 , [], 1);
-    
+  %  fprintf('iter=%d, normr=%g\n', index, normr);
     index=index+1;
     resvec(index) = normr;
     arvec(index) = KKT;
