@@ -1,10 +1,17 @@
-function x0=MPRGP(A, b, x0, L, a, delta, Ftol, maxIter)
+% || Ax - yk - Axk || || aAd - (-yk) || ||aAd - rk ||
+%x(k+1) = x(k) - ad(gradient g); ||Ax - bk ||
+function [x0,r] = MPRGP(A, b, x0,rpk, L, a, delta, Ftol, maxIter)
 [~,n]=size(A);
-Ax0 = A*x0;
-yk = b - Ax0;
+% Ax0 = A*x0;
+% yk = b - Ax0;
+yk = rpk;
+zk = -rpk;
 yk(yk<0) = 0;
-bk = yk + Ax0;
-r = Ax0 - bk;
+zk(zk<0) = 0;
+% bk = yk + Ax0;
+% r = Ax0 - bk;
+bk = zk + b;
+r = -yk;
 g = A' * r;
 F = x0 > Ftol;
 fx = zeros(n , 1);
