@@ -5,11 +5,11 @@ addpath('./dataInequality/');
 addpath('./algorithmInequality/');
 addpath('./class')
 m = 2000;
-n = 1600;
+n = 400;
 rangeMax = 2;
 rangeMin = -2;
-count = 10;
-record=zeros(4*count,5);
+count = 1;
+record = zeros(4*count,5);
 
 param = parameter();
 for j = 1:count
@@ -46,6 +46,8 @@ for j = 1:count
         gD=norm(A'*rkD);
         beginN=find(itersm>0);
         sumiter=sum(itersm>0);
+       sumiterlsqr=sum(itersm>1);
+       sumiterNt=sum(itersm>0 & itersm<=1);       
         fprintA(2*i-1:2*i)=[gD,tfD];
         if isempty(beginN)
             beginN=0;
@@ -53,21 +55,28 @@ for j = 1:count
         record((j-1)*4+i,:)=[dD,gD,iter*nf,sumiter,tfD];
 % print for tex      
         % fprintf('%s $ %d \\times %d $ & %g & %g & %g & %g & %g & %g\n',type,m,n,dD,gD,tfD,iter*nf,sumiter,beginN(1));
-        fprintf('& %s & %g & %g & (%d,%d)  & %g \\\\\n',type,dD,gD,iter*nf,sumiter,tfD);
-       iterA(i,1:iter+1)=resvec;
+%         fprintf('& %s & %g & %g & (%d,%d)  & %g \\\\\n',type,dD,gD,iter*nf,sumiter,tfD);
+        fprintf('& %s & %g & %g & (%d,%d,%d)  & %g \\\\\n',type,dD,gD,iter*nf,sumiterlsqr,sumiterNt,tfD);      
+        iterA(i,1:iter+1)=resvec;
         if maxIterA < iter+1
             maxIterA = iter+1;
         end
     end
 end
+debug = 0;
+if debug
+%% count multi
 records = reshape(record,4,count,5);
 recordp = permute(records,[1,3,2]);
 meanp = squeeze(sum(recordp,3)/count);
- fprintf('\\hline \n \\multirow{4}{*}{$ %d\\times %d $}',m,n);
+fprintf('\\hline \n \\multirow{4}{*}{$ %d\\times %d $}',m,n);
+
 for i =1:4
-fprintf('& %s & %g & %g & (%d,%d)  & %g \\\\\n',[str(i) 'HA'],meanp(i,1),meanp(i,2),round(meanp(i,3)),round(meanp(i,4)),meanp(i,5));
+    fprintf('& %s & %g & %g & (%d,%d)  & %g \\\\\n',[str(i) 'HA'],meanp(i,1),meanp(i,2),round(meanp(i,3)),round(meanp(i,4)),meanp(i,5));
 end      
 
+
+ %%
 type=['r','c','k','g'];
 typet=['+','o','v','s'];
 beginp = 1;
@@ -83,6 +92,6 @@ end
 legend('DHA','CHA','RHA','PHA');
 xlabel('Iteration Number');
 ylabel('the norm of the gradient');
-
+end
 %    end % for ration
 %    end % for m

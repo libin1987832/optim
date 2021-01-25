@@ -77,7 +77,9 @@ rangeMin = -1;
         dD=norm(rkD);
         gD=norm(A'*rkD);
         beginN=find(itersm>0);
-        sumiter=sum(itersm>0);
+       % sumiter=sum(itersm>0);
+       sumiterlsqr=sum(itersm>1);
+       sumiterNt=sum(itersm>0 && itersm<=1);
         fprintA(2*i-1:2*i)=[gD,tfD];
         if isempty(beginN)
             beginN=0;
@@ -85,7 +87,7 @@ rangeMin = -1;
         record(i,:)=[dD,gD,iter*nf,sumiter,tfD];
 % print for tex      
         % fprintf('%s $ %d \\times %d $ & %g & %g & %g & %g & %g & %g\n',type,m,n,dD,gD,tfD,iter*nf,sumiter,beginN(1));
-       fprintf('& %s & %g & %g & (%d,%d)  & %g \\\\\n',[type,'HA'],dD,gD,iter*nf,sumiter,tfD);
+       fprintf('& %s & %g & %g & (%d,%d,%d)  & %g \\\\\n',[type,'HA'],dD,gD,iter*nf,sumiterlsqr,sumiterNt,tfD);
        iterA(i,1:iter+1)=resvec;
         if maxIterA < iter+1
             maxIterA = iter+1;
