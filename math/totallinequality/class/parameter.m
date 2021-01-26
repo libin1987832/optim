@@ -14,13 +14,13 @@ classdef parameter
     end
     methods
          function param = parameter()
-            param.fixed_tol = 1e-6;
-            param.fixed_maxit = 200;
+            param.fixed_tol = 1e-10;
+            param.fixed_maxit = 1000;
             param.mprgp_L = 1;
             param.mprgp_a = 0.5;
             param.mprgp_delta = 1e-50;
             param.mprgp_Ftol = 1e-15;
-            param.mprgp_maxIter = 20;
+            param.mprgp_maxIter = 3;
          end
         %         & FMprgp & 60.2694 & 0 & 9.42747e-12 & -2.64471e-12 & 0.49  
 % & ls & 60.2694 & 2.6693e-12 & 3.94438e-05 & -7.83655e-07 &0.254098 \\
@@ -33,7 +33,7 @@ classdef parameter
             param.mprgp_a = 1;
             param.mprgp_delta = 1e-50;
             param.mprgp_Ftol = 1e-10;
-            param.mprgp_maxIter = 10;
+            param.mprgp_maxIter = 6;
          end
 
         %         & FMprgp & 66.1538 & 0 & 9.94362e-12 & -1.06281e-12 & 1.385  

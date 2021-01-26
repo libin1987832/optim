@@ -32,6 +32,19 @@ switch type
     case 6 
         load('testalpha1')
         m1 = 1000;m2=1000;n=300;x0=ones(300,1);
+    % pcg 
+    case 7
+%         A1=abs(sprand(m1,n,0.1,1/100));
+%         A2=abs(sprand(m2,n,0.1,1/100));
+        A1=rand(m1,n) + 1 ;
+        A2=rand(m2,n) + 1;
+        b1=rand(m1,1);
+        b2=rand(m2,1);
+        A=[A1;-A2];
+        b=[b1;-b2];
+%         L = ichol(A'*A);
+%         A = L*L';
+         x0=ones(n,1);
     otherwise
          load('test15')
          m1 = 500;m2=500;n=300;x0=ones(300,1);
