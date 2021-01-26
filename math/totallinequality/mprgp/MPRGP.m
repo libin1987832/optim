@@ -80,7 +80,8 @@ while bx' * bx + fx' * fx > delta && iter < maxIter
 %               disp(['r_d:',num2str(r_d2'*r_d2)]);
                 r_d = A*x0-bk;
                 g_d = A'*(A*x0-bk);
-              disp(['old:', num2str(r_d'*r_d), ' out range in the subspace:',num2str( r'*r ),' xa-x,fx', num2str(-(xk-x0)'*g_d)]);
+              disp([' af: ', num2str(af),...
+                ' acg:',num2str(acg),'old:', num2str(r_d'*r_d), ' out range in the subspace:',num2str( r'*r ),' xa-x,fx', num2str(-(xk-x0)'*g_d)]);
             end
 %              break;
         end

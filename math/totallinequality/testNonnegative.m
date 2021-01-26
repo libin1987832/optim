@@ -40,7 +40,7 @@ end
 %%
 
 if example == -1 || example > 10
-param.mprgp_a = 1/norm(A'*A, inf)*20;
+param.mprgp_a = 1/norm(A'*A, inf)*10;
 [xkn1, resvecn1, arvecn1,facen11v,facen12v, tfn1] = fixedMprgp(A,b,x0,param);
 [rpk1, normr1, xmin1, Ar, normKKT1 , face11, face21] = kktResidual(A, b, xkn1 , [], 1);
 fprintf('& %s & %g & %g & %g & %g & %g  \n','FMprgp',normr1,xmin1,normKKT1,min(Ar),tfn1);
