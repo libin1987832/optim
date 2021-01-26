@@ -17,13 +17,13 @@ clear
 % 7:GNP  8 hybridfast
 example = -1;
 % 1 sparse matrix m1 m2 n 2 density matrix
-[A,b,x0] = readData(4,1000,1000,100);
+[A,b,x0] = readData(1,1000,1000,100);
 [m,n] =size(A);
 options = optimoptions('lsqlin','Algorithm','interior-point','Display','iter');
 % options = optimoptions('Algorithm','interior-point','TolX',1e-13)
 options.Display = 'off';
 % options.StepTolerance = 1e-13;
-options.OptimalityTolerance = 1e-5;
+options.OptimalityTolerance = 1e-11;
 % options.ConstraintTolerance = 1e-13;
 options.MaxIterations = 600;
 % options.

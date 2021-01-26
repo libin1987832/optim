@@ -9,7 +9,7 @@ arvec = zeros(1, param.fixed_maxit + 1);
 face1vec = zeros(1,(param.fixed_maxit + 1));
 % face x
 face2vec = zeros(1,(param.fixed_maxit + 1));
-[r, normr, xmin, Ar, KKT, face1, face2] = kktResidual(A, b, x0 , [],1);
+[rpk, normr, xmin, Ar, KKT, face1, face2] = kktResidual(A, b, x0 , [],1);
 resvec(index) = normr;
 arvec(index) = KKT;
 face1vec(index) = face1;
@@ -24,15 +24,15 @@ face2vec(index) = face2;
 % options.MaxIterations = 600;
   
 while KKT > param.fixed_tol && index < param.fixed_maxit
-    x1=MPRGP(A, b, x0, param.mprgp_L, param.mprgp_a, param.mprgp_delta, param.mprgp_Ftol, param.mprgp_maxIter);
+    [x1,rpk]=MPRGP(A, b, x0, rpk, param.mprgp_L, param.mprgp_a, param.mprgp_delta, param.mprgp_Ftol, param.mprgp_maxIter);
 %     z = -r;
 %     z(z<0) = 0;
 %     bk = b + z;
 %     %内置使用MATLAB自带的算法
 %     [x2,f1,residual,exitflag,output,ff]=lsqlin(A,bk,[],[],[],[],zeros(n,1),Inf*ones(n,1),x0,options);
     x0=x1;
-    [r, normr, xmin,Ar, KKT,face1,face2] = kktResidual(A, b, x0 , [], 1);
-    fprintf('iter=%d, normr=%g, Ar=%g\n', index, normr, KKT);
+    [r, normr, xmin,Ar, KKT,face1,face2] = kktResidual(A, b, x0 , rpk, 1);
+%     fprintf('iter=%d, normr=%g, Ar=%g\n', index, normr, KKT);
     index=index+1;
     resvec(index) = normr;
     arvec(index) = KKT;

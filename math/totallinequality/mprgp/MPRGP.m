@@ -1,6 +1,6 @@
 % || Ax - yk - Axk || || aAd - (-yk) || ||aAd - rk ||
 %x(k+1) = x(k) - ad(gradient g); ||Ax - bk ||
-function [x0,r] = MPRGP(A, b, x0,rpk, L, a, delta, Ftol, maxIter)
+function [x0,rpk] = MPRGP(A, b, x0,rpk, L, a, delta, Ftol, maxIter)
 [~,n]=size(A);
 % Ax0 = A*x0;
 % yk = b - Ax0;
@@ -45,7 +45,7 @@ while bx' * bx + fx' * fx > delta && iter < maxIter
             Afx = A * fx;
             grma=(Afx' * Ap) / (Ap' * Ap);
             p = fx - grma * p;
-            disp(['conject gradient:',num2str(r'*r)]);
+%             disp(['conject gradient:',num2str(r'*r)]);
         else
             afp = af * p;
             xk2 = x0 - afp;
@@ -62,7 +62,7 @@ while bx' * bx + fx' * fx > delta && iter < maxIter
             fx( : ) = 0;
             fx( F ) = g( F );
             p = fx;
-             disp(['out range in the subspace:',num2str(r'*r)]);
+%              disp(['out range in the subspace:',num2str(r'*r)]);
 %              break;
         end
     else
@@ -74,11 +74,14 @@ while bx' * bx + fx' * fx > delta && iter < maxIter
         fx( : ) = 0;
         fx( F ) = g( F );
         p = fx;
-         disp(['go to implement space:',num2str(r'*r)]);
+%          disp(['go to implement space:',num2str(r'*r)]);
 %          break;
     end
     bx( : ) = 0;
     bx( ~F ) = min( g( ~F ) , 0);
     x0 = xk;
 end
+rpk = -r - zk;
+
+
 end
