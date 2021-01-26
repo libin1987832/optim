@@ -21,6 +21,7 @@ fx( F ) = g( F );
 bx( ~F ) = min(g( ~F ),0);
 iter = 0;
 p = fx;
+debug = 0;
 while bx' * bx + fx' * fx > delta && iter < maxIter
     iter = iter + 1;
     f1x( : ) = 0;
@@ -44,8 +45,14 @@ while bx' * bx + fx' * fx > delta && iter < maxIter
             fx( F ) = g(F);
             Afx = A * fx;
             grma=(Afx' * Ap) / (Ap' * Ap);
+            if debug
+                p1 = fx - grma * p;
+            disp(['conject gradient:',num2str(r'*r),' p1*A*Ap:',...
+                num2str(p1'*A'*A*p),' cos(p1,p)',...
+                num2str(p1'*p/(norm(p1)*norm(p))),' af: ', num2str(af),...
+                ' acg:',num2str(acg)]);
+            end
             p = fx - grma * p;
-%             disp(['conject gradient:',num2str(r'*r)]);
         else
             afp = af * p;
             xk2 = x0 - afp;
@@ -62,7 +69,9 @@ while bx' * bx + fx' * fx > delta && iter < maxIter
             fx( : ) = 0;
             fx( F ) = g( F );
             p = fx;
-%              disp(['out range in the subspace:',num2str(r'*r)]);
+            if debug
+              disp(['out range in the subspace:',num2str(r'*r)]);
+            end
 %              break;
         end
     else
@@ -74,7 +83,9 @@ while bx' * bx + fx' * fx > delta && iter < maxIter
         fx( : ) = 0;
         fx( F ) = g( F );
         p = fx;
-%          disp(['go to implement space:',num2str(r'*r)]);
+        if debug
+          disp(['go to implement space:',num2str(r'*r)]);
+        end
 %          break;
     end
     bx( : ) = 0;

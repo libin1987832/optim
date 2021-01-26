@@ -32,7 +32,7 @@ while KKT > param.fixed_tol && index < param.fixed_maxit
 %     [x2,f1,residual,exitflag,output,ff]=lsqlin(A,bk,[],[],[],[],zeros(n,1),Inf*ones(n,1),x0,options);
     x0=x1;
     [r, normr, xmin,Ar, KKT,face1,face2] = kktResidual(A, b, x0 , rpk, 1);
-%     fprintf('iter=%d, normr=%g, Ar=%g\n', index, normr, KKT);
+%fprintf('iter=%d, normr=%g, Ar=%g\n', index, normr, KKT);
     index=index+1;
     resvec(index) = normr;
     arvec(index) = KKT;
