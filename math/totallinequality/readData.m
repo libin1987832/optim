@@ -42,6 +42,10 @@ switch type
         b2=rand(m2,1);
         A=[A1;-A2];
         b=[b1;-b2];
+        [u,s,v] = svd(A);
+        s(1:n,1:n) = diag(rand(n,1));
+        A = u*s*v';
+%         
 %         L = ichol(A'*A);
 %         A = L*L';
          x0=ones(n,1);
