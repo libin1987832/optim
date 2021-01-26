@@ -76,6 +76,7 @@ while bx' * bx + fx' * fx > delta && iter < maxIter
             fx( F ) = g( F );
             p = fx;
             if debug
+                x2 = pcg(A,b,[],100,[],[],x0);
 %               xk_d = x0 - 0.000001 * p;r_d2 = A*xk_d-bk;
 %               disp(['r_d:',num2str(r_d2'*r_d2)]);
                 r_d = A*x0-bk;
