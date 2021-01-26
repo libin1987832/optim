@@ -17,15 +17,15 @@ clear
 % 7:GNP  8 hybridfast
 example = -1;
 % 1 sparse matrix m1 m2 n 2 density matrix
-[A,b,x0] = readData(7,2000,2000,500);
+[A,b,x0] = readData(7,1000,1000,1000);
 [m,n] =size(A);
 options = optimoptions('lsqlin','Algorithm','interior-point','Display','iter');
 % options = optimoptions('Algorithm','interior-point','TolX',1e-13)
 options.Display = 'off';
 % options.StepTolerance = 1e-13;
-options.OptimalityTolerance = 1e-11;
+options.OptimalityTolerance = 1e-12;
 options.ConstraintTolerance = 1e-13;
-options.MaxIterations = 6000;
+options.MaxIterations = 10000;
 % options.
 param = parameter();
 if example == 1 || example >100
@@ -43,7 +43,7 @@ if example == -1 || example > 10
 param.mprgp_a = 1/norm(A'*A, inf)*10;
 [xkn1, resvecn1, arvecn1,facen11v,facen12v, tfn1] = fixedMprgp(A,b,x0,param);
 [rpk1, normr1, xmin1, Ar, normKKT1 , face11, face21] = kktResidual(A, b, xkn1 , [], 1);
-fprintf('& %s & %g & %g & %g & %g & %g  \n','FMprgp',normr1,xmin1,normKKT1,min(Ar),tfn1);
+fprintf('& %s & %g & %g & %g & %g & %g  \\\\\n','FMprgp',normr1,xmin1,normKKT1,min(Ar),tfn1);
 end
 
 example = 0;
@@ -65,7 +65,7 @@ if example == 2 || example > 100
 end
 
 if example == 6 || example > 100
-    maxIterA = 10;
+    maxIterA = 100;
  [xk6,resvec6,arvec6,face6h,face6h,tf6] = hybridnnls(A,b,x0,1e-5,3, maxIterA, options, 'IPG');
 [rpk6, normr6, xmin6, Ar6, normKKT6 , faceX6, faceA6] = kktResidual(A, b, xk6 , [], 1); 
 % h=semilogy(1:2:2*maxIterA,resvec2(1:2:2*maxIterA),'r+');
@@ -77,8 +77,8 @@ end
 
 example = 3;
 if example == 3 || example > 10
-maxIterA = 6000;
-[xk3, resvec3, arvec3, faceXvec3, tf3]  = IPG(A, b, x0, 1e-5, 1e-2, 0.8, maxIterA,'IPG');
+maxIterA = 60000;
+[xk3, resvec3, arvec3, faceXvec3, tf3]  = IPG(A, b, x0, 1e-10, 1e-5, 0.8, maxIterA,'IPG');
 [rpk3, normr3, xmin3, Ar3, normKKT3 , faceX3, faceA3] = kktResidual(A, b, xk3, [], 1);
  fprintf('& %s & %g & %g & %g & %g &%g \\\\\n','IPG',normr3,full(xmin3),full(normKKT3),min(Ar3),tf3);
 end 
