@@ -31,7 +31,69 @@ classdef parameter
         eIter_num
     end
     methods
-         function param = parameter()
+        function param = parameter()
+            param.tol = 1e-15;
+            param.maxIter = 600;
+            param.nf = 3;
+            param.steplengthOrk = 10;
+            param.lsqrIter = 5;
+            param.lsqrTol = 1e-10;
+            param.smIsqmIter = 10;
+            param.con1 = 0.95;
+            param.con2 =0.3;
+            param.diff = 1e-10;
+            param.eIter = 5;
+            param.eIter_num = 0.95;
+        end
+
+%data  [A,rows,cols,entries,rep,field,symm]=mmread('well1850.mtx');
+        %         \multirow{4}{*}{$ 1850\times 712 $}& IFM & 9.59166 & 4.94528e-16 & (1500,0)  & 0.196 \\
+% & DHA & 9.59166 & 9.7861e-16 & (516,0)  & 0.174 \\
+% & CHA & 9.59166 & 1.16511e-13 & (9,2)  & 0.111 \\
+% & RHA & 9.59166 & 1.96507e-13 & (57,6)  & 0.117 \\
+% & PHA & 9.59166 & 4.05799e-10 & (63,9)  & 0.148 \\
+          function param = parameter_well1850()
+            param.tol = 1e-15;
+            param.maxIter = 600;
+            param.nf = 3;
+            param.steplengthOrk = 10;
+            param.lsqrIter = 5;
+            param.lsqrTol = 1e-10;
+            param.smIsqmIter = 10;
+            param.con1 = 0.95;
+            param.con2 =0.3;
+            param.diff = 1e-10;
+            param.eIter = 5;
+            param.eIter_num = 0.95;
+        end
+        %data  [A,rows,cols,entries,rep,field,symm]=mmread('illc1033.mtx');
+%         \hline 
+%  \multirow{4}{*}{$ 1033\times 320 $}& IFM & 7.14143 & 7.72974e-15 & (1500,0)  & 0.12 \\
+% & DHA & 7.14143 & 3.53e-16 & (336,1)  & 0.051 \\
+% & CHA & 7.14143 & 1.42168e-15 & (12,2)  & 0.018 \\
+% & RHA & 7.14143 & 1.42168e-15 & (12,2)  & 0.018 \\
+% & PHA & 7.14143 & 2.4265e-15 & (15,2)  & 0.018 \\
+         function param = parameter_illc1033()
+            param.tol = 1e-15;
+            param.maxIter = 600;
+            param.nf = 3;
+            param.steplengthOrk = 5;
+            param.lsqrIter = 5;
+            param.lsqrTol = 1e-10;
+            param.smIsqmIter = 10;
+            param.con1 = 0.95;
+            param.con2 =0.7;
+            param.diff = 1e-3;
+            param.eIter = 2;
+            param.eIter_num = 0.95;
+        end
+        %data [A,rows,cols,entries,rep,field,symm]=mmread('illc1850.mtx');
+%         \hline 
+%  \multirow{4}{*}{$ 1850\times 712 $}& DHA & 9.59166 & 6.02927e-16 & (640,1)  & 0.107 \\
+% & CHA & 9.59166 & 6.61387e-14 & (10,1)  & 0.073 \\
+% & RHA & 9.59166 & 1.07131e-15 & (50,3)  & 0.096 \\
+% & PHA & 9.59166 & 1.05423e-10 & (40,3)  & 0.083 \\
+         function param = parameter_illc()
             param.tol = 1e-12;
             param.maxIter = 300;
             param.nf = 10;
@@ -41,7 +103,7 @@ classdef parameter
             param.smIsqmIter = 10;
             param.con1 = 0.95;
             param.con2 =0.5;
-            param.diff = 1e-8;
+            param.diff = 1e-5;
             param.eIter = 2;
             param.eIter_num = 0.95;
         end
