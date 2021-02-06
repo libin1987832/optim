@@ -46,8 +46,12 @@ while bx' * bx + fx' * fx > delta && iter < maxIter
             Afx = A * fx;
             grma=(Afx' * Ap) / (Ap' * Ap);
             if debug
+%                 AF = A(:,F);
+%                 L = ichol(AF'*AF,struct('michol','on'));
+%                 [x2,fl2,rr2,it2,rv2] = pcg(AF'*AF,AF'*bk,1e-8,3,L,L');
                 p1 = fx - grma * p;
-            disp(['conject gradient:',num2str(r'*r),' p1*A*Ap:',...
+                r_d0 = A*x0-bk;
+            disp(['old_r ',num2str(0.5*r_d0'*r_d0),' conject gradient:',num2str(0.5*r'*r),' diff: ', num2str(0.5*r_d0'*r_d0-0.5*r'*r),' p1*A*Ap:',...
                 num2str(p1'*A'*A*p),' cos(p1,p)',...
                 num2str(p1'*p/(norm(p1)*norm(p))),' af: ', num2str(af),...
                 ' acg:',num2str(acg)]);
@@ -62,11 +66,11 @@ while bx' * bx + fx' * fx > delta && iter < maxIter
             fx( : ) = 0;
             fx( F ) = g(F);
             xk = xk2 - a * fx;
-%             if debug
-%                 r_d = A*x0-bk;
-%                 g_d = A'*(A*x0-bk);
-%                 disp(['p*g:',num2str(p'*g_d)]);            
-%             end
+            if debug
+                r_d0 = A*x0-bk;
+                g_d = A'*(A*x0-bk);
+                disp(['old: ',num2str(0.5*r_d0'*r_d0),' new: ',num2str(0.5*r'*r),'p*g:',num2str(p'*g_d)]);            
+            end
 %             xk = x0 - a * p;
             F = xk > Ftol;
             xk( ~F )=0;
@@ -76,13 +80,13 @@ while bx' * bx + fx' * fx > delta && iter < maxIter
             fx( F ) = g( F );
             p = fx;
             if debug
-                x2 = pcg(A,b,[],100,[],[],x0);
+  %              x2 = pcg(A,b,[],100,[],[],x0);
 %               xk_d = x0 - 0.000001 * p;r_d2 = A*xk_d-bk;
 %               disp(['r_d:',num2str(r_d2'*r_d2)]);
-                r_d = A*x0-bk;
                 g_d = A'*(A*x0-bk);
               disp([' af: ', num2str(af),...
-                ' acg:',num2str(acg),'old:', num2str(r_d'*r_d), ' out range in the subspace:',num2str( r'*r ),' xa-x,fx', num2str(-(xk-x0)'*g_d)]);
+                ' acg:',num2str(acg),'old: ', num2str(0.5*r_d0'*r_d0), ...
+                ' out range in the subspace:',num2str(0.5*r'*r ),'diff: ',num2str(0.5*r_d0'*r_d0-0.5*r'*r),' xa-x,fx', num2str(-(xk-x0)'*g_d)]);
             end
 %              break;
         end
@@ -96,7 +100,8 @@ while bx' * bx + fx' * fx > delta && iter < maxIter
         fx( F ) = g( F );
         p = fx;
         if debug
-          disp(['go to implement space:',num2str(r'*r)]);
+          r_d0 = A * x0 - bk;
+          disp(['old ',num2str(0.5*r_d0'*r_d0),' go to implement space:',num2str(0.5*r'*r)]);
         end
 %          break;
     end

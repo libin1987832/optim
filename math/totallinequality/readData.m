@@ -10,6 +10,7 @@ switch type
         A=[A1;-A2];
         b=[b1;-b2];
         x0=ones(n,1);
+        save('test1.mat','A','b','x0')
    case 2
         A1=abs(rand(m1,n))/100;
         A2=abs(rand(m2,n))/100;
@@ -24,7 +25,7 @@ switch type
     case 3
         A = [1 3;2 4;-5 -6]; b = [5;6;-3]; x0 = [1;1];m1=2;m2=1;n=2;
     case 4
-         load('testFbug')
+         load('test1')
 %          m1 = 5;m2=5;n=7;
     case 5 
         load('testface')

@@ -20,7 +20,7 @@ classdef parametern
             param.mprgp_a = 0.5;
             param.mprgp_delta = 1e-30;
             param.mprgp_Ftol = 1e-25;
-            param.mprgp_maxIter = 8;
+            param.mprgp_maxIter = 3;
          end
          %param.mprgp_a = 1/norm(A'*A, inf)*10;
 %         [A,b,x0] = readData(7,500,500,300);

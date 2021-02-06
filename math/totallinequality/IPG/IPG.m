@@ -1,6 +1,6 @@
 %[xk,resvec,arvec,face1vec,face2vec,tf]
 function [xk, resvec, arvec, faceXvec, tf] = IPG(A,b,x0,tol,det,tou,maxit,dtype)
-display = false;
+display = 1;
 %x
 t=clock;
 loopcount = 1;
@@ -20,6 +20,7 @@ faceXvec(1) = 0;
 IF = false(m,1);
 IP = b - Ax > 1e-15;
 ADA = AT(:,IP) * Ax(IP);
+% dtype = 'NT';
 while norm( x0 .* g, inf) > tol || min( g )< -tol
     if loopcount > maxit
         break;
@@ -28,8 +29,8 @@ while norm( x0 .* g, inf) > tol || min( g )< -tol
     
     switch dtype
         case 'NT'
-            %             p = -(A(I,:)'*A(I,:)+det)\g;
-            p = lsqminnorm(A(IP,:)'*A(IP,:), -g);
+                         p = -(A(IP,:)'*A(IP,:))\g;
+            %p = lsqminnorm(A(IP,:)'*A(IP,:), -g);
             %  cos2 =  np'*p / (norm(np)*norm(p));
         case 'ST'
             p = -g;
@@ -42,15 +43,17 @@ while norm( x0 .* g, inf) > tol || min( g )< -tol
     alphaAll = - x0./p;
     alphak = min(alphaAll(alphaAll>0));
     if isempty(alphak)
-        alphak = 10;
+        alphak = 1;
     end
     %tou = toustrategy(tou,loopcount,x0);
     % tou = tou - 1/100;
     touk = tou + rand()*(1-tou);
     talphak = touk * alphak;
-    %   [alpha, knot, retcode] = arraySpiece(A,b,x0,p,1e-5,30);
+    % assert descent direction
     
-    [alpha, ~, retcode] = wolfe(A, b, x0, p, talphak,Ax,Ap,normr,g,30);
+     [alpha, knot, retcode] = arraySpiece(A,b,x0,p,1e-10,30);
+      x00 =x0;    g00=g; Ax00=Ax;
+%     [alpha, ~, retcode] = wolfe(A, b, x0, p, talphak,Ax,Ap,normr,g,100);
     
     x0 = x0 + alpha * p;
     Ax = Ax + alpha * Ap;
@@ -60,17 +63,26 @@ while norm( x0 .* g, inf) > tol || min( g )< -tol
     if any(xor(IF,IP))
         ADb = AT(:,IP) * b(IP);
     end
+
     g = ADA - ADb;
+%     r=b-A*x0;
+%     r(r<0)=0;
+%     gr = -A'*r;
     IF = IP;
     normr = 0.5*r(IP)'*r(IP);
     %    [normr,g,normKKT,Ax] = dtffunc(A,AT,b,x0);
     
     if display
-        [normr,g1,normKKT11,Ax1] = dtffunc(A,AT,b,x0);
-        pg = g1'*p;
+        [normrd,g1,normKKT11,Ax1] = dtffunc(A,AT,b,x00);
+        [normr0,g10,normKKT10,Ax10] = dtffunc(A,AT,b,x0);
+
+        pg = g1'*p;% assert descent direction
         [minx,loc]=min(x0);
-        fprintf('IPG(%d end): normr(%g),kkt(%g),gp(%g),alpha(%g),talpha(%g),minx(%g,%d)\n'...
-            , loopcount, normr, normKKT11,pg,alpha,alphak,minx,loc);
+        fprintf('IPG(%d end): normr(%g),normrk(%g),kkt(%g),gp(%g),alpha(%g),talpha(%g),minx(%g,%d)\n'...
+            , loopcount, normrd, normr0,normKKT11,pg,alpha,alphak,minx,loc);
+       if normr0 > normrd
+        dd
+        end
             resvec(loopcount) = normr;
     % record the value of the gradient function
     arvec(loopcount) = normKKT11;

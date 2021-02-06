@@ -14,11 +14,12 @@ while func(A, b, Ax, Adk ,alpha) > normr +  alpha * qpc1
     loopcount = loopcount + 1;    
     alpha=alpha/2;
     allalpha(loopcount) = alpha; 
-    if loopcount > maxit
-        alpha = range;
-        retcode = [2,loopcount];
-        return;
-    end
+%     if loopcount > maxit
+%         alpha = range;
+%         assert('maxit small');
+%         retcode = [2,loopcount];
+%         return;
+%     end
 end
 retcode = [1,loopcount];
 return

@@ -42,6 +42,9 @@ while norm( x0 .* g, inf) > tol || min( g )< -tol
     resvec(loopcount) = normr;
     % record the value of the gradient function
     arvec(loopcount) = normKKT;
+    if loopcount > maxit
+        break;
+    end
 end
 tf = etime(clock,t);
 x0(x0<0)=0;

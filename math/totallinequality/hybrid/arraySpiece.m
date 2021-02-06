@@ -46,20 +46,28 @@ end
 xk = x0 + alpha * p;
 xk(xk<0) =0;
 if display
-%     if alpha <1e-10;
-%         xa = [1e-12:1e-14:2*1e-12];
-%         ya = arrayfun(@(alpha) funmin(A,b,x0,p,alpha), xa);
-%         pxy={};
-%         pxy(1).X = xa;
-%         pxy(1).Y = ya;
-%         figure
-%         hold on
-%         p1 = arrayfun(@(a) plot(a.X,a.Y),pxy);
-%     end
+    if alpha <1e-10;
+        xa = [0:1e-10:1e-5];
+        ya = arrayfun(@(alpha) funmin(A,b,x0,p,alpha), xa);
+        pxy={};
+        pxy(1).X = xa;
+        pxy(1).Y = ya;
+        figure
+        hold on
+        p1 = arrayfun(@(a) plot(a.X,a.Y),pxy,'UniformOutput',false);
+    end
     knotL = length(knot);
     [rpk0, normr0, xmin0, Ar0, normKKT0 , face11, face12] = kktResidual(A, b, x0, [], 1);
     [rpk1, normr1, xmin1, Ar1, normKKT1 , face21, face22] = kktResidual(A, b, xk , [], 1);
     fprintf('___projected(0,1): alpha_num(%g,%d),normBF(%g,%g),gBFP(%g,%g,%g),xa(%d,%d,%d,%d)\n',...
         alpha,knotL,normr0,normr1,norm(Ar0),norm(Ar1),Ar0'*p/(norm(Ar0)*norm(p)),face11, face21,face12, face22);
+end
+end
+function f = funmin(A,b,x0,u,alpha)
+xn = x0 + alpha*u;
+xn( xn < 0) = 0;
+f = b - A * xn;
+f(f<0) = 0;
+f = 0.5*(f'*f);
 end
 %minf = funmin(A,b,x0,p,alpha);
