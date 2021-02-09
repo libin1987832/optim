@@ -1,6 +1,6 @@
 %[xk,resvec,arvec,face1vec,face2vec,tf]
 function [xk, resvec, arvec, faceXvec, tf] = IPG(A,b,x0,tol,det,tou,maxit,dtype)
-display = 1;
+display = 0;
 %x
 t=clock;
 loopcount = 1;

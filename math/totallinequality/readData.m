@@ -5,12 +5,19 @@ switch type
         A2=abs(sprand(m2,n,0.1,1/100));
         %A1=rand(m1,n) + 1 ;
         %A2=rand(m2,n) + 1;
+  
         b1=rand(m1,1);
         b2=rand(m2,1);
         A=[A1;-A2];
         b=[b1;-b2];
+%         A0=A;
+%         L = ichol(A'*A+0.1*speye(size(A'*A)),struct('michol','on'));
+%         A=A*L;
+%         A = A0+0.1*rand(size(A));
+%         l1=eig(A0'*A0);
+%         l2=eig(A'*A);
+%         plot(1:n,l1,1:n,l2);
         x0=ones(n,1);
-        save('test1.mat','A','b','x0')
    case 2
         A1=abs(rand(m1,n))/100;
         A2=abs(rand(m2,n))/100;
@@ -25,7 +32,7 @@ switch type
     case 3
         A = [1 3;2 4;-5 -6]; b = [5;6;-3]; x0 = [1;1];m1=2;m2=1;n=2;
     case 4
-         load('test1')
+         load('test')
 %          m1 = 5;m2=5;n=7;
     case 5 
         load('testface')

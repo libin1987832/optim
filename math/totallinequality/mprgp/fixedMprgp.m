@@ -33,9 +33,26 @@ while KKT > param.fixed_tol && index < param.fixed_maxit
 %     bk = b + z;
 %     %内置使用MATLAB自带的算法
 %     [x2,f1,residual,exitflag,output,ff]=lsqlin(A,bk,[],[],[],[],zeros(n,1),Inf*ones(n,1),x0,options);
+%    
+%     F = x0 > param.mprgp_Ftol;
+%     xkkr = x0;
+%     u = krylovkm(A(:,F),b,rpk,10);
+%     xkkr(F)=xkkr(F)+u;
+%     [rpkkr, normrkr, xminkr, Ar, KKTkr, face1, face2] = kktResidual(A, b, xkkr , [],1);
+   
     x0=x1;
+    
+      
+    
     [r, normr, xmin,Ar, KKT,face1,face2] = kktResidual(A, b, x0 , rpk, 1);
-%  fprintf('iter=%d, normr=%g, KKT=%g\n', index, normr, KKT);
+%      if KKT > KKTkr
+%          x0=xkkr;
+%      end
+%       KKTkr = KKT;
+%   fprintf('iter=%d, normr=%g, KKT=%g,krylovKKt=%g,xminkr=%g\n', index, normr, KKT,KKTkr,xminkr);
+    
+  
+  
     index=index+1;
     resvec(index) = normr;
     arvec(index) = KKT;

@@ -1,6 +1,6 @@
 % || Ax - yk - Axk || || aAd - (-yk) || ||aAd - rk ||
 %x(k+1) = x(k) - ad(gradient g); ||Ax - bk ||
-function [x0,rpk] = MPRGP(A, b, x0,rpk, L, a, delta, Ftol, maxIter)
+function [x0,rpk] = MPRGPlsqr(A, b, x0,rpk, L, a, delta, Ftol, maxIter)
 [~,n]=size(A);
 % Ax0 = A*x0;
 % yk = b - Ax0;
@@ -21,15 +21,13 @@ fx( F ) = g( F );
 bx( ~F ) = min(g( ~F ),0);
 iter = 0;
 p = fx;
-debug = 0;
+debug = 1;
 while bx' * bx + fx' * fx > delta && iter < maxIter
     iter = iter + 1;
     f1x( : ) = 0;
     f1x( F ) = min( x0( F ) / a , fx( F ));
     if bx' * bx <= L * f1x' * fx
-        Ap = A(:,F) * p(F);
-        L = ichol(A(:,F)'*A(:,F),struct('michol','on'));
-        
+        Ap = A * p;
         acg = (r' * Ap) / (Ap' * Ap); y = x0 - acg * p;
         I = p > Ftol;
         if any(I)
@@ -39,25 +37,28 @@ while bx' * bx + fx' * fx > delta && iter < maxIter
         end
         if acg < af
             %iter = iter - 1;
-
             xk = y;
             r = r - acg * Ap;
             g = A' * r;
             F = xk > Ftol;
             fx( : ) = 0;
             fx( F ) = g(F);
-            Afx = A(:,F) * fx(F);
+            Afx = A * fx;
             grma=(Afx' * Ap) / (Ap' * Ap);
             if debug
-%                 AF = A(:,F);
+                 AF = A(:,F);
+                 xkkr = xk;
 %                 L = ichol(AF'*AF,struct('michol','on'));
 %                 [x2,fl2,rr2,it2,rv2] = pcg(AF'*AF,AF'*bk,1e-8,3,L,L');
+                bkkr = yk + A*x0; 
+                xkkr(F) = krylovk(AF,bkkr,3);
+                [rpkkr, normrkr, xminkr, Ar, KKTkr, face1, face2] = kktResidual(A, b, xkkr , [],1);
                 p1 = fx - grma * p;
                 r_d0 = A*x0-bk;
             disp(['old_r ',num2str(0.5*r_d0'*r_d0),' conject gradient:',num2str(0.5*r'*r),' diff: ', num2str(0.5*r_d0'*r_d0-0.5*r'*r),' p1*A*Ap:',...
                 num2str(p1'*A'*A*p),' cos(p1,p)',...
                 num2str(p1'*p/(norm(p1)*norm(p))),' af: ', num2str(af),...
-                ' acg:',num2str(acg)]);
+                ' acg:',num2str(acg),'KKTkr: ',num2str(KKTkr)]);
             end
             p = fx - grma * p;
         else

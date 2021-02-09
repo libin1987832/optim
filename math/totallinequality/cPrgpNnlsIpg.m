@@ -9,6 +9,9 @@ example = 11;
 nn=[200,300,400,500];
 % 1 sparse matrix m1 m2 n 2 density matrix
 [A,b,x0] = readData(1,2000,2000,nn(k));[m,n] =size(A);
+
+
+
 options = optimoptions('lsqlin','Algorithm','interior-point','Display','iter');options.Display = 'off';
 options.OptimalityTolerance = 1e-15;options.ConstraintTolerance = 1e-10;options.MaxIterations = 70;
 param = parametern();
@@ -28,7 +31,7 @@ fprintf('& %s & %g & %g & %g & %g & %g  \n','FM',normr1,xmin1,normKKT1,min(Ar),t
 end
 %%
 %example = 3;
-if example == 2 || example > 10
+if example == 2 || example > 11
 maxIterA = 5000;
 [xk3, resvec3, arvec3, faceXvec3, tf3]  = IPG(A, b, x0, 1e-6, 1e-5, 1, maxIterA,'IPG');
 [rpk3, normr3, xmin3, Ar3, normKKT3 , faceX3, faceA3] = kktResidual(A, b, xk3, [], 1);
@@ -37,7 +40,7 @@ end
 if example == 3 || example > 10
 param.mprgp_a = 1/norm(A'*A, inf);
 [xkn1, resvecn1, arvecn1,facen11v,facen12v, tfn1] = fixedMprgp(A,b,x0,param);
-[rpk1, normr1, xmin1, Ar, normKKT1 , face11, face21] = kktResidual(A, b, xkn1 , [], 1);
-fprintf('& %s & %g & %g & %g & %g & %g  \\\\\n','FMprgp',normr1,xmin1,normKKT1,min(Ar),tfn1);
+[rpk1, normr1, xmin1, Arn1, normKKT1 , face11, face21] = kktResidual(A, b, xkn1 , [], 1);
+fprintf('& %s & %g & %g & %g & %g & %g  \\\\\n','FMprgp',normr1,xmin1,normKKT1,min(Arn1),tfn1);
 end
 end
