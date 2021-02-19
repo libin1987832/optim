@@ -31,7 +31,30 @@ classdef parameter
         eIter_num
     end
     methods
-        function param = parameter()
+%picture_paper 1000 800 save('pictureconsistent.mat','A','b','x0')
+        %  \hline 
+%  \multirow{4}{*}{$ 1000\times 800 $}& DHA & 9.04455e-16 & 1.39461e-14 & (130,0,0)  & 0.906 \\
+% & CHA & 1.23021e-15 & 1.8318e-14 & (20,2,0)  & 0.221 \\
+% & RHA & 2.61829e-15 & 3.77841e-14 & (25,1,1)  & 0.227 \\
+% & PHA & 3.11251e-15 & 4.48269e-14 & (15,1,1)  & 0.173 \\       
+  function param = parameter()
+            param.tol = 1e-15;
+            param.maxIter = 200;
+            param.nf = 10;
+            param.steplengthOrk = 3;
+            param.lsqrIter = 5;
+            param.lsqrTol = 1e-10;
+            param.smIsqmIter = 3;
+            param.con1 = 0.95;
+            param.con2 =0.6;
+            param.diff = 100*eps;%consistent 10*eps
+            param.eIter = 5;
+            param.eIter_num = 0.8;
+        end
+
+        
+        
+        function param = parameter_()
             param.tol = 1e-15;
             param.maxIter = 600;
             param.nf = 3;
