@@ -46,8 +46,8 @@ classdef parameter
             param.lsqrTol = 1e-10;
             param.smIsqmIter = 3;
             param.con1 = 0.95;
-            param.con2 =0.6;
-            param.diff = 100*eps;%consistent 10*eps
+            param.con2 =0.5;
+            param.diff = 1*eps;%consistent 10*eps
             param.eIter = 5;
             param.eIter_num = 0.8;
         end
