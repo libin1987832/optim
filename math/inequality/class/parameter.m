@@ -47,7 +47,7 @@ classdef parameter
             param.smIsqmIter = 3;
             param.con1 = 0.95;
             param.con2 =0.5;
-            param.diff = 1*eps;%consistent 10*eps
+            param.diff = 30*eps;%consistent 10*eps
             param.eIter = 5;
             param.eIter_num = 0.8;
         end

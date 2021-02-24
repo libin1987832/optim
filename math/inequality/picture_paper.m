@@ -2,16 +2,23 @@
 addpath('./dataInequality/');
 addpath('./algorithmInequality/');
 addpath('./class')
+clc
+clear
 m = 1000;
 n = 100;
+
 rangeMax = 2;
 rangeMin = -2;
 count = 1;
 record = zeros(4*count,5);
 maxIter = 200;
-param = parameter();
+
+
+%  load('pictureinconsistentG.mat');
+ load('pictureconsistent.mat','A','b','x0');
+ param = parameter();
 for j = 1:count
-     [A,b,x0]=randInequality(m,n,2,1);
+%      [A,b,x0]=randInequality(m,n,2,1);
    str = ['D','C','R','P'];
     iterA=size(4,maxIter+2);
     maxIterA = 0;
@@ -38,8 +45,8 @@ for j = 1:count
         if isempty(beginN)
             beginN=0;
         end
-        record((j-1)*4+i,:)=[dD,gD,iter*nf,sumiter,tfD];
-        fprintf('& %s & %g & %g & (%d,%d,%d)  & %g \\\\\n',type,dD,gD,iter*nf,sumiterlsqr,sumiterNt,tfD);      
+        record((j-1)*4+i,:)=[dD,gD,iter*param.nf,sumiter,tfD];
+        fprintf('& %s & %g & %g & (%d,%d,%d)  & %g \\\\\n',type,dD,gD,iter*param.nf,sumiterlsqr,sumiterNt,tfD);      
         iterA(i,1:iter+1)=resvec;
         if maxIterA < iter+1
             maxIterA = iter+1;
@@ -53,12 +60,13 @@ type=['r','c','k','g'];
 typet=['+','o','v','s'];
 beginp = 1;
 figure
-%maxIterA = 200;
-h=semilogy(beginp:nf:maxIterA*nf,iterA(1,beginp:maxIterA),'bx');
+maxIterA = 15;
+param.nf = 10;
+h=semilogy(beginp:param.nf:maxIterA*param.nf,iterA(1,beginp:maxIterA),'bx');
 h.LineStyle = '--';
 hold on
 for i=2:4
-    h=semilogy(beginp:nf:maxIterA*nf,iterA(i,beginp:maxIterA),[type(i) typet(i)]);
+    h=semilogy(beginp:param.nf:maxIterA*param.nf,iterA(i,beginp:maxIterA),[type(i) typet(i)]);
     h.LineStyle = '--';
 end
 legend('DHA','CHA','RHA','PHA');
