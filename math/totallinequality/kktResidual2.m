@@ -1,3 +1,4 @@
+% ||Ax-b|| 
 function [rpk, normr, xmin, Ar, normKKT , faceX, faceA] = kktResidual2(A, b, x , rpk, type)
 % if the parametre is greater than 3 , save the computation of  rpk
 if nargin < 4 || isempty(rpk)

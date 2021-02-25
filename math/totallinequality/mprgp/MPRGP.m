@@ -28,7 +28,7 @@ while bx' * bx + fx' * fx > delta && iter < maxIter
     f1x( F ) = min( x0( F ) / a , fx( F ));
     if bx' * bx <= L * f1x' * fx
         Ap = A(:,F) * p(F);
-        L = ichol(A(:,F)'*A(:,F),struct('michol','on'));
+     %   L = ichol(A(:,F)'*A(:,F),struct('michol','on'));
         
         acg = (r' * Ap) / (Ap' * Ap); y = x0 - acg * p;
         I = p > Ftol;
