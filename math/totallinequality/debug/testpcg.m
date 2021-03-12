@@ -1,8 +1,13 @@
-load('AF1.mat')
-A=AF1'*AF1;
-b=AF1'*b(rF1>1e-5);
-x0=sparse(zeros(130,1));
+% load('AF1.mat')
+% A=AF1'*AF1;
+% b=AF1'*b(rF1>1e-5);
+% x0=sparse(zeros(130,1));
 % [x0,fl0,rr0,it0,rv0] = pcg(A,b,1e-8,100);
+load('test.mat')
+A=full(A);
+b=A'*b;
+A=A'*A;
+
 L = ichol(A);
 M = L*L';
 r0=b-A*x0;

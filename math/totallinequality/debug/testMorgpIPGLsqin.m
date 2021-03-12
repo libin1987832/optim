@@ -13,12 +13,12 @@ addpath('../')
 clc
 clear 
 % 
-[A,b,x0] = readData(1,2000,2000,100);
+[A,b,x0] = readData(5,30,30,10);
 
 [m,n] =size(A);
 options = optimoptions('lsqlin','Algorithm','interior-point','Display','iter');
 % options = optimoptions('Algorithm','interior-point','TolX',1e-13)
-options.Display = 'off';
+options.Display = 'iter';
 % options.StepTolerance = 1e-13;
 options.OptimalityTolerance = 1e-15;
 options.ConstraintTolerance = 1e-20;

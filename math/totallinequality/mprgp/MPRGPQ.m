@@ -1,30 +1,25 @@
-% || Ax - yk - Axk || || aAd - (-yk) || ||aAd - rk ||
+% x^TAx+bx
 %x(k+1) = x(k) - ad(gradient g); ||Ax - bk ||
-function [x0,rpk] = MPRGP(A, bk, x0, L, a, delta, Ftol, maxIter)
+function [x0,rpk] = MPRGPQ(A, bk, x0, L, a, delta, Ftol, maxIter)
 [~,n]=size(A);
 
-
-r = bk-A*x0;
-
-g = A' * r;
+r = A*x0-bk;
 F = x0 > Ftol;
 fx = zeros(n , 1);
 bx = zeros(n , 1);
 f1x = zeros(n , 1);
-fx( F ) = g( F );
-bx( ~F ) = min(g( ~F ),0);
+fx( F ) = r( F );
+bx( ~F ) = min(r( ~F ),0);
 iter = 0;
 p = fx;
-debug = 1;
+debug = 0;
 while bx' * bx + fx' * fx > delta && iter < maxIter
     iter = iter + 1;
     f1x( : ) = 0;
     f1x( F ) = min( x0( F ) / a , fx( F ));
     if bx' * bx <= L * f1x' * fx
-        Ap = A(:,F) * p(F);
-     %   L = ichol(A(:,F)'*A(:,F),struct('michol','on'));
-        
-        acg = (r' * Ap) / (Ap' * Ap); y = x0 - acg * p;
+        Ap=A*p;
+        acg = (r' * p) / (p' * Ap); y = x0 - acg * p;
         I = p > Ftol;
         if any(I)
            af = min(x0(I) ./ p(I));   
@@ -33,19 +28,13 @@ while bx' * bx + fx' * fx > delta && iter < maxIter
         end
         if acg < af
             %iter = iter - 1;
-
             xk = y;
             r = r - acg * Ap;
-            g = A' * r;
             F = xk > Ftol;
             fx( : ) = 0;
-            fx( F ) = g(F);
-            Afx = A(:,F) * fx(F);
-            grma=(Afx' * Ap) / (Ap' * Ap);
+            fx( F ) = r(F);
+            grma=(fx' * Ap) / (p' * Ap);
             if debug
-%                 AF = A(:,F);
-%                 L = ichol(AF'*AF,struct('michol','on'));
-%                 [x2,fl2,rr2,it2,rv2] = pcg(AF'*AF,AF'*bk,1e-8,3,L,L');
                 p1 = fx - grma * p;
                 r_d0 = A*x0-bk;
             disp(['old_r ',num2str(0.5*r_d0'*r_d0),' conject gradient:',num2str(0.5*r'*r),' diff: ', num2str(0.5*r_d0'*r_d0-0.5*r'*r),' p1*A*Ap:',...
@@ -55,13 +44,13 @@ while bx' * bx + fx' * fx > delta && iter < maxIter
             end
             p = fx - grma * p;
         else
+            Ap=A*p;
             afp = af * p;
             xk2 = x0 - afp;
-            r = A * xk2 - bk;
+            r = r - af*Ap;
             F = xk2 > Ftol;
-            g = A' * r;
             fx( : ) = 0;
-            fx( F ) = g(F);
+            fx( F ) = r(F);
             xk = xk2 - a * fx;
             if debug
                 r_d0 = A*x0-bk;
@@ -72,9 +61,8 @@ while bx' * bx + fx' * fx > delta && iter < maxIter
             F = xk > Ftol;
             xk( ~F )=0;
             r = A * xk - bk;
-            g = A' * r;
             fx( : ) = 0;
-            fx( F ) = g( F );
+            fx( F ) = r( F );
             p = fx;
             if debug
   %              x2 = pcg(A,b,[],100,[],[],x0);
@@ -89,12 +77,11 @@ while bx' * bx + fx' * fx > delta && iter < maxIter
         end
     else
         Ad = A * bx;
-        acg = (Ad' * r) / (Ad' * Ad);
-        xk = x0 - acg * bx; r = A * xk - bk;
-        g = A' * r;
+        acg = (d' * r) / (d' * Ad);
+        xk = x0 - acg * bx; r = r-acg * Ad;
         F = xk > Ftol;
         fx( : ) = 0;
-        fx( F ) = g( F );
+        fx( F ) = r( F );
         p = fx;
         if debug
           r_d0 = A * x0 - bk;
@@ -103,10 +90,8 @@ while bx' * bx + fx' * fx > delta && iter < maxIter
 %          break;
     end
     bx( : ) = 0;
-    bx( ~F ) = min( g( ~F ) , 0);
+    bx( ~F ) = min( r( ~F ) , 0);
     x0 = xk;
 end
 rpk = bk-A*x0;
-
-
 end
