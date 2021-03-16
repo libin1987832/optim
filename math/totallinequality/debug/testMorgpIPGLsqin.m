@@ -13,16 +13,16 @@ addpath('../')
 clc
 clear 
 % 
-[A,b,x0] = readData(5,30,30,10);
+[A,b,x0] = readData(1,300,300,20);
 
 [m,n] =size(A);
 options = optimoptions('lsqlin','Algorithm','interior-point','Display','iter');
 % options = optimoptions('Algorithm','interior-point','TolX',1e-13)
-options.Display = 'iter';
+options.Display = 'off';
 % options.StepTolerance = 1e-13;
 options.OptimalityTolerance = 1e-15;
 options.ConstraintTolerance = 1e-20;
-options.MaxIterations = 20000;
+options.MaxIterations = 200;
 % options.
 param = parametern();
 save('testMIL','A','b','x0','param','options');
@@ -41,7 +41,7 @@ tic;[x1,f1,residual,exitflag,output,ff] = lsqlin([A,-eye(m)],b,...
 end
 
 if example == 1 || example > 10
-param.mprgp_a = 1/norm(A'*A, inf)*30;
+param.mprgp_a = 1/norm(A'*A, inf);
 [xkn1, resvecn1, arvecn1,facen11v,facen12v, tfn1] = fixedMprgp(A,b,x0,param);
 [rpk1, normr1, xmin1, Ar, normKKT1 , face11, face21] = kktResidual(A, b, xkn1 , [], 1);
 fprintf('& %s & %g & %g & %g & %g & %g  \\\\\n','FMprgp',normr1,xmin1,normKKT1,min(Ar),tfn1);

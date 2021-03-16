@@ -7,7 +7,7 @@ rpk = b - A * x;
 end
 r = rpk;
 r(r<0) = 0;
-normr = 0.5*norm(r,2)^2;
+normr = norm(r,2)^2;
 %xmin = min( x );
 xmin = min( x );
 Ar = -1;

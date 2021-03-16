@@ -15,7 +15,7 @@ fx( F ) = g( F );
 bx( ~F ) = min(g( ~F ),0);
 iter = 0;
 p = fx;
-debug = 1;
+debug = 0;
 while bx' * bx + fx' * fx > delta && iter < maxIter
     iter = iter + 1;
     f1x( : ) = 0;
