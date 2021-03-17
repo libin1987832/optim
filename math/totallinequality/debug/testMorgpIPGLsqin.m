@@ -13,7 +13,7 @@ addpath('../')
 clc
 clear 
 % 
-[A,b,x0] = readData(1,300,300,20);
+[A,b,x0] = readData(1,3000,3000,200);
 
 [m,n] =size(A);
 options = optimoptions('lsqlin','Algorithm','interior-point','Display','iter');

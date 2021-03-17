@@ -1,0 +1,24 @@
+function [x2,fl2,rr2,it2,rv2] = pcgself(A, b, tol, k, L1, L2, x0)
+r0=A*x0-b;
+y0=L1\r0;
+y0=L2\y0;
+p0=-y0;
+ry0=r0'*y0;
+rv2=zeros(k,1);
+fl2=1;
+it2 = k;
+rr2=1;
+for i=1:k
+    rv2(i)=norm(r0);
+    Ap=A*p0;
+    a0=ry0/(p0'*Ap);
+    x0=x0+a0*p0;
+    r0=r0+a0*Ap;
+    y0=L1\r0;
+    y0=L2\y0;
+    ry1=r0'*y0;
+    b0=ry1/ry0;
+    p0=-y0+b0*p0;
+    ry0=ry1;
+end
+x2=x0;

@@ -2,7 +2,7 @@
 %x(k+1) = x(k) - ad(gradient g); ||Ax - bk ||
 function [x0,rpk] = MPRGPQ(A, bk, x0, L_cons, a, delta, Ftol, maxIter,bnorm)
 [~,n]=size(A);
-debug = 2;%1 precondition %2 debug
+debug = 0;
 r = A*x0-bk;
 F = x0 > Ftol;
 fx = zeros(n , 1);
@@ -13,6 +13,7 @@ iter = 0;
 fx(F)=r(F);
 p = fx;
 update = true;
+precondition = true;
 % if debug
 %
 %     bnorm=bk'*bk;
@@ -22,16 +23,16 @@ while bx' * bx + fx' * fx > delta && iter < maxIter
     f1x( : ) = 0;
     f1x( F ) = min( x0( F ) / a , fx( F ));
     if bx' * bx <= L_cons * f1x' * fx
-        if debug == 2 && update
+        if precondition && update
             AF=A(F,F);
-            nf=size(F,1);
-            L=ichol(AF,struct('michol','on'));
-            y=L'\(L\r(F));
-            p(F)=y;
+            nf=size(AF,1);delt=0.3;
+            L=ichol(AF+delt*speye(nf),struct('michol','on'));
+            yL=L'\(L\r(F));
+            p(F)=yL;
         end
-        Ap = A * p;
+        Ap = AF * p(F);
         rp=r'*p;
-        acg = rp / (p' * Ap); y = x0 - acg * p;
+        acg = rp / (p(F)' * Ap); y = x0 - acg * p;
         I = p > Ftol;
         if any(I)
             af = min(x0(I) ./ p(I));
@@ -41,26 +42,23 @@ while bx' * bx + fx' * fx > delta && iter < maxIter
         if acg < af
             %iter = iter - 1;
             xk = y;
-            r = r - acg * Ap;
+            r(F) = r(F) - acg * Ap;
             fx( F ) = r( F );
-            if debug == 2
-                AF=A(F,F);
-                L=ichol(AF,struct('michol','on'));
-                y=L'\(L\r(F));
-                grma=(r(F)'*y)/rp;
+            if precondition
+                yL=L'\(L\r(F));
+                grma=(r(F)'*yL)/rp;
+                p(F) = yL + grma * p(F);
             else
                 grma=(fx' * Ap) / (p' * Ap);
+                p(F) = fx(F) - grma * p(F);
             end
-            %             F = xk > Ftol;
-            %             fx( : ) = 0;
-            %             fx( F ) = r(F);
             
-            if debug
+            if debug 
                 r_d0 = x0'*A*x0-2*x0'*bk+bnorm;
                 r_0 = xk'*A*xk-2*xk'*bk+bnorm;
-                disp(['old_r ',num2str(r_d0),' conject gradient:',num2str(r_0),' af: ', num2str(af), ' acg:',num2str(acg)]);
+                disp(['old_r ',num2str(r_d0),' conject gradient:',num2str(r_0),' af: ', num2str(af), ' acg:',num2str(acg),' grma:',num2str(grma)]);
             end
-            p(F) = y - grma * p(F);
+       
             update = false;
         else
             p = fx;
@@ -79,7 +77,7 @@ while bx' * bx + fx' * fx > delta && iter < maxIter
             r = A * xk - bk;
             fx( : ) = 0;
             fx( F ) = r( F );
-            if debug
+            if debug 
                 r_d0 = x0'*A*x0-2*x0'*bk+bnorm;
                 r_0 = xk'*A*xk-2*xk'*bk+bnorm;
                 disp(['old_r ',num2str(r_d0),' projected:',num2str(r_0),' af: ', num2str(af), ' acg:',num2str(acg),' a:',num2str(a),' p*f>0:',num2str(rold'*p)]);

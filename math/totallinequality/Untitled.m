@@ -18,7 +18,7 @@ maxit=10;
 % x3=H'*x3;
 % rv3
 L = ichol(A,struct('michol','on'));
-[x2,fl2,rr2,it2,rv2] = pcg(A,b,1e-2,3,L,L',x00);
+[x2,fl2,rr2,it2,rv2] = pcg(A,b,1e-2,10,L,L',x00);
 % semilogy(0:length(rv0)-1,rv0/norm(b),'-o')
 % hold on
 % semilogy(0:length(rv1)-1,rv1/norm(b),'-o')
@@ -45,6 +45,6 @@ y0=L\r0;
 y0=L'\y0;
 ry1=r0'*y0;
 b0=ry1/ry0;
-p0=-r0+b0*p0;
+p0=-y0+b0*p0;
 ry0=ry1;
 end

@@ -32,7 +32,7 @@ switch type
         b=[b1;-b2];
         x0=ones(n,1);
     otherwise
-         load('test60.mat')
+         load('test3000.mat')
 end
 %  hold on 
 % clc
