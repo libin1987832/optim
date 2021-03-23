@@ -23,9 +23,9 @@ while bx' * bx + fx' * fx > delta && iter < maxIter
     f1x( : ) = 0;
     f1x( F ) = min( x0( F ) / a , fx( F ));
     if bx' * bx <= L_cons * f1x' * fx
+        AF=A(F,F);
         if precondition && update
-            AF=A(F,F);
-            nf=size(AF,1);delt=0.3;
+            nf=size(AF,1);delt=2;
             L=ichol(AF+delt*speye(nf),struct('michol','on'));
             yL=L'\(L\r(F));
             p(F)=yL;
@@ -49,14 +49,14 @@ while bx' * bx + fx' * fx > delta && iter < maxIter
                 grma=(r(F)'*yL)/rp;
                 p(F) = yL + grma * p(F);
             else
-                grma=(fx' * Ap) / (p' * Ap);
+                grma=(r(F)' * Ap) / (rp' * Ap);
                 p(F) = fx(F) - grma * p(F);
             end
             
             if debug 
                 r_d0 = x0'*A*x0-2*x0'*bk+bnorm;
                 r_0 = xk'*A*xk-2*xk'*bk+bnorm;
-                disp(['old_r ',num2str(r_d0),' conject gradient:',num2str(r_0),' af: ', num2str(af), ' acg:',num2str(acg),' grma:',num2str(grma)]);
+                disp(['iter ',num2str(iter),'old_r ',num2str(r_d0),' conject gradient:',num2str(r_0),' af: ', num2str(af), ' acg:',num2str(acg),' grma:',num2str(grma)]);
             end
        
             update = false;
@@ -80,7 +80,7 @@ while bx' * bx + fx' * fx > delta && iter < maxIter
             if debug 
                 r_d0 = x0'*A*x0-2*x0'*bk+bnorm;
                 r_0 = xk'*A*xk-2*xk'*bk+bnorm;
-                disp(['old_r ',num2str(r_d0),' projected:',num2str(r_0),' af: ', num2str(af), ' acg:',num2str(acg),' a:',num2str(a),' p*f>0:',num2str(rold'*p)]);
+                disp(['iter ',num2str(iter),'old_r ',num2str(r_d0),' projected:',num2str(r_0),' af: ', num2str(af), ' acg:',num2str(acg),' a:',num2str(a),' p*f>0:',num2str(rold'*p)]);
             end
             p = fx;
             update = true;
@@ -99,7 +99,7 @@ while bx' * bx + fx' * fx > delta && iter < maxIter
         if debug
             r_d0 = x0'*A*x0-2*x0'*bk+bnorm;
             r_0 = xk'*A*xk-2*xk'*bk+bnorm;
-            disp(['old_r ',num2str(r_d0),' implement:',num2str(r_0), ' acg:',num2str(acg)]);
+            disp(['iter ',num2str(iter),'old_r ',num2str(r_d0),' implement:',num2str(r_0), ' acg:',num2str(acg)]);
         end
         update = true;
         %          break;
