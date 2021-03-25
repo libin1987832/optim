@@ -40,7 +40,7 @@ tic;[x1,f1,residual,exitflag,output,ff] = lsqlin([A,-eye(m)],b,...
 %  0.5*x1'*C*x1-x1'*[A,-eye(m)]'*b
 end
 
-if example == 3 || example > 10
+if example == 1 || example > 10
 param.mprgp_a = 1/norm(A'*A, inf);
 [xkn1, resvecn1, arvecn1,facen11v,facen12v, tfn1] = fixedMprgp(A,b,x0,param);
 [rpk1, normr1, xmin1, Ar, normKKT1 , face11, face21] = kktResidual(A, b, xkn1 , [], 1);
@@ -58,7 +58,7 @@ if example == 3 || example > 10
 tic;
 AE=[A,-eye(m)];
 AEE = AE' * AE;
-param.mprgp_a = 1/norm(AEE, inf);
+param.mprgp_a = 1/norm(AEE, inf)*2;
 [x1,rpk] = MPRGPQ(AEE, AE'*b, [x0;ones(m,1)], param.mprgp_L, param.mprgp_a, param.mprgp_delta, param.mprgp_Ftol, 3000, b'*b);
 tf0=toc;xk0 = x1(1:n);
  [rpk0, normr0, xmin0, Ar0, normKKT0 , faceX0, faceA0] = kktResidual(A, b, xk0 , [], 1); 
