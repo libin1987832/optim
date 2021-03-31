@@ -1,1 +1,1 @@
-[BQP,output] = random_test(300,0.1,'method','exact')
+[BQP,output] = random_test(1000,0.2,'method','inexact');

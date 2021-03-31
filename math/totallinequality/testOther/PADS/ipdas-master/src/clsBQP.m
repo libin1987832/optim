@@ -7,7 +7,7 @@ classdef clsBQP < handle
     % Author        : Zheng Han
     % Date          : 12/09/2012
     %==================================================
-    properties(SetAccess = private, Hidden = false)
+    properties(SetAccess = public, Hidden = false)
         H;
         c;
         ub;

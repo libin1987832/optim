@@ -24,7 +24,12 @@ data.n = n;
 data.dH = dH;
 option  = ipdasoptimset(varargin{:});
 BQP = random_bqp(data);
-x0=BQP
+x0=BQP.x;
+A=BQP.H;
+b=BQP.c;
+BQP.H = A'*A;
+BQP.c = A'*b;
+ub=BQP.ub;
 tic
 [BQP,output] = ipdas(BQP,option);
 toc
@@ -36,7 +41,8 @@ options.MaxIterations = 200;
 [m,n] =size(BQP.H);
 
 tic;
-[x1,f1,residual,exitflag,output,ff] = lsqlin(BQP.H,BQP.c,...
-    [],[],[],[],zeros(n,1),Inf*ones(n,1),x0,options);
+[x1,f1,residual,exitflag,output,ff] = lsqlin(A,b,...
+    [],[],[],[],[],ub,x0,options);
 toc;
+0.5*x1'*A*x1 + b'*x1
 end
