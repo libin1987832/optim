@@ -36,7 +36,7 @@ toc
 options = optimoptions('lsqlin','Algorithm','interior-point','Display','iter');
 options.Display = 'off';
 options.OptimalityTolerance = 1e-15;
-options.ConstraintTolerance = 1e-20;
+options.ConstraintTolerance = 1e-15;
 options.MaxIterations = 200;
 [m,n] =size(BQP.H);
 
