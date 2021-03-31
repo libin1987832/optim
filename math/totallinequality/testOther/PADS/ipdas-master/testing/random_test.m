@@ -44,5 +44,5 @@ tic;
 [x1,f1,residual,exitflag,output,ff] = lsqlin(A,b,...
     [],[],[],[],[],ub,x0,options);
 toc;
-0.5*x1'*A*x1 + b'*x1
+0.5*x1'*A'*A*x1 - (A*b)'*x1
 end
