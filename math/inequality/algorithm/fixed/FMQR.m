@@ -5,6 +5,8 @@
 function [xk,rk]=FMQR(x0,Q,R,A,b,rk)
 rk(rk<0)=0;
 % compute min increase
-uk=R\(Q'*rk);
+QTrk=(Q'*rk);
+
+uk=R\QTrk;
 xk=x0+uk;
 rk=b-A*xk;
