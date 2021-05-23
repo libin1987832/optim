@@ -40,8 +40,8 @@ seperat_example = false;
 %    x0 = ones(n , 1);
 m = 1000;
 n = 200;
-rangeMax = 2;
-rangeMin = -1;
+rangeMax = 4;
+rangeMin = -2;
 [A,b,x0]=randInequality(m,n,rangeMax,rangeMin);
     maxIter = 900;
     nf = 5;
@@ -68,7 +68,7 @@ rangeMin = -1;
     for i=1:4
         type = str(i);
 %         
-        [xkD,flag,relres,iter,resvec,arvec,itersm,tfD]=hybridNqr(A,b,x0,steplengthOrk,maxIter,nf,[type,'HA']);
+       [xkD,flag,relres,iter,resvec,arvec,itersm,tfD]=hybridNqr(A,b,x0,steplengthOrk,maxIter,nf,[type,'HA']);
   %      [rk, rkD, dD, gD] = residual(A,b,xkD);
         resvec = arvec;
 % check the solution
@@ -77,7 +77,7 @@ rangeMin = -1;
         dD=norm(rkD);
         gD=norm(A'*rkD);
         beginN=find(itersm>0);
-       % sumiter=sum(itersm>0);
+      sumiter=sum(itersm>0);
        sumiterlsqr=sum(itersm>1);
        sumiterNt=sum(itersm>0 && itersm<=1);
         fprintA(2*i-1:2*i)=[gD,tfD];

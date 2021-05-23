@@ -13,7 +13,7 @@ record = zeros(4*count,5);
 
 param = parameter();
 for j = 1:count
-     [A,b,x0]=randInequality(m,n,2,1);
+     [A,b,x0]=randInequality(m,n,4,2);
 %    A = 2 * rand(m , n)-1;
 %    b = 2 * rand(m , 1)-1;
 %    x0 = zeros(n , 1);

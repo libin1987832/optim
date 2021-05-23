@@ -32,7 +32,7 @@ classdef parameter
     end
     methods
 %picture_paper 1000 800 save('pictureconsistent.mat','A','b','x0')
-        %  \hline 
+%  \hline 
 %  \multirow{4}{*}{$ 1000\times 800 $}& DHA & 9.04455e-16 & 1.39461e-14 & (130,0,0)  & 0.906 \\
 % & CHA & 1.23021e-15 & 1.8318e-14 & (20,2,0)  & 0.221 \\
 % & RHA & 2.61829e-15 & 3.77841e-14 & (25,1,1)  & 0.227 \\

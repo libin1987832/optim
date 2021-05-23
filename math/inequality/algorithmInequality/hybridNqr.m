@@ -5,15 +5,17 @@
 % arvec
 % itersm
 % tf
-function [xk,flag,relres,iter,resvec,arvec,itersm,tf] = hybridNqr(A,b,x0,param)
+% function [xk,flag,relres,iter,resvec,arvec,itersm,tf] = hybridNqr(A,b,x0,param)
+% steplengthOrk = param.steplengthOrk;
+% maxit = param.maxIter;
+% nf = param.nf;
+% type = param.type;
+function [xk,flag,relres,iter,resvec,arvec,itersm,tf] = hybridNqr(A,b,x0,steplengthOrk,maxit,nf,type)
 t=clock;
-steplengthOrk = param.steplengthOrk;
-maxit = param.maxIter;
-nf = param.nf;
-type = param.type;
+
 % stop criterion
-% tol = 1e-13;
-tol = param.tol;
+tol = 1e-13;
+%tol = param.tol;
 [m,n] = size(A);
 
 
