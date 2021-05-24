@@ -8,7 +8,8 @@ rangeMax = 2;
 rangeMin = -2;
 A = 2 * rand(m , n)-1;
 b = 2 * rand(m , 1)-1;
-x0 = zeros(n , 1);
+x00 = zeros(n , 1);
+x0=x00;
 rk0 = b-A*x0;
 iter = 50;
 rkA=zeros(m,iter);
@@ -24,3 +25,4 @@ sumrkA(:,i)=sum(rk>0);
 end
 sumrkA
 
+[nf,iffind]=generateNf(A,b,x00,50)

@@ -1,4 +1,5 @@
 function [nf,iffind]=generateNf(A,b,x0,iter)
+[m,n]=size(A);
 rk0 = b-A*x0;
 iter = 50;
 rkA=zeros(m,iter);
@@ -15,6 +16,11 @@ end
 for i=1:iter
     signrks = rk>0;
     signi = rkA(:,i)>0;
-    alls = all(signrk-signi);
+    alls = all(~abs(signrks-signi));
+    if alls == 1
+        nf = i;
+        iffind = 1;
+        break;
+    end 
 end
 
