@@ -14,7 +14,7 @@ for j = 1:count
    b = 2 * rand(m , 1)-1;
    x0 = zeros(n , 1);
    maxIter = 300;
-   nf = 5;
+   nf = 10;
    str = ['D','C','R','P'];
 % for the solution so here
 % debug = 1;
