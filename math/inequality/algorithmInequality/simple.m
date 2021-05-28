@@ -21,9 +21,16 @@ switch upper(type)
             r(r<0) = 0;
             Qr = Q' * r;
             % compute min increase
-            uk = R \ Qr;
-            xk = xk+uk;
-            rpk = b - A * xk;
-            xkA(:,i) = xk;
+           % uk = R \ Qr;
+           uk=zeros(n,1);
+           for k=n:-1:1
+               for j=k:n
+                   Qr(k)=Qr(k)-R(k,j)*uk(j);
+               end
+               uk(k)=Qr(k)/R(k,k);
+           end
+           xk = xk+uk;
+           rpk = b - A * xk;
+           xkA(:,i) = xk;
         end        
 end

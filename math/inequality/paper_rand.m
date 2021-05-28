@@ -2,8 +2,8 @@
 % [A,rows,cols,entries,rep,field,symm]=mmread('../util/well1033.mtx');
 addpath('./dataInequality/');
 addpath('./algorithmInequality/')
-m = 1000;
-n = 100;
+m = 5000;
+n = 200;
 rangeMax = 2;
 rangeMin = -2;
 count = 10;
@@ -14,7 +14,7 @@ for j = 1:count
    b = 2 * rand(m , 1)-1;
    x0 = zeros(n , 1);
    maxIter = 300;
-   nf = 10;
+   nf = 5;
    str = ['D','C','R','P'];
 % for the solution so here
 % debug = 1;

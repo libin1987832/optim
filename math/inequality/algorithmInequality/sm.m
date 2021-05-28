@@ -25,7 +25,7 @@ else
 %     xs = x0 + aa * u;
 %     rpk = b - A * xs;
 %     x0=xs;
-   for i=1:6
+   for i=1:1
         I = find(rpk>=tol);
         AI = A(I,:);
  %       hk = lsqminnorm(AI,rpk(I));

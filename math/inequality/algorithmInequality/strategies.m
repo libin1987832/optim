@@ -12,10 +12,11 @@ function isSub = strategies(A,b,Qn,type,iter,nf,rkp,xA)
 isSub = false;
 eIter = 2;
 con1 = 0.95;
-con2 = 0.2;
+con2 = 0.65;
 diff = 100*eps;
 tol = 1e-13;
-Daxiter = floor(max(33,(m+n)/4)/nf);
+%Daxiter = floor(max(33,(m+n)/4)/nf);
+Daxiter =iter;
 switch upper(type)
     case 'GHA'
         rk=rkp;
