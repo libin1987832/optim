@@ -3,11 +3,12 @@ function [xk,rk] = FMGS(x0,A,b,D,rk,niter)
 xk=x0;
 zk=-rk;
 zk(zk<0)=0;
+bzk=b+zk;
 % compute min increase
 for j=1:niter
     for i=1:n
-        r=rk+zk;
+        r=bzk-A*xk;
         xk(i) = xk(i) + (A(:,i)'*r)/D(i);
-        rk = b - A*xk;
     end
 end
+rk=b-A*xk;

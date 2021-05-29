@@ -24,13 +24,15 @@ aa=0;
         I = find(rpk>=tol);
         AI = A(I,:);
  %       hk = lsqminnorm(AI,rpk(I));
-       hk = (AI'*AI) \ (AI'*rpk(I));
-        if hk'*hk<1e-15
+       hk = AI \ rpk(I);
+        if norm(hk)<1e-15
+            
             disp('hk is small');
-            break
+            aa=0;
+        else
+            aa = spiecewise(A,b,hk,x0);
         end
-        aa = spiecewise(A,b,hk,x0);
-        xs = x0 + aa * hk;
+         xs = x0 + aa * hk;
         x0 = xs;
         rpk = b - A * x0;
    end
