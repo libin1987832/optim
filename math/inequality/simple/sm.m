@@ -24,8 +24,9 @@ aa=0;
         I = find(rpk>=tol);
         AI = A(I,:);
  %       hk = lsqminnorm(AI,rpk(I));
-       hk = AI \ rpk(I);
-        if hk'*hk<1e-13
+       hk = (AI'*AI) \ (AI'*rpk(I));
+        if hk'*hk<1e-15
+            disp('hk is small');
             break
         end
         aa = spiecewise(A,b,hk,x0);
