@@ -25,8 +25,7 @@ aa=0;
         AI = A(I,:);
  %       hk = lsqminnorm(AI,rpk(I));
        hk = AI \ rpk(I);
-        if norm(hk)<1e-15
-            
+        if norm(hk)<1e-20
             disp('hk is small');
             aa=0;
         else

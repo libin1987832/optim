@@ -9,7 +9,7 @@ function [xk,flag,relres,iter,resvec,arvec,itersm,tf] = hybridA(A,b,x0,steplengt
 t=clock;
 
 % stop criterion
-tol = 1e-13;
+tol = 1e-12;
 [m,n] = size(A);
 
 
@@ -48,7 +48,8 @@ while normAr > tol  && normr > tol
 %     if debug
 %        fprintf("active:%d\n",sum(sign(rpk)>0));
 %     end
-    isSub = strategies(A,b,type,iter,nf,rpk,xfA);
+   isSub = strategies(A,b,type,iter,nf,rpk,xfA);
+% isSub=false;
     if isSub
         xf = xfA(:, end);
         [xs,rpk,len,flag] = sm(A, b, n, rpk, xf);
