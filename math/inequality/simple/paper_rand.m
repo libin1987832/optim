@@ -2,7 +2,7 @@
 % [A,rows,cols,entries,rep,field,symm]=mmread('../util/well1033.mtx');
 addpath('./dataInequality/');
 %addpath('./algorithmInequality/')
-m = 5000;
+m = 2000;
 n = 500;
 rangeMax = 2;
 rangeMin = -2;
