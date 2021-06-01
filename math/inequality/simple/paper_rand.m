@@ -15,7 +15,7 @@ for j = 1:count
    x0 = zeros(n , 1);
    maxIter = 300;
    nf = 5;
-   str = ['D','C','R','P'];
+   str = ['''D','C','R','P'];
 % for the solution so here
 % debug = 1;
 % if debug

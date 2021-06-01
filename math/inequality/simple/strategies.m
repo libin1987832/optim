@@ -15,10 +15,15 @@ con1 = 0.95;
 con2 = 0.65;
 diff = 100*eps;
 tol = 1e-13;
-%Daxiter = floor(max(33,(m+n)/4)/nf);
-Daxiter =iter;
+
 switch upper(type)
+    case 'UHA'
+        Daxiter =iter;
+        if mod(iter,Daxiter) == 0
+            isSub = true;
+        end
     case 'DHA'
+        Daxiter = floor(max(33,(m+n)/4)/nf);
         if mod(iter,Daxiter) == 0
             isSub = true;
         end

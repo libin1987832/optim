@@ -75,6 +75,7 @@
                     end;
               end;
               d = v*y;
+              R=0;
       end 
 %
 %  Method = 2 means to use QR with column pivoting 

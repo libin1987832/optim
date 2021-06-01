@@ -54,8 +54,8 @@
 %
   Ad = A*d;
   err = 0;
-  z = max(-r(INQ),zeros(ninq,1));
-  z = [z;-r(EQ)];
+  z = max(r(INQ),zeros(ninq,1));
+  z = [z;r(EQ)];
 %
 % 
 % Initialize search interval left hand endpoint to be a = 0:
@@ -64,7 +64,7 @@
 % Function value at lefthand endpoint a:
   aval = fval;
 % Derivative value at lefthand endpoint a:
-  adval = Ad'*z;
+  adval = -Ad'*z;
 % Check to make sure d is a descent direction:
   if (adval > 0) 
       disp('                LS info: Error in line search; theta increasing at 0')

@@ -3,21 +3,21 @@
 %addpath('./dataInequality/');
 %addpath('./algorithmInequality/')
 addpath('./bramley/ineq')
-m = 1000;
-n = 100;
+m = 5000;
+n = 300;
 rangeMax = 2;
 rangeMin = -2;
 count = 1;
-num_alg = 9;
+num_alg = 10;
 record=zeros(num_alg*count,5);
 for j = 1:count
    A = 2 * rand(m , n)-1;
    b = 2 * rand(m , 1)-1;
    x0 = zeros(n , 1);
-   maxIter = 300;
+   maxIter = 500;
    nf = 5;
-   str = ['F','I','P','H','B','D','C','R','P'];
-    str2 = {'FM','IFM','PC','HAN','BW','DHA','CHA','RHA','PHA'};
+   str = ['F','I','P','H','B','D','U','C','R','P'];
+    str2 = {'FM','IFM','PC','HAN','BW','DHA','UHA','CHA','RHA','PHA'};
     iterA=size(num_alg,maxIter+2);
     maxIterA = 0;
     fprintA=zeros(1,8);
@@ -56,10 +56,9 @@ end
 records = reshape(record,num_alg,count,5);
 recordp = permute(records,[1,3,2]);
 meanp = squeeze(sum(recordp,3)/count);
- fprintf('\\hline \n \\multirow{9}{*}{$ %d\\times %d $}',m,n);
-for i =1:4
-str = ['D','C','R','P'];
-fprintf('& %s & %g & %g & (%d,%d)  & %g \\\\\n',[str(i),'HA'],meanp(i,1),meanp(i,2),round(meanp(i,3)),round(meanp(i,4)),meanp(i,5));
+ fprintf('\\hline \n \\multirow{10}{*}{$ %d\\times %d $}',m,n);
+for i =1:num_alg
+fprintf('& %s & %g & %g & (%d,%d)  & %g \\\\\n',str2{i},meanp(i,1),meanp(i,2),round(meanp(i,3)),round(meanp(i,4)),meanp(i,5));
 end      
 %    end % for ration
 %    end % for m

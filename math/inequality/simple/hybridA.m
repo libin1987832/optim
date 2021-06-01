@@ -9,7 +9,7 @@ function [xk,flag,relres,iter,resvec,arvec,itersm,tf] = hybridA(A,b,x0,steplengt
 t=clock;
 
 % stop criterion
-tol = 1e-12;
+tol = 1e-13;
 [m,n] = size(A);
 
 
