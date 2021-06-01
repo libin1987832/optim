@@ -7,8 +7,9 @@ bzk=b+zk;
 % compute min increase
 for j=1:niter
     for i=1:n
-        r=bzk-A*xk;
-        xk(i) = xk(i) + (sum(A(:,i).*r))/D(i);
+      r=bzk-A*xk;
+       xk(i) = xk(i) + (sum(A(:,i).*r))/D(i);
+%xk(i) = xk(i) + (sum(A(:,i).*(bzk-A*xk)))/D(i);
     end
 end
 rk=b-A*xk;

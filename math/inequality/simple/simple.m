@@ -6,7 +6,11 @@
 function [xkA,rpk] = simple(A,b,xk,n,rpk,nf,D)
 xkA = zeros(n,nf);
 for i = 1 : nf
-    [xk,rpk] = FMGS2(xk,A,b,D,rpk,1);
+ %   [xk,rpk] = FMGS2(xk,A,b,D,rpk,1);
   %  rpk = b - A * xk;
+  rpk(rpk<0)=0;
+      uk=krylovk(A,rpk,1);
+      xk = xk+uk;
+      rpk = b-A*xk;
     xkA(:,i) = xk;
 end
