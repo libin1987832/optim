@@ -13,6 +13,6 @@
       function [val] = theta(lambda,Ad,r)
       m = size(Ad,1);
 %
-      s = max(lambda*Ad -r,zeros(m,1));
-      val = 0.5*s'*s;
+      s = max(r - lambda*Ad, zeros(m,1));
+      val = 0.5 * s' * s;
       end
