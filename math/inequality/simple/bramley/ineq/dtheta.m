@@ -16,7 +16,7 @@
       m = size(Ad,1);
       ninq = m - neq;
 %
-      z1 = max(lambda*Ad(1:ninq) - r(1:ninq),zeros(ninq,1));
-      z2 = lambda*Ad(ninq+1:m) - r(ninq+1:m);
+      z1 = max(-lambda*Ad(1:ninq) + r(1:ninq),zeros(ninq,1));
+      z2 = -lambda*Ad(ninq+1:m) - r(ninq+1:m);
       val = Ad'*[z1;z2];
       end

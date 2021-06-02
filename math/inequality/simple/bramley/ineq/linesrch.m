@@ -86,7 +86,7 @@
 % No positive knot points; use [0,2] as search interval
           bnode = 2;
 % Find value at right hand endpoint b:
-          z = max(bnode*Ad(INQ)-r(INQ),zeros(ninq,1));
+          z = max(-bnode*Ad(INQ)+r(INQ),zeros(ninq,1));
           z = [z;bnode*Ad(EQ)-r(EQ)];
 %
           bval = 0.5*z'*z;
