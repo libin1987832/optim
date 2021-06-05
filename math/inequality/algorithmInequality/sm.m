@@ -30,7 +30,10 @@ else
         AI = A(I,:);
  %       hk = lsqminnorm(AI,rpk(I));
        hk = AI \ rpk(I);
-        if hk'*hk<1e-13
+%         [Q,R]=qr(AI);
+%         qrpk=Q'*rpk(I);
+%         hk=pinv(R)*qrpk;
+        if hk'*hk<1e-30
             break
         end
         aa = spiecewise(A,b,hk,x0);

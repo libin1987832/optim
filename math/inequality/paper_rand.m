@@ -2,8 +2,8 @@
 % [A,rows,cols,entries,rep,field,symm]=mmread('../util/well1033.mtx');
 addpath('./dataInequality/');
 addpath('./algorithmInequality/')
-m = 5000;
-n = 200;
+m = 1000;
+n = 600;
 rangeMax = 2;
 rangeMin = -2;
 count = 10;
@@ -15,7 +15,7 @@ for j = 1:count
    x0 = zeros(n , 1);
    maxIter = 300;
    nf = 5;
-   str = ['D','C','R','P'];
+   str = ['D','U','C','R','P'];
 % for the solution so here
 % debug = 1;
 % if debug
@@ -27,9 +27,9 @@ for j = 1:count
     maxIterA = 0;
     fprintA=zeros(1,8);
     steplengthOrk = 3;
-    fprintf('\\hline \n \\multirow{4}{*}{$ %d\\times %d $}',m,n);
+    fprintf('\\hline \n \\multirow{5}{*}{$ %d\\times %d $}',m,n);
 % there are four methods to run
-    for i=1:4
+    for i=1:5
         type = str(i);
         [xkD,flag,relres,iter,resvec,arvec,itersm,tfD]=hybridA(A,b,x0,steplengthOrk,maxIter,nf,[type,'HA']);
   %      [rk, rkD, dD, gD] = residual(A,b,xkD);
@@ -45,7 +45,7 @@ for j = 1:count
         if isempty(beginN)
             beginN=0;
         end
-        record((j-1)*4+i,:)=[dD,gD,iter*nf,sumiter,tfD];
+        record((j-1)*5+i,:)=[dD,gD,iter*nf,sumiter,tfD];
 % print for tex      
         % fprintf('%s $ %d \\times %d $ & %g & %g & %g & %g & %g & %g\n',type,m,n,dD,gD,tfD,iter*nf,sumiter,beginN(1));
         fprintf('& %s & %g & %g & (%d,%d)  & %g \\\\\n',[type,'HA'],dD,gD,iter*nf,sumiter,tfD);
@@ -55,12 +55,12 @@ for j = 1:count
         end
     end
 end
-records = reshape(record,4,count,5);
+records = reshape(record,5,count,5);
 recordp = permute(records,[1,3,2]);
 meanp = squeeze(sum(recordp,3)/count);
  fprintf('\\hline \n \\multirow{4}{*}{$ %d\\times %d $}',m,n);
-for i =1:4
-    str = ['D','C','R','P'];
+for i =1:5
+    str = ['D','U','C','R','P'];
 fprintf('& %s & %g & %g & (%d,%d)  & %g \\\\\n',[str(i),'HA'],meanp(i,1),meanp(i,2),round(meanp(i,3)),round(meanp(i,4)),meanp(i,5));
 end      
 %    end % for ration
