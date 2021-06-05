@@ -1,25 +1,39 @@
 addpath('../dataInequality/');
-clc
-clear
-m = 1000;
-n = 500;
-rangeMax = 2;
-rangeMin = -2;
-A = 2 * rand(m , n)-1;
-b = 2 * rand(m , 1)-1;
-x00 = zeros(n , 1);
-x0=x00;
-rk0 = b-A*x0;
-iter = 3000;
-[rk, rkN, nRkN, nGARk] = residual(A,b,x0);
-fprintf('residual %g gradient %g \n',nRkN,nGARk);
-[nf,iffind,xk,sumrkA]=generateNf(A,b,x0,iter);
-%[nf,iffind]=generateNf(A,b,x00,100);
-[rk, rkN, nRkN, nGARk] = residual(A,b,xk);
-fprintf('residual %g gradient %g ',nRkN,nGARk);
-sumrkA(1,iter-100:iter)
+            clc
+            clear
+for count=1:10
+    for m=1000:1000:2000
+        for ro=0.1:0.1:1
 
-
+            % m = 2000;
+            % n = 1800;
+            rangeMax = 2;
+            rangeMin = -2;
+            n=floor(m*ro);     
+            A = 2 * rand(m , n)-1;
+            b = 2 * rand(m , 1)-1;
+            x00 = zeros(n , 1);
+            for k=3:10
+                x0=x00;
+                rk0 = b-A*x0;
+                iter = 1500;
+                [rk, rkN, nRkN, nGARk] = residual(A,b,x0);
+                fprintf('residual %g gradient %g \n',nRkN,nGARk);
+                [nf,iffind,xk,sumrkA]=generateNf(A,b,x0,iter,k);
+                %[nf,iffind]=generateNf(A,b,x00,100);
+                [rk, rkN, nRkN, nGARk] = residual(A,b,xk);
+                fprintf('residual %g gradient %g ',nRkN,nGARk);
+                sumrkA(1,iter-100:iter);
+                iter2=100;
+                name = [num2str(m) '_' num2str(n) '_' num2str(count) '_' num2str(k)];
+                save([name,'.mat'],'A','b','x00','sumrkA');
+                % plot(1:iter2,sumrkA(1:iter2));
+                plot(1:iter2,abs(sumrkA(2:iter2+1)-sumrkA(1:iter2)));
+                saveas(gcf,['D:\matlab',name,'.jpg']);
+            end
+        end
+    end
+end
 % rkA=zeros(m,iter);
 % sumrkA=zeros(1,iter);
 % rkA(:,1)=rk0;

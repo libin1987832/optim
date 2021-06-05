@@ -1,4 +1,4 @@
-function [nf,iffind,xk,sumrkA]=generateNf(A,b,x0,iter)
+function [nf,iffind,xk,sumrkA]=generateNf(A,b,x0,iter,k)
 [m,n]=size(A);
 rk0 = b-A*x0;
 %iter = 50;
@@ -8,7 +8,7 @@ rkA(:,1)=rk0;
 sumrkA(1)=sum(rk0>0);
 rk=rk0;
 for i = 2:iter
-[xk,rk]=Lei2(x0,A,b,3,rk);
+[xk,rk]=Lei2(x0,A,b,k,rk);
 x0=xk;
 rkA(:,i)=rk;
 sumrkA(i)=sum(rk>0);
