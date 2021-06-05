@@ -14,7 +14,7 @@ bI = rpk(AA);
 [u,flag,relres,iter,resvec,lsvec,out] = lsqrm(AI,bI,lsqrTol,maxIter,[],[],zeros(n,1),A,b,x0,AA);
 if ~out
     xs = x0 + u;
-    len = iter;
+    len = 3;
     rpk = b - A * xs;
 else
 %    u = AI\bI;
@@ -25,7 +25,7 @@ else
 %     xs = x0 + aa * u;
 %     rpk = b - A * xs;
 %     x0=xs;
-   for i=1:6
+   for i=1:10
         I = find(rpk>=tol);
         AI = A(I,:);
  %       hk = lsqminnorm(AI,rpk(I));
