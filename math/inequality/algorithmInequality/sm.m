@@ -28,8 +28,8 @@ else
    for i=1:smIsqmIter
         I = find(rpk>=tol);
         AI = A(I,:);
-       hk = lsqminnorm(AI,rpk(I));
-   %    hk = AI \ rpk(I);
+  %     hk = lsqminnorm(AI,rpk(I));
+       hk = AI \ rpk(I);
         if norm(hk) < tol
             steplength = 0;
             xs = x0;

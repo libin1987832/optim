@@ -31,7 +31,13 @@ classdef parameter
         eIter_num
     end
     methods
-         function param = parameter()
+%         \hline 
+%  \multirow{4}{*}{$ 2000\times 1600 $}& DHA & 5.15314e-13 & 5.02499e-12 & (186,0)  & 4.2586 \\
+% & DHA($ \mu=n_f $) & 1.55017e-14 & 3.29507e-13 & (16,2)  & 2.853 \\
+% & CHA & 1.55017e-14 & 3.29507e-13 & (16,2)  & 2.852 \\
+% & RHA & 1.40002e-14 & 2.9747e-13 & (49,1)  & 1.583 \\
+% & PHA & 1.53412e-14 & 3.24847e-13 & (17,2)  & 2.6356 \\
+         function param = parameter2000_1600()
             param.tol = 1e-12;
             param.maxIter = 300;
             param.nf = 10;
@@ -50,7 +56,7 @@ classdef parameter
 % & CHA & 2.63079e-14 & 5.18038e-13 & (23,1)  & 1.4294 \\
 % & RHA & 6.5965e-13 & 5.91268e-12 & (123,2)  & 3.0509 \\
 % & PHA & 2.71702e-14 & 5.36049e-13 & (10,1)  & 1.5809 \\
-         function param = parameter2000_1400_10()
+         function param = parameter2000_1400()
             param.tol = 1e-12;
             param.maxIter = 300;
             param.nf = 10;
@@ -68,10 +74,10 @@ classdef parameter
 % & CHA & 3.12238e-15 & 4.51886e-14 & (61,3)  & 0.2296 \\
 % & RHA & 3.54412e-15 & 5.02664e-14 & (244,4)  & 0.4105 \\
 % & PHA & 3.39384e-15 & 4.85255e-14 & (51,4)  & 0.2694 \\
-        function param = parameter1000_800_10()
+        function param = parameter()
             param.tol = 1e-15;
             param.maxIter = 300;
-            param.nf = 3;
+            param.nf = 10;
             param.steplengthOrk = 3;
             param.lsqrIter = 5;
             param.lsqrTol = 1e-10;
@@ -86,7 +92,7 @@ classdef parameter
 % & CHA & 1.26661e-14 & 1.76672e-13 & (23,1)  & 0.1881 \\
 % & RHA & 4.12112e-13 & 2.47838e-12 & (68,2)  & 0.4121 \\
 % & PHA & 2.80832e-13 & 1.43003e-12 & (173,1)  & 0.7279 \\
-        function param = parameter1000_700_10()
+        function param = parameter1000_700()
             param.tol = 1e-12;
             param.maxIter = 300;
             param.nf = 10;
@@ -103,7 +109,7 @@ classdef parameter
 % & CHA & 1.64732e-14 & 2.14597e-13 & (32,1)  & 0.2979 \\
 % & RHA & 1.60181e-14 & 2.06093e-13 & (81,1)  & 0.3486 \\
 % & PHA & 1.64198e-14 & 2.09168e-13 & (118,1)  & 0.4843 \\
-        function param = parameter1000_600_10()
+        function param = parameter1000_600()
             param.tol = 1e-12;
             param.maxIter = 300;
             param.nf = 10;
@@ -157,7 +163,7 @@ classdef parameter
 % & CHA & 3.12937e-14 & 5.67979e-13 & (30,1)  & 2.1504 \\
 % & RHA & 3.05403e-14 & 5.48779e-13 & (105,1)  & 2.2535 \\
 % & PHA & 2.14908e-13 & 1.0948e-12 & (403,1)  & 6.2704 \\
-         function param = parameter20001200()
+         function param = parameter2000_1200()
             param.tol = 1e-12;
             param.maxIter = 300;
             param.nf = 10;
@@ -168,7 +174,7 @@ classdef parameter
             param.con1 = 0.95;
             param.con2 =0.9;
             param.diff = 10*eps;
-            param.eIter = 2;
+            param.eIter = 3;
          end
  
   

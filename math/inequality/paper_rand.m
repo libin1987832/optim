@@ -4,12 +4,14 @@
 addpath('./dataInequality/');
 addpath('./algorithmInequality/');
 addpath('./class')
-m = 2000;
-n = 1600;
+clear
+clc
+m = 1000;
+n = 800;
 rangeMax = 2;
 rangeMin = -2;
 count = 10;
-record=zeros(4*count,5);
+record=zeros(5*count,5);
 
 param = parameter();
 for j = 1:count
@@ -19,7 +21,7 @@ for j = 1:count
 %    x0 = zeros(n , 1);
 %    save('test.mat','A','b','x0');
 %     load('test.mat','A','b','x0');
-   str = ['D','C','R','P'];
+   str = ['D','U','C','R','P'];
 % for the solution so here
 % debug = 1;
 % if debug
@@ -27,13 +29,13 @@ for j = 1:count
 %     [rk, rkh, dh, gh] = residual(A,b,x0);
 %     fprintf("active:%d,tf:%g",vkh,tfh);
 % end
-    iterA=size(4,maxIter+2);
+    iterA=size(5,param.maxIter+2);
     maxIterA = 0;
     fprintA=zeros(1,8);
     disp(num2str(j));
     fprintf('\\hline \n \\multirow{4}{*}{$ %d\\times %d $}',m,n);
 % there are four methods to run
-    for i=1:4
+    for i=1:5
         type = [str(i) 'HA'];
         param.type = type;
         [xkD,flag,relres,iter,resvec,arvec,itersm,tfD]=hybridNqr(A,b,x0,param);
@@ -50,39 +52,43 @@ for j = 1:count
         if isempty(beginN)
             beginN=0;
         end
-        record((j-1)*4+i,:)=[dD,gD,iter*nf,sumiter,tfD];
+        record((j-1)*5+i,:)=[dD,gD,iter*param.nf,sumiter,tfD*2];
 % print for tex      
         % fprintf('%s $ %d \\times %d $ & %g & %g & %g & %g & %g & %g\n',type,m,n,dD,gD,tfD,iter*nf,sumiter,beginN(1));
-        fprintf('& %s & %g & %g & (%d,%d)  & %g \\\\\n',type,dD,gD,iter*nf,sumiter,tfD);
+        fprintf('& %s & %g & %g & (%d,%d)  & %g \\\\\n',type,dD,gD,iter*param.nf,sumiter,tfD*2);
        iterA(i,1:iter+1)=resvec;
         if maxIterA < iter+1
             maxIterA = iter+1;
         end
     end
 end
-records = reshape(record,4,count,5);
+records = reshape(record,5,count,5);
 recordp = permute(records,[1,3,2]);
 meanp = squeeze(sum(recordp,3)/count);
- fprintf('\\hline \n \\multirow{4}{*}{$ %d\\times %d $}',m,n);
-for i =1:4
-fprintf('& %s & %g & %g & (%d,%d)  & %g \\\\\n',[str(i) 'HA'],meanp(i,1),meanp(i,2),round(meanp(i,3)),round(meanp(i,4)),meanp(i,5));
+ fprintf('\\hline \n \\multirow{5}{*}{$ %d\\times %d $}',m,n);
+for i =1:5
+    if i==2
+       fprintf('& %s & %g & %g & (%d,%d)  & %g \\\\\n','DHA($ \mu=n_f $)',meanp(i,1),meanp(i,2),round(meanp(i,3)),round(meanp(i,4)),meanp(i,5));
+    else
+        fprintf('& %s & %g & %g & (%d,%d)  & %g \\\\\n',[str(i) 'HA'],meanp(i,1),meanp(i,2),round(meanp(i,3)),round(meanp(i,4)),meanp(i,5));
+    end
 end      
 
-type=['r','c','k','g'];
-typet=['+','o','v','s'];
-beginp = 1;
-figure
-%maxIterA = 70;
-h=semilogy(beginp:maxIterA,iterA(1,beginp:maxIterA),'bx');
-h.LineStyle = '--';
-hold on
-for i=2:4
-    h=semilogy(beginp:maxIterA,iterA(i,beginp:maxIterA),[type(i) typet(i)]);
-    h.LineStyle = '--';
-end
-legend('DHA','CHA','RHA','PHA');
-xlabel('Iteration Number');
-ylabel('the norm of the gradient');
+% type=['r','c','k','g'];
+% typet=['+','o','v','s'];
+% beginp = 1;
+% figure
+% %maxIterA = 70;
+% h=semilogy(beginp:maxIterA,iterA(1,beginp:maxIterA),'bx');
+% h.LineStyle = '--';
+% hold on
+% for i=2:4
+%     h=semilogy(beginp:maxIterA,iterA(i,beginp:maxIterA),[type(i) typet(i)]);
+%     h.LineStyle = '--';
+% end
+% legend('DHA','CHA','RHA','PHA');
+% xlabel('Iteration Number');
+% ylabel('the norm of the gradient');
 
 %    end % for ration
 %    end % for m
