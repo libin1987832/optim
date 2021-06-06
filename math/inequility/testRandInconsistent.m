@@ -3,10 +3,10 @@ clear
 clc
 addpath('./util/');
 
-% [A,rows,cols,entries,rep,field,symm]=mmread('illc1850.mtx');
-% [A,rows,cols,entries,rep,field,symm]=mmread('illc1033.mtx');
-[A,rows,cols,entries,rep,field,symm]=mmread('well1850.mtx');
- %[A,rows,cols,entries,rep,field,symm]=mmread('well1033.mtx');
+%[A,rows,cols,entries,rep,field,symm]=mmread('illc1850.mtx');
+%[A,rows,cols,entries,rep,field,symm]=mmread('illc1033.mtx');
+%[A,rows,cols,entries,rep,field,symm]=mmread('well1850.mtx');
+ [A,rows,cols,entries,rep,field,symm]=mmread('well1033.mtx');
 m=rows;
 n=cols;
 % A(20:20:end,:)=0;
@@ -25,21 +25,21 @@ b=ones(m,1);
     x0 = ones(n , 1);
     maxIter = 300;
     nf = 3;
-    str = ['D','C','R','P'];
-    [xkh,rkh,countFMh,countNWh,beginNWh,tfh,vkh,rkArrh]=han(x0,A,b,maxIter);
-     rkh=b-A*xkh;
-     rkh(rkh<0)=0;
-    dh=norm(rkh);
-     gh=norm(A'*rkh);
+    str = ['D','U','C','R','P'];
+    %[xkh,rkh,countFMh,countNWh,beginNWh,tfh,vkh,rkArrh]=han(x0,A,b,maxIter);
+%      rkh=b-A*xkh;
+%      rkh(rkh<0)=0;
+%     dh=norm(rkh);
+%      gh=norm(A'*rkh);
   %  fprintf('han:%g %4.4f\n',gh,tfh);
 %    [xk,rk,countFM,countNW,beginNW,tf,vk,Arr,rkrr]=als(x0,A,b,maxIter);
   %  fprintf('estiate value:%d\n',Arr(1,end));
-    iterA=size(4,maxIter+2);
+    iterA=size(5,maxIter+2);
     maxIterA = 0;
     fprintA=zeros(1,8);
-    record=zeros(4,5);
+    record=zeros(5,5);
     fprintf('\\hline \n \\multirow{4}{*}{$ %d\\times %d $}',m,n);
-    for i=1:4
+    for i=1:5
         type = str(i);
         [xkD,flag,relres,iter,resvec,arvec,itersm,tfD]=hybridA(A,b,x0,maxIter,nf,[type,'HA']);
         resvec = arvec;
@@ -66,19 +66,19 @@ b=ones(m,1);
 
 
 %% plot picture
-type=['r','g','k','c'];
-typet=['+','o','v','s'];
-beginp = 1;
-figure
-%maxIterA = 70;
-h=semilogy(beginp:maxIterA,iterA(1,beginp:maxIterA),'bx');
-h.LineStyle = '--';
-hold on
-for i=2:4
-    h=semilogy(beginp:maxIterA,iterA(i,beginp:maxIterA),[type(i) typet(i)]);
-    h.LineStyle = '--';
-end
-legend('DHA','CHA','RHA','PHA');
-xlabel('Iteration Number');
-ylabel('the norm of the gradient');
+% type=['r','g','k','c'];
+% typet=['+','o','v','s'];
+% beginp = 1;
+% figure
+% %maxIterA = 70;
+% h=semilogy(beginp:maxIterA,iterA(1,beginp:maxIterA),'bx');
+% h.LineStyle = '--';
+% hold on
+% for i=2:4
+%     h=semilogy(beginp:maxIterA,iterA(i,beginp:maxIterA),[type(i) typet(i)]);
+%     h.LineStyle = '--';
+% end
+% legend('DHA','CHA','RHA','PHA');
+% xlabel('Iteration Number');
+% ylabel('the norm of the gradient');
     
