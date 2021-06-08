@@ -74,6 +74,7 @@ classdef parameter
 % & CHA & 3.12238e-15 & 4.51886e-14 & (61,3)  & 0.2296 \\
 % & RHA & 3.54412e-15 & 5.02664e-14 & (244,4)  & 0.4105 \\
 % & PHA & 3.39384e-15 & 4.85255e-14 & (51,4)  & 0.2694 \\
+
 % \hline 
 %  \multirow{5}{*}{$ 1000\times 800 $}& DHA & 3.01847e-14 & 2.81707e-13 & (146,0)  & 0.3372 \\
 % & DHA($ \mu=n_f $) & 4.68391e-14 & 4.00962e-13 & (119,12)  & 0.4732 \\
@@ -82,6 +83,7 @@ classdef parameter
 % & PHA & 3.01847e-14 & 2.81707e-13 & (146,2)  & 0.4052 \\
         function param = parameter1000_800()
             param.tol = 1e-13;
+
             param.maxIter = 300;
             param.nf = 10;
             param.steplengthOrk = 10;
@@ -191,14 +193,14 @@ classdef parameter
 % & CHA & 1.64732e-14 & 2.14597e-13 & (32,1)  & 0.2979 \\
 % & RHA & 1.60181e-14 & 2.06093e-13 & (81,1)  & 0.3486 \\
 % & PHA & 1.64198e-14 & 2.09168e-13 & (118,1)  & 0.4843 \\
-        function param = parameter1000_600()
-            param.tol = 1e-12;
+        function param = parameter()
+            param.tol = 1e-11;
             param.maxIter = 300;
             param.nf = 10;
-            param.steplengthOrk = 3;
+            param.steplengthOrk = 10;
             param.lsqrIter = 5;
             param.lsqrTol = 1e-10;
-            param.smIsqmIter = 10;
+            param.smIsqmIter = 1;
             param.con1 = 0.95;
             param.con2 =0.9;
             param.diff = 10*eps;

@@ -6,11 +6,13 @@ addpath('./algorithmInequality/');
 addpath('./class')
 clear
 clc
+
 m = 2000;
 n = 1400;
+
 rangeMax = 2;
 rangeMin = -2;
-count = 10;
+count = 1;
 record=zeros(5*count,5);
 
 param = parameter();
