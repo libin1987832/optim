@@ -29,13 +29,13 @@ else
         I = find(rpk>=tol);
         AI = A(I,:);
   %     hk = lsqminnorm(AI,rpk(I));
-     %  hk = AI \ rpk(I);
-      hk=zeros(n,1);
- [U,S,V]=svd(AI);
-  [m,n] =size(AI);
+ %      hk = AI \ rpk(I);
+       hk=zeros(n,1);
+  [U,S,V]=svd(AI);
+   [m,n] =size(AI);
     minmn = min(m,n);
- svdj=minmn;
- for j=1:minmn
+  svdj=minmn;
+  for j=1:minmn
      if S(j,j)<1e-20
          svdj=j;
          break;

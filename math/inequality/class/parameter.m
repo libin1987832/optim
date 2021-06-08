@@ -141,19 +141,19 @@ classdef parameter
 % & DHA($ \mu=n_f $) & 2.93706e-14 & 3.69878e-13 & (38,8)  & 2.6816 \\
 % & CHA & 9.60513e-15 & 1.20571e-13 & (83,4)  & 1.844 \\
 % & RHA & 1.87502e-14 & 2.43415e-13 & (102,3)  & 1.5406 \\
-% & PHA & 1.10833e-14 & 1.39912e-13 & (123,1)  & 1.4712 \\
-           function param = parameter()
+% & PHA & 1.10833e-14 & 1.39912e-13 & (123,1)  & 1.4712 \\ 30 
+           function param = parameter_600()
             param.tol = 1e-13;
             param.maxIter = 300;
             param.nf = 5;
-            param.steplengthOrk = 40;
+            param.steplengthOrk = 3;
             param.lsqrIter = 1;
             param.lsqrTol = 1e-10;
-            param.smIsqmIter = 3;
+            param.smIsqmIter = 2;
             param.con1 = 0.95;
-            param.con2 =0.77;
+            param.con2 =0.6;
             param.diff = eps;
-            param.eIter = 5;
+            param.eIter = 3;
             param.eIter_num = 1;
           end
            function param = parameter_2()
@@ -208,7 +208,7 @@ classdef parameter
         % & CHA & 4.51891e-15 & 8.13075e-14 & (310,4)  & 5.671 \\
         % & RHA & 3.91853e-15 & 7.19521e-14 & (320,25)  & 5.327 \\
         % & PHA & 5.16507e-15 & 8.99295e-14 & (370,23)  & 6.343 \\
-         function param = parameter200012001()
+         function param = parameterEE()
             param.tol = 1e-15;
             param.maxIter = 300;
             param.nf = 10;
@@ -245,18 +245,18 @@ classdef parameter
 % & CHA & 3.12937e-14 & 5.67979e-13 & (30,1)  & 2.1504 \\
 % & RHA & 3.05403e-14 & 5.48779e-13 & (105,1)  & 2.2535 \\
 % & PHA & 2.14908e-13 & 1.0948e-12 & (403,1)  & 6.2704 \\
-         function param = parameter2000_1200()
+         function param = parameter()
             param.tol = 1e-12;
             param.maxIter = 300;
             param.nf = 10;
-            param.steplengthOrk = 3;
+            param.steplengthOrk = 20;
             param.lsqrIter = 5;
             param.lsqrTol = 1e-10;
-            param.smIsqmIter = 10;
+            param.smIsqmIter = 3;
             param.con1 = 0.95;
             param.con2 =0.9;
             param.diff = 10*eps;
-            param.eIter = 3;
+            param.eIter = 5;
          end
  
   
