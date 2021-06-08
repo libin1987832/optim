@@ -52,7 +52,7 @@ else
         x0 = xs;
         rpk = b - A * x0;
    end
-    len = steplength;
+    len = steplength+1e-10;
     flag = flag + 6;
 end
 %rpk = b - A * xs;
