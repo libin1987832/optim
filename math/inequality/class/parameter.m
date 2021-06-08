@@ -74,7 +74,7 @@ classdef parameter
 % & CHA & 3.12238e-15 & 4.51886e-14 & (61,3)  & 0.2296 \\
 % & RHA & 3.54412e-15 & 5.02664e-14 & (244,4)  & 0.4105 \\
 % & PHA & 3.39384e-15 & 4.85255e-14 & (51,4)  & 0.2694 \\
-        function param = parameter()
+        function param = parameter1000_800()
             param.tol = 1e-15;
             param.maxIter = 300;
             param.nf = 10;
@@ -109,7 +109,7 @@ classdef parameter
 % & CHA & 1.64732e-14 & 2.14597e-13 & (32,1)  & 0.2979 \\
 % & RHA & 1.60181e-14 & 2.06093e-13 & (81,1)  & 0.3486 \\
 % & PHA & 1.64198e-14 & 2.09168e-13 & (118,1)  & 0.4843 \\
-        function param = parameter1000_600()
+        function param = parameter()
             param.tol = 1e-12;
             param.maxIter = 300;
             param.nf = 10;
