@@ -25,11 +25,11 @@ else
 %     xs = x0 + aa * u;
 %     rpk = b - A * xs;
 %     x0=xs;
-   for i=1:10
+   for i=1:1
         I = find(rpk>=tol);
         AI = A(I,:);
- %       hk = lsqminnorm(AI,rpk(I));
-       hk = AI \ rpk(I);
+        hk = lsqminnorm(AI,rpk(I));
+ %      hk = AI \ rpk(I);
         if hk'*hk<1e-13
             break
         end
