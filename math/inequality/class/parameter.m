@@ -110,13 +110,13 @@ classdef parameter
 % & RHA & 1.60181e-14 & 2.06093e-13 & (81,1)  & 0.3486 \\
 % & PHA & 1.64198e-14 & 2.09168e-13 & (118,1)  & 0.4843 \\
         function param = parameter()
-            param.tol = 1e-12;
+            param.tol = 1e-11;
             param.maxIter = 300;
             param.nf = 10;
-            param.steplengthOrk = 3;
+            param.steplengthOrk = 10;
             param.lsqrIter = 5;
             param.lsqrTol = 1e-10;
-            param.smIsqmIter = 10;
+            param.smIsqmIter = 1;
             param.con1 = 0.95;
             param.con2 =0.9;
             param.diff = 10*eps;
