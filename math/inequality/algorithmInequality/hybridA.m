@@ -51,6 +51,7 @@ while normAr > tol  && normr > tol
         xf = xfA(:, end);
         [xs,rpk,len,flag] = sm(A, b, n, rpk, xf);
         indexsm = indexsm + 1;
+
         % record step length and statistic to number of sm
         itersm(iter + 1) = len;
         x0 = xs;
@@ -60,6 +61,9 @@ while normAr > tol  && normr > tol
         x0 = xfA(:, end);
     end
     [rpk, r, normr, normAr] = residual(A,b,x0,rpk);
+      if  isSub && len == 0 
+            disp(['norm:' num2str(normAr)]);
+        end
     % record the value of objection function
     resvec(iter + 1) = normr;
     % record the value of the gradient function
