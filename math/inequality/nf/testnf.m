@@ -1,9 +1,9 @@
 addpath('../dataInequality/');
             clc
             clear
-for count=1:10
-    for m=1000:1000:2000
-        for ro=0.1:0.1:1
+for count=1:1
+    for m=1000:1000:1000
+        for ro=0.1:0.1:0.1
 
             % m = 2000;
             % n = 1800;
