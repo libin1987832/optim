@@ -4,9 +4,9 @@ clc
 addpath('./util/');
 
 %[A,rows,cols,entries,rep,field,symm]=mmread('illc1850.mtx');
-%[A,rows,cols,entries,rep,field,symm]=mmread('illc1033.mtx');
+[A,rows,cols,entries,rep,field,symm]=mmread('illc1033.mtx');
 %[A,rows,cols,entries,rep,field,symm]=mmread('well1850.mtx');
- [A,rows,cols,entries,rep,field,symm]=mmread('well1033.mtx');
+% [A,rows,cols,entries,rep,field,symm]=mmread('well1033.mtx');
 m=rows;
 n=cols;
 % A(20:20:end,:)=0;
