@@ -2,47 +2,45 @@
 % compuation lsqrm: A*x(n)   lsqminnorm: A*x(n) A*xs spiecewise A*x(n)
 function [xs,rpk,len,flag]=sm(A,b,n,rpk,x0)
 % lsqr tollera
-tol = 1e-15;
-lsqrTol = 1e-15;
-maxIter = 5;
-% AA indice of active set
-AA = (rpk>tol);
+tol = 1e-20;
+[m,n] = size(A);
 % subspace
-AI = A(AA,:);
-bI = rpk(AA);
-
-[u,flag,relres,iter,resvec,lsvec,out] = lsqrm(AI,bI,lsqrTol,maxIter,[],[],zeros(n,1),A,b,x0,AA);
-if ~out
-    xs = x0 + u;
-    len = iter;
-    rpk = b - A * xs;
-else
-%    u = AI\bI;
-
-%      u = lsqminnorm(AI,bI);
-
-%     aa = spiecewise(A,b,u,x0);
-%     xs = x0 + aa * u;
-%     rpk = b - A * xs;
-%     x0=xs;
-   for i=1:1
-        I = find(rpk>=tol);
-        AI = A(I,:);
- %       hk = lsqminnorm(AI,rpk(I));
-       hk = AI \ rpk(I);
-%         [Q,R]=qr(AI);
-%         qrpk=Q'*rpk(I);
-%         hk=pinv(R)*qrpk;
-        if hk'*hk<1e-30
-            break
-        end
-        aa = spiecewise(A,b,hk,x0);
-        xs = x0 + aa * hk;
-        x0 = xs;
-        rpk = b - A * x0;
-   end
-    len = aa;
-    flag = flag + 6;
+for i=1:1
+    I = find(rpk>=tol);
+    AI = A(I,:);
+    %       hk = lsqminnorm(AI,rpk(I));
+         hk = AI \ rpk(I);
+    %         [Q,R]=qr(AI);
+    %         qrpk=Q'*rpk(I);
+    %         hk=pinv(R)*qrpk;
+%     [U,S,V]=svd(AI);
+%     minmn = min(size(S));
+%     svdj=minmn;
+%     for j=1:minmn
+%         if S(j,j)<1e-20
+%             svdj=j;
+%             break;
+%         end
+%     end
+%     B=U(:,1:svdj)'*rpk(I);
+%     for j=1:svdj
+%         B(j)=B(j)/S(j,j);
+%     end
+%     hk=V(:,1:svdj)*B;
+    aa = spiecewise(A,b,hk,x0);
+    xs = x0 + aa * hk;
+    x0 = xs;
+    rpk = b - A * x0;
+    
+    xss = x0 + hk;
+    rpks = b(I) - AI*xss;
+    Is = setdiff(1:m, I); 
+    rpkss = b(Is)-A(Is,:)*xss;
+    Isc=rpkss>0;
+    fprintf('rpk=%g,%d\n',norm(rpks),sum(Isc));
+end
+len = aa;
+flag = 1 + 6;
 end
 %rpk = b - A * xs;
 %semilogy(1:iter,resvec(1:iter),'b.');
