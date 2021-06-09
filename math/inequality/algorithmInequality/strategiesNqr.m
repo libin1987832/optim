@@ -40,6 +40,8 @@ switch upper(type)
         if mod(iter,Daxiter) == 0
             isSub = true;
         end
+    case 'UHA'
+            isSub = true;
     case 'PHA'
         rk=rkp;
         xk = xA(:,end);
