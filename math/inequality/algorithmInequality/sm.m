@@ -33,7 +33,7 @@ for i=1:1
     
     xss = x0 + hk;
     rpks = b(I) - AI*xss;
-    if norm(rpks)<1e-15
+    if norm(rpks)<1e-13
         Is = setdiff(1:m, I);
         rpkss = b(Is)-A(Is,:)*xss;
         Ass=A(Is,:)*V(:,svdj+1:n);
@@ -41,13 +41,16 @@ for i=1:1
         %     [rk, rkh, dh, gh] = residual(Ass,rpkss,xkh);
         xssv=xss+V(:,svdj+1:n)*xkh;
         [rk2, rkh2, dh2, gh2] = residual(A,b,xssv);
+        if dh2<1e-13
+            xs=xssv;
+            rpk = b - A * xs;
+            aa = 10;
+            break;
+        else
+            disp('不在解的范围内')
+        end
     end
-    if dh2<1e-14
-        xs=xssv;
-        rpk = b - A * xs;
-        aa = 10;
-        break;
-    end
+    
     
     aa = spiecewise(A,b,hk,x0);
     xs = x0 + aa * hk;
