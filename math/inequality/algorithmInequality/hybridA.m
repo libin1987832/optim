@@ -49,7 +49,7 @@ while normAr > tol  && normr > tol
     isSub = strategies(A,b,Qn,type,iter,nf,rpk,xfA);
     if isSub
         xf = xfA(:, end);
-        iter
+      %  iter
         [xs,rpk,len,flag] = sm(A, b, n, rpk, xf);
         indexsm = indexsm + 1;
         % record step length and statistic to number of sm

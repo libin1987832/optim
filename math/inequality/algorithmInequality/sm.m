@@ -4,14 +4,14 @@ function [xs,rpk,len,flag]=sm(A,b,n,rpk,x0)
 % lsqr tollera
 tol = -1e-20;
 [m,n] = size(A);
-    rpk=b-A*x0;
+rpk=b-A*x0;
 % subspace
-for i=1:100
-
+for i=1:1
+    
     I = find(rpk>=tol);
     AI = A(I,:);
     %       hk = lsqminnorm(AI,rpk(I));
-   %      hk = AI \ rpk(I);
+    %      hk = AI \ rpk(I);
     %         [Q,R]=qr(AI);
     %         qrpk=Q'*rpk(I);
     %         hk=pinv(R)*qrpk;
@@ -29,37 +29,32 @@ for i=1:100
         B(j)=B(j)/S(j,j);
     end
     hk=V(:,1:svdj)*B;
-    aas = spiecewise(A,b,hk,x0);
-    ap=A*hk;
-    ai=rpk./ap;
-    as=sort(ai(ai>0));
-    tas=[0;as];
-    aa = tas(2)+1e-13;
-    aaa = tas(2);
-    xs = x0 + aa * hk;
-    xsaa=x0 + aaa * hk;
-    rpksssa = b - A * xsaa;
-    rpksssa(rpksssa<0)=0;
-    rpksss = b - A * xs;
-    rpkkkk=rpk;
-    rpkkkk(rpkkkk<0)=0;
-    srpksss=sum(rpksss>=tol);
-    rpksss(rpksss<0)=0;
-    fprintf('rpk=%g,rpks=%g,rpksa=%g,len=%g,(%d,%d)\n',norm(rpkkkk),norm(rpksss),norm( rpksssa),aa , sum(rpk>=tol),srpksss);
     
-    xss = x0 + aas*hk;
+    
+    xss = x0 + hk;
     rpks = b(I) - AI*xss;
-    Is = setdiff(1:m, I); 
-    rpkss = b(Is)-A(Is,:)*xss;
-    Isc=rpkss>0;
-    rpkss(rpkss<0)=0;
-    fprintf('rpk=%g,rpks=%g,len=%g,%d\n',norm(rpkss),norm(rpks),aas,sum(Isc));
-       
-    x0 = xs;
-    rpk = b - A * x0;
-    if norm(rpksss)<1e-13
+    if norm(rpks)<1e-15
+        Is = setdiff(1:m, I);
+        rpkss = b(Is)-A(Is,:)*xss;
+        Ass=A(Is,:)*V(:,svdj+1:n);
+        [xkh,rkh,countFMh,countNWh,beginNWh,tfh,vkh,rkArrh]=han(zeros(n-svdj,1),Ass,rpkss,100);
+        %     [rk, rkh, dh, gh] = residual(Ass,rpkss,xkh);
+        xssv=xss+V(:,svdj+1:n)*xkh;
+        [rk2, rkh2, dh2, gh2] = residual(A,b,xssv);
+    end
+    if dh2<1e-14
+        xs=xssv;
+        rpk = b - A * xs;
+        aa = 10;
         break;
     end
+    
+    aa = spiecewise(A,b,hk,x0);
+    xs = x0 + aa * hk;
+    
+    x0 = xs;
+    rpk = b - A * x0;
+    
 end
 len = aa;
 flag = 1 + 6;

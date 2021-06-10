@@ -6,7 +6,7 @@ m = 1000;
 n = 600;
 rangeMax = 2;
 rangeMin = -2;
-count = 1;
+count = 10;
 record=zeros(4*count,5);
 for j = 1:count
 %     [A,b,x0]=randInequality(m,n,rangeMax,rangeMin);
@@ -17,7 +17,7 @@ for j = 1:count
    nf = 5;
    str = ['D','U','C','R','P'];
 % for the solution so here
-debug = 1;
+debug = 0;
 if debug
     [xkh,rkh,countFMh,countNWh,beginNWh,tfh,vkh,rkArrh]=han(x0,A,b,maxIter);
     [rk, rkh, dh, gh] = residual(A,b,xkh);
