@@ -62,9 +62,9 @@ meanp = squeeze(sum(recordp,3)/count);
 for i =1:5
     str = ['D','U','C','R','P'];
     if i ==2
-        fprintf('& %s & %g & %g & (%d,%d)  & %g \\\\\n',['DHA($ \mu = n_f $)'],meanp(i,1),meanp(i,2),round(meanp(i,3)),round(meanp(i,4)),meanp(i,5)*2);
+        fprintf('& %s & %g & %g & (%d,%d)  & %g \\\\\n',['DHA($ \mu = n_f $)'],meanp(i,1),meanp(i,2),round(meanp(i,3)),round(meanp(i,4)),meanp(i,5));
     else
-        fprintf('& %s & %g & %g & (%d,%d)  & %g \\\\\n',[str(i),'HA'],meanp(i,1),meanp(i,2),round(meanp(i,3)),round(meanp(i,4)),meanp(i,5)*2);
+        fprintf('& %s & %g & %g & (%d,%d)  & %g \\\\\n',[str(i),'HA'],meanp(i,1),meanp(i,2),round(meanp(i,3)),round(meanp(i,4)),meanp(i,5));
     end
 end      
 %    end % for ration
