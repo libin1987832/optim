@@ -39,7 +39,7 @@ seperat_example = false;
 % initialize the parameter
 %    x0 = ones(n , 1);
 m = 1000;
-n = 200;
+n = 100;
 rangeMax = 2;
 rangeMin = -1;
 [A,b,x0]=randInequality(m,n,rangeMax,rangeMin);
