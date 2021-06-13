@@ -2,8 +2,8 @@
 % [A,rows,cols,entries,rep,field,symm]=mmread('../util/well1033.mtx');
 addpath('./dataInequality/');
 addpath('./algorithmInequality/')
-m = 1000;
-n = 200;
+m = 2000;
+n = 300;
 Daxiter = floor(max(33,(m+n)/4));
 rangeMax = 2;
 rangeMin = -2;
@@ -31,6 +31,12 @@ for j = 1:count
     fprintf('\\hline \n \\multirow{4}{*}{$ %d\\times %d $}',m,n);
 % there are four methods to run
     for i=1:5
+%         if i==1
+%             nft=nf;
+%             nf=Daxiter;
+%         else
+%             nf=nft;
+%         end
         type = str(i);
         [xkD,flag,relres,iter,resvec,arvec,itersm,tfD]=hybridA(A,b,x0,steplengthOrk,maxIter,nf,[type,'HA']);
   %      [rk, rkD, dD, gD] = residual(A,b,xkD);
@@ -49,7 +55,15 @@ for j = 1:count
         record((j-1)*5+i,:)=[dD,gD,iter*nf,sumiter,tfD];
 % print for tex      
         % fprintf('%s $ %d \\times %d $ & %g & %g & %g & %g & %g & %g\n',type,m,n,dD,gD,tfD,iter*nf,sumiter,beginN(1));
-        fprintf('& %s & %g & %g & (%d,%d)  & %g \\\\\n',[type,'HA'],dD,gD,iter*nf,sumiter,tfD);
+       fprintf('& %s & %g & %g & (%d,%d,%d)  & %g \\\\\n',[type,'HA'],dD,gD,iter,iter*nf,sumiter,tfD);
+%     if i ==2
+%         fprintf('& %s & %g & %g & (%d,%d,%d)  & %g \\\\\n',['DHA($ \mu = n_f $)'],dD,gD,iter,iter*nf,iter,tfD);
+%     elseif i==1
+%                sumnf=ceil(iter*nf/Daxiter);
+%               fprintf('& %s & %g & %g & (%d,%d,%d)  & %g \\\\\n',[str(i),'HA'],dD,gD,sumnf,sumnf*Daxiter,sumnf,tfD);
+%     else
+%         fprintf('& %s & %g & %g & (%d,%d,%d)  & %g \\\\\n',[str(i),'HA'],dD,gD,iter,iter*nf,sumiter,tfD);
+%     end
        iterA(i,1:iter+1)=resvec;
         if maxIterA < iter+1
             maxIterA = iter+1;
@@ -64,6 +78,8 @@ for i =1:5
     str = ['D','U','C','R','P'];
     if i ==2
         fprintf('& %s & %g & %g & (%d,%d,%d)  & %g \\\\\n',['DHA($ \mu = n_f $)'],meanp(i,1),meanp(i,2),round(meanp(i,3)/nf),round(meanp(i,3)),round(meanp(i,4)),meanp(i,5));
+%     elseif i==1
+%               fprintf('& %s & %g & %g & (%d,%d,%d)  & %g \\\\\n',[str(i),'HA'],meanp(i,1),meanp(i,2),ceil(meanp(i,3)/Daxiter),round(meanp(i,3)),round(meanp(i,4)),meanp(i,5));
     else
         fprintf('& %s & %g & %g & (%d,%d,%d)  & %g \\\\\n',[str(i),'HA'],meanp(i,1),meanp(i,2),round(meanp(i,3)/nf),round(meanp(i,3)),round(meanp(i,4)),meanp(i,5));
     end
