@@ -1,5 +1,6 @@
 function steplength=spiecefast(A,b,p,x0)
-if p'*p<1e-15
+if p'*p<1e-30
+    disp('p is small');
     steplength = 0;
     return
 end

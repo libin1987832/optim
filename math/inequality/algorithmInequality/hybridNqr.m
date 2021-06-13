@@ -55,6 +55,9 @@ while normAr > tol  && normr > tol
         indexsm = indexsm + 1;
         % record step length and statistic to number of sm
         itersm(iter + 1) = len;
+        if len <1e-20
+               disp(['p is small' num2str(iter)]);
+        end
         x0 = xs;
     else
  %       [xfA,rpk] = fmnf(A,b,x0,n,Q,R,rpk,nf);

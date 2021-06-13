@@ -24,6 +24,7 @@ switch upper(type)
             r = rpk;
             r(r<0) = 0;
             uk=krylovk(A,r,steplengthOrk);
+%             uk=A\r;
             xk = xk+uk;
             rpk = b - A * xk;
             xkA(:,i) = xk;
