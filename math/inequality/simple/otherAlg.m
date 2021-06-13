@@ -1,8 +1,8 @@
-function  [xk,flag,relres,iter,resvec,arvec,itersm,tf] =otherAlg(A,b,x0,maxit,type) 
+function  [xk,flag,relres,iter,resvec,arvec,itersm,tf] =otherAlg(A,b,x0,maxit,type,tol) 
 t=clock;
 
 % stop criterion
-tol = 1e-13;
+%tol = 1e-14;
 [m,n] = size(A);
 
 [rpk, r0, normr, normAr] = residual(A,b,x0);
@@ -29,10 +29,20 @@ while normAr > tol  && normr > tol
                 [Q,R]=qr(A);
             end
             [xk,rpk]=FMQR(x0,Q,R,A,b,rpk);
+%               if iter == 1
+%                   D=zeros(1,n);
+%                 for i=1:n
+%                     D(i) = A(:,i)'*A(:,i);
+%                 end
+%               end
+              
+%              [xk,rpk] = FMGS2(x0,A,b,D,rpk,2);
         case 'I'
               r0=rpk;
               r0(r0<0)=0;
-              uk=krylovk(A,r0,3);
+              uk=krylovk(A,r0,100);
+         %     uk2= lsqr(A,r0,1e-5,3);
+        %      norm(uk2-uk)
               xk=x0+uk;
               rpk=b-A*xk;
         case 'P'

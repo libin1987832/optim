@@ -2,21 +2,33 @@
 % [A,rows,cols,entries,rep,field,symm]=mmread('../util/well1033.mtx');
 %addpath('./dataInequality/');
 %addpath('./algorithmInequality/')
+clear 
+clc
 addpath('./bramley/ineq')
-m = 5000;
-n = 300;
+m = 1000;
+n = 100;
 rangeMax = 2;
 rangeMin = -2;
-count = 1;
+count = 10;
 num_alg = 10;
 record=zeros(num_alg*count,5);
+tol = 1e-7;
+tols = 1e-8;
+e=randn(1, n);
+e(e<tol)=tol;
+E = diag(e); % 只要最大除最小等于1000即可
+E(1,1) = 10;
+U = orth(randn(m, m));
+V = orth(randn(n, n));
+A = U*[E;zeros(m-n,n)]*V';
+rank(A)
 for j = 1:count
-   A = 2 * rand(m , n)-1;
+ %  A = 2 * rand(m , n)-1;
    b = 2 * rand(m , 1)-1;
    x0 = zeros(n , 1);
    maxIter = 500;
    nf = 5;
-   str = ['F','I','P','H','B','D','U','C','R','P'];
+   str = ['F','I','F','H','B','D','U','C','R','P'];
     str2 = {'FM','IFM','PC','HAN','BW','DHA','UHA','CHA','RHA','PHA'};
     iterA=size(num_alg,maxIter+2);
     maxIterA = 0;
@@ -26,10 +38,10 @@ for j = 1:count
     for i=1:num_alg
         if i <6
             type = str(i);
-            [xkD,flag,relres,iter,resvec,arvec,itersm,tfD]=otherAlg(A,b,x0,maxIter,type); 
+            [xkD,flag,relres,iter,resvec,arvec,itersm,tfD]=otherAlg(A,b,x0,maxIter,type,tols);
         else
              type = str(i);
-            [xkD,flag,relres,iter,resvec,arvec,itersm,tfD]=hybridA(A,b,x0,steplengthOrk,maxIter,nf,[type,'HA']);
+            [xkD,flag,relres,iter,resvec,arvec,itersm,tfD]=hybridA(A,b,x0,steplengthOrk,maxIter,nf,[type,'HA'],tols);
         end
         resvec = arvec;
         rkD=b-A*xkD;
