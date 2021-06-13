@@ -19,9 +19,11 @@ switch upper(type)
         for i = 1 : nf
             r = rpk;
             r(r<0) = 0;
-            Qr = Q' * r;
-            % compute min increase
-            uk = R \ Qr;
+%             Qr = Q' * r;
+%             % compute min increase
+%             uk = R \ Qr;
+%             uk=A\r;
+              uk=krylovk(A,r,10);
             xk = xk+uk;
             rpk = b - A * xk;
             xkA(:,i) = xk;
