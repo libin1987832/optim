@@ -6,8 +6,8 @@ addpath('./algorithmInequality/');
 addpath('./class')
 clear
 clc
-m = 1000;
-n = 800;
+m = 2000;
+n = 1600;
 rangeMax = 2;
 rangeMin = -2;
 count = 10;
@@ -52,10 +52,10 @@ for j = 1:count
         if isempty(beginN)
             beginN=0;
         end
-        record((j-1)*5+i,:)=[dD,gD,iter*param.nf,sumiter,tfD*2];
+        record((j-1)*5+i,:)=[dD,gD,iter*param.nf,sumiter,tfD];
 % print for tex      
         % fprintf('%s $ %d \\times %d $ & %g & %g & %g & %g & %g & %g\n',type,m,n,dD,gD,tfD,iter*nf,sumiter,beginN(1));
-        fprintf('& %s & %g & %g & (%d,%d)  & %g \\\\\n',type,dD,gD,iter*param.nf,sumiter,tfD*2);
+        fprintf('& %s & %g & %g & (%d,%d)  & %g \\\\\n',type,dD,gD,iter*param.nf,sumiter,tfD);
        iterA(i,1:iter+1)=resvec;
         if maxIterA < iter+1
             maxIterA = iter+1;
