@@ -61,7 +61,10 @@ while normAr > tol  && normr > tol
             %提取子矩阵判断是否正定
             AI=A(I,:);
             %    AII=AI'*AI;
-             hk=AI\rpk(I);      
+            % hk=AI\rpk(I);      
+            [Q,R] = qr(AI);
+ %     hk = AI \ rpk(I);
+          hk = R\(Q' * rpk(I));
             aa=spiecewise(A,b,hk,x0);
             xk=x0+aa*hk;
             rpk=b-A*xk;

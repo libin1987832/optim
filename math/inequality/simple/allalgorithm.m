@@ -6,14 +6,14 @@ clear
 clc
 addpath('./bramley/ineq')
 m = 1000;
-n = 100;
+n = 600;
 rangeMax = 2;
 rangeMin = -2;
-count = 10;
+count = 1;
 num_alg = 10;
 record=zeros(num_alg*count,5);
-tol = 1e-7;
-tols = 1e-8;
+tol = 1e-1;
+tols = 1e-5;
 e=randn(1, n);
 e(e<tol)=tol;
 E = diag(e); % 只要最大除最小等于1000即可
@@ -64,6 +64,8 @@ for j = 1:count
         end
         iterA(i,1:iter+1)=resvec;
     end
+    
+    
 end
 records = reshape(record,num_alg,count,5);
 recordp = permute(records,[1,3,2]);
@@ -72,5 +74,12 @@ meanp = squeeze(sum(recordp,3)/count);
 for i =1:num_alg
 fprintf('& %s & %g & %g & (%d,%d)  & %g \\\\\n',str2{i},meanp(i,1),meanp(i,2),round(meanp(i,3)),round(meanp(i,4)),meanp(i,5));
 end      
+
+t17=records(1:7,:,5);
+%t173=repmat(t17,1,1,3);
+t810=records(8:10,:,5);
+t810s=permute(t810,[3,2,1]);
+speed = bsxfun(@rdivide,t17,t810s);
+speed_avg = squeeze(sum(speed,2)/count)
 %    end % for ration
 %    end % for m
