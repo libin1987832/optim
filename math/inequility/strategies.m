@@ -19,9 +19,11 @@ switch upper(type)
         qrkn=A*qrkn;
         rkn=rkp-eIter*Qn*qrkn;
         ssign=sum(~xor(rk>tol, rkn>tol));
-        if ssign==m 
+        if ssign==m
             isSub = true;
         end
+    case 'UHA'
+            isSub = true;
     case 'DHA'
         if mod(iter,Daxiter) == 0
             isSub = true;
@@ -33,7 +35,7 @@ switch upper(type)
         qrkn=Qn*qrkn;
         rkn=rkp-eIter*qrkn;
         ssign=sum(~xor(rk>tol, rkn>tol));
-        if ssign==m 
+        if ssign==m
             isSub = true;
         end
     case 'CHA'
@@ -48,7 +50,7 @@ switch upper(type)
         if roup<con1 && roup>con2
             isSub = true;
         end
-     case 'RHA'
+    case 'RHA'
         x0 = xA(:,end-1);
         xk = xA(:,end);
         rpk0 = b - A * x0;

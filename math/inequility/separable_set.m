@@ -78,12 +78,12 @@ toc
 maxIterA = 0;
 maxIter = 500;
 nf = 3;
-str = ['D','C','R','P','H'];
+str = ['D','U','C','R','P'];
 steplength = 0;%1/(max(eig(ATA))+0.0001);
 A=A2;
  for i=1:5
         type = str(i);   
-        if i<5
+        if i<7
         [xkD,flag,relres,iter,resvec,arvec,itersm,tfD]=hybridA(A2,b2,[x0;0],steplength,maxIter,nf,[type,'HA']);
         resvec = arvec;
         else
@@ -107,8 +107,12 @@ A=A2;
         record(i,:)=[dD,gD,iter*nf,sumiter,tfD];
 % print for tex      
         % fprintf('%s $ %d \\times %d $ & %g & %g & %g & %g & %g & %g\n',type,m,n,dD,gD,tfD,iter*nf,sumiter,beginN(1));
-       fprintf('& %s & %g & %g & (%d,%d)  & %g \\\\\n',[type,'HA'],dD,gD,iter*nf,sumiter,tfD);
- end
+       if i==2
+        fprintf('& %s & %g & %g & (%d,%d,%d)  & %g \\\\\n','DHA($\mu=n_f$)',dD,gD,iter,iter*nf,sumiter,tfD);
+       else
+        fprintf('& %s & %g & %g & (%d,%d,%d)  & %g \\\\\n',[type,'HA'],dD,gD,iter,iter*nf,sumiter,tfD);
+       end
+end
 [xkh2,rkh,countFMh,countNWh,itersm,tfD,vkh,rkArrh]=han([x0;0],A2,b2,maxIter); 
 
 
