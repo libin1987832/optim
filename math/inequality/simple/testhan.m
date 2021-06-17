@@ -1,6 +1,6 @@
 addpath('./bramley/ineq')
 m = 1000;
-n = 400;
+n = 200;
 rangeMax = 2;
 rangeMin = -2;
 count = 1;
@@ -13,6 +13,8 @@ tolsa = (1e-1).^(0:9);%[1e-5:1e-1:1e-13];
 arrspeed=zeros(num_alg-1,ntol);
 format shortE
 acc=zeros(ntol,100);
+anor= zeros(ntol*2,300);
+
 for k = 1:ntol
     tols= tolsa(k);
     e=randn(1, n);
@@ -23,6 +25,9 @@ for k = 1:ntol
     V = orth(randn(n, n));
     A = U*[E;zeros(m-n,n)]*V';
     rank(A);
+       A = 2 * rand(m , n)-1;
+   b = 2 * rand(m , 1)-1;
+   x0 = zeros(n , 1);
     for j = 1:count
         %  A = 2 * rand(m , n)-1;
         b = 2 * rand(m , 1)-1;
@@ -35,10 +40,26 @@ for k = 1:ntol
         maxIterA = 0;
         fprintA=zeros(1,8);
         steplengthOrk = 3;
-  
-                type = str(1);
-                [xkD,flag,relres,iter,resvec,arvec,itersm,tfD]=otherAlg(A,b,x0,maxIter,type,tols);
-               acc(k,1:size(arvec,2)+1)=[arvec tfD];
+        type = str(1);
+        [xkD,flag,relres,iter,resvec,arvec,itersm,tfD]=otherAlg(A,b,x0,maxIter,type,tols);
+        acc(k,1:size(arvec,2)+1)=[arvec tfD];
+        rpkt = b-A*xkD;
+        rpkt(rpkt<0)=0;
+        It= rpkt>0;
+        [Q,R]=qr(A);
+        for i = 1:100
+            rk=b-A*x0;
+            [xk,rk]=FMQR(x0,Q,R,A,b,rk);
+            [xs,rpk,len,flag]=sm(A,b,n,rk,xk);
+            I=rk>0;
+            rka=rk;
+            rka(rka<0)=0;
+%             anor(k,i*3-2:i*3) = [norm(rpkt-rka) norm(xk-xkD) sum(abs(I-It))];
+            rpk(rpk<0)=0;
+            anor(2*k-1,i) = [sum(abs(I-It))];
+%             anor(2*k,i) = [norm(A'*rpk)];
+            x0=xk;
+        end
     end
 
 end
