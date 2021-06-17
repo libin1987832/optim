@@ -46,13 +46,13 @@ while normAr > tol  && normr > tol
             %      norm(uk2-uk)
             xk=x0+uk;
             rpk=b-A*xk;
-            r0n=norm(A'*r0);
-            rpk00=rpk;
-            rpk00(rpk00<0)=0;
-            rpk0n = norm(A'*rpk00);
-            if r0n<rpk0n
-                disp('error')
-            end
+%             r0n=norm(A'*r0);
+%             rpk00=rpk;
+%             rpk00(rpk00<0)=0;
+%             rpk0n = norm(A'*rpk00);
+%             if r0n<rpk0n
+%                 disp('error')
+%             end
         case 'P'
             if iter == 1
                 z1 = -rpk;
@@ -69,7 +69,7 @@ while normAr > tol  && normr > tol
             [xk,rpkt]=FMQR(xt,Q,R,A,b,rpkt);
             xt = xk;
             rpk = rpkt;
-            [x0,rpk,len,flag]=sm(A,b,n,rpk,xk);
+            [xk,rpk,len,flag]=sm(A,b,n,rpk,xk);
         case 'H'
             %[xk,rk,countFM,countNW,beginNW,tf,vk,rkArr]=han(x0,A,b,maxit);
             
