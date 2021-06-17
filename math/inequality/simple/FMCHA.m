@@ -9,12 +9,12 @@ m = 1000;
 n = 300;
 rangeMax = 2;
 rangeMin = -2;
-count = 3;
-num_alg = 2;
+count = 1;
+num_alg = 4;
 record=zeros(num_alg*count,5);
 tol = 1e-5;
 % tols = 1e-5;
-tolsa = linspace(1e-6,1e-15,3);%[1e-5:1e-1:1e-13];
+tolsa = (1e-1).^(1:10);%[1e-5:1e-1:1e-13];
 [mtol,ntol] = size(tolsa);
 arrspeed=zeros(1,ntol);
 for k = 1:ntol
@@ -33,15 +33,15 @@ for k = 1:ntol
         x0 = zeros(n , 1);
         maxIter = 500;
         nf = 5;
-        str = ['F','C','F','H','B','D','U','C','R','P'];
-        str2 = {'FM','CHA','PC','HAN','BW','DHA','UHA','CHA','RHA','PHA'};
+        str = ['F','I','H','C','F','H','B','D','U','C','R','P'];
+        str2 = {'FM','IFM','HAN','CHA','PC','HAN','BW','DHA','UHA','CHA','RHA','PHA'};
         iterA=size(num_alg,maxIter+2);
         maxIterA = 0;
         fprintA=zeros(1,8);
         steplengthOrk = 3;
         fprintf('\\hline \n \\multirow{9}{*}{$ %d\\times %d $}',m,n);
         for i=1:num_alg
-            if i == 1
+            if i < 4
                 type = str(i);
                 [xkD,flag,relres,iter,resvec,arvec,itersm,tfD]=otherAlg(A,b,x0,maxIter,type,tols);
             else
@@ -80,15 +80,16 @@ for k = 1:ntol
         fprintf('& %s & %g & %g & (%d,%d)  & %g \\\\\n',str2{i},meanp(i,1),meanp(i,2),round(meanp(i,3)),round(meanp(i,4)),meanp(i,5));
     end
     
-    t17=records(1,:,5);
+    t17=records(1:3,:,5);
     %t173=repmat(t17,1,1,3);
-    t810=records(2,:,5);
+    t810=records(4,:,5);
    % t810s=permute(t810,[3,2,1]);
-   % speed = bsxfun(@rdivide,t17,t810s);
-   speed = t17./t810;
-    speed_avg = mean(speed);
+    speed = bsxfun(@rdivide,t17,t810s);
+   %speed = t17./t810;
+    speed_avg = mean(sum(speed,2)/count);
     arrspeed(k) = speed_avg;
 end
-arrspeed
+[tolsa;arrspeed]
+
 %    end % for ration
 %    end % for m
