@@ -40,7 +40,7 @@ while normAr > tol  && normr > tol
         case 'I'
               r0=rpk;
               r0(r0<0)=0;
-              uk=krylovk(A,r0,100);
+              uk=krylovk(A,r0,30);
          %     uk2= lsqr(A,r0,1e-5,3);
         %      norm(uk2-uk)
               xk=x0+uk;
@@ -57,14 +57,29 @@ while normAr > tol  && normr > tol
         case 'H'
             %[xk,rk,countFM,countNW,beginNW,tf,vk,rkArr]=han(x0,A,b,maxit);
              
-            I=find(rpk>=tol);
+            I=find(rpk>=1e-13);
             %提取子矩阵判断是否正定
-            AI=A(I,:);
-            %    AII=AI'*AI;
-            % hk=AI\rpk(I);      
-            [Q,R] = qr(AI);
+             AI=A(I,:);
+%                 AII=AI'*AI;
+%              hk=AII\(AI'*rpk(I));      
+           [Q,R] = qr(AI);
  %     hk = AI \ rpk(I);
           hk = R\(Q' * rpk(I));
+%           [U,S,V]=svd(AI);
+%     minmn = min(size(S));
+%     svdj=minmn;
+%     for j=1:minmn
+%         if S(j,j)<1e-20
+%             svdj=j;
+%             break;
+%         end
+%     end
+%     B=U(:,1:svdj)'*rpk(I);
+%     for j=1:svdj
+%         B(j)=B(j)/S(j,j);
+%     end
+%     hk=V(:,1:svdj)*B;
+    
             aa=spiecewise(A,b,hk,x0);
             xk=x0+aa*hk;
             rpk=b-A*xk;
