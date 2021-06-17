@@ -11,13 +11,15 @@ n = 400;
 rangeMax = 2;
 rangeMin = -2;
 count = 1;
-num_alg = 2;
+num_alg = 5;
+maxIter = 3000;
 record=zeros(num_alg*count,5);
 tol = 1e-3;
 % tols = 1e-5;
-tolsa = (1e-1).^(0:9);%[1e-5:1e-1:1e-13];
+tolsa = (1e-1).^(0:5);%[1e-5:1e-1:1e-13];
 [mtol,ntol] = size(tolsa);
 arrspeed=zeros(num_alg-1,ntol);
+revarr=zeros(ntol*count*num_alg,maxIter+2);
 for k = 1:ntol
     tols= tolsa(k);
     e=randn(1, n);
@@ -32,11 +34,11 @@ for k = 1:ntol
         %  A = 2 * rand(m , n)-1;
         b = 2 * rand(m , 1)-1;
         x0 = zeros(n , 1);
-        maxIter = 3000;
+
         nf = 5;
-        str = ['H','C','H','C','F','H','B','D','U','C','R','P'];
-        str2 = {'HAN','CHM','HAN','CHA','PC','HAN','BW','DHA','UHA','CHA','RHA','PHA'};
-        iterA=size(num_alg,maxIter+2);
+        str = ['F','I','H','N','C','F','H','B','D','U','C','R','P'];
+        str2 = {'FM','IFM','HAN','NET','CHA','PC','HAN','BW','DHA','UHA','CHA','RHA','PHA'};
+        iterA=zeros(num_alg,maxIter+2);
         maxIterA = 0;
         fprintA=zeros(1,8);
         steplengthOrk = 3;
@@ -45,12 +47,13 @@ for k = 1:ntol
             if i < num_alg
                 type = str(i);
                 [xkD,flag,relres,iter,resvec,arvec,itersm,tfD]=otherAlg(A,b,x0,maxIter,type,tols);
+           iter =iter+1;
 %                 arvec
             else
                 type = str(i);
                 [xkD,flag,relres,iter,resvec,arvec,itersm,tfD]=hybridA(A,b,x0,steplengthOrk,maxIter,nf,[type,'HA'],tols);
             end
-            iter =iter+1;
+ 
             resvec = arvec;
             rkD=b-A*xkD;
             rkD(rkD<0)=0;
@@ -67,13 +70,15 @@ for k = 1:ntol
             % fprintf('%s $ %d \\times %d $ & %g & %g & %g & %g & %g & %g\n',type,m,n,dD,gD,tfD,iter*nf,sumiter,beginN(1));
             if i < num_alg
                 fprintf('& %s & %g & %g & (%d,%d)  & %g \\\\\n',type,dD,gD,iter,sumiter,tfD);
+                iterA(i,1:iter)=resvec;
             else
                 fprintf('& %s & %g & %g & (%d,%d)  & %g \\\\\n',[type,'HA'],dD,gD,iter*nf,sumiter,tfD);
+                iterA(i,1:iter*(nf+1))=resvec;
             end
-            iterA(i,1:iter)=resvec;
+            
         end
         
-        
+        revarr((k-1)*count*num_alg+1:(k-1)*count*num_alg+num_alg,:) = iterA;
     end
     records = reshape(record,num_alg,count,5);
     recordp = permute(records,[1,3,2]);

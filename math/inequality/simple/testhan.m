@@ -12,6 +12,7 @@ tolsa = (1e-1).^(0:9);%[1e-5:1e-1:1e-13];
 [mtol,ntol] = size(tolsa);
 arrspeed=zeros(num_alg-1,ntol);
 format shortE
+acc=zeros(ntol,100);
 for k = 1:ntol
     tols= tolsa(k);
     e=randn(1, n);
@@ -37,7 +38,7 @@ for k = 1:ntol
   
                 type = str(1);
                 [xkD,flag,relres,iter,resvec,arvec,itersm,tfD]=otherAlg(A,b,x0,maxIter,type,tols);
-               [ arvec tfD]
+               acc(k,1:size(arvec,2)+1)=[arvec tfD];
     end
 
 end
