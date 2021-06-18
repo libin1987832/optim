@@ -30,14 +30,14 @@ while normAr > tol  && normr > tol
                 [Q,R]=qr(A);
             end
             [xk,rpk]=FMQR(x0,Q,R,A,b,rpk);
-            %               if iter == 1
-            %                   D=zeros(1,n);
-            %                 for i=1:n
-            %                     D(i) = A(:,i)'*A(:,i);
-            %                 end
-            %               end
-            
-            %              [xk,rpk] = FMGS2(x0,A,b,D,rpk,2);
+%                           if iter == 1
+%                               D=zeros(1,n);
+%                             for i=1:n
+%                                 D(i) = A(:,i)'*A(:,i);
+%                             end
+%                           end
+%             
+%                          [xk,rpk] = FMGS2(x0,A,b,D,rpk,1);
         case 'I'
             r0=rpk;
             r0(r0<0)=0;
@@ -73,15 +73,15 @@ while normAr > tol  && normr > tol
         case 'H'
             %[xk,rk,countFM,countNW,beginNW,tf,vk,rkArr]=han(x0,A,b,maxit);
             
-            I=find(rpk>=1e-13);
+            I=find(rpk>=-1e-10);
             %提取子矩阵判断是否正定
             AI=A(I,:);
             %                 AII=AI'*AI;
             %              hk=AII\(AI'*rpk(I));
 %             [Q,R] = qr(AI);
 %             hk = AI \ rpk(I);
-            %           hk = R\(Q' * rpk(I));
-                      [U,S,V]=svd(AI);
+%             hk = R\(Q' * rpk(I));
+               [U,S,V]=svd(AI);
                 minmn = min(size(S));
                 svdj=minmn;
                 for j=1:minmn

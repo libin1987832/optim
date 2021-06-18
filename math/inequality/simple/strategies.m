@@ -10,7 +10,7 @@
 function isSub = strategies(A,b,type,iter,nf,rkp,xA)
 [m,n] = size(A);
 isSub = false;
-eIter = 3;
+eIter = 5;
 con1 = 0.95;
 con2 = 0.85;
 diff = 100*eps;
@@ -18,10 +18,7 @@ tol = 1e-13;
 
 switch upper(type)
     case 'UHA'
-        Daxiter =iter;
-        if mod(iter,Daxiter) == 0
             isSub = true;
-        end
     case 'DHA'
         Daxiter = floor(max(33,(m+n)/4)/nf);
         if mod(iter,Daxiter) == 0
@@ -34,7 +31,7 @@ switch upper(type)
         uk =  xk - xk1;
         rkn=rkp - eIter * A * uk;
         ssign=sum(~xor(rk>tol, rkn>tol));
-        if ssign==m 
+        if ssign==m
             isSub = true;
         end
     case 'CHA'
