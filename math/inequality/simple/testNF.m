@@ -15,12 +15,17 @@ num_alg = 4;
 maxIter = 10000;
 record=zeros(num_alg*count,5);
 tol = 1e-2;
-tols = 1e-13;
+tols = 1e-7;
 % tolsa = (1e-1).^(0:2:13);%[1e-5:1e-1:1e-13];
-nfA = (5:3:30);
+nfA = (3:3:30);
 [mtol,ntol] = size(nfA);
 arrspeed=zeros(num_alg-1,ntol);
 revarr=zeros(ntol*count*num_alg,maxIter+2);
+ A = 2 * rand(m , n)-1;
+        b = 2 * rand(m , 1)-1;
+        x0 = zeros(n , 1);
+%              save(['A.mat'],'A','b');
+load(['A.mat']);
 for k=1:ntol
 nf= nfA(k);
 %     e=randn(1, n);
@@ -31,14 +36,11 @@ nf= nfA(k);
 %     E(1,1) = 10;
 %     U = orth(randn(m, m));
 %     V = orth(randn(n, n));
-%     A = U*[E;zeros(m-n,n)]*V';
-    A = 2 * rand(m , n)-1;
-       
+%     A = U*[E;zeros(m-n,n)]*V'; 
     for j = 1:count
         %  A = 2 * rand(m , n)-1;
-        b = 2 * rand(m , 1)-1;
-        x0 = zeros(n , 1);
-        save(['A',num2str(k),num2str(j),'.mat'],'A','b');
+ 
+   
         str = ['U','C','R','P','F','H','B','D','U','C','R','P'];
         str2 = {'DHM($\mu=n_f$)','CHA','RHA','PHA','PC','HAN','BW','DHA','UHA','CHA','RHA','PHA'};
 

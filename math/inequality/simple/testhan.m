@@ -10,7 +10,7 @@ num_alg = 1;
 record=zeros(num_alg*count,5);
 tol = 1e-3;
 % tols = 1e-5;
-tolsa = (1e-1).^(1:7);%[1e-5:1e-1:1e-13];
+tolsa = (1e-1).^(12);%[1e-5:1e-1:1e-13];
 [mtol,ntol] = size(tolsa);
 arrspeed=zeros(num_alg-1,ntol);
 format shortE
@@ -20,17 +20,20 @@ anor= zeros(2*ntol,300);
 
 for k = 1:ntol
     tols= tolsa(k);
-    e=randn(1, n);
-    e(e<tol)=tol;
-    E = diag(e); % 只要最大除最小等于1000即可
-    E(1,1) = 10;
-    U = orth(randn(m, m));
-    V = orth(randn(n, n));
-    A = U*[E;zeros(m-n,n)]*V';
-    rank(A);
-       A = 2 * rand(m , n)-1;
-   b = 2 * rand(m , 1)-1;
- x0 = zeros(n , 1);
+%     e=randn(1, n);
+%     e(e<tol)=tol;
+%     E = diag(e); % 只要最大除最小等于1000即可
+%     E(1,1) = 10;
+%     U = orth(randn(m, m));
+%     V = orth(randn(n, n));
+%     A = U*[E;zeros(m-n,n)]*V';
+%     rank(A);
+%        A = 2 * rand(m , n)-1;
+%    b = 2 * rand(m , 1)-1;
+load('A.mat')
+[m,n]=size(A);
+  x0 = zeros(n , 1);
+
     for j = 1:count
         %  A = 2 * rand(m , n)-1;
 %         b = 2 * rand(m , 1)-1;
