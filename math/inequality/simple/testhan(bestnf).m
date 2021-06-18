@@ -53,9 +53,9 @@ load('A.mat')
         rpkt(rpkt<0)=0;
         It= rpkt>0;
         [Q,R]=qr(A);
-        [xk0o,flag,relres,iter,resvec,arvecN,itersm,tfD]=otherAlg(A,b,x0,maxIter,'N',tols);
-         acc1(k,1:size(arvecN,2)+1)=[arvecN tfD];
-        for i = 1:100
+       % [xk0o,flag,relres,iter,resvec,arvecN,itersm,tfD]=otherAlg(A,b,x0,maxIter,'N',tols);
+%         acc1(k,1:size(arvecN,2)+1)=[arvecN tfD];
+        for i = 1:200
             rk=b-A*x0;
             [xk,rk]=FMQR(x0,Q,R,A,b,rk);
             [xs,rpk,len,flag]=sm(A,b,n,rk,xk);

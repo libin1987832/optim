@@ -20,29 +20,31 @@ tolsa = (1e-1).^(0:2:13);%[1e-5:1e-1:1e-13];
 [mtol,ntol] = size(tolsa);
 arrspeed=zeros(num_alg-1,ntol);
 revarr=zeros(ntol*count*num_alg,maxIter+2);
+A = 2 * rand(m , n)-1;
+b = 2 * rand(m , 1)-1;
+x0 = zeros(n , 1);
+save(['A.mat'],'A','b');
 for k = 1:ntol
     tols= tolsa(k);
-    e=randn(1, n);
-    e(e<tol)=e(e<tol)+tol;
-    [~,l]=min(e);
-    e(l)=tol;
-    E = diag(e); % 只要最大除最小等于1000即可
-    E(1,1) = 10;
-    U = orth(randn(m, m));
-    V = orth(randn(n, n));
-    A = U*[E;zeros(m-n,n)]*V';
+%     e=randn(1, n);
+%     e(e<tol)=e(e<tol)+tol;
+%     [~,l]=min(e);
+%     e(l)=tol;
+%     E = diag(e); % 只要最大除最小等于1000即可
+%     E(1,1) = 10;
+%     U = orth(randn(m, m));
+%     V = orth(randn(n, n));
+%     A = U*[E;zeros(m-n,n)]*V';
 %        A = 2 * rand(m , n)-1;
        
     for j = 1:count
         %  A = 2 * rand(m , n)-1;
-        b = 2 * rand(m , 1)-1;
-        x0 = zeros(n , 1);
-        save(['A',num2str(k),num2str(j),'.mat'],'A','b');
+%         b = 2 * rand(m , 1)-1;
+%         x0 = zeros(n , 1);
+    
         nf = 5;
-%         str = ['F','I','H','N','C','F','H','B','D','U','C','R','P'];
-%         str2 = {'FM','IFM','HAN','NET','CHA','PC','HAN','BW','DHA','UHA','CHA','RHA','PHA'};
-        str = ['F','I','H','P','F','H','B','D','U','C','R','P'];
-        str2 = {'FM','IFM','HAN','PHA','PC','HAN','BW','DHA','UHA','CHA','RHA','PHA'};
+       str = ['H','C','P','R'];
+        str2 = {'HAN','CHA','RHA','PHA'};
 
         iterA=zeros(num_alg,maxIter+2);
         maxIterA = 0;
@@ -50,7 +52,7 @@ for k = 1:ntol
         steplengthOrk = 3;
         fprintf('\\hline \n \\multirow{9}{*}{$ %d\\times %d $}',m,n);
         for i=1:num_alg
-            if i < num_alg
+            if i ==1
                 type = str(i);
                 [xkD,flag,relres,iter,resvec,arvec,itersm,tfD]=otherAlg(A,b,x0,maxIter,type,tols);
                 iter =iter+1;
@@ -74,7 +76,7 @@ for k = 1:ntol
             record((j-1)*num_alg+i,:)=[dD,gD,iter*nf,sumiter,tfD];
             % print for tex
             % fprintf('%s $ %d \\times %d $ & %g & %g & %g & %g & %g & %g\n',type,m,n,dD,gD,tfD,iter*nf,sumiter,beginN(1));
-            if i < num_alg
+            if i ==1
                 fprintf('& %s & %g & %g & (%d,%d)  & %g \\\\\n',type,dD,gD,iter,sumiter,tfD);
                 iterA(i,1:iter)=resvec;
             else
@@ -94,24 +96,23 @@ for k = 1:ntol
         fprintf('& %s & %g & %g & (%d,%d)  & %g \\\\\n',str2{i},meanp(i,1),meanp(i,2),round(meanp(i,3)),round(meanp(i,4)),meanp(i,5));
     end
     
-    t17=records(1:num_alg-1,:,5);
+    t17=records(1,:,5);
     %t173=repmat(t17,1,1,3);
-    t810=records(num_alg,:,5);
+    t810=records(2:num_alg,:,5);
    % t810s=permute(t810,[3,2,1]);
     speed = bsxfun(@rdivide,t17,t810);
    %speed = t17./t810;
     speed_avg = squeeze(sum(speed,2)/count);
     arrspeed(:,k) = speed_avg;
 end
-format long
 [tolsa;arrspeed]
 semilogx(tolsa,arrspeed(1,:),'b*-',tolsa,arrspeed(2,:),'ro-',tolsa,arrspeed(3,:),'g+-')
-% set(gca,'XTickLabel',tolsa);
+set(gca,'XDir','reverse')
 % 标题标注 
-title('Compared with other algorithms, the speed up of CHA is relation with the accuracy') 
+title('The speed-up comparison of ours and HAN') 
 % 坐标轴标注 
 xlabel('the accuracy') 
 ylabel('the speed up') 
-legend('FM/CHA','IFM/CHA','HAN/CHA') 
+legend('HAN/CHA','HAN/RHA','HAN/PHA') 
 %    end % for ration
 %    end % for m
