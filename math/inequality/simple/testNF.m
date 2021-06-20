@@ -85,16 +85,29 @@ nf
    %speed = t17./t810;
     speed_avg = squeeze(sum(speed,2)/count);
     arrspeed(:,k) = speed_avg;
+    
+    likehoodNewton(:,k) =squeeze(sum((records(:,:,4)*nf)/records(:,:,3),2)/count);
 end
 format long
- [nfA;arrspeed]
-plot(nfA,arrspeed(1,:),'b*-',nfA,arrspeed(2,:),'ro-',nfA,arrspeed(3,:),'g+-')
-% set(gca,'XTickLabel',tolsa);
-% 标题标注 
-title('Compared with other algorithms, the speed up of CHA is relation with the accuracy') 
-% 坐标轴标注 
-xlabel('the accuracy') 
-ylabel('the speed up') 
-legend('CHA','RHA','PHA') 
+[nfA,likehoodNewton]
+plot(nfA,likehoodNewton(1,:),'b*-',nfA,likehoodNewton(2,:),'ro-',nfA,likehoodNewton(3,:),'g+-',nfA,likehoodNewton(4,:),'k.-')
+% % set(gca,'XTickLabel',tolsa);
+% % 标题标注 
+ title('The likehood of Newton type algorithm with increasing nf') 
+% % 坐标轴标注 
+xlabel('nf') 
+ylabel('the likehood of Newton type algorithm') 
+legend('DHA(μ= nf)','CHA','RHA','PHA') 
+
+%  [nfA;arrspeed]
+% plot(nfA,arrspeed(1,:),'b*-',nfA,arrspeed(2,:),'ro-',nfA,arrspeed(3,:),'g+-')
+% % set(gca,'XTickLabel',tolsa);
+% % 标题标注 
+% title('Compared with other algorithms, the speed up of CHA is relation with the accuracy') 
+% % 坐标轴标注 
+% xlabel('the accuracy') 
+% ylabel('the speed up') 
+% legend('CHA','RHA','PHA') 
+
 %    end % for ration
 %    end % for m
