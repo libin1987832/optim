@@ -90,11 +90,11 @@ nf
 end
 format long
 [nfA;likehoodNewton]
-plot(nfA,likehoodNewton(1,:),'b*-',nfA,likehoodNewton(2,:),'ro-',nfA,likehoodNewton(3,:),'g+-',nfA,likehoodNewton(4,:),'k.-')
+plot(nfA,likehoodNewton(1,:),'k.-',nfA,likehoodNewton(2,:),'b*-',nfA,likehoodNewton(3,:),'ro-',nfA,likehoodNewton(4,:),'g+-')
 % % set(gca,'XTickLabel',tolsa);
 % % 标题标注
 set(gca,'YLim',[0 1.5]);%X轴的数据显示范围
- title('The likehood of Newton type algorithm with increasing nf') 
+ title('The likehood Newton of hybrid algorithm with increasing nf') 
 % % 坐标轴标注 
 xlabel('nf') 
 ylabel('the likehood of Newton type algorithm') 
