@@ -21,7 +21,7 @@ x4=imread('DHA.tif');
 % imshow(x);
 
 x5 = [x1 x2 ;
-    x4 x4];
+    x3 x4];
 imshow(x5)
 % copyobj(get(get(h1,'Children'),'Children'),s1)
 % s2=subplot(212);

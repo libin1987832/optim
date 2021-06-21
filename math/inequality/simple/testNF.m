@@ -13,12 +13,12 @@ rangeMin = -2;
 count = 1;
 num_alg = 4;
 maxIter = 10000;
-record=zeros(num_alg*count,5);
 tol = 1e-2;
 tols = 1e-7;
 % tolsa = (1e-1).^(0:2:13);%[1e-5:1e-1:1e-13];
-nfA = (3:3:30);
+nfA = (3:3:50);
 [mtol,ntol] = size(nfA);
+record=zeros(num_alg*count*ntol,5);
 arrspeed=zeros(num_alg-1,ntol);
 revarr=zeros(ntol*count*num_alg,maxIter+2);
  A = 2 * rand(m , n)-1;
@@ -26,6 +26,7 @@ revarr=zeros(ntol*count*num_alg,maxIter+2);
         x0 = zeros(n , 1);
 %              save(['A.mat'],'A','b');
 load(['A.mat']);
+likehoodNewton=zeros(4,ntol);
 for k=1:ntol
 nf= nfA(k);
 %     e=randn(1, n);
@@ -64,35 +65,35 @@ nf
             if isempty(beginN)
                 beginN=0;
             end
-            record((j-1)*num_alg+i,:)=[dD,gD,iter*nf,sumiter,tfD];
+            record((k-1)*count*num_alg+(j-1)*num_alg+i,:)=[dD,gD,iter*nf,sumiter,tfD];
             % print for tex
            fprintf('& %s & %g & %g & (%d,%d)  & %g \\\\\n',[type,'HA'],dD,gD,iter*nf,sumiter,tfD);          
         end
     end
-    records = reshape(record,num_alg,count,5);
-    recordp = permute(records,[1,3,2]);
-    meanp = squeeze(sum(recordp,3)/count);
-    fprintf('\\hline \n \\multirow{10}{*}{$ %d\\times %d $}',m,n);
-    for i =1:num_alg
-        fprintf('& %s & %g & %g & (%d,%d)  & %g \\\\\n',str2{i},meanp(i,1),meanp(i,2),round(meanp(i,3)),round(meanp(i,4)),meanp(i,5));
-    end
+    records = reshape(record,num_alg,ntol,5);
+%     meanp = squeeze(sum(recordp,2)/count);
+%     fprintf('\\hline \n \\multirow{10}{*}{$ %d\\times %d $}',m,n);
+%     for i =1:num_alg
+%         fprintf('& %s & %g & %g & (%d,%d)  & %g \\\\\n',str2{i},meanp(i,1),meanp(i,2),round(meanp(i,3)),round(meanp(i,4)),meanp(i,5));
+%     end
     
-    t17=records(1,:,5);
-    %t173=repmat(t17,1,1,3);
-    t810=records(2:num_alg,:,5);
-   % t810s=permute(t810,[3,2,1]);
-    speed = bsxfun(@rdivide,t17,t810);
-   %speed = t17./t810;
-    speed_avg = squeeze(sum(speed,2)/count);
-    arrspeed(:,k) = speed_avg;
+%     t17=records(1,:,5);
+%     %t173=repmat(t17,1,1,3);
+%     t810=records(2:num_alg,:,5);
+%    % t810s=permute(t810,[3,2,1]);
+%     speed = bsxfun(@rdivide,t17,t810);
+%    %speed = t17./t810;
+%     speed_avg = squeeze(sum(speed,2)/count);
+%     arrspeed(:,k) = speed_avg;
     
-    likehoodNewton(:,k) =squeeze(sum((records(:,:,4)*nf)/records(:,:,3),2)/count);
+    likehoodNewton(:,k) =squeeze((records(:,k,4).*nf)./records(:,k,3));
 end
 format long
-[nfA,likehoodNewton]
+[nfA;likehoodNewton]
 plot(nfA,likehoodNewton(1,:),'b*-',nfA,likehoodNewton(2,:),'ro-',nfA,likehoodNewton(3,:),'g+-',nfA,likehoodNewton(4,:),'k.-')
 % % set(gca,'XTickLabel',tolsa);
-% % 标题标注 
+% % 标题标注
+set(gca,'YLim',[0 1.5]);%X轴的数据显示范围
  title('The likehood of Newton type algorithm with increasing nf') 
 % % 坐标轴标注 
 xlabel('nf') 
