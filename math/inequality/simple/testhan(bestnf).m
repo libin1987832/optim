@@ -16,7 +16,8 @@ arrspeed=zeros(num_alg-1,ntol);
 format shortE
 acc=zeros(ntol,100);
 acc1=zeros(ntol,100);
-anor= zeros(2*ntol,300);
+inf_num=3;
+anor= zeros(inf_num*ntol,300);
 
 for k = 1:ntol
     tols= tolsa(k);

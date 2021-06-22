@@ -16,7 +16,7 @@ maxIter = 10000;
 tol = 1e-2;
 tols = 1e-7;
 % tolsa = (1e-1).^(0:2:13);%[1e-5:1e-1:1e-13];
-nfA = (3:3:50);
+nfA = (3:5:60);
 [mtol,ntol] = size(nfA);
 record=zeros(num_alg*count*ntol,5);
 arrspeed=zeros(num_alg-1,ntol);
@@ -86,19 +86,42 @@ nf
 %     speed_avg = squeeze(sum(speed,2)/count);
 %     arrspeed(:,k) = speed_avg;
     
-    likehoodNewton(:,k) =squeeze((records(:,k,4).*nf)./records(:,k,3));
+%     likehoodNewton(:,k) =squeeze((records(:,k,4).*nf)./records(:,k,3));
 end
 format long
-[nfA;likehoodNewton]
-plot(nfA,likehoodNewton(1,:),'k.-',nfA,likehoodNewton(2,:),'b*-',nfA,likehoodNewton(3,:),'ro-',nfA,likehoodNewton(4,:),'g+-')
+
+figure
+plot(nfA,records(1,:,4),'k.-',nfA,records(2,:,4),'b*-',nfA,records(3,:,4),'ro-',nfA,records(4,:,4),'g+-')
 % % set(gca,'XTickLabel',tolsa);
 % % 标题标注
-set(gca,'YLim',[0 1.5]);%X轴的数据显示范围
- title('The likehood Newton of hybrid algorithm with increasing nf') 
+set(gca,'YLim',[0 6]);%X轴的数据显示范围
+ title('The overall number of Newton type iterations with increasing nf') 
 % % 坐标轴标注 
 xlabel('nf') 
-ylabel('the likehood of Newton type algorithm') 
+ylabel('the overall number of Newton type algorithm') 
 legend('DHA(μ= nf)','CHA','RHA','PHA') 
+
+figure
+plot(nfA,records(1,:,5),'k.-',nfA,records(2,:,5),'b*-',nfA,records(3,:,5),'ro-',nfA,records(4,:,5),'g+-')
+% % set(gca,'XTickLabel',tolsa);
+% % 标题标注
+set(gca,'YLim',[0 11]);%X轴的数据显示范围
+ title('The performance of hybrid algorithms with increasing nf') 
+% % 坐标轴标注 
+xlabel('nf') 
+ylabel('CPU(s)') 
+legend('DHA(μ= nf)','CHA','RHA','PHA') 
+
+% [nfA;likehoodNewton]
+% plot(nfA,likehoodNewton(1,:),'k.-',nfA,likehoodNewton(2,:),'b*-',nfA,likehoodNewton(3,:),'ro-',nfA,likehoodNewton(4,:),'g+-')
+% % % set(gca,'XTickLabel',tolsa);
+% % % 标题标注
+% set(gca,'YLim',[0 1.5]);%X轴的数据显示范围
+%  title('The likehood Newton of hybrid algorithm with increasing nf') 
+% % % 坐标轴标注 
+% xlabel('nf') 
+% ylabel('the likehood of Newton type algorithm') 
+% legend('DHA(μ= nf)','CHA','RHA','PHA') 
 
 %  [nfA;arrspeed]
 % plot(nfA,arrspeed(1,:),'b*-',nfA,arrspeed(2,:),'ro-',nfA,arrspeed(3,:),'g+-')
