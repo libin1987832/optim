@@ -56,18 +56,31 @@ load('A.mat')
         [Q,R]=qr(A);
        % [xk0o,flag,relres,iter,resvec,arvecN,itersm,tfD]=otherAlg(A,b,x0,maxIter,'N',tols);
 %         acc1(k,1:size(arvecN,2)+1)=[arvecN tfD];
+xkA=zeros(n,200);
         for i = 1:200
             rk=b-A*x0;
             [xk,rk]=FMQR(x0,Q,R,A,b,rk);
             [xs,rpk,len,flag]=sm(A,b,n,rk,xk);
-
+            xkA(:,i) = xk;
             I=rk>0;
             rka=rk;
             rka(rka<0)=0;
 %             anor(k,i*3-2:i*3) = [norm(rpkt-rka) norm(xk-xkD) sum(abs(I-It))];
             rpk(rpk<0)=0;
 %            anor(k,i) = [sum(abs(I-It))];
-             anor(2*k-1:2*k,i) = [sum(abs(I-It));norm(A'*rpk)];
+             if i>3
+                   x0c = xkA(:,i - 1);
+        xpn = xkA(:,i - 2);
+        xkc = xkA(:,i);
+        p1v=x0c-xpn;
+        p1=p1v'*p1v;
+        p2v=xkc-x0c;
+        p2=p2v'*p2v;
+        roup=p2/p1;
+             anor(inf_num*(k-1)+1:inf_num*k,i) = [sum(abs(I-It));roup;norm(A'*rpk)];
+             else
+                 anor(inf_num*(k-1)+1:inf_num*k,i) = [sum(abs(I-It));0;norm(A'*rpk)];
+             end
             x0=xk;
             if norm(xs-xkD)<1e-15
                 break;
