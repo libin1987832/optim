@@ -3,8 +3,8 @@
 addpath('./dataInequality/');
 addpath('./algorithmInequality/')
 
-m = 2000;
-n = 300;
+m = 1000;
+n = 100;
 Daxiter = floor(max(33,(m+n)/4));
 
 rangeMax = 2;
@@ -83,10 +83,10 @@ for i =1:5
         fprintf('& %s & %g & %g & (%d,%d,%d)  & %g \\\\\n',['DHA($ \mu = n_f $)'],meanp(i,1),meanp(i,2),round(meanp(i,3)/nf),round(meanp(i,3)),round(meanp(i,4)),meanp(i,5));
 %     elseif i==1
 %               fprintf('& %s & %g & %g & (%d,%d,%d)  & %g \\\\\n',[str(i),'HA'],meanp(i,1),meanp(i,2),ceil(meanp(i,3)/Daxiter),round(meanp(i,3)),round(meanp(i,4)),meanp(i,5));
-    else
+ %   else
  %       fprintf('& %s & %g & %g & (%d,%d,%d)  & %g \\\\\n',[str(i),'HA'],meanp(i,1),meanp(i,2),round(meanp(i,3)/nf),round(meanp(i,3)),round(meanp(i,4)),meanp(i,5));
 
-        fprintf('& %s & %g & %g & (%d,%d)  & %g \\\\\n',['DHA($ \mu = n_f $)'],meanp(i,1),meanp(i,2),round(meanp(i,3)),round(meanp(i,4)),meanp(i,5));
+ %       fprintf('& %s & %g & %g & (%d,%d)  & %g \\\\\n',['DHA($ \mu = n_f $)'],meanp(i,1),meanp(i,2),round(meanp(i,3)),round(meanp(i,4)),meanp(i,5));
     else
         fprintf('& %s & %g & %g & (%d,%d)  & %g \\\\\n',[str(i),'HA'],meanp(i,1),meanp(i,2),round(meanp(i,3)),round(meanp(i,4)),meanp(i,5));
 
