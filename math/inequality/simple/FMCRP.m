@@ -16,14 +16,15 @@ maxIter = 10000;
 record=zeros(num_alg*count,5);
 tol = 1e-2;
 % tols = 1e-5;
-tolsa = (1e-1).^(5:2:13);%[1e-5:1e-1:1e-13];
+tolsa = (1e-1).^(1:2:12);%[1e-5:1e-1:1e-13];
 [mtol,ntol] = size(tolsa);
 arrspeed=zeros(num_alg-1,ntol);
 revarr=zeros(ntol*count*num_alg,maxIter+2);
 A = 2 * rand(m , n)-1;
 b = 2 * rand(m , 1)-1;
 x0 = zeros(n , 1);
-save(['A.mat'],'A','b');
+ save(['A.mat'],'A','b');
+% load('A.mat','A','b')
 for k = 1:ntol
     tols= tolsa(k);
 %     e=randn(1, n);
@@ -43,8 +44,8 @@ for k = 1:ntol
 %         x0 = zeros(n , 1);
     
         nf = 5;
-       str = ['D','C','P','R'];
-        str2 = {'DAX','CHA','RHA','PHA'};
+       str = ['F','C','P','R'];
+        str2 = {'FM','CHA','RHA','PHA'};
 
         iterA=zeros(num_alg,maxIter+2);
         maxIterA = 0;
@@ -52,7 +53,7 @@ for k = 1:ntol
         steplengthOrk = 3;
         fprintf('\\hline \n \\multirow{9}{*}{$ %d\\times %d $}',m,n);
         for i=1:num_alg
-            if i ==0
+            if i ==1
                 type = str(i);
                 [xkD,flag,relres,iter,resvec,arvec,itersm,tfD]=otherAlg(A,b,x0,maxIter,type,tols);
                 iter =iter+1;
@@ -78,7 +79,7 @@ for k = 1:ntol
             % fprintf('%s $ %d \\times %d $ & %g & %g & %g & %g & %g & %g\n',type,m,n,dD,gD,tfD,iter*nf,sumiter,beginN(1));
             if i ==1
                 fprintf('& %s & %g & %g & (%d,%d)  & %g \\\\\n',type,dD,gD,iter,sumiter,tfD);
-                iterA(i,1:iter)=resvec;
+                iterA(i,1:iter)=resvec(1,iter);
             else
                 fprintf('& %s & %g & %g & (%d,%d)  & %g \\\\\n',[type,'HA'],dD,gD,iter*nf,sumiter,tfD);
                 iterA(i,1:iter*(nf+1))=resvec;
@@ -109,10 +110,10 @@ end
 semilogx(tolsa,arrspeed(1,:),'b*-',tolsa,arrspeed(2,:),'ro-',tolsa,arrspeed(3,:),'g+-')
 set(gca,'XDir','reverse')
 % 标题标注 
-title('The speed up comparison of ours and '+str2(1)) 
+title(['The speed up comparison of ours and ' str2{1}]) 
 % 坐标轴标注 
 xlabel('the accuracy') 
 ylabel('the speed up') 
-legend(str2(1)+'/CHA',str2(1)+'/RHA',str2(1)+'/PHA') 
+legend([str2{1} '/CHA'],[str2{1} '/RHA'],[str2{1} '/PHA']) 
 %    end % for ration
 %    end % for m

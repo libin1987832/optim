@@ -20,10 +20,11 @@ tolsa = (1e-1).^(3:2:12);%[1e-5:1e-1:1e-13];
 [mtol,ntol] = size(tolsa);
 arrspeed=zeros(num_alg-1,ntol);
 revarr=zeros(ntol*count*num_alg,maxIter+2);
-A = 2 * rand(m , n)-1;
-b = 2 * rand(m , 1)-1;
+% A = 2 * rand(m , n)-1;
+% b = 2 * rand(m , 1)-1;
 x0 = zeros(n , 1);
-save(['A.mat'],'A','b');
+% save(['A.mat'],'A','b');
+load('A.mat','A','b')
 for k = 1:ntol
     tols= tolsa(k);
 %     e=randn(1, n);
