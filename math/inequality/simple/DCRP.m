@@ -6,8 +6,8 @@ clear
 clc
 % format shortEng
 addpath('./bramley/ineq')
-m = 1000;
-n = 200;
+m = 3000;
+n = 1000;
 rangeMax = 2;
 rangeMin = -2;
 count = 1;
@@ -16,7 +16,7 @@ maxIter = 10000;
 record=zeros(num_alg*count,5);
 tol = 1e-2;
 % tols = 1e-5;
-tolsa = (1e-1).^(3:2:13);%[1e-5:1e-1:1e-13];
+tolsa = (1e-1).^(3:2:12);%[1e-5:1e-1:1e-13];
 [mtol,ntol] = size(tolsa);
 arrspeed=zeros(num_alg-1,ntol);
 revarr=zeros(ntol*count*num_alg,maxIter+2);
@@ -98,7 +98,7 @@ end
 semilogx(tolsa,arrspeed(1,:),'b*-',tolsa,arrspeed(2,:),'ro-',tolsa,arrspeed(3,:),'g+-')
 set(gca,'XDir','reverse')
 % 标题标注 
-title('The speed-up comparison of ours and HAN') 
+title('The speed up comparison of ours and DAX') 
 % 坐标轴标注 
 xlabel('the accuracy') 
 ylabel('the speed up') 

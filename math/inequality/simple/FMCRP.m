@@ -43,8 +43,8 @@ for k = 1:ntol
 %         x0 = zeros(n , 1);
     
         nf = 5;
-       str = ['H','C','P','R'];
-        str2 = {'HAN','CHA','RHA','PHA'};
+       str = ['D','C','P','R'];
+        str2 = {'DAX','CHA','RHA','PHA'};
 
         iterA=zeros(num_alg,maxIter+2);
         maxIterA = 0;
@@ -52,7 +52,7 @@ for k = 1:ntol
         steplengthOrk = 3;
         fprintf('\\hline \n \\multirow{9}{*}{$ %d\\times %d $}',m,n);
         for i=1:num_alg
-            if i ==1
+            if i ==0
                 type = str(i);
                 [xkD,flag,relres,iter,resvec,arvec,itersm,tfD]=otherAlg(A,b,x0,maxIter,type,tols);
                 iter =iter+1;
@@ -109,10 +109,10 @@ end
 semilogx(tolsa,arrspeed(1,:),'b*-',tolsa,arrspeed(2,:),'ro-',tolsa,arrspeed(3,:),'g+-')
 set(gca,'XDir','reverse')
 % 标题标注 
-title('The speed-up comparison of ours and HAN') 
+title('The speed up comparison of ours and '+str2(1)) 
 % 坐标轴标注 
 xlabel('the accuracy') 
 ylabel('the speed up') 
-legend('HAN/CHA','HAN/RHA','HAN/PHA') 
+legend(str2(1)+'/CHA',str2(1)+'/RHA',str2(1)+'/PHA') 
 %    end % for ration
 %    end % for m
