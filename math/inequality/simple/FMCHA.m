@@ -7,7 +7,7 @@ clc
 % format shortEng
 addpath('./bramley/ineq')
 m = 1000;
-n = 100;
+n = 300;
 rangeMax = 2;
 rangeMin = -2;
 
@@ -31,7 +31,7 @@ V = orth(randn(n, n));
 % A = 2 * rand(m , n)-1;
 % b = 2 * rand(m , 1)-1;
 x0 = zeros(n , 1);
-load('At.mat');
+load('A1000_300_2.mat');
 % save('At.mat','A','b');
 nf = 5;
 
