@@ -28,12 +28,12 @@ U = orth(randn(m, m));
 V = orth(randn(n, n));
 % A = U*[E;zeros(m-n,n)]*V';
 
- A = 2 * rand(m , n)-1;
-  b = 2 * rand(m , 1)-1;
-x0 = zeros(n , 1);
-% load('A2000_100.mat');
-save('A3000_300.mat','A','b');
-nf = 5;
+%  A = 2 * rand(m , n)-1;
+%   b = 2 * rand(m , 1)-1;
+ x0 = zeros(n , 1);
+ load('A3000_300.mat');
+%save('A3000_300.mat','A','b');
+nf = 30;
 
 str = ['D','U','C','R','P'];
 str2 = {'DHA','UHA','CHA','RHA','PHA'};

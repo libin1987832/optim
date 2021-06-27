@@ -7,16 +7,16 @@ clc
 % format shortEng
 addpath('./bramley/ineq')
 m = 3000;
-n = 1000;
+n = 300;
 rangeMax = 2;
 rangeMin = -2;
 count = 1;
 num_alg = 4;
 maxIter = 10000;
 tol = 1e-2;
-tols = 1e-7;
+tols = 1e-12;
 % tolsa = (1e-1).^(0:2:13);%[1e-5:1e-1:1e-13];
-nfA = (3:5:60);
+nfA = (3:2:30);
 [mtol,ntol] = size(nfA);
 record=zeros(num_alg*count*ntol,5);
 arrspeed=zeros(num_alg-1,ntol);
@@ -25,7 +25,8 @@ revarr=zeros(ntol*count*num_alg,maxIter+2);
         b = 2 * rand(m , 1)-1;
         x0 = zeros(n , 1);
 %              save(['A.mat'],'A','b');
-load(['A.mat']);
+% load(['A.mat']);
+load(['A3000_300.mat']);
 likehoodNewton=zeros(4,ntol);
 for k=1:ntol
 nf= nfA(k);
@@ -53,7 +54,7 @@ nf
         fprintf('\\hline \n \\multirow{9}{*}{$ %d\\times %d $}',m,n);
         for i=1:num_alg
             type = str(i);
-            [xkD,flag,relres,iter,resvec,arvec,itersm,tfD]=hybridA(A,b,x0,steplengthOrk,maxIter,nf,[type,'HA'],tols);
+            [xkD,flag,relres,iter,resvec,arvec,itersm,tfD]=hybridA(A,b,x0,maxIter,nf,[type,'HA'],tols);
             resvec = arvec;
             rkD=b-A*xkD;
             rkD(rkD<0)=0;
@@ -105,7 +106,7 @@ figure
 plot(nfA,records(1,:,5),'k.-',nfA,records(2,:,5),'b*-',nfA,records(3,:,5),'ro-',nfA,records(4,:,5),'g+-')
 % % set(gca,'XTickLabel',tolsa);
 % % 标题标注
-set(gca,'YLim',[0 11]);%X轴的数据显示范围
+set(gca,'YLim',[0.2 0.6]);%X轴的数据显示范围
  title('The performance of hybrid algorithms with increasing nf') 
 % % 坐标轴标注 
 xlabel('nf') 
