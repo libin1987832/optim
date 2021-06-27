@@ -24,9 +24,15 @@ aa=0;
         I = find(rpk>=tol);
         AI = A(I,:);
   %   hk = lsqminnorm(AI,rpk(I));
+<<<<<<< HEAD
    %     [Q,R] = qr(AI);
    hk = AI \ rpk(I);
   %     hk = R\(Q' * rpk(I));
+=======
+       [Q,R] = qr(AI);
+   %  hk = AI \ rpk(I);
+       hk = R\(Q' * rpk(I));
+>>>>>>> 68f37df8bd2b2fc3e8ce82a94bceedf6c5f0fdf4
         if norm(hk)<1e-20
             disp('hk is small');
             aa=0;

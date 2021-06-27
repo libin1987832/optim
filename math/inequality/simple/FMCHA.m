@@ -6,8 +6,13 @@ clear
 clc
 % format shortEng
 addpath('./bramley/ineq')
+<<<<<<< HEAD
 m = 6000;
 n = 600;
+=======
+m = 3000;
+n = 300;
+>>>>>>> 68f37df8bd2b2fc3e8ce82a94bceedf6c5f0fdf4
 rangeMax = 2;
 rangeMin = -2;
 
@@ -28,12 +33,21 @@ revarr=zeros(num_alg, maxIter+2);
 % V = orth(randn(n, n));
 % A = U*[E;zeros(m-n,n)]*V';
 
+<<<<<<< HEAD
 % A = 2 * rand(m , n)-1;
 % b = 2 * rand(m , 1)-1;
 x0 = zeros(n , 1);
 load('A6000_600.mat');
 % save('At.mat','A','b');
 nf = 5;
+=======
+%  A = 2 * rand(m , n)-1;
+%   b = 2 * rand(m , 1)-1;
+ x0 = zeros(n , 1);
+ load('A3000_300.mat');
+%save('A3000_300.mat','A','b');
+nf = 30;
+>>>>>>> 68f37df8bd2b2fc3e8ce82a94bceedf6c5f0fdf4
 
 str = ['D','U','C','R','P'];
 str2 = {'DHA','UHA','CHA','RHA','PHA'};
@@ -42,7 +56,7 @@ iterA=zeros(num_alg,maxIter+2);
 maxIterA = 0;
 fprintA=zeros(1,8);
 steplengthOrk = 3;
-for i = 1:5    
+for i = 1:5 
     type = str(i);
     [xkD,flag,relres,iter,resvec,arvec,itersm,tfD]=hybridA(A,b,x0,maxIter,nf,[type,'HA'],1e-12);
     resvec = arvec;
