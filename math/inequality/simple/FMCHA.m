@@ -6,8 +6,8 @@ clear
 clc
 % format shortEng
 addpath('./bramley/ineq')
-m = 3000;
-n = 300;
+m = 6000;
+n = 600;
 rangeMax = 2;
 rangeMin = -2;
 
@@ -18,22 +18,22 @@ tol = 1e-2;
 
 revarr=zeros(num_alg, maxIter+2);
 
-e=randn(1, n);
-e(e<tol)=e(e<tol)+tol;
-[~,l]=min(e);
-e(l)=tol;
-E = diag(e); % 只要最大除最小等于1000即可
-E(1,1) = 10;
-U = orth(randn(m, m));
-V = orth(randn(n, n));
+% e=randn(1, n);
+% e(e<tol)=e(e<tol)+tol;
+% [~,l]=min(e);
+% e(l)=tol;
+% E = diag(e); % 只要最大除最小等于1000即可
+% E(1,1) = 10;
+% U = orth(randn(m, m));
+% V = orth(randn(n, n));
 % A = U*[E;zeros(m-n,n)]*V';
 
-%  A = 2 * rand(m , n)-1;
-%   b = 2 * rand(m , 1)-1;
+% A = 2 * rand(m , n)-1;
+%  b = 2 * rand(m , 1)-1;
  x0 = zeros(n , 1);
- load('A3000_300.mat');
-%save('A3000_300.mat','A','b');
-nf = 30;
+ load('A6000_600_1.mat');
+%save('A6000_600_1.mat','A','b');
+nf = 5;
 
 str = ['D','U','C','R','P'];
 str2 = {'DHA','UHA','CHA','RHA','PHA'};
