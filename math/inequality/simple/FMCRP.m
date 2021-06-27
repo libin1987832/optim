@@ -7,7 +7,7 @@ clc
 % format shortEng
 addpath('./bramley/ineq')
 m = 1000;
-n = 300;
+n = 100;
 rangeMax = 2;
 rangeMin = -2;
 count = 1;

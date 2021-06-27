@@ -10,18 +10,14 @@ m = 1000;
 n = 100;
 rangeMax = 2;
 rangeMin = -2;
-count = 1;
+
 num_alg = 4;
 maxIter = 10000;
 record=zeros(num_alg*count,5);
 tol = 1e-2;
-% tols = 1e-5;
-tolsa = (1e-1).^(0:2:13);%[1e-5:1e-1:1e-13];
-[mtol,ntol] = size(tolsa);
-arrspeed=zeros(num_alg-1,ntol);
-revarr=zeros(ntol*count*num_alg,maxIter+2);
-for k = 1:ntol
-    tols= tolsa(k);
+
+revarr=zeros(num_alg,maxIter+2);
+
     e=randn(1, n);
     e(e<tol)=e(e<tol)+tol;
     [~,l]=min(e);
