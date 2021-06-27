@@ -58,7 +58,7 @@ while normAr > tol  && normr > tol
         [xs,rpk,len,flag] = sm(A, b, n, rpk, xf);
         indexsm = indexsm + 1;
         % record step length and statistic to number of sm
-        itersm(iter + 1) = len;
+        itersm(iter + 1) = 1;
         x0 = xs;
     else
  %       [xfA,rpk] = fmnf(A,b,x0,n,Q,R,rpk,nf);

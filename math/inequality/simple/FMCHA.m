@@ -6,8 +6,18 @@ clear
 clc
 % format shortEng
 addpath('./bramley/ineq')
+<<<<<<< HEAD
 m = 6000;
 n = 600;
+=======
+<<<<<<< HEAD
+m = 6000;
+n = 600;
+=======
+m = 3000;
+n = 300;
+>>>>>>> 68f37df8bd2b2fc3e8ce82a94bceedf6c5f0fdf4
+>>>>>>> 4214018ef0ffd3b3974130c8affe76ddb5c55a9a
 rangeMax = 2;
 rangeMin = -2;
 
@@ -28,12 +38,30 @@ revarr=zeros(num_alg, maxIter+2);
 % V = orth(randn(n, n));
 % A = U*[E;zeros(m-n,n)]*V';
 
+<<<<<<< HEAD
 % A = 2 * rand(m , n)-1;
 %  b = 2 * rand(m , 1)-1;
  x0 = zeros(n , 1);
  load('A6000_600_1.mat');
 %save('A6000_600_1.mat','A','b');
 nf = 5;
+=======
+<<<<<<< HEAD
+% A = 2 * rand(m , n)-1;
+% b = 2 * rand(m , 1)-1;
+x0 = zeros(n , 1);
+load('A6000_600.mat');
+% save('At.mat','A','b');
+nf = 5;
+=======
+%  A = 2 * rand(m , n)-1;
+%   b = 2 * rand(m , 1)-1;
+ x0 = zeros(n , 1);
+ load('A3000_300.mat');
+%save('A3000_300.mat','A','b');
+nf = 30;
+>>>>>>> 68f37df8bd2b2fc3e8ce82a94bceedf6c5f0fdf4
+>>>>>>> 4214018ef0ffd3b3974130c8affe76ddb5c55a9a
 
 str = ['D','U','C','R','P'];
 str2 = {'DHA','UHA','CHA','RHA','PHA'};
