@@ -16,7 +16,7 @@ maxIter = 10000;
 tol = 1e-2;
 tols = 1e-12;
 % tolsa = (1e-1).^(0:2:13);%[1e-5:1e-1:1e-13];
-nfA = (3:2:40);
+nfA = (3:1:30);
 [mtol,ntol] = size(nfA);
 record=zeros(num_alg*count*ntol,5);
 arrspeed=zeros(num_alg-1,ntol);
@@ -24,9 +24,9 @@ revarr=zeros(ntol*count*num_alg,maxIter+2);
  A = 2 * rand(m , n)-1;
         b = 2 * rand(m , 1)-1;
         x0 = zeros(n , 1);
-%              save(['A.mat'],'A','b');
-% load(['A.mat']);
-load(['A3000_300.mat']);
+   %           save(['Anf.mat'],'A','b');
+ load(['Anf.mat']);
+%load(['A3000_300.mat']);
 likehoodNewton=zeros(4,ntol);
 for k=1:ntol
 nf= nfA(k);
@@ -107,11 +107,11 @@ plot(nfA,records(1,:,5),'k.-',nfA,records(2,:,5),'b*-',nfA,records(3,:,5),'ro-',
 % % set(gca,'XTickLabel',tolsa);
 % % 标题标注
 set(gca,'YLim',[0.2 0.6]);%X轴的数据显示范围
- title('The performance of hybrid algorithms with increasing nf') 
+ title('The performance of hybrid algorithms with increasing n_f') 
 % % 坐标轴标注 
-xlabel('nf') 
+xlabel('n_f') 
 ylabel('CPU(s)') 
-legend('DHA(μ= nf)','CHA','RHA','PHA') 
+legend('DHA(μ= n_f)','CHA','RHA','PHA') 
 
 % [nfA;likehoodNewton]
 % plot(nfA,likehoodNewton(1,:),'k.-',nfA,likehoodNewton(2,:),'b*-',nfA,likehoodNewton(3,:),'ro-',nfA,likehoodNewton(4,:),'g+-')
