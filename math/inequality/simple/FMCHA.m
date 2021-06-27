@@ -28,11 +28,11 @@ U = orth(randn(m, m));
 V = orth(randn(n, n));
 % A = U*[E;zeros(m-n,n)]*V';
 
-% A = 2 * rand(m , n)-1;
-%  b = 2 * rand(m , 1)-1;
+ A = 2 * rand(m , n)-1;
+  b = 2 * rand(m , 1)-1;
 x0 = zeros(n , 1);
-load('A2000_100.mat');
-% save('A2000_100.mat','A','b');
+% load('A2000_100.mat');
+save('A3000_300.mat','A','b');
 nf = 5;
 
 str = ['D','U','C','R','P'];
@@ -44,7 +44,7 @@ fprintA=zeros(1,8);
 steplengthOrk = 3;
 for i = 1:5 
     type = str(i);
-    [xkD,flag,relres,iter,resvec,arvec,itersm,tfD]=hybridA(A,b,x0,maxIter,nf,[type,'HA'],1e-13);
+    [xkD,flag,relres,iter,resvec,arvec,itersm,tfD]=hybridA(A,b,x0,maxIter,nf,[type,'HA'],1e-12);
     resvec = arvec;
     rkD=b-A*xkD;
     rkD(rkD<0)=0;
