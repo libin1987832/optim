@@ -6,8 +6,8 @@ clear
 clc
 % format shortEng
 addpath('./bramley/ineq')
-m = 1000;
-n = 100;
+m = 3000;
+n = 300;
 rangeMax = 2;
 rangeMin = -2;
 
@@ -29,10 +29,10 @@ V = orth(randn(n, n));
 % A = U*[E;zeros(m-n,n)]*V';
 
 % A = 2 * rand(m , n)-1;
-% b = 2 * rand(m , 1)-1;
+%  b = 2 * rand(m , 1)-1;
 x0 = zeros(n , 1);
-load('At.mat');
-% save('At.mat','A','b');
+load('A2000_100.mat');
+% save('A2000_100.mat','A','b');
 nf = 5;
 
 str = ['D','U','C','R','P'];
@@ -42,7 +42,7 @@ iterA=zeros(num_alg,maxIter+2);
 maxIterA = 0;
 fprintA=zeros(1,8);
 steplengthOrk = 3;
-for i = 1:5    
+for i = 1:5 
     type = str(i);
     [xkD,flag,relres,iter,resvec,arvec,itersm,tfD]=hybridA(A,b,x0,maxIter,nf,[type,'HA'],1e-13);
     resvec = arvec;
