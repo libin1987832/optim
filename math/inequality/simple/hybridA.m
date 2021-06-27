@@ -5,7 +5,7 @@
 % arvec
 % itersm
 % tf
-function [xk,flag,relres,iter,resvec,arvec,itersm,tf] = hybridA(A,b,x0,steplength,maxit,nf,type,tol)
+function [xk,flag,relres,iter,resvec,arvec,itersm,tf] = hybridA(A,b,x0,maxit,nf,type,tol)
 t=clock;
 
 % stop criterion

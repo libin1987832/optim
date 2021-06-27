@@ -13,101 +13,51 @@ rangeMin = -2;
 
 num_alg = 4;
 maxIter = 10000;
-record=zeros(num_alg*count,5);
+record=zeros(num_alg, 6);
 tol = 1e-2;
 
-revarr=zeros(num_alg,maxIter+2);
+revarr=zeros(num_alg, maxIter+2);
 
-    e=randn(1, n);
-    e(e<tol)=e(e<tol)+tol;
-    [~,l]=min(e);
-    e(l)=tol;
-    E = diag(e); % 只要最大除最小等于1000即可
-    E(1,1) = 10;
-    U = orth(randn(m, m));
-    V = orth(randn(n, n));
-    A = U*[E;zeros(m-n,n)]*V';
-%        A = 2 * rand(m , n)-1;
-       
-    for j = 1:count
-        %  A = 2 * rand(m , n)-1;
-        b = 2 * rand(m , 1)-1;
-        x0 = zeros(n , 1);
-        save(['A',num2str(k),num2str(j),'.mat'],'A','b');
-        nf = 5;
-%         str = ['F','I','H','N','C','F','H','B','D','U','C','R','P'];
-%         str2 = {'FM','IFM','HAN','NET','CHA','PC','HAN','BW','DHA','UHA','CHA','RHA','PHA'};
-        str = ['F','I','H','P','F','H','B','D','U','C','R','P'];
-        str2 = {'FM','IFM','HAN','PHA','PC','HAN','BW','DHA','UHA','CHA','RHA','PHA'};
+e=randn(1, n);
+e(e<tol)=e(e<tol)+tol;
+[~,l]=min(e);
+e(l)=tol;
+E = diag(e); % 只要最大除最小等于1000即可
+E(1,1) = 10;
+U = orth(randn(m, m));
+V = orth(randn(n, n));
+% A = U*[E;zeros(m-n,n)]*V';
 
-        iterA=zeros(num_alg,maxIter+2);
-        maxIterA = 0;
-        fprintA=zeros(1,8);
-        steplengthOrk = 3;
-        fprintf('\\hline \n \\multirow{9}{*}{$ %d\\times %d $}',m,n);
-        for i=1:num_alg
-            if i < num_alg
-                type = str(i);
-                [xkD,flag,relres,iter,resvec,arvec,itersm,tfD]=otherAlg(A,b,x0,maxIter,type,tols);
-                iter =iter+1;
-%                 arvec
-            else
-                type = str(i);
-                [xkD,flag,relres,iter,resvec,arvec,itersm,tfD]=hybridA(A,b,x0,steplengthOrk,maxIter,nf,[type,'HA'],tols);
-            end
- 
-            resvec = arvec;
-            rkD=b-A*xkD;
-            rkD(rkD<0)=0;
-            dD=norm(rkD);
-            gD=norm(A'*rkD);
-            beginN=find(itersm>0);
-            sumiter=sum(itersm>0);
-            fprintA(2*i-1:2*i)=[gD,tfD];
-            if isempty(beginN)
-                beginN=0;
-            end
-            record((j-1)*num_alg+i,:)=[dD,gD,iter*nf,sumiter,tfD];
-            % print for tex
-            % fprintf('%s $ %d \\times %d $ & %g & %g & %g & %g & %g & %g\n',type,m,n,dD,gD,tfD,iter*nf,sumiter,beginN(1));
-            if i < num_alg
-                fprintf('& %s & %g & %g & (%d,%d)  & %g \\\\\n',type,dD,gD,iter,sumiter,tfD);
-                iterA(i,1:iter)=resvec;
-            else
-                fprintf('& %s & %g & %g & (%d,%d)  & %g \\\\\n',[type,'HA'],dD,gD,iter*nf,sumiter,tfD);
-                iterA(i,1:iter*(nf+1))=resvec;
-            end
-            
-        end
-        
-%         revarr((k-1)*count*num_alg+1:(k-1)*count*num_alg+num_alg,:) = iterA;
+% A = 2 * rand(m , n)-1;
+% b = 2 * rand(m , 1)-1;
+x0 = zeros(n , 1);
+load('At.mat');
+% save('At.mat','A','b');
+nf = 5;
+
+str = ['D','U','C','R','P'];
+str2 = {'DHA','UHA','CHA','RHA','PHA'};
+
+iterA=zeros(num_alg,maxIter+2);
+maxIterA = 0;
+fprintA=zeros(1,8);
+steplengthOrk = 3;
+for i = 1:5    
+    type = str(i);
+    [xkD,flag,relres,iter,resvec,arvec,itersm,tfD]=hybridA(A,b,x0,maxIter,nf,[type,'HA'],1e-13);
+    resvec = arvec;
+    rkD=b-A*xkD;
+    rkD(rkD<0)=0;
+    dD=norm(rkD);
+    gD=norm(A'*rkD);
+    beginN=find(itersm>0);
+    sumiter=sum(itersm>0);
+    fprintA(2*i-1:2*i)=[gD,tfD];
+    if isempty(beginN)
+        beginN=0;
     end
-    records = reshape(record,num_alg,count,5);
-    recordp = permute(records,[1,3,2]);
-    meanp = squeeze(sum(recordp,3)/count);
-    fprintf('\\hline \n \\multirow{10}{*}{$ %d\\times %d $}',m,n);
-    for i =1:num_alg
-        fprintf('& %s & %g & %g & (%d,%d)  & %g \\\\\n',str2{i},meanp(i,1),meanp(i,2),round(meanp(i,3)),round(meanp(i,4)),meanp(i,5));
-    end
-    
-    t17=records(1:num_alg-1,:,5);
-    %t173=repmat(t17,1,1,3);
-    t810=records(num_alg,:,5);
-   % t810s=permute(t810,[3,2,1]);
-    speed = bsxfun(@rdivide,t17,t810);
-   %speed = t17./t810;
-    speed_avg = squeeze(sum(speed,2)/count);
-    arrspeed(:,k) = speed_avg;
+    record(i,:)=[dD,gD,iter,iter*nf,sumiter,tfD];
+    fprintf('& %s & %g & %g & (%d,%d,%d)  & %g \\\\\n',[type,'HA'],dD,gD,iter,iter*nf,sumiter,tfD);
 end
-format long
-[tolsa;arrspeed]
-semilogx(tolsa,arrspeed(1,:),'b*-',tolsa,arrspeed(2,:),'ro-',tolsa,arrspeed(3,:),'g+-')
-% set(gca,'XTickLabel',tolsa);
-% 标题标注 
-title('Compared with other algorithms, the speed up of CHA is relation with the accuracy') 
-% 坐标轴标注 
-xlabel('the accuracy') 
-ylabel('the speed up') 
-legend('FM/CHA','IFM/CHA','HAN/CHA') 
-%    end % for ration
-%    end % for m
+
+
