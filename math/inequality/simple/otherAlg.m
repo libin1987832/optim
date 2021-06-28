@@ -78,23 +78,23 @@ while normAr > tol  && normr > tol
             AI=A(I,:);
             %                 AII=AI'*AI;
             %              hk=AII\(AI'*rpk(I));
-%             [Q,R] = qr(AI);
-%             hk = AI \ rpk(I);
-%             hk = R\(Q' * rpk(I));
-               [U,S,V]=svd(AI);
-                minmn = min(size(S));
-                svdj=minmn;
-                for j=1:minmn
-                    if S(j,j)<1e-20
-                        svdj=j;
-                        break;
-                    end
-                end
-                B=U(:,1:svdj)'*rpk(I);
-                for j=1:svdj
-                    B(j)=B(j)/S(j,j);
-                end
-                hk=V(:,1:svdj)*B;
+%              [Q,R] = qr(AI);
+             hk = AI \ rpk(I);
+%              hk = R\(Q' * rpk(I));
+%                [U,S,V]=svd(AI);
+%                 minmn = min(size(S));
+%                 svdj=minmn;
+%                 for j=1:minmn
+%                     if S(j,j)<1e-20
+%                         svdj=j;
+%                         break;
+%                     end
+%                 end
+%                 B=U(:,1:svdj)'*rpk(I);
+%                 for j=1:svdj
+%                     B(j)=B(j)/S(j,j);
+%                 end
+%                 hk=V(:,1:svdj)*B;
             
             aa=spiecewise(A,b,hk,x0);
             xk=x0+aa*hk;

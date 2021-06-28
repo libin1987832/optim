@@ -25,7 +25,7 @@ for i =1:am
      end
         if alph<=t && alph > last
             alpht=alph;
-%       //      break;
+             break;
         end
     else
         alpht=1;
