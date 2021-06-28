@@ -16,7 +16,7 @@ maxIter = 10000;
 record=zeros(num_alg*count,5);
 tol = 1e-2;
 % tols = 1e-5;
-tolsa = (1e-1).^(1:2:12);%[1e-5:1e-1:1e-13];
+tolsa = (1e-1).^(12:2:12);%[1e-5:1e-1:1e-13];
 [mtol,ntol] = size(tolsa);
 arrspeed=zeros(num_alg-1,ntol);
 revarr=zeros(ntol*count*num_alg,maxIter+2);
@@ -24,6 +24,18 @@ A = 2 * rand(m , n)-1;
 b = 2 * rand(m , 1)-1;
 x0 = zeros(n , 1);
  save(['A.mat'],'A','b');
+  options = optimoptions('lsqlin','Algorithm','interior-point','Display','iter');
+% options = optimoptions('Algorithm','interior-point','TolX',1e-13)
+options.Display = 'off';
+% options.StepTolerance = 1e-13;
+options.OptimalityTolerance = 1e-13;
+% options.ConstraintTolerance = 1e-13;
+options.MaxIterations = 600;
+% options.
+ tic;
+ [x1,f1,residual,exitflag,output,ff] = lsqlin([A,-eye(m)],b, [],[],[],[],[-Inf*ones(n,1);zeros(m,1)],Inf*ones(n+m,1),x0,options);
+ tf0=toc
+ norm(residual)
 % load('A.mat','A','b')
 for k = 1:ntol
     tols= tolsa(k);
