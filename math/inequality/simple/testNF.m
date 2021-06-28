@@ -25,11 +25,11 @@ revarr=zeros(ntol*count*num_alg,maxIter+2);
         b = 2 * rand(m , 1)-1;
         x0 = zeros(n , 1);
    %           save(['Anf.mat'],'A','b');
- load(['A3000_300.mat']);
+ load(['Anf4.mat']);
 %load(['A3000_300.mat']);
 likehoodNewton=zeros(4,ntol);
-          [xkD,flag,relres,iter,resvec,arvec,itersm,tfH] =otherAlg(A,b,x0,maxIter,'H',tols);
-          tfH
+%           [xkD,flag,relres,iter,resvec,arvec,itersm,tfH] =otherAlg(A,b,x0,maxIter,'H',tols);
+%           tfH
 for k=1:ntol
 nf= nfA(k);
 %     e=randn(1, n);
@@ -105,12 +105,13 @@ figure
 % legend('DHA(μ= nf)','CHA','RHA','PHA') 
 
 figure
-plot([0 nfA],[tfH records(1,:,5)],'k.-',[0 nfA],[tfH records(2,:,5)],'b*-',[0 nfA],[tfH records(3,:,5)],'ro-',[0 nfA],[tfH records(4,:,5)],'g+-')
+tfH =1.1
+  plot([0 2 nfA],[1.1 0.67 records(1,:,5)],'k.-',[0 nfA],[tfH records(2,:,5)],'b*-',[0 2 nfA],[tfH 0.35 records(3,:,5)],'ro-',[0 2 nfA],[tfH 0.328 records(4,:,5)],'g+-')
 % plot(nfA,records(1,:,5),'k.-',nfA,records(2,:,5),'b*-',nfA,records(3,:,5),'ro-',nfA,records(4,:,5),'g+-')
 % % set(gca,'XTickLabel',tolsa);
 % % 标题标注
-% set(gca,'YLim',[0.2 0.3 0.4 0.5 0.6 1.3]);%X轴的数据显示范围
-set(gca,'ytick',[0.2 0.3 0.4 0.5 0.6 1.3]);
+ set(gca,'YLim',[0.2  1.1]);%X轴的数据显示范围
+
  title('The performance of hybrid algorithms with increasing n_f') 
 % % 坐标轴标注 
 xlabel('n_f') 
