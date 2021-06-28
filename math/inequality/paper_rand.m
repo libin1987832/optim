@@ -5,8 +5,8 @@ clc
 addpath('./dataInequality/');
 addpath('./algorithmInequality/')
 
-m = 2000;
-n = 1200;
+m = 3000;
+n = 1800;
 rangeMax = 2;
 rangeMin = -2;
 count = 1;
@@ -15,7 +15,7 @@ for j = 1:count
 %     [A,b,x0]=randInequality(m,n,rangeMax,rangeMin);
 %    A = 2 * rand(m , n)-1;
 %    b = 2 * rand(m , 1)-1;
-load('A2000_1200.mat')
+load('A3000_1800.mat')
    x0 = zeros(n , 1);
    maxIter = 300;
    nf = 5;
