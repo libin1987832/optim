@@ -1,10 +1,11 @@
 clear
 clc
 gamm = 0.6;
-n = 5000;
-w = [1,1]+rand(1,2);
-b = 1+rand(1);
-x = rand( n , 2 );
+n = 2000;
+% w = [1,1]+rand(1,2);
+% b = 1+rand(1);
+% x = rand( n , 2 );
+load('A2000_paper.mat','w','b','x')
 %% triangle
 w1 = [1,1];w2 = [1,-1];
 b1 = 0.2;b2 = 1;
