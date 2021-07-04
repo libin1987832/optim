@@ -16,7 +16,7 @@ x2=imread('IFM.tif');
 x3=imread('HAN.tif');
 % subplot(223);
 % imshow(x);
-x4=imread('DHA2.tif');
+x4=imread('DAX2.tif');
 % subplot(224);
 % imshow(x);
 
