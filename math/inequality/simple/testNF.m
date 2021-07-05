@@ -112,7 +112,7 @@ tfH =1.1
 % % 标题标注
  set(gca,'YLim',[0.2  1.1]);%X轴的数据显示范围
 
- title('The performance of hybrid algorithms with increasing n_f') 
+ %title('The performance of hybrid algorithms with increasing n_f') 
 % % 坐标轴标注 
 xlabel('n_f') 
 ylabel('CPU(s)') 
