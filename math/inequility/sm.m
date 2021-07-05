@@ -9,13 +9,30 @@ AI = A(AA,:);
 bI = rpk(AA);
 
 [u,flag,relres,iter,resvec,lsvec,out] = lsqrm(AI,bI,lsqrTol,maxIter,[],[],zeros(n,1),A,b,x0,AA);
-if ~out
+if 0
     xs = x0 + u;
     len = iter;
     rpk = b - A * xs;
 else
-   u = AI\bI;
-    aa = spiecewise(A,b,u,x0);
+%   u = AI\bI;
+     u=zeros(n,1);
+ [U,S,V]=svds(AI);
+  [m,n] =size(AI);
+    minmn = min(size(S));
+ svdj=minmn;
+ for j=1:minmn
+     if S(j,j)<1e-20
+         svdj=j;
+         break;
+     end
+ end
+ B=U(:,1:svdj)'*rpk(AA);
+ for j=1:svdj
+     B(j)=B(j)/S(j,j);
+ end
+u=V(:,1:svdj)*B;
+         aa = spiecewise(A,b,u,x0);
+    %aa = spiecewise(A,b,u,x0);
     xs = x0 + aa * u;
     rpk = b - A * xs;
     x0=xs;
