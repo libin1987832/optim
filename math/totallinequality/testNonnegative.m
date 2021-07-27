@@ -17,7 +17,7 @@ example =11;
 % 1 sparse matrix m1 m2 n 2 density matrix
 [A,b,x0] = readData(2,1000,1000,100);
 [m,n] =size(A);
- options = optimoptions('lsqlin','Algorithm','interior-point','Display','iter');
+options = optimoptions('lsqlin','Algorithm','interior-point','Display','iter');
 % options = optimoptions('Algorithm','interior-point','TolX',1e-13)
 options.Display = 'off';
 % options.StepTolerance = 1e-13;
