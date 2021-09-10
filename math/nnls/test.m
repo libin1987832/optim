@@ -1,8 +1,10 @@
 % The best codes handle N = 20,000 as long as the matrix is very sparse.
 % N   = 3000; M = 4000; % Large scale. Things start to get interesting
-N   = 1000; M = 1500;     % at this size, some algo take a long time!
+N   = 300; M = 500;     % at this size, some algo take a long time!
 % N   = 100; M = 150;     % at this size, all algorithms take < 14 seconds
 A   = randn(M,N);
+A =[A,-eye(M)];
+N = N+M;
 b   = randn(M,1);
 
 fcn     = @(x) norm( A*x - b)^2;
@@ -16,40 +18,40 @@ grad    = grad2;
 
 x = [];
 time = [];
-%%
-l  = zeros(N,1);    % lower bound
-u  = inf(N,1);      % there is no upper bound
-tstart=tic;
-fun     = @(x)fminunc_wrapper( x, fcn, grad);
-% Request very high accuracy for this test:
-opts    = struct( 'factr', 1e4, 'pgtol', 1e-8, 'm', 10);
-opts.printEvery     = 5;
-if N > 10000
-    opts.m  = 50;
-end
-% Run the algorithm:
-[xk, ~, info] = lbfgsb(fun, l, u, opts );
-t=toc(tstart)
-% Record results
-x.lbfgsb    = xk;
-time.lbfgsb = t;
-
-%%
-if exist( 'itron.m', 'file' )
-
-    x0   = zeros(N,1);
-    xl   = zeros(N,1);
-    xu   = +1e300*ones(N,1);
-    fmin = -1e300;
-    H       = sparse(AtA/2); % will crash if not a sparse matrix
-    tstart=tic;
-    hess    = @(x) H;
-    fun     = @(x)fminunc_wrapper( x, fcn, grad, hess );
-    [xk, fval, exitflag, output] = itron(fun, x0, xl, xu, fmin );
-    t=toc(tstart)
-    x.tron    = xk;
-    time.tron = t;
-end
+% %%
+% l  = zeros(N,1);    % lower bound
+% u  = inf(N,1);      % there is no upper bound
+% tstart=tic;
+% fun     = @(x)fminunc_wrapper( x, fcn, grad);
+% % Request very high accuracy for this test:
+% opts    = struct( 'factr', 1e4, 'pgtol', 1e-8, 'm', 10);
+% opts.printEvery     = 5;
+% if N > 10000
+%     opts.m  = 50;
+% end
+% % Run the algorithm:
+% [xk, ~, info] = lbfgsb(fun, l, u, opts );
+% t=toc(tstart)
+% % Record results
+% x.lbfgsb    = xk;
+% time.lbfgsb = t;
+% 
+% %%
+% if exist( 'itron.m', 'file' )
+% 
+%     x0   = zeros(N,1);
+%     xl   = zeros(N,1);
+%     xu   = +1e300*ones(N,1);
+%     fmin = -1e300;
+%     H       = sparse(AtA/2); % will crash if not a sparse matrix
+%     tstart=tic;
+%     hess    = @(x) H;
+%     fun     = @(x)fminunc_wrapper( x, fcn, grad, hess );
+%     [xk, fval, exitflag, output] = itron(fun, x0, xl, xu, fmin );
+%     t=toc(tstart)
+%     x.tron    = xk;
+%     time.tron = t;
+% end
 
 %%
 if exist( 'activeset.m', 'file' )
