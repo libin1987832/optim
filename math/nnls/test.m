@@ -92,18 +92,25 @@ else
 end
 %%
 %
+options = optimoptions('lsqlin','Algorithm','interior-point','Display','iter');
+% options = optimoptions('Algorithm','interior-point','TolX',1e-13)
+options.Display = 'off';
+% options.StepTolerance = 1e-13;
+options.OptimalityTolerance = 1e-13;
+% options.ConstraintTolerance = 1e-13;
+options.MaxIterations = 600;
 tstart=tic;
-[xk,f1,residual,exitflag,output,ff]=lsqlin(A,b,[],[],[],[],l,u,x0,options);
+[xk,f1,residual,exitflag,output,ff]=lsqlin(A,b,[],[],[],[],l,u,zeros(N,1),options);
 t=toc(tstart)
 x.lsqlin   = xk;
-time.lsqnonneg = t; 
+time.lsqlin = t; 
 
 %%
-tstart=tic;
-xk = lsqnonneg(A,b);
-t=toc(tstart)
-x.lsqnonneg   = xk;
-time.lsqnonneg = t; 
+% tstart=tic;
+% xk = lsqnonneg(A,b);
+% t=toc(tstart)
+% x.lsqnonneg   = xk;
+% time.lsqnonneg = t; 
 %%
 if exist( 'fnnls.m', 'file' )
     tstart=tic;

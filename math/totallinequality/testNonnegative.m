@@ -13,7 +13,7 @@ clear
 
 % 1:fixed 0:lsqin 2:hybrid lsqr 6:hybrd IPG 3: IPG 4: steep decent 5:Newton
 % 7:GNP  8 hybridfast
-example =11;
+example =1;
 % 1 sparse matrix m1 m2 n 2 density matrix
 [A,b,x0] = readData(2,1000,1000,100);
 [m,n] =size(A);
@@ -29,12 +29,25 @@ if example == 1 || example >100
 maxIterA = 6;
 [xk1, resvec, arvec,face1v,face2v, tf1] = fixedMatrix(A,b,x0,maxIterA,1e-15,options);
 [rpk1, normr1, xmin1, Ar, normKKT1 , face11, face21] = kktResidual(A, b, xk1 , [], 1);
-fprintf('& %s & %g & %g & %g & %g & %g  \n','FM',normr1,xmin1,normKKT1,min(Ar),tf1); 
+fprintf('& %s & %g & %g & %g & %g & %g  \n','FM1',normr1,xmin1,normKKT1,min(Ar),tf1); 
+% [rpk0, normr0, xmin0, Ar0, normKKT0 , faceX0, faceA0] = kktResidual(A, b, [0;57/61] , [], 1); 
+%  fprintf('& %s & %g & %g & %g & %g &%g /n','FM',normr0,xmin0,normKKT0,min(Ar0));
+%h=semilogy(beginp:maxIterA,arvec(beginp:maxIterA),'b+');
+%h.LineStyle = '--';
+% end
+% 
+% if example == 1 || example >100
+maxIterA = 6;
+[xk1, resvec, arvec,face1v,face2v, tf1] = fixedMatrixlbfgs(A,b,x0,maxIterA,1e-15,options);
+[rpk1, normr1, xmin1, Ar, normKKT1 , face11, face21] = kktResidual(A, b, xk1 , [], 1);
+fprintf('& %s & %g & %g & %g & %g & %g  \n','FM2',normr1,xmin1,normKKT1,min(Ar),tf1); 
 % [rpk0, normr0, xmin0, Ar0, normKKT0 , faceX0, faceA0] = kktResidual(A, b, [0;57/61] , [], 1); 
 %  fprintf('& %s & %g & %g & %g & %g &%g /n','FM',normr0,xmin0,normKKT0,min(Ar0));
 %h=semilogy(beginp:maxIterA,arvec(beginp:maxIterA),'b+');
 %h.LineStyle = '--';
 end
+
+
 %%
 if example == 0 || example > 10  
 tic;[x1,f1,residual,exitflag,output,ff] = lsqlin([A,-eye(m)],b,...
