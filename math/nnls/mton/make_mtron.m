@@ -13,7 +13,7 @@
 %
 %  make libs CC=gcc FC=g77 ARCH=darwin
 %
-mex mtron.c ./tron/src/tron/d-darwin.a ./tron/src/blas/d-darwin.a ./tron/src/icf/d-darwin.a ./tron/src/coloring/d-darwin.a -lg2c
+mex mtron.c ./tron/src/tron/d-darwin.a ./tron/src/blas/d-darwin.a ./tron/src/icf/d-darwin.a ./tron/src/coloring/d-darwin.a 
 
 
 %
