@@ -1,7 +1,7 @@
 % The best codes handle N = 20,000 as long as the matrix is very sparse.
 % N   = 3000; M = 4000; % Large scale. Things start to get interesting
 addpath(genpath(pwd))
-N   = 1000; M = 500;     % at this size, some algo take a long time!
+N   = 800; M = 300;     % at this size, some algo take a long time!
 % N   = 100; M = 150;     % at this size, all algorithms take < 14 seconds
 A   = randn(M,N);
 %A =[A,-eye(M)];
