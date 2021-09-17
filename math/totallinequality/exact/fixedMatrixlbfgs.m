@@ -17,16 +17,18 @@ face1vec(index) = face1;
 face2vec(index) = face2;
 l  = zeros(N,1);    % lower bound
 u  = inf(N,1);      % there is no upper bound
-opts    = struct( 'factr', 1e4, 'pgtol', 1e-8, 'm', 10);
-opts.printEvery     = 10;
-
+AtA     = A'*A; Ab = A'*b;
+opts    = struct( 'factr', 1e1, 'pgtol', 1e-2, 'm', 50);
+opts.printEvery     = -1;
+opts.maxIts =400;
 t=clock;
 while KKT > tol && index < maxit
     z = -r;
     z(z<0) = 0;
     bk = b + z;
     %内置使用MATLAB自带的算法
-    [xk, ~, info] = lbfgsb(@(x)fungun(x,A,bk), l, u, opts );
+    [x1, ~, info] = lbfgsb(@(x)fungunz(x,A,bk,AtA,Ab), l, u, opts );
+  %  [x1,f1,residual,exitflag,output,ff]=lsqlin(A,bk,[],[],[],[],zeros(n,1),Inf*ones(n,1),x0,options);
     x0=x1;
     [r, normr, xmin,Ar, KKT,face1,face2] = kktResidual(A, b, x0 , [], 1);
     %fprintf('index:%d,exit %d,f:%f,res1:%f,res0:%f,ratio:%f!\n',index,exitflag,f1,res1,res0,res1/res0);

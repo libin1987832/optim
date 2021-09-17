@@ -15,18 +15,18 @@ clear
 % 7:GNP  8 hybridfast
 example =1;
 % 1 sparse matrix m1 m2 n 2 density matrix
-[A,b,x0] = readData(2,1000,1000,100);
+[A,b,x0] = readData(2,1000,1000,500);
 [m,n] =size(A);
 options = optimoptions('lsqlin','Algorithm','interior-point','Display','iter');
 % options = optimoptions('Algorithm','interior-point','TolX',1e-13)
 options.Display = 'off';
 % options.StepTolerance = 1e-13;
-options.OptimalityTolerance = 1e-13;
+options.OptimalityTolerance = 1e-5;
 % options.ConstraintTolerance = 1e-13;
 options.MaxIterations = 600;
 % options.
 if example == 1 || example >100
-maxIterA = 6;
+maxIterA = 20;
 [xk1, resvec, arvec,face1v,face2v, tf1] = fixedMatrix(A,b,x0,maxIterA,1e-15,options);
 [rpk1, normr1, xmin1, Ar, normKKT1 , face11, face21] = kktResidual(A, b, xk1 , [], 1);
 fprintf('& %s & %g & %g & %g & %g & %g  \n','FM1',normr1,xmin1,normKKT1,min(Ar),tf1); 
@@ -34,11 +34,13 @@ fprintf('& %s & %g & %g & %g & %g & %g  \n','FM1',normr1,xmin1,normKKT1,min(Ar),
 %  fprintf('& %s & %g & %g & %g & %g &%g /n','FM',normr0,xmin0,normKKT0,min(Ar0));
 %h=semilogy(beginp:maxIterA,arvec(beginp:maxIterA),'b+');
 %h.LineStyle = '--';
-% end
+ end
 % 
-% if example == 1 || example >100
-maxIterA = 6;
-[xk1, resvec, arvec,face1v,face2v, tf1] = fixedMatrixlbfgs(A,b,x0,maxIterA,1e-15,options);
+if example == 1 || example >100
+maxIterA = 10;
+options.OptimalityTolerance = 1e-5;
+% options.Algorithm = 'active-set';
+[xk1, resvec, arvec,face1v,face2v, tf1] = fixedMatrix(A,b,x0,maxIterA,1e-15,options);
 [rpk1, normr1, xmin1, Ar, normKKT1 , face11, face21] = kktResidual(A, b, xk1 , [], 1);
 fprintf('& %s & %g & %g & %g & %g & %g  \n','FM2',normr1,xmin1,normKKT1,min(Ar),tf1); 
 % [rpk0, normr0, xmin0, Ar0, normKKT0 , faceX0, faceA0] = kktResidual(A, b, [0;57/61] , [], 1); 
@@ -49,7 +51,7 @@ end
 
 
 %%
-if example == 0 || example > 10  
+if example == 2 || example > 10  
 tic;[x1,f1,residual,exitflag,output,ff] = lsqlin([A,-eye(m)],b,...
     [],[],[],[],zeros(n+m,1),Inf*ones(n+m,1),x0,options);tf0=toc;xk0 = x1(1:n);
  [rpk0, normr0, xmin0, Ar0, normKKT0 , faceX0, faceA0] = kktResidual(A, b, xk0 , [], 1); 

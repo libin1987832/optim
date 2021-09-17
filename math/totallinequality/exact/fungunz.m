@@ -1,3 +1,3 @@
-function [f,g]=fungun(x,A,b)
+function [f,g]=fungunz(x,A,b,AtA,Ab)
 f = norm( A*x - b)^2;
-g = 2*A'*(A*x-b);
+g = 2*( AtA*x - Ab );

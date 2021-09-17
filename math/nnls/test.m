@@ -25,7 +25,7 @@ u  = inf(N,1);      % there is no upper bound
 tstart=tic;
 fun     = @(x)fminunc_wrapper( x, fcn, grad);
 % Request very high accuracy for this test:
-opts    = struct( 'factr', 1e4, 'pgtol', 1e-8, 'm', 10);
+opts    = struct( 'factr', 1e4, 'pgtol', 1e-8, 'm', 20);
 opts.printEvery     = 5;
 if N > 10000
     opts.m  = 50;
@@ -71,79 +71,79 @@ time.lbfgsb = t;
 %     time.blockPivot = t;
 % end
 %%
-if exist( 'newton.m', 'file' ) && N < 500
-    tstart=tic;
-    [xk,y]  = newton(A,b, ones(N,1), 100); % can't have 0 starting vector
-    t=toc(tstart)
-    x.newton    = xk;
-    time.newton = t;
-else
-    fprintf('Skipping Newton method because we can''t find it, or it is too slow\n');
-end
-%%
-if exist( 'pcnnls.m', 'file' ) && N < 500
-    tstart=tic;
-    [xk,y,nits]  = pcnnls(A,b,ones(N,1), 3000);
-    t=toc(tstart)
-    x.predCorr    = xk;
-    time.predCorr = t;
-else
-    fprintf('Skipping predCorr method because we can''t find it, or it is too slow\n');
-end
+% if exist( 'newton.m', 'file' ) && N < 500
+%     tstart=tic;
+%     [xk,y]  = newton(A,b, ones(N,1), 100); % can't have 0 starting vector
+%     t=toc(tstart)
+%     x.newton    = xk;
+%     time.newton = t;
+% else
+%     fprintf('Skipping Newton method because we can''t find it, or it is too slow\n');
+% end
+% %%
+% if exist( 'pcnnls.m', 'file' ) && N < 500
+%     tstart=tic;
+%     [xk,y,nits]  = pcnnls(A,b,ones(N,1), 3000);
+%     t=toc(tstart)
+%     x.predCorr    = xk;
+%     time.predCorr = t;
+% else
+%     fprintf('Skipping predCorr method because we can''t find it, or it is too slow\n');
+% end
 %%
 %
 options = optimoptions('lsqlin','Algorithm','interior-point','Display','iter');
 % options = optimoptions('Algorithm','interior-point','TolX',1e-13)
 options.Display = 'off';
 % options.StepTolerance = 1e-13;
-options.OptimalityTolerance = 1e-13;
+options.OptimalityTolerance = 1e-8;
 % options.ConstraintTolerance = 1e-13;
-options.MaxIterations = 600;
+options.MaxIterations = 300;
 tstart=tic;
 [xk,f1,residual,exitflag,output,ff]=lsqlin(A,b,[],[],[],[],l,u,zeros(N,1),options);
 t=toc(tstart)
 x.lsqlin   = xk;
 time.lsqlin = t; 
 
-%%
-% tstart=tic;
-% xk = lsqnonneg(A,b);
-% t=toc(tstart)
-% x.lsqnonneg   = xk;
-% time.lsqnonneg = t; 
-%%
-if exist( 'fnnls.m', 'file' )
-    tstart=tic;
-    [xk]  = fnnls(A'*A,A'*b);
-    t=toc(tstart)
-    x.fnnls    = xk;
-    time.fnnls = t;
-end
-%%
-if exist( 'solnls.m', 'file' )
- %   opt = solopt;
-    opt.maxtime     = 2000;
-    opt.verbose     = 0;
-    tstart=tic;
-    % run their 'BB' variant
-    opt.algo = 'BB';
-    out     = solnls( A, b, zeros(N,1), opt );
-    t=toc(tstart)
-    x.PQN_BB   = out.x;
-    time.PQN_BB = t;
-
-    % and run their 'PLB' variant (their 'PQN' variant is much slower)
-    %   which uses L-BFGS (not to be confused with L-BFGS-B)
-    opt.algo = 'PLB';
-
-    tstart=tic;
-    out     = solnls( A, b, zeros(N,1), opt );
-    t=toc(tstart)
-
-    x.PQN   = out.x;
-    time.PQN = t;
-
-end
+% %%
+% % tstart=tic;
+% % xk = lsqnonneg(A,b);
+% % t=toc(tstart)
+% % x.lsqnonneg   = xk;
+% % time.lsqnonneg = t; 
+% %%
+% if exist( 'fnnls.m', 'file' )
+%     tstart=tic;
+%     [xk]  = fnnls(A'*A,A'*b);
+%     t=toc(tstart)
+%     x.fnnls    = xk;
+%     time.fnnls = t;
+% end
+% %%
+% if exist( 'solnls.m', 'file' )
+%  %   opt = solopt;
+%     opt.maxtime     = 2000;
+%     opt.verbose     = 0;
+%     tstart=tic;
+%     % run their 'BB' variant
+%     opt.algo = 'BB';
+%     out     = solnls( A, b, zeros(N,1), opt );
+%     t=toc(tstart)
+%     x.PQN_BB   = out.x;
+%     time.PQN_BB = t;
+% 
+%     % and run their 'PLB' variant (their 'PQN' variant is much slower)
+%     %   which uses L-BFGS (not to be confused with L-BFGS-B)
+%     opt.algo = 'PLB';
+% 
+%     tstart=tic;
+%     out     = solnls( A, b, zeros(N,1), opt );
+%     t=toc(tstart)
+% 
+%     x.PQN   = out.x;
+%     time.PQN = t;
+% 
+% end
 %%
 fMin = Inf;
 for f=fieldnames(x)',
