@@ -13,7 +13,8 @@
 %
 %  make libs CC=gcc FC=g77 ARCH=darwin
 %
-mex mtron.c ./tron/src/tron/d-darwin.a ./tron/src/blas/d-darwin.a ./tron/src/icf/d-darwin.a ./tron/src/coloring/d-darwin.a 
+mex mtron.c ./tron/src/tron/d-darwin.a ./tron/src/blas/d-darwin.a ./tron/src/icf/d-darwin.a ./tron/src/coloring/d-darwin.a -L'F:\msys64\usr\share\bash-completion\completions\gfortran'
+
 
 
 %
