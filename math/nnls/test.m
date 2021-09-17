@@ -1,10 +1,11 @@
 % The best codes handle N = 20,000 as long as the matrix is very sparse.
 % N   = 3000; M = 4000; % Large scale. Things start to get interesting
-N   = 300; M = 500;     % at this size, some algo take a long time!
+addpath(genpath(pwd))
+N   = 1000; M = 500;     % at this size, some algo take a long time!
 % N   = 100; M = 150;     % at this size, all algorithms take < 14 seconds
 A   = randn(M,N);
-A =[A,-eye(M)];
-N = N+M;
+%A =[A,-eye(M)];
+%N = N+M;
 b   = randn(M,1);
 
 fcn     = @(x) norm( A*x - b)^2;
@@ -105,7 +106,7 @@ if exist( 'fnnls.m', 'file' )
 end
 %%
 if exist( 'solnls.m', 'file' )
-    opt = solopt;
+ %   opt = solopt;
     opt.maxtime     = 2000;
     opt.verbose     = 0;
     tstart=tic;
