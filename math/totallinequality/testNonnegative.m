@@ -26,7 +26,7 @@ options.OptimalityTolerance = 1e-5;
 options.MaxIterations = 600;
 % options.
 if example == 1 || example >100
-maxIterA = 20;
+maxIterA = 10;
 [xk1, resvec, arvec,face1v,face2v, tf1] = fixedMatrix(A,b,x0,maxIterA,1e-15,options);
 [rpk1, normr1, xmin1, Ar, normKKT1 , face11, face21] = kktResidual(A, b, xk1 , [], 1);
 fprintf('& %s & %g & %g & %g & %g & %g  \n','FM1',normr1,xmin1,normKKT1,min(Ar),tf1); 
@@ -38,9 +38,9 @@ fprintf('& %s & %g & %g & %g & %g & %g  \n','FM1',normr1,xmin1,normKKT1,min(Ar),
 % 
 if example == 1 || example >100
 maxIterA = 10;
-options.OptimalityTolerance = 1e-5;
+% options.OptimalityTolerance = 1e-10;
 % options.Algorithm = 'active-set';
-[xk1, resvec, arvec,face1v,face2v, tf1] = fixedMatrix(A,b,x0,maxIterA,1e-15,options);
+[xk1, resvec, arvec,face1v,face2v, tf1] = fixedMatrixlbfgs(A,b,x0,maxIterA,1e-15,options);
 [rpk1, normr1, xmin1, Ar, normKKT1 , face11, face21] = kktResidual(A, b, xk1 , [], 1);
 fprintf('& %s & %g & %g & %g & %g & %g  \n','FM2',normr1,xmin1,normKKT1,min(Ar),tf1); 
 % [rpk0, normr0, xmin0, Ar0, normKKT0 , faceX0, faceA0] = kktResidual(A, b, [0;57/61] , [], 1); 
