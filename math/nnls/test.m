@@ -1,11 +1,11 @@
 % The best codes handle N = 20,000 as long as the matrix is very sparse.
 % N   = 3000; M = 4000; % Large scale. Things start to get interesting
 addpath(genpath(pwd))
-N   = 800; M = 300;     % at this size, some algo take a long time!
+N   = 500; M = 1500;     % at this size, some algo take a long time!
 % N   = 100; M = 150;     % at this size, all algorithms take < 14 seconds
 A   = randn(M,N);
-%A =[A,-eye(M)];
-%N = N+M;
+A =[A,-eye(M)];
+N = N+M;
 b   = randn(M,1);
 
 fcn     = @(x) norm( A*x - b)^2;
@@ -55,21 +55,21 @@ time.lbfgsb = t;
 % end
 
 %%
-if exist( 'activeset.m', 'file' )
-    tstart=tic;
-    [xk,y]  = activeset(A,b);
-    t=toc(tstart)
-    x.activeset    = xk;
-    time.activeset = t;
-end
-%%
-if exist( 'blocknnls.m', 'file' )
-    tstart=tic;
-    [xk]  = blocknnls(A,b, 'fixed');
-    t=toc(tstart)
-    x.blockPivot    = xk;
-    time.blockPivot = t;
-end
+% if exist( 'activeset.m', 'file' )
+%     tstart=tic;
+%     [xk,y]  = activeset(A,b);
+%     t=toc(tstart)
+%     x.activeset    = xk;
+%     time.activeset = t;
+% end
+% %%
+% if exist( 'blocknnls.m', 'file' )
+%     tstart=tic;
+%     [xk]  = blocknnls(A,b, 'fixed');
+%     t=toc(tstart)
+%     x.blockPivot    = xk;
+%     time.blockPivot = t;
+% end
 %%
 if exist( 'newton.m', 'file' ) && N < 500
     tstart=tic;
@@ -90,6 +90,14 @@ if exist( 'pcnnls.m', 'file' ) && N < 500
 else
     fprintf('Skipping predCorr method because we can''t find it, or it is too slow\n');
 end
+%%
+%
+tstart=tic;
+[xk,f1,residual,exitflag,output,ff]=lsqlin(A,b,[],[],[],[],l,u,x0,options);
+t=toc(tstart)
+x.lsqlin   = xk;
+time.lsqnonneg = t; 
+
 %%
 tstart=tic;
 xk = lsqnonneg(A,b);
