@@ -1,6 +1,7 @@
 % 精确方法求解（中间使用MATLAB自带的算法求解带约束的最小二乘问题）
 % 将非负最小二乘问题转变成 普通的最小二乘问题?
 function [x0, resvec, arvec, face1vec, face2vec, tf]=fixedMatrix(A,b,x0,maxit,tol,options)
+display =true;
 [m,n]=size(A);
 index = 1;
 % the residual vector
@@ -17,6 +18,11 @@ face1vec(index) = face1;
 face2vec(index) = face2;
 t=clock;
 while KKT > tol && index < maxit
+    if display
+        [minx,loc]=min(x0);
+        fprintf('lbfgs(%d end): normr(%g),kkt(%g),gp(%g),alpha(%g),talpha(%g),minx(%g,%d)\n'...
+            , index, normr, KKT,1,1,1,minx,loc);
+    end
     z = -r;
     z(z<0) = 0;
     bk = b + z;
@@ -32,6 +38,7 @@ while KKT > tol && index < maxit
 
     face1vec(index) = face1;
     face2vec(index) = face2;
+
 
 end
 resvec = resvec(resvec>0);
