@@ -19,11 +19,11 @@ face2vec(index) = face2;
 l  = zeros(N,1);    % lower bound
 u  = inf(N,1);      % there is no upper bound
 
-opts    = struct( 'factr', 1e2, 'pgtol', 1e-2, 'm', 50,'verbose',-1);
+opts    = struct( 'factr', 1e3, 'pgtol', 1e-2, 'm', 50,'verbose',-1);
 opts.printEvery     = Inf;
-opts.maxIts =100;
+opts.maxIts =10;
 t=clock;
-AtA     = A'*A; Ab = A'*b;
+% AtA     = A'*A; Ab = A'*b;
 while KKT > tol && index < maxit
   if display
         [minx,loc]=min(x0);
@@ -35,9 +35,17 @@ while KKT > tol && index < maxit
     bk = b + z;
     Ab = A'*bk;
     %内置使用MATLAB自带的算法
-    [x1, ~, info] = lbfgsb(@(x)fungunz(x,A,bk,AtA,Ab), l, u, opts );
+    [x1, ~, info] = lbfgsb(@(x)fungunz2(x,A,bk), l, u, opts );
   %  [x1,f1,residual,exitflag,output,ff]=lsqlin(A,bk,[],[],[],[],zeros(n,1),Inf*ones(n,1),x0,options);
     x0=x1;
+%     
+     if activeset
+         activeset=1:m;
+         
+         [x1, ~, info] = lbfgsb(@(x)fungunz2(x,A,bk), l, u, opts );
+     end
+    
+    
     [r, normr, xmin,Ar, KKT,face1,face2] = kktResidual(A, b, x0 , [], 1);
     %fprintf('index:%d,exit %d,f:%f,res1:%f,res0:%f,ratio:%f!\n',index,exitflag,f1,res1,res0,res1/res0);
     index=index+1;
