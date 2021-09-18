@@ -15,7 +15,7 @@ clear
 % 7:GNP  8 hybridfast
 example =1;
 % 1 sparse matrix m1 m2 n 2 density matrix
-[A,b,x0] = readData(2,2000,2000,500);
+[A,b,x0] = readData(2,2000,2000,1000);
 [m,n] =size(A);
 options = optimoptions('lsqlin','Algorithm','interior-point','Display','iter');
 % options = optimoptions('Algorithm','interior-point','TolX',1e-13)
@@ -37,7 +37,7 @@ fprintf('& %s & %g & %g & %g & %g & %g  \n','FM1',normr1,xmin1,normKKT1,min(Ar),
  end
 % 
 if example == 1 || example >100
-maxIterA = 20;
+maxIterA = 10;
 % options.OptimalityTolerance = 1e-10;
 % options.Algorithm = 'active-set';
 [xk1, resvec, arvec,face1v,face2v, tf1] = fixedMatrixlbfgs(A,b,x0,maxIterA,1e-15,options);
@@ -91,9 +91,9 @@ if example == 4 || example > 100
   fprintf('& %s & %g & %g & %g & %g &%g \\\\\n','ST',normr4,full(xmin4),full(normKKT4),min(Ar4),tf4);
 end
 if example == 1 || example > 100
-    maxIterA = 50;
- [xk5, resvec5, arvec5, faceXvec5, tf5]  = IPG(A, b, x0, 1e-13, 1e-8, 1-1e-10, maxIterA,'IPG');
- [rpk5, normr5, xmin5, Ar5, normKKT5 , faceX5, faceA5] = kktResidual(A, b, xk5, [], 1);
+  maxIterA = 50;
+  [xk5, resvec5, arvec5, faceXvec5, tf5]  = IPG(A, b, x0, 1e-13, 1e-8, 1-1e-10, maxIterA,'IPG');
+  [rpk5, normr5, xmin5, Ar5, normKKT5 , faceX5, faceA5] = kktResidual(A, b, xk5, [], 1);
   fprintf('& %s & %g & %g & %g & %g &%g \\\\\n','NT',normr5,full(xmin5),full(normKKT5),min(Ar5),tf5);
 end
 if example == 7 || example > 100

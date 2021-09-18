@@ -38,11 +38,17 @@ while KKT > tol && index < maxit
     [x1, ~, info] = lbfgsb(@(x)fungunz2(x,A,bk), l, u, opts );
   %  [x1,f1,residual,exitflag,output,ff]=lsqlin(A,bk,[],[],[],[],zeros(n,1),Inf*ones(n,1),x0,options);
     x0=x1;
-%     
+     activeset = true;
      if activeset
-         activeset=1:m;
-         
-         [x1, ~, info] = lbfgsb(@(x)fungunz2(x,A,bk), l, u, opts );
+         Aa=A;
+         Aa(z>0,:)=[];
+         ba=b;
+         ba(z>0)=[];
+         [x1a, ~, info] = lbfgsb(@(x)fungunz2(x,Aa,ba), l, u, opts );
+         [minxa,loca]=min(x1a);
+         [ra, normra, xmina, Ara, KKTa, face1a, face2a] = kktResidual(A, b, x1a , [],1);
+         fprintf('lbfgsa(%d end): normra(%g),kkta(%g),gpa(%g),alphaa(%g),talphaa(%g),minxa(%g,%d)\n'...
+            , index, normra, KKTa,1,1,1,minxa,loca);
      end
     
     
