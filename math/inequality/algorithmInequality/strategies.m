@@ -12,7 +12,7 @@ function isSub = strategies(A,b,Qn,type,iter,nf,rkp,xA)
 isSub = false;
 eIter = 3;
 con1 = 0.95;
-con2 = 0.50;
+con2 = 0.6;
 diff = 10*eps;
 tol = 1e-15;
 %

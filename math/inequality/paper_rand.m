@@ -3,7 +3,7 @@
 addpath('./dataInequality/');
 addpath('./algorithmInequality/')
 m = 1000;
-n = 800;
+n = 100;
 rangeMax = 2;
 rangeMin = -2;
 count = 1;
@@ -14,7 +14,7 @@ for j = 1:count
 %    b = 2 * rand(m , 1)-1;
 %    x0 = zeros(n , 1);
 %   load('1000_100picture.mat');
- load('1000_800picture.mat');
+ load('1000_100picture.mat');
    maxIter = 300;
    nf = 5;
    str = ['D','U','C','R','P'];
@@ -80,7 +80,7 @@ for i=2:5
     h.LineStyle = '--';
 end
 legend('DHA','DHA(\mu=n_f)','CHA','RHA','PHA');
-xlabel('the sum numbers');
+xlabel('the iterative numbers');
 ylabel('the norm of the gradient');
 
 %    end % for ration
