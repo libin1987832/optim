@@ -3,7 +3,7 @@
 addpath('./dataInequality/');
 addpath('./algorithmInequality/')
 m = 1000;
-n = 100;
+n = 800;
 rangeMax = 2;
 rangeMin = -2;
 count = 1;
@@ -13,7 +13,8 @@ for j = 1:count
 %    A = 2 * rand(m , n)-1;
 %    b = 2 * rand(m , 1)-1;
 %    x0 = zeros(n , 1);
-   load('1000_100picture.mat');
+%   load('1000_100picture.mat');
+ load('1000_800picture.mat');
    maxIter = 300;
    nf = 5;
    str = ['D','U','C','R','P'];
