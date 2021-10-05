@@ -2,11 +2,11 @@
 % [A,rows,cols,entries,rep,field,symm]=mmread('../util/well1033.mtx');
 addpath('./dataInequality/');
 addpath('./algorithmInequality/')
-m = 2000;
-n = 1200;
+m = 1000;
+n = 100;
 rangeMax = 2;
 rangeMin = -2;
-count = 10;
+count = 1;
 record=zeros(4*count,5);
 for j = 1:count
 %     [A,b,x0]=randInequality(m,n,rangeMax,rangeMin);
