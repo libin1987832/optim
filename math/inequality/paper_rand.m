@@ -3,16 +3,17 @@
 addpath('./dataInequality/');
 addpath('./algorithmInequality/')
 m = 1000;
-n = 100;
+n = 600;
 rangeMax = 2;
 rangeMin = -2;
 count = 1;
 record=zeros(4*count,5);
 for j = 1:count
 %     [A,b,x0]=randInequality(m,n,rangeMax,rangeMin);
-   A = 2 * rand(m , n)-1;
-   b = 2 * rand(m , 1)-1;
-   x0 = zeros(n , 1);
+%    A = 2 * rand(m , n)-1;
+%    b = 2 * rand(m , 1)-1;
+%    x0 = zeros(n , 1);
+   load('1000_600picture.mat');
    maxIter = 300;
    nf = 5;
    str = ['D','U','C','R','P'];
@@ -62,6 +63,9 @@ meanp = squeeze(sum(recordp,3)/count);
 for i =1:5
     str = ['D','U','C','R','P'];
 fprintf('& %s & %g & %g & (%d,%d)  & %g \\\\\n',[str(i),'HA'],meanp(i,1),meanp(i,2),round(meanp(i,3)),round(meanp(i,4)),meanp(i,5));
-end      
+end
+
+
+
 %    end % for ration
 %    end % for m
