@@ -26,7 +26,7 @@ iter = 0;
 % residual vector
 resvec = zeros(1,maxit + 1);
 % the normal gradient 
-arvec = zeros(1,maxit + 1);
+arvec = zeros(1,maxit*nf + 1);
 % subspace minization
 itersm = zeros(1,maxit + 1);
 resvec(1) = normr;
@@ -41,7 +41,8 @@ Qn=Q(:,1:n);
 while normAr > tol  && normr > tol
     iter = iter + 1;
 %    [xfA,rpk] = fmnf(A,b,x0,n,Q,R,rpk,nf,type);
-    [xfA,rpk] = simple(A,b,x0,n,Q,R,rpk,nf,type);
+    [xfA,rpk,resA] = simple(A,b,x0,n,Q,R,rpk,nf,type);
+    arvec((iter-1)*(nf+1) + 2:(iter-1)*(nf+1) + 1+nf) = resA;
 %     debug = 0;
 %     if debug
 %        fprintf("active:%d\n",sum(sign(rpk)>0));
@@ -64,7 +65,7 @@ while normAr > tol  && normr > tol
     % record the value of objection function
     resvec(iter + 1) = normr;
     % record the value of the gradient function
-    arvec(iter + 1) = normAr;
+    arvec(iter*(nf+1) + 1) = normAr;
     if iter > maxit || flag == 0
         break;
     end
@@ -79,5 +80,5 @@ xk = x0;
 relres = normr;
 resvec = resvec(1:iter + 1);
 itersm = itersm(1:iter + 1);
-arvec = arvec(1:iter + 1);
+arvec = arvec(1:iter*(nf+1) + 1);
 tf = etime(clock,t);

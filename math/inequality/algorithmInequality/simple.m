@@ -3,8 +3,9 @@
 % R may be steplength if the gradient method
 % rpk is b-Ax
 % compuataion: GHA: A' * r;,R * d,A * xk FM Q' * r  R \ Qr A * xk
-function [xkA,rpk] = simple(A,b,xk,n,Q,R,rpk,nf,type)
+function [xkA,rpk,resA] = simple(A,b,xk,n,Q,R,rpk,nf,type)
 xkA = zeros(n,nf);
+resA = zeros(1,nf);
 switch upper(type)
     case 'GHA'
         for i = 1 : nf
@@ -32,5 +33,7 @@ switch upper(type)
            xk = xk+uk;
            rpk = b - A * xk;
            xkA(:,i) = xk;
+           [~, r, normr, normAr] = residual(A,b,xk,rpk);
+           resA(1, i) = normAr;
         end        
 end

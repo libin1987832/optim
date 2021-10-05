@@ -3,7 +3,7 @@
 addpath('./dataInequality/');
 addpath('./algorithmInequality/')
 m = 1000;
-n = 600;
+n = 100;
 rangeMax = 2;
 rangeMin = -2;
 count = 1;
@@ -13,7 +13,7 @@ for j = 1:count
 %    A = 2 * rand(m , n)-1;
 %    b = 2 * rand(m , 1)-1;
 %    x0 = zeros(n , 1);
-   load('1000_600picture.mat');
+   load('1000_100picture.mat');
    maxIter = 300;
    nf = 5;
    str = ['D','U','C','R','P'];
@@ -24,7 +24,7 @@ if debug
     [rk, rkh, dh, gh] = residual(A,b,xkh);
     fprintf('active:%d ,%g',vkh,dh);
 end
-    iterA=size(4,maxIter+2);
+    iterA=size(4,maxIter*(nf+1)+2);
     maxIterA = 0;
     fprintA=zeros(1,8);
     steplengthOrk = 3;
@@ -50,7 +50,7 @@ end
 % print for tex      
         % fprintf('%s $ %d \\times %d $ & %g & %g & %g & %g & %g & %g\n',type,m,n,dD,gD,tfD,iter*nf,sumiter,beginN(1));
         fprintf('& %s & %g & %g & (%d,%d)  & %g \\\\\n',[type,'HA'],dD,gD,iter*nf,sumiter,tfD);
-       iterA(i,1:iter+1)=resvec;
+       iterA(i,1:iter*(nf+1)+1)=resvec;
         if maxIterA < iter+1
             maxIterA = iter+1;
         end
@@ -65,7 +65,22 @@ for i =1:5
 fprintf('& %s & %g & %g & (%d,%d)  & %g \\\\\n',[str(i),'HA'],meanp(i,1),meanp(i,2),round(meanp(i,3)),round(meanp(i,4)),meanp(i,5));
 end
 
-
+ %%
+type=['r','r','c','k','g'];
+typet=['+','+','o','v','s'];
+beginp = 1;
+figure
+%maxIterA = 200;
+h=semilogy(beginp:(maxIterA-1)*(nf+1),iterA(1,beginp:(maxIterA-1)*(nf+1)),'bx');
+h.LineStyle = '--';
+hold on
+for i=2:5
+    h=semilogy(beginp:(maxIterA-1)*(nf+1),iterA(i,beginp:(maxIterA-1)*(nf+1)),[type(i) typet(i)]);
+    h.LineStyle = '--';
+end
+legend('DHA','DHA(\mu=n_f)','CHA','RHA','PHA');
+xlabel('the sum numbers');
+ylabel('the norm of the gradient');
 
 %    end % for ration
 %    end % for m
