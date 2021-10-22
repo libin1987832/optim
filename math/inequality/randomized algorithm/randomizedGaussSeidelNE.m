@@ -38,7 +38,7 @@ if isempty(tol)
     r(r<0)=0;
      
     col = A(:, pickedj);
-    x(pickedj) = x(pickedj) + ( col' * r ) / Acol(pickedj);
+    x(pickedj) = x(pickedj) + ( col' * r ) / Acol(pickedj)
     e = norm(x-exactx);
     error = [error,e];
     %iter = iter+1;

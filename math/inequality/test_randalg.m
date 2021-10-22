@@ -5,14 +5,15 @@ addpath('./algorithmInequality/');
 addpath('./randomized algorithm')
 
 m = 1000;
-n = 20;
+n = 1000;
 rangeMax = 2;
 rangeMin = -2;
 
-   A = 2 * rand(m , n)-1;
-   b = 2 * rand(m , 1)-1;
-  % b=A*ones(n,1);
-   x0 = zeros(n , 1);
+%    A = 2 * rand(m , n)-1;
+%    b = 2 * rand(m , 1)-1;
+%   % b=A*ones(n,1);
+%    x0 = zeros(n , 1);
+   A = -[1,-1;-1,-1;0,1];b=-[0;-1;0];x0=[-1;0];
    maxIter = 300;
    nf = 5;
    str = ['D','U','C','R','P'];
@@ -21,8 +22,9 @@ rangeMin = -2;
     [xkh,rkh,countFMh,countNWh,beginNWh,tfh,vkh,rkArrh]=han(x0,A,b,maxIter);
     [rk, rkh, dh, gh] = residual(A,b,xkh);
     fprintf('active:%d ,%g',vkh,dh);
-    maxit = 10000;
-    [xkacz,iterkacz,errorkacz] = randomizedKaczmarzNE(A, b, x0,2*maxit,[],xkh);
+    maxit = 10;
+    xkh
+    [xkacz,iterkacz,errorkacz] = randomizedKaczmarzNE(A, b, x0,maxit,[],xkh);
     [xGS,iterGS,errorGS] = randomizedGaussSeidelNE(A, b, x0,maxit,[],xkh);
 
 

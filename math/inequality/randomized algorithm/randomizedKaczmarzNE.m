@@ -41,17 +41,18 @@ if isempty(tol)
     row = A(pickedi, :);
     r=b(pickedi) - (row * x); 
     if r>0
-    x = x + ( r ) / (Arow(pickedi)) * row';
+    x = x + ( r ) / (Arow(pickedi)) * row'
+
     update = update + 1;
     end
-    if size(index,2) == 2
-         weight = weightOrig;
-         index = indexOrig;
-    end
-    loc=find(index==pickedi);
-    index(loc) = [];
-    weight(loc) = [];
-    weight = weight./sum(weight);
+%     if size(index,2) == 2
+%          weight = weightOrig;
+%          index = indexOrig;
+%     end
+%     loc=find(index==pickedi);
+%     index(loc) = [];
+%     weight(loc) = [];
+%     weight = weight./sum(weight);
 
     e = norm(x-exactx);
     error = [error,e];

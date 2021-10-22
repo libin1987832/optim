@@ -3,7 +3,7 @@
 addpath('./dataInequality/');
 addpath('./algorithmInequality/')
 m = 1000;
-n = 100;
+n = 1000;
 rangeMax = 2;
 rangeMin = -2;
 count = 1;
