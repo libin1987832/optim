@@ -1,4 +1,4 @@
-function [x,iter,error] = randomizedGaussSeidelNE(A, b, x0,maxit,tol,exactx)
+function [x,iter,error,xA] = randomizedGaussSeidelNE(A, b, x0,maxit,tol,exactx)
 % randomized kaczmarz by Algorithm 1
 % Ax = b
 % A - input matrix
@@ -16,7 +16,7 @@ x = x0;
 %iter = 0;
 error = [];
 e = 1;
-
+xA = [];
 normrow = [];
 index = [];
 %compute norm per row also store the corresponding index
@@ -39,6 +39,7 @@ if isempty(tol)
      
     col = A(:, pickedj);
     x(pickedj) = x(pickedj) + ( col' * r ) / Acol(pickedj)
+      xA =[xA x];
     e = norm(x-exactx);
     error = [error,e];
     %iter = iter+1;

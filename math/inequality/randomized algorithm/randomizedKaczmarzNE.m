@@ -1,4 +1,4 @@
-function [x,iter,error] = randomizedKaczmarzNE(A, b, x0,maxit,tol,exactx)
+function [x,iter,error,xA] = randomizedKaczmarzNE(A, b, x0,maxit,tol,exactx)
 % randomized kaczmarz by Algorithm 1
 % Ax = b
 % A - input matrix
@@ -16,7 +16,7 @@ x = x0;
 %iter = 0;
 error = [];
 e = 1;
-
+xA = [];
 normrow = [];
 index = [];
 %compute norm per row also store the corresponding index
@@ -42,7 +42,7 @@ if isempty(tol)
     r=b(pickedi) - (row * x); 
     if r>0
     x = x + ( r ) / (Arow(pickedi)) * row'
-
+    xA =[xA x];
     update = update + 1;
     end
 %     if size(index,2) == 2

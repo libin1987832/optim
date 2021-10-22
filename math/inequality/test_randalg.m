@@ -19,16 +19,33 @@ rangeMin = -2;
    str = ['D','U','C','R','P'];
 % for the solution so here
 
-    [xkh,rkh,countFMh,countNWh,beginNWh,tfh,vkh,rkArrh]=han(x0,A,b,maxIter);
+   % [xkh,rkh,countFMh,countNWh,beginNWh,tfh,vkh,rkArrh]=han(x0,A,b,maxIter);
+     [xkh,flag,relres,iter,resvec,arvec,itersm,tfD]=hybridA(A,b,x0,3,300,5,['D','HA']);
     [rk, rkh, dh, gh] = residual(A,b,xkh);
     fprintf('active:%d ,%g',vkh,dh);
     maxit = 10;
     xkh
-    [xkacz,iterkacz,errorkacz] = randomizedKaczmarzNE(A, b, x0,maxit,[],xkh);
-    [xGS,iterGS,errorGS] = randomizedGaussSeidelNE(A, b, x0,maxit,[],xkh);
+    [xkacz,iterkacz,errorkacz,xAk] = randomizedKaczmarzNE(A, b, x0,maxit,[],xkh);
+    [xGS,iterGS,errorGS,xAg] = randomizedGaussSeidelNE(A, b, x0,maxit,[],xkh);
 
-
-
+x = linspace(-0.5,1.5);
+y = linspace(0,1);
+[X,Y] = meshgrid(x,y);
+XZ = repmat(X,1,1,3);
+YZ = repmat(Y,1,1,3);
+ba1 = reshape(A(:,1),1,1,3);
+ba2 = reshape(A(:,2),1,1,3);
+br = reshape(b,1,1,3);
+z = bsxfun(@times,ba1,XZ )+bsxfun(@times,ba2,YZ );
+z = bsxfun(@minus,br,z);
+z(z<0)=0;
+z=0.5*z.^2;
+Z=squeeze(sum(z,3));
+figure
+contour(X,Y,Z)
+hold on
+plot(xAk(1,:),xAk(2,:),'b+')
+plot(xAg(1,:),xAg(2,:),'ro')
  %%
 
 beginp = 1;
