@@ -21,13 +21,13 @@ normrow = [];
 index = [];
 %compute norm per row also store the corresponding index
 
-  for i = 1:m
-    normrow = [normrow,norm(A(i,:))];
-    index = [index,i];
+  for j = 1:n
+    normrow = [normrow,norm(A(:,j))];
+    index = [index,j];
   end
   
   weight = normrow/sum(normrow);
-  Acol=sum(A.*A,2);
+  Acol=sum(A.*A,1);
 if isempty(tol)
   iter = maxit;   
   for i = 1:maxit

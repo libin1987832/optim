@@ -27,7 +27,7 @@ index = [];
   end
   
   weight = normrow/sum(normrow);
-  Arow=sum(A.*A,1);
+  Arow=sum(A.*A,2);
 if isempty(tol)
   iter = maxit;   
   for i = 1:maxit
@@ -35,7 +35,10 @@ if isempty(tol)
     pickedi = randsample(index,1,true,weight);
     
     row = A(pickedi, :);
-    x = x + ( b(pickedi) - (row * x) ) / (Arow(pickedi)) * row';
+    r=b(pickedi) - (row * x); 
+    if r>0
+    x = x + ( r ) / (Arow(pickedi)) * row';
+    end
     e = norm(x-exactx);
     error = [error,e];
     %iter = iter+1;
@@ -48,7 +51,10 @@ else
     pickedi = randsample(index,1,true,weight);
     
     row = A(pickedi, :);
-    x = x + ( b(pickedi) - (row * x) ) / (row * row') * row';
+    r=b(pickedi) - (row * x); 
+    if r>0
+    x = x + ( r ) / (Arow(pickedi)) * row';
+    end
     e = norm(x-exactx);
     error = [error,e];
     iter = iter+1;

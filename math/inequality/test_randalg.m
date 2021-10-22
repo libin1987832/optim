@@ -5,12 +5,13 @@ addpath('./algorithmInequality/');
 addpath('./randomized algorithm')
 
 m = 1000;
-n = 100;
+n = 20;
 rangeMax = 2;
 rangeMin = -2;
 
    A = 2 * rand(m , n)-1;
    b = 2 * rand(m , 1)-1;
+  % b=A*ones(n,1);
    x0 = zeros(n , 1);
    maxIter = 300;
    nf = 5;
@@ -31,7 +32,7 @@ rangeMin = -2;
 beginp = 1;
 figure
 %maxIterA = 200;
-h=semilogy(beginp:iterkacz,errorkacz,'bx');
+h=semilogy(beginp:iterkacz,errorkacz,'b.');
 h.LineStyle = '--';
 hold on
 h=semilogy(beginp:iterGS,errorGS);
