@@ -22,7 +22,7 @@ rangeMin = -2;
     [rk, rkh, dh, gh] = residual(A,b,xkh);
     fprintf('active:%d ,%g',vkh,dh);
     maxit = 10000;
-    [xkacz,iterkacz,errorkacz] = randomizedKaczmarzNE(A, b, x0,maxit,[],xkh);
+    [xkacz,iterkacz,errorkacz] = randomizedKaczmarzNE(A, b, x0,2*maxit,[],xkh);
     [xGS,iterGS,errorGS] = randomizedGaussSeidelNE(A, b, x0,maxit,[],xkh);
 
 

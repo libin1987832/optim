@@ -27,18 +27,32 @@ index = [];
   end
   
   weight = normrow/sum(normrow);
+  weightOrig = weight;
+  indexOrig = index;
   Arow=sum(A.*A,2);
+  update = 0;
 if isempty(tol)
   iter = maxit;   
   for i = 1:maxit
     %randsample to generate weighted random number from given vector
+
     pickedi = randsample(index,1,true,weight);
-    
+
     row = A(pickedi, :);
     r=b(pickedi) - (row * x); 
     if r>0
     x = x + ( r ) / (Arow(pickedi)) * row';
+    update = update + 1;
     end
+    if size(index,2) == 2
+         weight = weightOrig;
+         index = indexOrig;
+    end
+    loc=find(index==pickedi);
+    index(loc) = [];
+    weight(loc) = [];
+    weight = weight./sum(weight);
+
     e = norm(x-exactx);
     error = [error,e];
     %iter = iter+1;
@@ -48,16 +62,25 @@ else
     e = 1;
     while e >= tol  
     %randsample to generate weighted random number from given vector
+
     pickedi = randsample(index,1,true,weight);
     
     row = A(pickedi, :);
     r=b(pickedi) - (row * x); 
     if r>0
-    x = x + ( r ) / (Arow(pickedi)) * row';
+        update = update + 1;
+        x = x + ( r ) / (Arow(pickedi)) * row';
+    elseif size(index,1) == 1
+         weight = weightOrig;
+         index = indexOrig;
     end
+    index(pickedi) = [];
+    weight(pickedi) = [];
+    weight = weight./sum(weight);
     e = norm(x-exactx);
     error = [error,e];
     iter = iter+1;
     end
 end
+update
 end
