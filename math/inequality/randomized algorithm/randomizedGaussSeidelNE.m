@@ -1,4 +1,4 @@
-function [x,iter,error,xA] = randomizedGaussSeidelNE(A, b, x0,maxit,tol,exactx)
+function [x,iter,error,xA,indexA] = randomizedGaussSeidelNE(A, b, x0,maxit,tol,exactx)
 % randomized kaczmarz by Algorithm 1
 % Ax = b
 % A - input matrix
@@ -16,9 +16,10 @@ x = x0;
 %iter = 0;
 error = [];
 e = 1;
-xA = [];
+xA = [x0];
 normrow = [];
 index = [];
+indexA=[0];
 %compute norm per row also store the corresponding index
 
   for j = 1:n
@@ -33,7 +34,7 @@ if isempty(tol)
   for i = 1:maxit
     %randsample to generate weighted random number from given vector
     pickedj = randsample(index,1,true,weight);
-     
+     indexA = [indexA,pickedj];
     r=b-A*x;
     r(r<0)=0;
      

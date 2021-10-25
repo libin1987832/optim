@@ -25,8 +25,8 @@ rangeMin = -2;
     fprintf('active:%d ,%g',vkh,dh);
     maxit = 10;
     xkh
-    [xkacz,iterkacz,errorkacz,xAk] = randomizedKaczmarzNE(A, b, x0,maxit,[],xkh);
-    [xGS,iterGS,errorGS,xAg] = randomizedGaussSeidelNE(A, b, x0,maxit,[],xkh);
+    [xkacz,iterkacz,errorkacz,xAk,indexAk] = randomizedKaczmarzNE(A, b, x0,maxit,[],xkh);
+    [xGS,iterGS,errorGS,xAg,indexAj] = randomizedGaussSeidelNE(A, b, x0,maxit,[],xkh);
 
 x = linspace(-0.5,1.5);
 y = linspace(0,1);
@@ -46,6 +46,13 @@ contour(X,Y,Z)
 hold on
 plot(xAk(1,:),xAk(2,:),'b+')
 plot(xAg(1,:),xAg(2,:),'ro')
+line([0,1],[0,1]);
+line([0,1],[1,0]);
+
+indexAk
+xAk
+indexAj
+xAg
  %%
 
 beginp = 1;

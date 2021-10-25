@@ -1,4 +1,4 @@
-function [x,iter,error,xA] = randomizedKaczmarzNE(A, b, x0,maxit,tol,exactx)
+function [x,iter,error,xA,indexA] = randomizedKaczmarzNE(A, b, x0,maxit,tol,exactx)
 % randomized kaczmarz by Algorithm 1
 % Ax = b
 % A - input matrix
@@ -16,7 +16,8 @@ x = x0;
 %iter = 0;
 error = [];
 e = 1;
-xA = [];
+xA = [x0];
+indexA=[];
 normrow = [];
 index = [];
 %compute norm per row also store the corresponding index
@@ -37,14 +38,14 @@ if isempty(tol)
     %randsample to generate weighted random number from given vector
 
     pickedi = randsample(index,1,true,weight);
-
+    indexA = [indexA,pickedi];
     row = A(pickedi, :);
     r=b(pickedi) - (row * x); 
     if r>0
     x = x + ( r ) / (Arow(pickedi)) * row'
-    xA =[xA x];
     update = update + 1;
     end
+    xA =[xA x];
 %     if size(index,2) == 2
 %          weight = weightOrig;
 %          index = indexOrig;
