@@ -14,6 +14,7 @@ rangeMin = -2;
 %   % b=A*ones(n,1);
 %    x0 = zeros(n , 1);
    A = -[1,-1;-1,-1;0,1];b=-[0;-1;0];x0=[-1;0];
+   xkhe=[1/2;1/3];
    maxIter = 300;
    nf = 5;
    str = ['D','U','C','R','P'];
@@ -22,12 +23,12 @@ rangeMin = -2;
    % [xkh,rkh,countFMh,countNWh,beginNWh,tfh,vkh,rkArrh]=han(x0,A,b,maxIter);
      [xkh,flag,relres,iter,resvec,arvec,itersm,tfD]=hybridA(A,b,x0,3,300,5,['D','HA']);
     [rk, rkh, dh, gh] = residual(A,b,xkh);
-    fprintf('active:%d ,%g',vkh,dh);
-    maxit = 10;
+  %  fprintf('active:%d ,%g',vkh,dh);
+    maxit = 30;
     xkh
     [xkacz,iterkacz,errorkacz,xAk,indexAk] = randomizedKaczmarzNE(A, b, x0,maxit,[],xkh);
     [xGS,iterGS,errorGS,xAg,indexAj] = randomizedGaussSeidelNE(A, b, x0,maxit,[],xkh);
-    [xIn,iterIn,errorIn,xIn,indexAIn] = randomizedInexactNE(A, b, x0,maxit,[],xkh);
+    [xIn,iterIn,errorIn,xIng,indexAIn] = randomizedInexactNE(A, b, x0,maxit,[],xkh);
     
     
 x = linspace(-0.5,1.5);
@@ -48,6 +49,7 @@ contour(X,Y,Z)
 hold on
 plot(xAk(1,:),xAk(2,:),'b+')
 plot(xAg(1,:),xAg(2,:),'ro')
+% plot(xIng(1,:),xIng(2,:),'g*')
 line([0,1],[0,1]);
 line([0,1],[1,0]);
 
@@ -55,6 +57,8 @@ indexAk
 xAk
 indexAj
 xAg
+indexAIn
+xIng
  %%
 
 beginp = 1;
