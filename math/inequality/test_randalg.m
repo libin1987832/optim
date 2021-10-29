@@ -27,7 +27,9 @@ rangeMin = -2;
     xkh
     [xkacz,iterkacz,errorkacz,xAk,indexAk] = randomizedKaczmarzNE(A, b, x0,maxit,[],xkh);
     [xGS,iterGS,errorGS,xAg,indexAj] = randomizedGaussSeidelNE(A, b, x0,maxit,[],xkh);
-
+    [xIn,iterIn,errorIn,xIn,indexAIn] = randomizedInexactNE(A, b, x0,maxit,[],xkh);
+    
+    
 x = linspace(-0.5,1.5);
 y = linspace(0,1);
 [X,Y] = meshgrid(x,y);
