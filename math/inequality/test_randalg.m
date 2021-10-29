@@ -24,7 +24,7 @@ rangeMin = -2;
      [xkh,flag,relres,iter,resvec,arvec,itersm,tfD]=hybridA(A,b,x0,3,300,5,['D','HA']);
     [rk, rkh, dh, gh] = residual(A,b,xkh);
   %  fprintf('active:%d ,%g',vkh,dh);
-    maxit = 30;
+    maxit = 50;
     xkh
     [xkacz,iterkacz,errorkacz,xAk,indexAk] = randomizedKaczmarzNE(A, b, x0,maxit,[],xkh);
     [xGS,iterGS,errorGS,xAg,indexAj] = randomizedGaussSeidelNE(A, b, x0,maxit,[],xkh);
