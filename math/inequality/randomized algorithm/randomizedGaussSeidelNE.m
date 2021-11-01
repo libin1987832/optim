@@ -39,10 +39,9 @@ if isempty(tol)
     indexA = [indexA,pickedj];
     r=b-A*x;
     r(r<0)=0;
-     
     col = A(:, pickedj);
     x(pickedj) = x(pickedj) + alpha*( col' * r ) / Acol(pickedj);
-      xA =[xA x];
+    xA =[xA x];
     e = norm(x-exactx);
     error = [error,e];
     %iter = iter+1;

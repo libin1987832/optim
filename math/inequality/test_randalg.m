@@ -4,7 +4,7 @@ addpath('./dataInequality/');
 addpath('./algorithmInequality/');
 addpath('./randomized algorithm')
 
-m = 1000;
+m = 2000;
 n = 100;
 rangeMax = 2;
 rangeMin = -2;
@@ -15,20 +15,21 @@ rangeMin = -2;
    x0 = zeros(n , 1);
 %    A = -[1,-1;-1,-1;0,1];b=-[0;-1;0];x0=[-1;0];
 %    xkhe=[1/2;1/3];
-   maxIter = 300;
+   maxIter = 100;
    nf = 5;
    str = ['D','U','C','R','P'];
 % for the solution so here
 
    % [xkh,rkh,countFMh,countNWh,beginNWh,tfh,vkh,rkArrh]=han(x0,A,b,maxIter);
-    [xkh,flag,relres,iter,resvec,arvec,itersm,tfD]=hybridA(A,b,x0,3,300,5,['D','HA']);
+    [xkh,flag,relres,iter,resvec,arvec,itersm,tfD]=hybridA(A,b,x0,3,300,5,['R','HA']);
     [rk, rkh, dh, gh] = residual(A,b,xkh);
   %  fprintf('active:%d ,%g',vkh,dh);
     maxit = 1500;
     xkh;
-    norm(rk)
+    norm(gh)
    [xIn,iterIn,errorIn,xIng,indexAIn] = randomizedInexactNE(A, b, x0,maxit,[],xkh);
-    [xkacz,iterkacz,errorkacz,xAk,indexAk] = randomizedKaczmarzNE(A, b, x0,maxit,[],xkh);
+%     [xkacz,iterkacz,errorkacz,xAk,indexAk] = randomizedKaczmarzNE(A, b, x0,maxit,[],xkh);
+ [xkacz,iterkacz,errorkacz,xAk,indexAk] = IFM(A, b, x0,maxit,[],xkh);
     [xGS,iterGS,errorGS,xAg,indexAj] = randomizedGaussSeidelNE(A, b, x0,maxit,[],xkh);
 
     
@@ -65,16 +66,16 @@ rangeMin = -2;
 
 beginp = 1;
 figure
-%maxIterA = 200;
-% h=semilogy(beginp:iterkacz,errorkacz,'b.');
-% h.LineStyle = '--';
+maxIterA = 200;
+h=semilogy(beginp:iterkacz,errorkacz,'g.');
+h.LineStyle = '--';
 hold on
 h=semilogy(beginp:iterGS,errorGS,'r+');
 h.LineStyle = '--';
 h=semilogy(beginp:iterIn,errorIn,'b*');
 h.LineStyle = '--';
-%legend('Kaczmarz','Gauss Seidel','Inexact');
-legend('Gauss Seidel','Inexact');
+legend('IFM','Gauss Seidel','Inexact');
+% legend('Gauss Seidel','Inexact');
 xlabel('the iterative numbers');
 ylabel('the norm of the error');
 
