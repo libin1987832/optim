@@ -31,7 +31,7 @@ rangeMin = -2;
     [xIn,iterIn,errorIn,xIng,indexAIn] = randomizedInexactNE(A, b, x0,maxit,[],xkh);
     
     
-x = linspace(-0.5,1.5);
+x = linspace(-1,1.5);
 y = linspace(0,1);
 [X,Y] = meshgrid(x,y);
 XZ = repmat(X,1,1,3);
