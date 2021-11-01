@@ -21,15 +21,16 @@ rangeMin = -2;
 % for the solution so here
 
    % [xkh,rkh,countFMh,countNWh,beginNWh,tfh,vkh,rkArrh]=han(x0,A,b,maxIter);
-     [xkh,flag,relres,iter,resvec,arvec,itersm,tfD]=hybridA(A,b,x0,3,300,5,['D','HA']);
+    [xkh,flag,relres,iter,resvec,arvec,itersm,tfD]=hybridA(A,b,x0,3,300,5,['D','HA']);
     [rk, rkh, dh, gh] = residual(A,b,xkh);
   %  fprintf('active:%d ,%g',vkh,dh);
-    maxit = 50;
+    maxit = 1500;
     xkh;
     norm(rk)
+   [xIn,iterIn,errorIn,xIng,indexAIn] = randomizedInexactNE(A, b, x0,maxit,[],xkh);
     [xkacz,iterkacz,errorkacz,xAk,indexAk] = randomizedKaczmarzNE(A, b, x0,maxit,[],xkh);
     [xGS,iterGS,errorGS,xAg,indexAj] = randomizedGaussSeidelNE(A, b, x0,maxit,[],xkh);
-    [xIn,iterIn,errorIn,xIng,indexAIn] = randomizedInexactNE(A, b, x0,maxit,[],xkh);
+
     
     
 % x = linspace(-1,1.5);
@@ -65,14 +66,15 @@ rangeMin = -2;
 beginp = 1;
 figure
 %maxIterA = 200;
-h=semilogy(beginp:iterkacz,errorkacz,'b.');
-h.LineStyle = '--';
+% h=semilogy(beginp:iterkacz,errorkacz,'b.');
+% h.LineStyle = '--';
 hold on
 h=semilogy(beginp:iterGS,errorGS,'r+');
 h.LineStyle = '--';
 h=semilogy(beginp:iterIn,errorIn,'b*');
 h.LineStyle = '--';
-legend('Kaczmarz','Gauss Seidel','Inexact');
+%legend('Kaczmarz','Gauss Seidel','Inexact');
+legend('Gauss Seidel','Inexact');
 xlabel('the iterative numbers');
 ylabel('the norm of the error');
 

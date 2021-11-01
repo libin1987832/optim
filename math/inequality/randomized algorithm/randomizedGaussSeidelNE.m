@@ -21,7 +21,8 @@ normrow = [];
 index = [];
 indexA=[0];
 %compute norm per row also store the corresponding index
-
+%alpha = 1+ min(m/n,n/m);
+alpha = 1;
   for j = 1:n
     normrow = [normrow,norm(A(:,j))];
     index = [index,j];
@@ -34,12 +35,13 @@ if isempty(tol)
   for i = 1:maxit
     %randsample to generate weighted random number from given vector
     pickedj = randsample(index,1,true,weight);
-     indexA = [indexA,pickedj];
+ %   pickedj=index(mod(i,n)+1);
+    indexA = [indexA,pickedj];
     r=b-A*x;
     r(r<0)=0;
      
     col = A(:, pickedj);
-    x(pickedj) = x(pickedj) + ( col' * r ) / Acol(pickedj)
+    x(pickedj) = x(pickedj) + alpha*( col' * r ) / Acol(pickedj);
       xA =[xA x];
     e = norm(x-exactx);
     error = [error,e];

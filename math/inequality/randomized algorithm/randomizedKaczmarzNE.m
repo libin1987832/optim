@@ -42,7 +42,7 @@ if isempty(tol)
     row = A(pickedi, :);
     r=b(pickedi) - (row * x); 
     if r>0
-    x = x + ( r ) / (Arow(pickedi)) * row'
+    x = x + ( r ) / (Arow(pickedi)) * row';
     update = update + 1;
     end
     xA =[xA x];
