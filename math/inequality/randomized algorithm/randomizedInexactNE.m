@@ -40,12 +40,14 @@ if isempty(tol)
     z=Axb;
     z(z<0)=0;
     t1 = 0.5 + 0.5 * sqrt(1+4*t0^2);
-   z=z+t0/t1*(z-z0);
+   %z=z0+t0/t1*(z-z0);
     z0=z;
     t0=t1;
     col = A(:, pickedj);
-    x(pickedj) = x(pickedj) + ( col' * (z-Axb) ) / Acol(pickedj);
-  %x=A\(b+z);
+    rz=(z-Axb);
+    r=b-A*x;
+    r(r<0)=0;
+    x(pickedj) = x(pickedj) + ( col' * r) / Acol(pickedj);
     
       xA =[xA x];
     e = norm(x-exactx);
