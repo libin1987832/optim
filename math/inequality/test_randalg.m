@@ -24,13 +24,14 @@ rangeMin = -2;
     [xkh,flag,relres,iter,resvec,arvec,itersm,tfD]=hybridA(A,b,x0,3,300,5,['R','HA']);
     [rk, rkh, dh, gh] = residual(A,b,xkh);
   %  fprintf('active:%d ,%g',vkh,dh);
-    maxit = 1500;
+    maxit = 100;
     xkh;
     norm(gh)
-   [xIn,iterIn,errorIn,xIng,indexAIn] = randomizedInexactNE(A, b, x0,maxit,[],xkh);
+    mutiple = 10;
+   [xIn,iterIn,errorIn,xIng,indexAIn] = randomizedInexactNE(A, b, x0,maxit*mutiple,[],xkh);
 %     [xkacz,iterkacz,errorkacz,xAk,indexAk] = randomizedKaczmarzNE(A, b, x0,maxit,[],xkh);
- [xkacz,iterkacz,errorkacz,xAk,indexAk] = IFM(A, b, x0,maxit,[],xkh);
-    [xGS,iterGS,errorGS,xAg,indexAj] = randomizedGaussSeidelNE(A, b, x0,maxit,[],xkh);
+    [xkacz,iterkacz,errorkacz,xAk,indexAk] = IFM(A, b, x0,maxit,[],xkh);
+    [xGS,iterGS,errorGS,xAg,indexAj] = randomizedGaussSeidelNE(A, b, x0,maxit*mutiple,[],xkh);
 
     
     
@@ -67,12 +68,16 @@ rangeMin = -2;
 beginp = 1;
 figure
 maxIterA = 200;
-h=semilogy(beginp:iterkacz,errorkacz,'g.');
+count = 50;
+jump=floor(iterkacz/count);
+h=semilogy((beginp:jump:iterkacz)*mutiple,errorkacz(beginp:jump:iterkacz),'g.');
 h.LineStyle = '--';
 hold on
-h=semilogy(beginp:iterGS,errorGS,'r+');
+jump=floor(iterGS/count);
+h=semilogy(beginp:jump:iterGS,errorGS(beginp:jump:iterGS),'r+');
 h.LineStyle = '--';
-h=semilogy(beginp:iterIn,errorIn,'b*');
+jump=floor(iterIn/count);
+h=semilogy(beginp:jump:iterIn,errorIn(beginp:jump:iterIn),'b*');
 h.LineStyle = '--';
 legend('IFM','Gauss Seidel','Inexact');
 % legend('Gauss Seidel','Inexact');

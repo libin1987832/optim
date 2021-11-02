@@ -24,26 +24,36 @@ indexA=[0];
 %compute norm per row also store the corresponding index
 %alpha = 1+ min(m/n,n/m);
 alpha = 1;
-  for j = 1:n
-    normrow = [normrow,norm(A(:,j))];
-    index = [index,j];
-  end
+rp=r;
+I = rp<0;
+rp(I)=0;
+ATrp = A'*rp;
+ATr = A'*r;
+Acol=sum(A.*A,1);
+%   for j = 1:n
+%     normrow = [normrow,Acol(j)];
+%     index = [index,j];
+%   end
+%   weight = normrow/sum(normrow);
+  index = 1:n;
 
-  weight = normrow/sum(normrow);
-  Acol=sum(A.*A,1);
 if isempty(tol)
   iter = maxit;   
   for i = 1:maxit
     %randsample to generate weighted random number from given vector
+    normrow= ATrp.*ATrp;
+    weight = normrow/sum(normrow);
     pickedj = randsample(index,1,true,weight);
  %   pickedj=index(mod(i,n)+1);
     indexA = [indexA,pickedj];
-
-    r(r<0)=0;
+    rp=r;
+    rp(rp<0)=0;
     col = A(:, pickedj);
-    inc = alpha*( col' * r ) / Acol(pickedj);
+    inc = alpha*( col' * rp ) / Acol(pickedj);
     x(pickedj) = x(pickedj) + inc;
-    r = r - ;
+    r = r - inc*col;
+   
+    ATr = ATr 
     xA =[xA x];
     e = norm(x-exactx);
     error = [error,e];

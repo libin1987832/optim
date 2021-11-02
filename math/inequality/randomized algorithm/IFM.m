@@ -13,7 +13,6 @@ rk=b-A*x;
 
 k=3;
 iter = 0;
-maxit = ceil(maxit/(2*k+1));
 if isempty(tol)
 %     iter = maxit;
     for i = 1:maxit
@@ -24,11 +23,10 @@ if isempty(tol)
         x=x+uk;
         rk = b - A * x;
         e = norm(x-exactx);
-        for j=1:(2*k+1)
-            error = [error,e];
-            xA =[xA x];
-        end
-        iter = iter+(2*k+1);
+        error = [error,e];
+        xA =[xA x];
+
+        iter = iter+1;
     end
 end
 
