@@ -25,35 +25,33 @@ indexA=[0];
 %alpha = 1+ min(m/n,n/m);
 alpha = 1;
 rp=r;
-I = rp<0;
-rp(I)=0;
+rp(rp<0)=0;
 ATrp = A'*rp;
-ATr = A'*r;
+
 Acol=sum(A.*A,1);
-%   for j = 1:n
-%     normrow = [normrow,Acol(j)];
-%     index = [index,j];
-%   end
-%   weight = normrow/sum(normrow);
-  index = 1:n;
+  for j = 1:n
+    normrow = [normrow,sqrt(Acol(j))];
+    index = [index,j];
+  end
+  weight = normrow/sum(normrow);
 
 if isempty(tol)
   iter = maxit;   
   for i = 1:maxit
     %randsample to generate weighted random number from given vector
-    normrow= ATrp.*ATrp;
-    weight = normrow/sum(normrow);
+%     normrow= ATrp.*ATrp;
+%     weight = normrow/sum(normrow);
     pickedj = randsample(index,1,true,weight);
  %   pickedj=index(mod(i,n)+1);
     indexA = [indexA,pickedj];
-    rp=r;
-    rp(rp<0)=0;
+
     col = A(:, pickedj);
     inc = alpha*( col' * rp ) / Acol(pickedj);
     x(pickedj) = x(pickedj) + inc;
     r = r - inc*col;
-   
-    ATr = ATr 
+    rp=r;
+    rp(rp<0)=0;
+%     ATrp = A'*rp;
     xA =[xA x];
     e = norm(x-exactx);
     error = [error,e];

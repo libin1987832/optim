@@ -4,7 +4,7 @@ addpath('./dataInequality/');
 addpath('./algorithmInequality/');
 addpath('./randomized algorithm')
 
-m = 2000;
+m = 10000;
 n = 100;
 rangeMax = 2;
 rangeMin = -2;
@@ -15,7 +15,7 @@ rangeMin = -2;
    x0 = zeros(n , 1);
 %    A = -[1,-1;-1,-1;0,1];b=-[0;-1;0];x0=[-1;0];
 %    xkhe=[1/2;1/3];
-   maxIter = 100;
+   maxIter = 20;
    nf = 5;
    str = ['D','U','C','R','P'];
 % for the solution so here

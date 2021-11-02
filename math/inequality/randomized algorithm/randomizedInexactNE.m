@@ -29,7 +29,7 @@ z0=z;
 alpha = 1+ min(m/n,n/m);
   Acol=sum(A.*A,1);
   for j = 1:n
-      normrow = [normrow,Acol(j)];
+      normrow = [normrow,sqrt(Acol(j))];
      index = [index,j];
   end
   weight = normrow/sum(normrow);
