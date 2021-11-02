@@ -15,6 +15,7 @@ n = size(A,2);
 x = x0;
 %iter = 0;
 error = [];
+  r=b-A*x;
 e = 1;
 xA = [x0];
 normrow = [];
@@ -27,7 +28,7 @@ alpha = 1;
     normrow = [normrow,norm(A(:,j))];
     index = [index,j];
   end
-  
+
   weight = normrow/sum(normrow);
   Acol=sum(A.*A,1);
 if isempty(tol)
@@ -37,10 +38,12 @@ if isempty(tol)
     pickedj = randsample(index,1,true,weight);
  %   pickedj=index(mod(i,n)+1);
     indexA = [indexA,pickedj];
-    r=b-A*x;
+
     r(r<0)=0;
     col = A(:, pickedj);
-    x(pickedj) = x(pickedj) + alpha*( col' * r ) / Acol(pickedj);
+    inc = alpha*( col' * r ) / Acol(pickedj);
+    x(pickedj) = x(pickedj) + inc;
+    r = r - ;
     xA =[xA x];
     e = norm(x-exactx);
     error = [error,e];
