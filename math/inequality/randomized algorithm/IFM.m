@@ -1,5 +1,12 @@
-function [x,iter,error,xA,indexA] = IFM(A, b, x0,maxit,tol,exactx)
-
+function [x,iter,error,iter_t,indexA] = IFM(A, b, x0,maxit,tol,exactx)
+%% 参数设定
+% 输入参数
+% A, b, x0 问题的系数矩阵和右边项 初始值
+% maxit,tol,exactx 最大迭代次数，容忍度，精确解
+% 输出参数
+% x iter 迭代最后的解, 实际迭代次数
+% error 如果没有精确解就存储每一次迭代的梯度2范数
+% xA 
 m = size(A,1);
 n = size(A,2);
 
