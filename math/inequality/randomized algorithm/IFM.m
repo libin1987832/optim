@@ -28,6 +28,24 @@ if isempty(tol)
 
         iter = iter+1;
     end
+else
+    [~, ~, normr, normAr] = residual(A,b,x0);
+        iter =0;
+        xA=[0];
+        error = [normAr];
+    while normAr > tol  && normr > tol
+        rk(rk<0)=0;
+        uk=krylovk(A,rk,k);
+        x=x+uk;
+        rk = b - A * x;
+        iter = iter+1;
+    if iter > maxit
+        return;
+    end
+     [~, ~, normr, normAr] = residual(A,b,x);
+        xA =[xA iter];
+        error = [error,normAr];
+    end
 end
 
 function xk=krylovk(A,y,k)

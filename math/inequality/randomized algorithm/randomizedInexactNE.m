@@ -61,13 +61,11 @@ if isempty(tol)
     %iter = iter+1;
   end
 else
-    am=max(max(A));
-    delt=am*m*n*10*tol;
-    iter = 0;
-    rn=r;
-    rn(rn<0)=0;
-    rn=rn'*rn;
-    while Ar>delt*rn && rn>delt 
+    [~, ~, normr, normAr] = residual(A,b,x0);
+    iter =0;
+       xA=[0];
+       error = [normAr];
+    while normAr > tol  && normr > tol
     %randsample to generate weighted random number from given vector
       pickedj = randsample(index,1,true,weight);
   %  pickedj=index(mod(i,n)+1);
@@ -86,16 +84,16 @@ else
      z0=z;
      t0=t1;
      
-    xA =[xA x];
-    e = norm(x-exactx);
-    error = [error,e];
+   
+  
     iter = iter+1;
     if iter > maxit
         return;
     end
-    rn=rz;
-    rn=rn'*rn;
-    if mod(iter,100)=0
+    if mod(iter,1000)==0
+        [~, ~, normr, normAr] = residual(A,b,x);
+         xA =[xA iter];
+        error = [error normAr];
     end
 end
 end

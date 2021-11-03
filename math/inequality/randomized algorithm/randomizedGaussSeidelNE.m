@@ -58,17 +58,35 @@ if isempty(tol)
     %iter = iter+1;
   end
 else
-    iter = 1;
-    e = 1;
-    while e >= tol  
+        iter =0;
+           xA=[0];
+
+      [~, ~, normr, normAr] = residual(A,b,x0);
+                        error = [normAr];
+    while normAr > tol  && normr > tol
     %randsample to generate weighted random number from given vector
-    pickedi = randsample(index,1,true,weight);
-    
-    row = A(pickedi, :);
-    x = x + ( b(pickedi) - (row * x) ) / (row * row') * row';
-    e = norm(x-exactx);
-    error = [error,e];
+    pickedj = randsample(index,1,true,weight);
+ %   pickedj=index(mod(i,n)+1);
+    indexA = [indexA,pickedj];
+
+    col = A(:, pickedj);
+    inc = alpha*( col' * rp ) / Acol(pickedj);
+    x(pickedj) = x(pickedj) + inc;
+    r = r - inc*col;
+    rp=r;
+    rp(rp<0)=0;
+%     ATrp = A'*rp;
+
     iter = iter+1;
+    
+    if iter > maxit
+        return;
+    end
+    if mod(iter,1000)==0
+        [~, ~, normr, normAr] = residual(A,b,x);
+        xA =[xA iter];
+        error = [error,normAr];
+    end
     end
 end
 end

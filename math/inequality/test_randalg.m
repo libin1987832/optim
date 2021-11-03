@@ -1,11 +1,13 @@
 %% read data 
 % [A,rows,cols,entries,rep,field,symm]=mmread('../util/well1033.mtx');
+clear
+clc
 addpath('./dataInequality/');
 addpath('./algorithmInequality/');
 addpath('./randomized algorithm')
 
-m = 10000;
-n = 100;
+m = 1000;
+n = 600;
 
    A = 2 * rand(m , n)-1;
    b = 2 * rand(m , 1)-1;
@@ -18,29 +20,52 @@ n = 100;
 % for the solution so here
 
    % [xkh,rkh,countFMh,countNWh,beginNWh,tfh,vkh,rkArrh]=han(x0,A,b,maxIter);
-    [xkh,flag,relres,iter,resvec,arvec,itersm,tfD]=hybridA(A,b,x0,3,300,5,['R','HA']);
+   [rk, rkh, dD, gD] = residual(A,b,x0);
+    fprintf('& %s & %g & %g \n','init',dD,gD);
+    [xkhe,flag,relres,iter,resvec,arvec,itersm,tfD]=hybridA(A,b,x0,3,300,5,['R','HA']);
+    [rk, rkh, dD, gD] = residual(A,b,xkhe);
+   fprintf('& %s & %g & %g & %d & %g \\\\\n','hybrid',dD,gD,iter,tfD);
    % [rk, rkh, dh, gh] = residual(A,b,xkh);
   %  fprintf('active:%d ,%g',vkh,dh);
-    maxit = 50;
+    maxit = 2000;
     xkhe;
-    norm(gh)
-    mutiple = 100;
-    t=tic;
-   [xIn,iterIn,errorIn,xIng,indexAIn] = randomizedInexactNE(A, b, x0,maxit*mutiple,[],xkhe);
-   tfD=toc-t;
+    mutiple = 50;
+    tol=1e-1;
+        t=clock;
+    [xkacz,iterkacz,errorkacz,xAk,indexAk] = IFM(A, b, x0,maxit,tol,xkhe);
+    tfD=etime(clock,t);
+    [rk, rkh, dD, gD] = residual(A,b,xkacz);
+   fprintf('& %s & %g & %g & %d & %g \\\\\n','IFM',dD,gD,iterkacz,tfD);
+      t=clock;
+    [xGS,iterGS,errorGS,xAg,indexAj] = randomizedGaussSeidelNE(A, b, x0,maxit*mutiple,tol,xkhe);
+    tfD=etime(clock,t);
+    [rk, rkh, dD, gD] = residual(A,b,xGS);
+   fprintf('& %s & %g & %g & %d & %g \\\\\n','Gauss',dD,gD,iterGS,tfD);
+    t=clock;
+   [xIn,iterIn,errorIn,xIng,indexAIn] = randomizedInexactNE(A, b, x0,maxit*mutiple,tol,xkhe);
+   tfD=etime(clock,t);
    [rk, rkh, dD, gD] = residual(A,b,xIn);
    fprintf('& %s & %g & %g & %d & %g \\\\\n','Inexact',dD,gD,iterIn,tfD);
  %    [xkacz,iterkacz,errorkacz,xAk,indexAk] = randomizedKaczmarzNE(A, b, x0,maxit*mutiple,[],xkhe);
-    t=tic;
-    [xkacz,iterkacz,errorkacz,xAk,indexAk] = IFM(A, b, x0,maxit,[],xkh);
-    tfD=toc-t;
-    [rk, rkh, dD, gD] = residual(A,b,xkacz);
-   fprintf('& %s & %g & %g & %d & %g \\\\\n','IFM',dD,gD,iterkacz,tfD);
-   t=tic;
-    [xGS,iterGS,errorGS,xAg,indexAj] = randomizedGaussSeidelNE(A, b, x0,maxit*mutiple,[],xkhe);
-    tfD=toc-t;
-    [rk, rkh, dD, gD] = residual(A,b,xGS);
-   fprintf('& %s & %g & %g & %d & %g \\\\\n','IFM',dD,gD,iterGS,tfD);
+
+beginp = 1;
+figure
+
+% h=semilogy((beginp:iter)*50,arvec(beginp:iter),'g.');
+% h.LineStyle = '--';
+
+h=semilogy(xAk*100,errorkacz,'k.');
+h.LineStyle = '--';
+hold on
+h=semilogy(xAg,errorGS,'r+');
+h.LineStyle = '--';
+h=semilogy(xIng,errorIn,'b*');
+h.LineStyle = '--';
+legend('IFM','Gauss Seidel','Inexact');
+% legend('hybrid','IFM','Gauss Seidel','Inexact');
+% legend('Gauss Seidel','Inexact');
+xlabel('the iterative numbers');
+ylabel('the norm of the gradient');
   
     
     
