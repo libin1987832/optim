@@ -68,9 +68,9 @@ Z=squeeze(sum(z,3));
 figure
 contour(X,Y,Z,40)
 hold on
-%plot(xAk(1,:),xAk(2,:),'b+')
-% plot(xAg(1,:),xAg(2,:),'ro')
-plot(xA_In(1,:),xA_In(2,:),'g*')
+plot(xA_Kac(1,:),xA_Kac(2,:),'b+')
+% plot(xA_GS(1,:),xA_GS(2,:),'ro')
+%plot(xA_In(1,:),xA_In(2,:),'g*')
 line([-0.5,1],[-0.5,1]);
 line([0,1.5],[1,-0.5]);
 line([-1,1.5],[0,0]);

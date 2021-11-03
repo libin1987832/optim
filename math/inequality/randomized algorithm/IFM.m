@@ -1,4 +1,4 @@
-function [x,iter,error_k,iter_k,index_k] = IFM(A, b, x0, maxit, tol, exactx)
+function [x,iter,error_k,iter_k,index_k] = IFM(A, b, x0, maxit, tol, exactx,debug)
 %% 参数设定
 % 输入参数
 % A, b, x0 问题的系数矩阵和右边项 初始值
@@ -13,13 +13,19 @@ function [x,iter,error_k,iter_k,index_k] = IFM(A, b, x0, maxit, tol, exactx)
 [m,n] = size(A);
 x = x0;
 iter = 0;
-debug = 0;
+
 %% 计算最开始的残差
 r = b - A * x0;
 r(r<0)=0;
 normAr = norm(A'*r);
 error_k = [normAr];
-iter_k = [0];
+if ~isempty(exactx)
+    e = norm(x-exactx);
+    iter_k =[x];
+else
+    iter_k =[0];
+end
+
 index_k=[0];
 
 %% 设定子问题中LSQR算法的迭代次数
@@ -37,22 +43,24 @@ for i = 1:maxit
         Ar = A'*r;
         e = norm(Ar);
         normAr = norm(r);
-        if ~isempty(tol) 
+        if ~isempty(tol)
             if normAr < tol  || e < tol
-              break;
+                break;
             end
         end
     end
     if debug
         if ~isempty(exactx)
             e = norm(x-exactx);
-        end
+            iter_k =[iter_k x];
+        else
+            iter_k =[iter_k i];
+        end        
         error_k = [error_k,e];
-        iter_k =[iter_k i];
     end
     
 end
-% 用LSQR算法计算子问题 argmin F（u） = || Au + Ax_k-b-z_k || = || Au -y_k || 
+% 用LSQR算法计算子问题 argmin F（u） = || Au + Ax_k-b-z_k || = || Au -y_k ||
 
     function xk=krylovk(A,y,k)
         u1=0;

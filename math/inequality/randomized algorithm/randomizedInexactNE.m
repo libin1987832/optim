@@ -1,4 +1,4 @@
-function [x,iter,error_k,iter_k,index_k] = randomizedInexactNE(A, b, x0,maxit,tol,exactx)
+function [x,iter,error_k,iter_k,index_k] = randomizedInexactNE(A, b, x0,maxit,tol,exactx,debug)
 %% 参数设定
 % 输入参数
 % A, b, x0 问题的系数矩阵和右边项 初始值
@@ -13,7 +13,7 @@ function [x,iter,error_k,iter_k,index_k] = randomizedInexactNE(A, b, x0,maxit,to
 [m, n] = size(A);
 x = x0;
 iter = 0;
-debug  = 1 ;
+
 
 %% 计算残差
 r = b - A * x;

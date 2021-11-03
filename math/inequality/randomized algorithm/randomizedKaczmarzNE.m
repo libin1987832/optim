@@ -1,4 +1,4 @@
-function [x,iter,error_k,iter_k,index_k] = randomizedKaczmarzNE(A, b, x0,maxit,tol,exactx)
+function [x,iter,error_k,iter_k,index_k] = randomizedKaczmarzNE(A, b, x0,maxit,tol,exactx,debug)
 %% 参数设定
 % 输入参数
 % A, b, x0 问题的系数矩阵和右边项 初始值
@@ -13,14 +13,19 @@ function [x,iter,error_k,iter_k,index_k] = randomizedKaczmarzNE(A, b, x0,maxit,t
 [m, n] = size(A);
 x = x0;
 iter = 0;
-debug  = 1 ;
 
 %% 计算残差
 r = b - A * x;
 r(r<0) = 0;
 norm_Ar = norm(A'*r);
 error_k = [norm_Ar];
-iter_k = [0];
+if ~isempty(exactx)
+    e = norm(x-exactx);
+    iter_k =[x];
+else
+    iter_k =[0];
+end
+
 index_k=[0];
 
 % 因为测试终止条件需要矩阵乘以向量 为了避免每次迭代都去检测终止条件因此周期检测
@@ -64,9 +69,11 @@ for i = 1:maxit
         if debug
             if ~isempty(exactx)
                 e = norm(x-exactx);
+                iter_k =[iter_k x];
+            else
+                iter_k =[iter_k i];
             end
             error_k = [error_k,e];
-            iter_k =[iter_k i];
             index_k = [index_k,pickedi];
         end
     end
