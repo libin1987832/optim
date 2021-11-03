@@ -6,8 +6,8 @@ addpath('./dataInequality/');
 addpath('./algorithmInequality/');
 addpath('./randomized algorithm')
 
-m = 1000;
-n = 600;
+m = 10000;
+n = 3000;
 
    A = 2 * rand(m , n)-1;
    b = 2 * rand(m , 1)-1;
@@ -22,15 +22,15 @@ n = 600;
    % [xkh,rkh,countFMh,countNWh,beginNWh,tfh,vkh,rkArrh]=han(x0,A,b,maxIter);
    [rk, rkh, dD, gD] = residual(A,b,x0);
     fprintf('& %s & %g & %g \n','init',dD,gD);
-    [xkhe,flag,relres,iter,resvec,arvec,itersm,tfD]=hybridA(A,b,x0,3,300,5,['R','HA']);
-    [rk, rkh, dD, gD] = residual(A,b,xkhe);
-   fprintf('& %s & %g & %g & %d & %g \\\\\n','hybrid',dD,gD,iter,tfD);
+%     [xkhe,flag,relres,iter,resvec,arvec,itersm,tfD]=hybridA(A,b,x0,3,300,5,['R','HA']);
+%     [rk, rkh, dD, gD] = residual(A,b,xkhe);
+%    fprintf('& %s & %g & %g & %d & %g \\\\\n','hybrid',dD,gD,iter,tfD);
    % [rk, rkh, dh, gh] = residual(A,b,xkh);
   %  fprintf('active:%d ,%g',vkh,dh);
-    maxit = 2000;
-    xkhe;
-    mutiple = 50;
-    tol=1e-1;
+    maxit = 100;
+    xkhe=0;
+    mutiple = 1000;
+    tol=1e-5;
         t=clock;
     [xkacz,iterkacz,errorkacz,xAk,indexAk] = IFM(A, b, x0,maxit,tol,xkhe);
     tfD=etime(clock,t);
@@ -54,7 +54,7 @@ figure
 % h=semilogy((beginp:iter)*50,arvec(beginp:iter),'g.');
 % h.LineStyle = '--';
 
-h=semilogy(xAk*100,errorkacz,'k.');
+h=semilogy(xAk*50,errorkacz,'k.');
 h.LineStyle = '--';
 hold on
 h=semilogy(xAg,errorGS,'r+');
