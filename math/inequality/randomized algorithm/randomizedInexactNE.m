@@ -34,7 +34,7 @@ alpha = 1+ min(m/n,n/m);
   end
   weight = normrow/sum(normrow);
 if isempty(tol)
-  iter = maxit;   
+  iter = 0;   
   for i = 1:maxit
     %randsample to generate weighted random number from given vector
      pickedj = randsample(index,1,true,weight);
@@ -57,20 +57,45 @@ if isempty(tol)
     xA =[xA x];
     e = norm(x-exactx);
     error = [error,e];
+    iter =iter+1;
     %iter = iter+1;
   end
 else
-    iter = 1;
-    e = 1;
-    while e >= tol  
+    am=max(max(A));
+    delt=am*m*n*10*tol;
+    iter = 0;
+    rn=r;
+    rn(rn<0)=0;
+    rn=rn'*rn;
+    while Ar>delt*rn && rn>delt 
     %randsample to generate weighted random number from given vector
-    pickedi = randsample(index,1,true,weight);
-    
-    row = A(pickedi, :);
-    x = x + ( b(pickedi) - (row * x) ) / (row * row') * row';
+      pickedj = randsample(index,1,true,weight);
+  %  pickedj=index(mod(i,n)+1);
+     indexA = [indexA,pickedj];
+     col = A(:, pickedj);
+     rz=(r+z);
+
+     inc = alpha*( col' * rz) / Acol(pickedj);
+     x(pickedj) = x(pickedj) + inc;
+     r = r - inc*col;
+     
+     z=-r;
+     z(z<0)=0;
+     t1 = 0.5 + 0.5 * sqrt(1+4*t0^2);
+     z=z0+t0/t1*(z-z0);
+     z0=z;
+     t0=t1;
+     
+    xA =[xA x];
     e = norm(x-exactx);
     error = [error,e];
     iter = iter+1;
+    if iter > maxit
+        return;
+    end
+    rn=rz;
+    rn=rn'*rn;
+    if mod(iter,100)=0
     end
 end
 end
