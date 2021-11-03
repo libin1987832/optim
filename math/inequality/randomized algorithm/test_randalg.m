@@ -41,7 +41,7 @@ t=clock;
 [x_Kac,iter_Kac,error_Kac,xA_Kac,index_Kac] = randomizedKaczmarzNE(A, b, x0, maxit_Rand,tol,x_exact);
 tf_Kac=etime(clock,t);
 [~, ~, r_Kac, g_Kac] = residual(A, b, x_Kac);
-fprintf('& %s & %g & %g & %d & %g \\\\\n', 'Gauss', r_Kac, g_Kac, iter_Kac, tf_Kac);
+fprintf('& %s & %g & %g & %d & %g \\\\\n', 'Kaczmarz', r_Kac, g_Kac, iter_Kac, tf_Kac);
 
 %% GaussSeidel
 t=clock;
@@ -52,7 +52,7 @@ fprintf('& %s & %g & %g & %d & %g \\\\\n', 'Gauss', r_GS, g_GS, iter_GS, tf_GS);
 
 %% InexactGaussSeidel
 t=clock;
-[x_In,iter_In,error_In,xA_In,index_In] = randomizedInexactNE(A, b, x0,maxit*mutiple,tol,x_exact);
+[x_In,iter_In,error_In,xA_In,index_In] = randomizedInexactNE(A, b, x0,maxit_Rand,tol,x_exact);
 tf_In=etime(clock,t);
 [~, ~, r_In, g_In] = residual(A, b, x_In);
 fprintf('& %s & %g & %g & %d & %g \\\\\n','Inexact', r_In, g_In,iter_In, tf_In);

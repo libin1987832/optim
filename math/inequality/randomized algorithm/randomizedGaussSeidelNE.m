@@ -30,7 +30,7 @@ alpha = 1;
 Acol=sum(A.*A,1);
 
 weight = Acol/sum(Acol);
-
+index=1:n;
 
 for i = 1:maxit
     
@@ -48,7 +48,7 @@ for i = 1:maxit
             % 矩阵乘以向量 
             Ar = A'*r;
             e = norm(Ar);
-            normAr = norm(r)
+            normAr = norm(r);
             % 如果有容忍度 即使没有到达最大迭代次数也终止
             if ~isempty(tol)
                 if normAr < tol  || e < tol

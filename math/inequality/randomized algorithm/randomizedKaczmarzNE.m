@@ -1,88 +1,76 @@
-function [x,iter,error,xA,indexA] = randomizedKaczmarzNE(A, b, x0,maxit,tol,exactx)
-% randomized kaczmarz by Algorithm 1
-% Ax = b
-% A - input matrix
-% b - right vector
-% x0 - initial x
-%
-% x - the approximated x
-% iter - number of iterations before convergence (= maxit if maxit is given)
-% error - the norm of difference in x and exact solution after every
-% iteration
-m = size(A,1);
-n = size(A,2);
+function [x,iter,error_k,iter_k,index_k] = randomizedKaczmarzNE(A, b, x0,maxit,tol,exactx)
+%% 参数设定
+% 输入参数
+% A, b, x0 问题的系数矩阵和右边项 初始值
+% maxit,tol,exactx 最大迭代次数，容忍度，精确解
+% 输出参数
+% x iter 迭代最后的解, 实际迭代次数
+% error 如果没有精确解就存储每一次迭代的梯度2范数
+% iter_k 存计算梯度的迭代次数 为作图方便
+% index_k 如果是随机算法则存储随机选择的序列
 
+%%
+[m, n] = size(A);
 x = x0;
-%iter = 0;
-error = [];
-e = 1;
-xA = [x0];
-indexA=[];
-normrow = [];
-index = [];
-%compute norm per row also store the corresponding index
+iter = 0;
+debug  = 1 ;
 
-  for i = 1:m
-    normrow = [normrow,norm(A(i,:))];
-    index = [index,i];
-  end
-  
-  weight = normrow/sum(normrow);
-  weightOrig = weight;
-  indexOrig = index;
-  Arow=sum(A.*A,2);
-  update = 0;
-if isempty(tol)
-  iter = maxit;   
-  for i = 1:maxit
+%% 计算残差
+r = b - A * x;
+r(r<0) = 0;
+norm_Ar = norm(A'*r);
+error_k = [norm_Ar];
+iter_k = [0];
+index_k=[0];
+
+% 因为测试终止条件需要矩阵乘以向量 为了避免每次迭代都去检测终止条件因此周期检测
+iter_test_stop = 1;
+
+alpha = 1;
+
+Arow=sum(A.*A,2);
+
+weight = Arow/sum(Arow);
+index=1:m;
+
+for i = 1:maxit
     %randsample to generate weighted random number from given vector
-
-    pickedi = randsample(index,1,true,weight);
-    indexA = [indexA,pickedi];
-    row = A(pickedi, :);
-    r=b(pickedi) - (row * x); 
-    if r>0
-    x = x + ( r ) / (Arow(pickedi)) * row';
-    update = update + 1;
-    end
-    xA =[xA x];
-%     if size(index,2) == 2
-%          weight = weightOrig;
-%          index = indexOrig;
-%     end
-%     loc=find(index==pickedi);
-%     index(loc) = [];
-%     weight(loc) = [];
-%     weight = weight./sum(weight);
-
-    e = norm(x-exactx);
-    error = [error,e];
-    %iter = iter+1;
-  end
-else
-    iter = 1;
-    e = 1;
-    while e >= tol  
-    %randsample to generate weighted random number from given vector
-
-    pickedi = randsample(index,1,true,weight);
     
+    pickedi = randsample(index,1,true,weight);
     row = A(pickedi, :);
-    r=b(pickedi) - (row * x); 
-    if r>0
-        update = update + 1;
-        x = x + ( r ) / (Arow(pickedi)) * row';
-    elseif size(index,1) == 1
-         weight = weightOrig;
-         index = indexOrig;
+    r_pickedi=b(pickedi) - (row * x);
+    if r_pickedi>0
+        x = x + alpha * ( r_pickedi ) / (Arow(pickedi)) * row';
     end
-    index(pickedi) = [];
-    weight(pickedi) = [];
-    weight = weight./sum(weight);
-    e = norm(x-exactx);
-    error = [error,e];
     iter = iter+1;
+    
+    % 主要记录迭代过程中的值 用来调试
+    if mod(iter,iter_test_stop)==0
+        if ~isempty(tol) || debug
+            r = b - A * x;
+            r(r<0) = 0;
+            % 矩阵乘以向量 
+            Ar = A'*r;
+            e = norm(Ar);
+            normAr = norm(r);
+            % 如果有容忍度 即使没有到达最大迭代次数也终止
+            if ~isempty(tol)
+                if normAr < tol  || e < tol
+                    break;
+                end
+            end
+        end
+        % 用来记录迭代信息 可能会影响效率
+        if debug
+            if ~isempty(exactx)
+                e = norm(x-exactx);
+            end
+            error_k = [error_k,e];
+            iter_k =[iter_k i];
+            index_k = [index_k,pickedi];
+        end
     end
+    
 end
-update
-end
+
+

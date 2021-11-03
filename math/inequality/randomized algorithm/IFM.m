@@ -36,7 +36,7 @@ for i = 1:maxit
     if ~isempty(tol) || debug
         Ar = A'*r;
         e = norm(Ar);
-        normAr = norm(r)
+        normAr = norm(r);
         if ~isempty(tol) 
             if normAr < tol  || e < tol
               break;
