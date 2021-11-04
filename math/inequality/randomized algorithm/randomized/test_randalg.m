@@ -1,14 +1,14 @@
 clear
 clc
-debug = 1;
+debug = 0;
 %% 产生问题矩阵
 % 随机矩阵
-m = 1000;
-n = 300;
+m = 10000;
+n = 1000;
 
 A = 2 * rand(m , n)-1;
 b = 2 * rand(m , 1)-1;
-b=A*ones(n,1);
+% b=A*ones(n,1);
 x0 = zeros(n , 1);
 
 % 二维矩阵
@@ -24,7 +24,7 @@ r(r<0) = 0;
 norm_r = norm(r);
 norm_g = norm(A'*r);
 fprintf('%s & %g & %g \n','最开始的目标函数和梯度', norm_r, norm_g);
-[x_exact, ~, ~, ~, ~] = IFM(A, b, x0,1000, maxit_LSQR , 1e-15,[],debug);
+[x_exact, ~, ~, ~, ~] = IFM(A, b, x0,1000, maxit_LSQR , 1e-10,[],debug);
 r = b - A * x_exact;
 r(r<0) = 0;
 norm_r = norm(r);
@@ -33,7 +33,7 @@ fprintf('%s & %g & %g \n','IFM解的目标函数值和梯度  ', norm_r, norm_g);
 x_exact=[];
 %% 参数的设定
 maxit_IFM = 100;
-maxit_Rand = 10000;
+maxit_Rand = 150000;
 tol=1e-5;
 tol=[];
 %% IFM算法求解问题
@@ -48,14 +48,14 @@ fprintf('& %s & %s & %s & %s & %s \\\\\n', 'alg', 'norm(r_+)', 'norm(Ar_+)', 'it
 fprintf('& %s & %g & %g & %d & %g \\\\\n','IFM', r_IFM, g_IFM,iter_IFM,tf_IFM);
 
 %% Kaczmarz
-t=clock;
-[x_Kac,iter_Kac,error_Kac,xA_Kac,index_Kac] = randomizedKaczmarzNE(A, b, x0, maxit_Rand,tol,x_exact,debug);
-tf_Kac=etime(clock,t);
-r = b - A * x_Kac;
-r(r<0) = 0;
-r_Kac = norm(r);
-g_Kac = norm(A'*r);
-fprintf('& %s & %g & %g & %d & %g \\\\\n', 'Kaczmarz', r_Kac, g_Kac, iter_Kac, tf_Kac);
+% t=clock;
+% [x_Kac,iter_Kac,error_Kac,xA_Kac,index_Kac] = randomizedKaczmarzNE(A, b, x0, maxit_Rand,tol,x_exact,debug);
+% tf_Kac=etime(clock,t);
+% r = b - A * x_Kac;
+% r(r<0) = 0;
+% r_Kac = norm(r);
+% g_Kac = norm(A'*r);
+% fprintf('& %s & %g & %g & %d & %g \\\\\n', 'Kaczmarz', r_Kac, g_Kac, iter_Kac, tf_Kac);
 
 %% GaussSeidel
 t=clock;

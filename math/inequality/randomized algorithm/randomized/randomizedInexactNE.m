@@ -40,7 +40,7 @@ index_k=[0];
 iter_test_stop = 1;
 t0=1;
 alpha = 1+ min(m/n,n/m);
-
+%  alpha = 1;
 Acol=sum(A.*A,1);
 weight = Acol/sum(Acol);
 index=1:n;
@@ -48,22 +48,33 @@ index=1:n;
 % for i = 1:maxit
 %  pickedj_a(i) = randsample(index,1,true,weight);
 % end
+iter_index=1;
+for i=1:n-1
+    k = ceil(weight(i)*maxit);
+    pickedj_a(iter_index:iter_index+k-1)=repmat(i,1,k);
+    iter_index=iter_index+k;
+end
+pickedj_a(iter_index:maxit)=repmat(n,1,maxit-iter_index+1);
+pickedj_i=randperm(maxit);
 for i = 1:maxit
 %     pickedj=pickedj_a(i);
-    pickedj = randsample(index,1,true,weight);
+   % pickedj = randsample(index,1,true,weight);
+       pickedj=pickedj_a(pickedj_i(i));
     col = A(:, pickedj);
     rz=(r+z);
     
     inc = alpha*( col' * rz) / Acol(pickedj);
     x(pickedj) = x(pickedj) + inc;
     r = r - inc*col;
-    
-    z=-r;
-    z(z<0)=0;
+  %  if mod(iter,1000)==0
+   % z=-r;
+   % z(z<0)=0;
+      z = (-r+abs(r))/2;
     t1 = 0.5 + 0.5 * sqrt(1+4*t0^2);
     z=z0+t0/t1*(z-z0);
     z0=z;
     t0=t1;
+ %   end
     
     iter =iter+1;
     
