@@ -35,7 +35,7 @@ t=clock;
 tf_IFM=etime(clock,t);
 [~, ~, r_IFM, g_IFM] = residual(A,b,x_IFM);
 fprintf('& %s & %s & %s & %s & %s \\\\\n', 'alg', 'norm(r_+)', 'norm(Ar_+)', 'iteration', 'time');
-fprintf('& %s & %g & %g & %d & %g \\\\\n','IFM', r_IFM, g_IFM,iter_IFM,tf_IFM,debug);
+fprintf('& %s & %g & %g & %d & %g \\\\\n','IFM', r_IFM, g_IFM,iter_IFM,tf_IFM);
 
 %% Kaczmarz
 t=clock;

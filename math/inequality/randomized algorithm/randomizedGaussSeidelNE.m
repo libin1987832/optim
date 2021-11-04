@@ -8,7 +8,8 @@ function [x,iter,error_k,iter_k,index_k] = randomizedGaussSeidelNE(A, b, x0,maxi
 % error 如果没有精确解就存储每一次迭代的梯度2范数
 % iter_k 存计算梯度的迭代次数 为作图方便
 % index_k 如果是随机算法则存储随机选择的序列
-% debug 是否调试
+% exactx 精确值为空则将iter_k 放每次迭代的x值
+% debug 调试程序
 %%
 [m, n] = size(A);
 x = x0;
@@ -18,12 +19,13 @@ iter = 0;
 r = b - A * x;
 r(r<0) = 0;
 norm_Ar = norm(A'*r);
-error_k = [norm_Ar];
-if ~isempty(exactx)
-    e = norm(x-exactx);
-    iter_k =[x];
-else
+
+if isempty(exactx)
+    error_k = [norm_Ar];
     iter_k =[0];
+else
+    error_k = [norm(x-exactx)];
+    iter_k =[x];
 end
 
 index_k=[0];
