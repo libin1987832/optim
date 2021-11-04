@@ -1,4 +1,4 @@
-function [x,iter,error_k,iter_k,index_k] = IFM(A, b, x0, maxit, tol, exactx,debug)
+function [x,iter,error_k,iter_k,index_k] = IFM(A, b, x0, maxit,maxit_LSQR, tol, exactx,debug)
 %% 参数设定
 % 输入参数
 % A, b, x0 问题的系数矩阵和右边项 初始值
@@ -29,7 +29,7 @@ end
 index_k=[0];
 
 %% 设定子问题中LSQR算法的迭代次数
-maxit_LSQR=3;
+
 
 
 for i = 1:maxit
@@ -74,9 +74,12 @@ end
         for i=1:k
             q2=A*v1-alph1*q1;beta2=norm(q2);q2=q2/beta2;
             
-            ro1=norm([ro_1,beta2]);c1=ro_1/ro1;s1=beta2/ro1;
+            ro1=norm([ro_1,beta2]);
             
-            v2=A'*q2-beta2*v1;alph2=norm(v2);v2=v2/alph2;
+            c1=ro_1/ro1;s1=beta2/ro1;
+            
+            v2=A'*q2-beta2*v1;alph2=norm(v2);
+            v2=v2/alph2;
             
             theta2=s1*alph2;ro_2=c1*alph2;thgma1=c1*thgma_1;thgma_2=-1*s1*thgma_1;
             

@@ -17,6 +17,7 @@ iter = 0;
 
 %% 计算残差
 r = b - A * x;
+rs = r;
 r(r<0) = 0;
 norm_Ar = norm(A'*r);
 
@@ -38,15 +39,19 @@ Acol=sum(A.*A,1);
 
 weight = Acol/sum(Acol);
 index=1:n;
-
+% pickedj_a =zeros(1,maxit);
+% for i = 1:maxit
+%  pickedj_a(i) = randsample(index,1,true,weight);
+% end
 for i = 1:maxit
-    
-    pickedj = randsample(index,1,true,weight);
+%     pickedj=pickedj_a(i);
+    pickedj=randsample(index,1,true,weight);
     
     col = A(:, pickedj);
     inc = alpha*( col' * r ) / Acol(pickedj);
     x(pickedj) = x(pickedj) + inc;
-    r = r - inc*col;
+    rs = rs - inc*col;
+    r = rs;
     r( r < 0) = 0;
     iter = iter+1;
     % 主要记录迭代过程中的值 用来调试
