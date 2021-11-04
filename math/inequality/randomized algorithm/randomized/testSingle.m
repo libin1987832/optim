@@ -1,12 +1,13 @@
-m=1000;
-n=100;
-A=100*rand(m,n);
+function [ssAs,r0re,factor,expect]=testSingle(A,r0,exact_f,iter)
 s=svd(A);
 smin=min(s);
 AA=A.*A;
 Acol=sum(AA,1);
 As=sum(Acol);
 Acolmin=min(Acol);
-Acs=1/Acolmin-1/As
-ss=smin^2/2
-ss*Acs
+Acs=1/Acolmin-1/As;
+ss=smin^2/2;
+ssAs = 1-ss*Acs;
+factor=ssAs^iter;
+r0re=r0-exact_f;
+expect=factor*(r0-exact_f)+exact_f;

@@ -3,14 +3,15 @@ clc
 debug = 0;
 %% 产生问题矩阵
 % 随机矩阵
-m = 10000;
-n = 1000;
+m = 1000;
+n = 100;
 
 A = 2 * rand(m , n)-1;
 b = 2 * rand(m , 1)-1;
 % b=A*ones(n,1);
 x0 = zeros(n , 1);
-
+% save('test.mat','A','b','x0')
+load('test.mat');
 % 二维矩阵
 % A = -[1,-1;-1,-1;0,1];b=-[0;-1;0];x0=[-1;0];
 % 不一致情况下的正解
@@ -21,19 +22,19 @@ x0 = zeros(n , 1);
 maxit_LSQR = 3;
 r = b - A * x0;
 r(r<0) = 0;
-norm_r = norm(r);
-norm_g = norm(A'*r);
-fprintf('%s & %g & %g \n','最开始的目标函数和梯度', norm_r, norm_g);
-[x_exact, ~, ~, ~, ~] = IFM(A, b, x0,1000, maxit_LSQR , 1e-10,[],debug);
+norm_r0 = norm(r);
+norm_g0 = norm(A'*r);
+fprintf('%s & %g & %g \n','最开始的目标函数和梯度', norm_r0, norm_g0);
+[x_exact, ~, ~, ~, ~] = IFM(A, b, x0,1000, maxit_LSQR , 1e-15,[],debug);
 r = b - A * x_exact;
 r(r<0) = 0;
-norm_r = norm(r);
-norm_g = norm(A'*r);
-fprintf('%s & %g & %g \n','IFM解的目标函数值和梯度  ', norm_r, norm_g);
+norm_rexact = norm(r);
+norm_gexact = norm(A'*r);
+fprintf('%s & %g & %g \n','IFM解的目标函数值和梯度  ', norm_rexact, norm_gexact);
 x_exact=[];
 %% 参数的设定
 maxit_IFM = 100;
-maxit_Rand = 150000;
+maxit_Rand = 100;
 tol=1e-5;
 tol=[];
 %% IFM算法求解问题
@@ -66,7 +67,8 @@ r(r<0) = 0;
 r_GS = norm(r);
 g_GS = norm(A'*r);
 fprintf('& %s & %g & %g & %d & %g \\\\\n', 'Gauss', r_GS, g_GS, iter_GS, tf_GS);
-
+[sfactor, r0re, factor, expect] = testSingle(A,norm_r0^2/2,norm_rexact^2/2,iter_GS);
+fprintf('& %s & %g & %g & %g & %g  & %g & %g\\\\\n', 'Gauss theory', sfactor, r0re, factor, expect,  r_GS^2/2,norm_rexact^2/2);
 %% InexactGaussSeidel
 t=clock;
 [x_In,iter_In,error_In,xA_In,index_In] = randomizedInexactNE(A, b, x0,maxit_Rand,tol,x_exact,debug);
