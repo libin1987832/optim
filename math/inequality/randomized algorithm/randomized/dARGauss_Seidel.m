@@ -65,7 +65,7 @@ colunmnormA=sum(A.^2,1);
  if strategy==1
      pro1=colunmnormA/sum(colunmnormA);
      residualvector=-b;
-     cumsumpro=cumsum(pro1);
+     cumsumpro=cumsum(pro1)';
     l1=sum(cumsumpro<rand(m,1),2)+1;  %%%%% ¸ÅÂÊÑ¡È¡
  else
      B=A'*A;
