@@ -10,8 +10,8 @@ A = 2 * rand(m , n)-1;
 b = 2 * rand(m , 1)-1;
 % b=A*ones(n,1);
 x0 = zeros(n , 1);
-% save('test.mat','A','b','x0')
-load('test.mat');
+% save('test2.mat','A','b','x0')
+%load('test.mat');
 % 二维矩阵
 % A = -[1,-1;-1,-1;0,1];b=-[0;-1;0];x0=[-1;0];
 % 不一致情况下的正解

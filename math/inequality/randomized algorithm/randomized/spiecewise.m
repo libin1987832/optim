@@ -1,6 +1,7 @@
 % computation A(rt>0,:)*p(n) A(rt>0,:)'*r(rt>0)(n)
 function alph=spiecewise(A,b,p,x)
 r=b-A*x;
+alph = 0;
 if p'*p<1e-30
     alph = 0;
     return
@@ -31,6 +32,7 @@ for i =1:am
         break;
     end    
 end
+
 % if alph <-0.5
 %     alph
 % end

@@ -1,7 +1,7 @@
 % pina hybrid algorithm
 function [xk,rk,countFM,countNW,beginNW,tf,vk,rkArr]=han_rand(x0,A,b,maxIter,maxit_R)
 t=clock;
-tol=1e-3;
+tol=1e-15;
 %compute hybrid uIter
 [m,n]=size(A);
 rkArr=zeros(2*maxIter);
@@ -38,12 +38,18 @@ opts.Max_iter=maxit_R;
 while Ar>delt*rn && rn>delt
     countFM=countFM+1;
     I=find(r0>=tol);
+    if sum(I) == 0
+        rn>delt
+    end
     %提取子矩阵判断是否正定
     AI=A(I,:);
 %    AII=AI'*AI;
   %  hk=AI\r0(I);    
       [hk,~]=dARGauss_Seidel(AI,r0(I),opts);
     aa=spiecewise(A,b,hk,x0);
+    if aa == 0
+        aa
+    end
     xk=x0+aa*hk;
     
     rk=b-A*xk;
