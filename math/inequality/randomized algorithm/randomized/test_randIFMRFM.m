@@ -34,11 +34,12 @@ fprintf('%s & %g & %g \n','IFM解的目标函数值和梯度  ', norm_rexact, norm_gexact)
 if debug == 0
 x_exact=[];
 end
+
 t=clock;
-xxx = A\b;
+
 tf_m=etime(clock,t);
 r = b - A * xxx;
-% r(r<0) = 0;
+ r(r<0) = 0;
 r_xxx = norm(r);
 g_xxx = norm(A'*r);
 fprintf('& %s & %s & %s & %s & %s \\\\\n', 'alg', 'norm(r_+)', 'norm(Ar_+)', 'iteration', 'time');
