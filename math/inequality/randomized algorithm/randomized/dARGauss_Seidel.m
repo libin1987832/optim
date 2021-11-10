@@ -114,18 +114,19 @@ while ~stopc
         midv=A(:,l)'*residualvector/colunmnormA(l);
          x(l)=x(l)-midv;
         residualvector=residualvector-midv*A(:,l);
-        if relative_error
-             error1=norm(x-xstar)/normxstar;
-             Axberror=[Axberror,error1];
-             if error1<TOL | iter>Max_iter
-                 stopc=1;
-             end
-        else
-        normres=norm(residualvector);
-        Axberror=[Axberror,normres/sqrt(snormb)];
-        if (normres^2/snormb)<TOL | iter>Max_iter
+%         if relative_error
+%            %  error1=norm(x-xstar)/normxstar;
+%            %  Axberror=[Axberror,error1];
+%              if error1<TOL | iter>Max_iter
+%                  stopc=1;
+%              end
+%         else
+       % normres=norm(residualvector);
+       % Axberror=[Axberror,normres/sqrt(snormb)];
+       % if (normres^2/snormb)<TOL | iter>Max_iter-1
+       if iter>Max_iter-1
         stopc=1;
-        end
+       % end
         end
     else
          %%%%%%%%%%%%%% the adaptive Gauss-Seidel method
@@ -134,10 +135,11 @@ while ~stopc
     sNresidual_r=sNresidual_r-((At_r(l))^2/colunmnormA(l));
     
     %% storing the residual error
-    Axberror=[Axberror,sqrt(sNresidual_r)/sqrt(snormb)];
+   % Axberror=[Axberror,sqrt(sNresidual_r)/sqrt(snormb)];
    
     %% checking whether the stopping rules is satisfied
-    if (sNresidual_r/snormb)<TOL | iter>Max_iter
+  %  if (sNresidual_r/snormb)<TOL | iter>Max_iter
+  if iter>Max_iter
         stopc=1;
     else
           %% update A'r_k=A'(Ax_k-b)

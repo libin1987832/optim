@@ -1,10 +1,10 @@
 clear
 clc
-debug = 0;
+debug = 1;
 %% 产生问题矩阵
 % 随机矩阵
-m = 1000;
-n = 100;
+m = 500000;
+n = 1000;
 
 A = 2 * rand(m , n)-1;
 b = 2 * rand(m , 1)-1;
@@ -19,7 +19,7 @@ load('test.mat');
 
 
 %% 基于IFM的算法找到一个解
-maxit_LSQR = 3;
+maxit_LSQR = 10;
 r = b - A * x0;
 r(r<0) = 0;
 norm_r0 = norm(r);
@@ -31,7 +31,9 @@ r(r<0) = 0;
 norm_rexact = norm(r);
 norm_gexact = norm(A'*r);
 fprintf('%s & %g & %g \n','IFM解的目标函数值和梯度  ', norm_rexact, norm_gexact);
+if debug == 0
 x_exact=[];
+end
 %% 参数的设定
 maxit_IFM = 100;
 maxit_Rand = 100;
@@ -50,7 +52,7 @@ fprintf('& %s & %g & %g & %d & %g \\\\\n','IFM', r_IFM, g_IFM,iter_IFM,tf_IFM);
 
 %% RFM算法求解问题
 t=clock;
-maxit_R =2 * n;
+maxit_R =300;
 [x_RFM,iter_RFM,error_RFM,xA_RFM,index_RFM] = RFM(A, b, x0, maxit_IFM, maxit_R ,tol, x_exact,debug);
 tf_RFM=etime(clock,t);
 r = b - A * x_RFM;
@@ -63,10 +65,10 @@ fprintf('& %s & %g & %g & %d & %g \\\\\n','RFM', r_RFM, g_RFM,iter_RFM,tf_RFM);
 %% 画图
 if debug
 figure
-h=semilogy(xA_IFM, error_IFM, 'k.');
+h=semilogy(1:(iter_IFM+1), error_IFM, 'k.');
 h.LineStyle = '--';
 hold on
-h=semilogy(xA_RFM, error_RFM, 'r+');
+h=semilogy(1:(iter_RFM+1), error_RFM, 'r+');
 h.LineStyle = '--';
 legend('IFM','RFM');
 xlabel('the iterative numbers');
