@@ -3,8 +3,8 @@ clc
 debug = 0;
 %% 产生问题矩阵
 % 随机矩阵
-m = 10000;
-n = 200;
+m = 100;
+n = 20;
 
 A = 2 * randn(m , n)-1;
 b = 2 * rand(m , 1)-1;
@@ -36,9 +36,23 @@ x_exact=[];
 end
 
 t=clock;
-
+C=[A,-eye(m)];
+xxx2 = lsqlin(C,b,[],[],[],[],[-Inf*ones(n,1);zeros(m,1)],Inf*ones(n+m,1));
 tf_m=etime(clock,t);
-r = b - A * xxx;
+r = b - A * xxx2(1:n,1);
+ r(r<0) = 0;
+r_xxx2 = norm(r);
+g_xxx2 = norm(A'*r);
+fprintf('& %s & %s & %s & %s & %s \\\\\n', 'alg', 'norm(r_+)', 'norm(Ar_+)', 'iteration', 'time');
+fprintf('& %s & %g & %g & %d & %g \\\\\n','lsq2', r_xxx2, g_xxx2,1,tf_m);
+
+
+t=clock;
+AAI=[A,-A,-eye(m)];
+c=[zeros(1,n),zeros(1,n),ones(1,m)];
+xxx = linprog(c,[],[],AAI,b,zeros(2*n+m,1),Inf*ones(2*n+m,1)) ;
+tf_m=etime(clock,t);
+r = b - A * (xxx(1:n,1)-xxx(n+1:2*n,1));
  r(r<0) = 0;
 r_xxx = norm(r);
 g_xxx = norm(A'*r);
