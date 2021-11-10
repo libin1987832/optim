@@ -62,14 +62,15 @@ x=initialx;
 
 
 colunmnormA=sum(A.^2,1);
- if strategy==1
-    l1=sum(cumsumpro<rand(m,1),2)+1;  %%%%% ¸ÅÂÊÑ¡È¡
- else
-     B=A'*A;
- end
       pro1=colunmnormA/sum(colunmnormA);
      residualvector=-b;
      cumsumpro=cumsum(pro1)';
+ if strategy==1
+    l1=sum(repmat(cumsumpro,1,Max_iter)<repmat(rand(1,Max_iter),n,1),1)+1; 
+ else
+     B=A'*A;
+ end
+
 
 %%
 sNresidual_r=norm(b)^2;
