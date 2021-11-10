@@ -1,7 +1,7 @@
 % pina hybrid algorithm
 function [xk,rk,countFM,countNW,beginNW,tf,vk,rkArr]=han(x0,A,b,maxIter)
 t=clock;
-tol=1e-2;
+tol=1e-15;
 %compute hybrid uIter
 [m,n]=size(A);
 rkArr=zeros(2*maxIter);

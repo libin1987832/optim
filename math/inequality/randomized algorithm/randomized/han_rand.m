@@ -1,7 +1,7 @@
 % pina hybrid algorithm
-function [xk,rk,countFM,countNW,beginNW,tf,vk,rkArr]=han(x0,A,b,maxIter)
+function [xk,rk,countFM,countNW,beginNW,tf,vk,rkArr]=han_rand(x0,A,b,maxIter,maxit_R)
 t=clock;
-tol=1e-2;
+tol=1e-3;
 %compute hybrid uIter
 [m,n]=size(A);
 rkArr=zeros(2*maxIter);
@@ -31,13 +31,18 @@ if Ar<delt*rn || rn<delt
     disp('input x is satisfied all constrain!(Ar<delt*rn|| rn<delt)') %ceases execution
 end
 %||A'(r)+||<=delt||(r)+|| ||(r)+||<=de
+
+   opts.strategy=1;
+opts.p=20;
+opts.Max_iter=maxit_R;
 while Ar>delt*rn && rn>delt
     countFM=countFM+1;
     I=find(r0>=tol);
     %提取子矩阵判断是否正定
     AI=A(I,:);
 %    AII=AI'*AI;
-    hk=AI\r0(I);      
+  %  hk=AI\r0(I);    
+      [hk,~]=dARGauss_Seidel(AI,r0(I),opts);
     aa=spiecewise(A,b,hk,x0);
     xk=x0+aa*hk;
     
