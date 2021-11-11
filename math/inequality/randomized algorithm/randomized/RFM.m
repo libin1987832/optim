@@ -31,7 +31,7 @@ index_k=[0];
 %% 设定子问题中LSQR算法的迭代次数
 
 
-opts.strategy=2;
+opts.strategy=1;
 opts.p=2;
 opts.Max_iter=maxit_R;
 opts.lamba = 1+min(n/m,m/n);

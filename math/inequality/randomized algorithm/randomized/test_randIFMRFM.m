@@ -3,8 +3,8 @@ clc
 debug = 0;
 %% 产生问题矩阵
 % 随机矩阵
-m = 1000;
-n = 10;
+m = 100000;
+n = 200;
 
 A = 2 * rand(m , n)-1;
 % AA=A.*A;
@@ -81,7 +81,7 @@ fprintf('& %s & %g & %g & %d & %g \\\\\n','IFM', r_IFM, g_IFM,iter_IFM,tf_IFM);
 % RFM算法求解问题
 t=clock;
 maxit_RC =maxit_IFM;
-maxit_R =7;
+maxit_R =200;
 [x_RFM,iter_RFM,error_RFM,xA_RFM,index_RFM] = RFM(A, b, x0, maxit_RC, maxit_R ,tol, x_exact,debug);
 tf_RFM=etime(clock,t);
 r = b - A * x_RFM;
@@ -93,7 +93,7 @@ fprintf('& %s & %g & %g & %d & %g \\\\\n','RFM', r_RFM, g_RFM,iter_RFM,tf_RFM);
 
 %% GaussSeidel
 t=clock;
-maxit_Rand=700;
+maxit_Rand=50000;
 [x_GS,iter_GS,error_GS,xA_GS,index_GS] = randomizedGaussSeidelNE(A, b, x0, maxit_Rand, tol,x_exact,debug);
 tf_GS=etime(clock,t);
 r = b - A * x_GS;
