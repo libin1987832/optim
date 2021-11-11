@@ -74,7 +74,7 @@ x=initialx;
 
 %%
 sNresidual_r=norm(b)^2;
-At_r=A'*b;
+At_r=A'*(-b);
 snormb=norm(b)^2;
 Axberror=[];
 

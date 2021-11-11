@@ -3,13 +3,13 @@ clc
 debug = 0;
 %% 产生问题矩阵
 % 随机矩阵
-m = 1000;
+m = 10000;
 n = 200;
 
-A = 2 * randn(m , n)-1;
-AA=A.*A;
-columua=sum(AA,1);
-A = AA./repmat(columua,m,1);
+A = 2 * rand(m , n)-1;
+% AA=A.*A;
+% columua=sum(AA,1);
+% A = AA./repmat(columua,m,1);
 b = 2 * rand(m , 1)-1;
 % b=A*ones(n,1);
 x0 = zeros(n , 1);
@@ -63,7 +63,7 @@ end
 % fprintf('& %s & %s & %s & %s & %s \\\\\n', 'alg', 'norm(r_+)', 'norm(Ar_+)', 'iteration', 'time');
 % fprintf('& %s & %g & %g & %d & %g \\\\\n','nei', r_xxx, g_xxx,1,tf_m);
 %% 参数的设定
-maxit_IFM = 50;
+maxit_IFM = 500;
 maxit_LSQR = 3;
 tol=1e-5;
 tol=[];
@@ -111,15 +111,15 @@ r(r<0) = 0;
 r_han = norm(r);
 g_han = norm(A'*r);
 fprintf('& %s & %g & %g & %d & %g \\\\\n','Han', r_han, g_han,iter_han,tf_Han);
-% %% han rand算法求解问题
-% maxit_Han_s =1000;
-% maxit_Han = 100;
-% [x_han_r,~,iter_han_r,~,~,tf_Han_r,~,~]=han_rand(x0,A,b,maxit_Han,maxit_Han_s);
-% r = b - A * x_han_r;
-% r(r<0) = 0;
-% r_han_r = norm(r);
-% g_han_r = norm(A'*r);
-% fprintf('& %s & %g & %g & %d & %g \\\\\n','Hanrand', r_han_r, g_han_r,iter_han_r,tf_Han_r);
+%% han rand算法求解问题
+maxit_Han_s =1000;
+maxit_Han = 100;
+[x_han_r,~,iter_han_r,~,~,tf_Han_r,~,~]=han_rand(x0,A,b,maxit_Han,maxit_Han_s);
+r = b - A * x_han_r;
+r(r<0) = 0;
+r_han_r = norm(r);
+g_han_r = norm(A'*r);
+fprintf('& %s & %g & %g & %d & %g \\\\\n','Hanrand', r_han_r, g_han_r,iter_han_r,tf_Han_r);
 %% 画图
 if debug
 figure
