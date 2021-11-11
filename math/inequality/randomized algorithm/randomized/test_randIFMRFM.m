@@ -3,8 +3,8 @@ clc
 debug = 0;
 %% 产生问题矩阵
 % 随机矩阵
-m = 100;
-n = 20;
+m = 1000;
+n = 200;
 
 A = 2 * randn(m , n)-1;
 b = 2 * rand(m , 1)-1;
@@ -34,10 +34,11 @@ fprintf('%s & %g & %g \n','IFM解的目标函数值和梯度  ', norm_rexact, norm_gexact)
 if debug == 0
 x_exact=[];
 end
+options = optimoptions('lsqlin','MaxIterations',5000);
 
 t=clock;
 C=[A,-eye(m)];
-xxx2 = lsqlin(C,b,[],[],[],[],[-Inf*ones(n,1);zeros(m,1)],Inf*ones(n+m,1));
+xxx2 = lsqlin(C,b,[],[],[],[],[-Inf*ones(n,1);zeros(m,1)],Inf*ones(n+m,1),[x0;zeros(m,1)],options);
 tf_m=etime(clock,t);
 r = b - A * xxx2(1:n,1);
  r(r<0) = 0;
