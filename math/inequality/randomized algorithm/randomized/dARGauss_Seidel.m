@@ -61,11 +61,12 @@ end
 x=initialx;
 
 
-colunmnormA=sum(A.^2,1);
+
+ if strategy==1
+     colunmnormA=sum(A.^2,1);
       pro1=colunmnormA/sum(colunmnormA);
      residualvector=-b;
      cumsumpro=cumsum(pro1)';
- if strategy==1
     l1=sum(repmat(cumsumpro,1,Max_iter)<repmat(rand(1,Max_iter),n,1),1)+1; 
  else
      B=A'*A;
@@ -94,7 +95,8 @@ while ~stopc
     switch strategy
         case 2
             p=opts.p;
-            pnormAx_b=power(abs(At_r)./sqrt(colunmnormA)',p);
+         %   pnormAx_b=power(abs(At_r)./sqrt(colunmnormA)',p);
+            pnormAx_b=power(abs(At_r),p);
             prob=(pnormAx_b/sum(pnormAx_b))';
             cumsumpro=cumsum(prob);
     end
