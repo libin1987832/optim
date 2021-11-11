@@ -1,4 +1,4 @@
-function [x,iter,error_k,iter_k,index_k] = randomizedGaussSeidelNE(A, b, x0,maxit,tol,exactx,debug)
+function [x,iter,error_k,iter_k,index_k] = randomizedGaussSeidelNE(A, b, x0,alpha ,maxit,tol,exactx,debug)
 %% 参数设定
 % 输入参数
 % A, b, x0 问题的系数矩阵和右边项 初始值
@@ -33,7 +33,7 @@ index_k=[0];
 % 因为测试终止条件需要矩阵乘以向量 为了避免每次迭代都去检测终止条件因此周期检测
 iter_test_stop = 1;
 
-alpha = 1;
+
 
 Acol=sum(A.*A,1);
 
