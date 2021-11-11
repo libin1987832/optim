@@ -45,7 +45,7 @@ Acol = diag(B);
 % end
 % iter_index=1;
 At_r=A'*r;
-pnormAx_b=power(abs(At_r),p);
+pnormAx_b=power((abs(At_r)./sqrt(Acol)),p);
 prob=(pnormAx_b/sum(pnormAx_b));
 cumsumpro=cumsum(prob);
 
@@ -61,7 +61,7 @@ for i = 1:maxit
     r = r - inc*col;
     
     At_r = At_r - inc*B(:,pickedj);
-    pnormAx_b=power(abs(At_r),p);
+    pnormAx_b=power((abs(At_r)./sqrt(Acol)),p);
     prob=(pnormAx_b/sum(pnormAx_b));
     cumsumpro=cumsum(prob);
     

@@ -1,4 +1,4 @@
-function [x,Out]=dARGauss_Seidel(A,b,opts)
+function [x,Out]=dARGauss_Seidel(A,b,B,colunmnormA,opts)
 
 % adaptive randomized  Gauss-Seidel method for solving linear systems
 %              Ax=b
@@ -56,7 +56,11 @@ if (flag && isfield(opts,'initialx'))
 else
     initialx=zeros(n,1);
 end
-
+if (flag && isfield(opts,'lamba'))
+   lamba=opts.lamba;
+else
+    lamba=1;
+end
 %%
 x=initialx;
 
@@ -66,9 +70,9 @@ x=initialx;
      residualvector=-b;
      cumsumpro=cumsum(pro1)';
     l1=sum(repmat(cumsumpro,1,Max_iter)<repmat(rand(1,Max_iter),n,1),1)+1; 
- else
-     B=A'*A;
-     colunmnormA=diag(B);
+%  else
+%      B=A'*A;
+%      colunmnormA=diag(B);
  end
 
 
@@ -94,14 +98,14 @@ while ~stopc
     switch strategy
         case 2
             p=opts.p;
-         %   pnormAx_b=power(abs(At_r)./sqrt(colunmnormA)',p);
-            pnormAx_b=power(abs(At_r),p);
+            pnormAx_b=power(abs(At_r)./sqrt(colunmnormA),p);
+      %      pnormAx_b=power(abs(At_r),p);
             prob=(pnormAx_b/sum(pnormAx_b))';
             cumsumpro=cumsum(prob);
     end
     %% selecting an index with (adaptive) probability
     if strategy==3
-         [~,l]=max(abs(At_r./sqrt(colunmnormA)')); % choosing the most coherence one;
+         [~,l]=max(abs(At_r./sqrt(colunmnormA))); % choosing the most coherence one;
     else if strategy==2
          %l=randsrc(1,1,[1:n;prob]);
          l=sum(cumsumpro<rand)+1;
@@ -113,7 +117,7 @@ while ~stopc
     %%%%%%%%%%%%%% the classical Gauss-Seidel method
     if strategy==1
         l=l1(iter1);
-        midv=A(:,l)'*residualvector/colunmnormA(l);
+        midv=lamba*A(:,l)'*residualvector/colunmnormA(l);
          x(l)=x(l)-midv;
         residualvector=residualvector-midv*A(:,l);
 %         if relative_error
@@ -132,10 +136,10 @@ while ~stopc
         end
     else
          %%%%%%%%%%%%%% the adaptive Gauss-Seidel method
-
-    x(l)=x(l)-(At_r(l))/colunmnormA(l); 
+    inc = lamba*(At_r(l))/colunmnormA(l);
+    x(l)=x(l)-inc; 
     %% update \|r_k\|^2
-    sNresidual_r=sNresidual_r-((At_r(l))^2/colunmnormA(l));
+    sNresidual_r=sNresidual_r-(lamba^2*(At_r(l))^2/colunmnormA(l));
     
     %% storing the residual error
     Axberror=[Axberror,sqrt(sNresidual_r)/sqrt(snormb)];
@@ -148,7 +152,7 @@ while ~stopc
           %% update A'r_k=A'(Ax_k-b)
           %Al=A(:,l);
           %AtAl=A'*Al;
-    At_r=At_r-((At_r(l))/colunmnormA(l))*B(:,l);
+    At_r=At_r-inc*B(:,l);
     end
     end
     

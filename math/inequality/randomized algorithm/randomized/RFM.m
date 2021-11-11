@@ -34,10 +34,13 @@ index_k=[0];
 opts.strategy=2;
 opts.p=2;
 opts.Max_iter=maxit_R;
+opts.lamba = 1+min(n/m,m/n);
+   B=A'*A;
+ colunmnormA=diag(B);
 for i = 1:maxit
     % 用LSQR算法求解子问题的下降方向
   %  u = krylovk(A, r, maxit_R);
-    [u,~]=dARGauss_Seidel(A,r,opts);
+    [u,~]=dARGauss_Seidel(A,r,B,colunmnormA,opts);
     x = x + u;
     r = b - A * x;
     r( r < 0) = 0;

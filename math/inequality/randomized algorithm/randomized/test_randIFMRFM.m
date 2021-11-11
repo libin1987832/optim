@@ -3,8 +3,8 @@ clc
 debug = 0;
 %% 产生问题矩阵
 % 随机矩阵
-m = 10000;
-n = 200;
+m = 1000;
+n = 10;
 
 A = 2 * rand(m , n)-1;
 % AA=A.*A;
@@ -34,9 +34,9 @@ r(r<0) = 0;
 norm_rexact = norm(r);
 norm_gexact = norm(A'*r);
 fprintf('%s & %g & %g \n','IFM解的目标函数值和梯度  ', norm_rexact, norm_gexact);
-if debug == 0
+% if debug == 1
 x_exact=[];
-end
+% end
 % options = optimoptions('lsqlin','MaxIterations',5000);
 % 
 % t=clock;
@@ -63,7 +63,7 @@ end
 % fprintf('& %s & %s & %s & %s & %s \\\\\n', 'alg', 'norm(r_+)', 'norm(Ar_+)', 'iteration', 'time');
 % fprintf('& %s & %g & %g & %d & %g \\\\\n','nei', r_xxx, g_xxx,1,tf_m);
 %% 参数的设定
-maxit_IFM = 500;
+maxit_IFM = 60;
 maxit_LSQR = 3;
 tol=1e-5;
 tol=[];
@@ -80,8 +80,9 @@ fprintf('& %s & %g & %g & %d & %g \\\\\n','IFM', r_IFM, g_IFM,iter_IFM,tf_IFM);
 
 % RFM算法求解问题
 t=clock;
-maxit_R =100;
-[x_RFM,iter_RFM,error_RFM,xA_RFM,index_RFM] = RFM(A, b, x0, maxit_IFM, maxit_R ,tol, x_exact,debug);
+maxit_RC =maxit_IFM;
+maxit_R =7;
+[x_RFM,iter_RFM,error_RFM,xA_RFM,index_RFM] = RFM(A, b, x0, maxit_RC, maxit_R ,tol, x_exact,debug);
 tf_RFM=etime(clock,t);
 r = b - A * x_RFM;
 r(r<0) = 0;
@@ -92,7 +93,7 @@ fprintf('& %s & %g & %g & %d & %g \\\\\n','RFM', r_RFM, g_RFM,iter_RFM,tf_RFM);
 
 %% GaussSeidel
 t=clock;
-maxit_Rand=100000;
+maxit_Rand=700;
 [x_GS,iter_GS,error_GS,xA_GS,index_GS] = randomizedGaussSeidelNE(A, b, x0, maxit_Rand, tol,x_exact,debug);
 tf_GS=etime(clock,t);
 r = b - A * x_GS;
@@ -102,24 +103,24 @@ g_GS = norm(A'*r);
 fprintf('& %s & %g & %g & %d & %g \\\\\n', 'Gauss', r_GS, g_GS, iter_GS, tf_GS);
 % [sfactor, r0re, factor, expect] = testSingle(A,norm_r0^2/2,norm_rexact^2/2,iter_GS);
 % fprintf('& %s & %g & %g & %g & %g  & %g & %g\\\\\n', 'Gauss theory', sfactor, r0re, factor, expect,  r_GS^2/2,norm_rexact^2/2);
-
-%% han算法求解问题
-maxit_Han = 100;
-[x_han,~,iter_han,~,~,tf_Han,~,~]=han(x0,A,b,maxit_Han);
-r = b - A * x_han;
-r(r<0) = 0;
-r_han = norm(r);
-g_han = norm(A'*r);
-fprintf('& %s & %g & %g & %d & %g \\\\\n','Han', r_han, g_han,iter_han,tf_Han);
-%% han rand算法求解问题
-maxit_Han_s =1000;
-maxit_Han = 100;
-[x_han_r,~,iter_han_r,~,~,tf_Han_r,~,~]=han_rand(x0,A,b,maxit_Han,maxit_Han_s);
-r = b - A * x_han_r;
-r(r<0) = 0;
-r_han_r = norm(r);
-g_han_r = norm(A'*r);
-fprintf('& %s & %g & %g & %d & %g \\\\\n','Hanrand', r_han_r, g_han_r,iter_han_r,tf_Han_r);
+% 
+% %% han算法求解问题
+% maxit_Han = 100;
+% [x_han,~,iter_han,~,~,tf_Han,~,~]=han(x0,A,b,maxit_Han);
+% r = b - A * x_han;
+% r(r<0) = 0;
+% r_han = norm(r);
+% g_han = norm(A'*r);
+% fprintf('& %s & %g & %g & %d & %g \\\\\n','Han', r_han, g_han,iter_han,tf_Han);
+% %% han rand算法求解问题
+% maxit_Han_s =1000;
+% maxit_Han = 100;
+% [x_han_r,~,iter_han_r,~,~,tf_Han_r,~,~]=han_rand(x0,A,b,maxit_Han,maxit_Han_s);
+% r = b - A * x_han_r;
+% r(r<0) = 0;
+% r_han_r = norm(r);
+% g_han_r = norm(A'*r);
+% fprintf('& %s & %g & %g & %d & %g \\\\\n','Hanrand', r_han_r, g_han_r,iter_han_r,tf_Han_r);
 %% 画图
 if debug
 figure

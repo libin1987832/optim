@@ -24,11 +24,11 @@ norm(A*x-b)
 p=2;
 [x,iter,error_k,iter_k,index_k] = wrandomizedGaussSeidel(A, b, x0,p,maxit,tol,exactx,debug);
 norm(A*x-b)
-opts.strategy=2;
+opts.strategy=3;
 opts.p=2;
 opts.xstar = xs;
 [x,Out]=dARGauss_Seidel(A,b,opts);
 norm(A*x-b)
 figure
-display=1:10:1000;
+display=1:1:1000;
 h=semilogy(display, Out.error(display), 'k.');
