@@ -60,16 +60,15 @@ end
 %%
 x=initialx;
 
-
-
  if strategy==1
-     colunmnormA=sum(A.^2,1);
+ colunmnormA=sum(A.^2,1);
       pro1=colunmnormA/sum(colunmnormA);
      residualvector=-b;
      cumsumpro=cumsum(pro1)';
     l1=sum(repmat(cumsumpro,1,Max_iter)<repmat(rand(1,Max_iter),n,1),1)+1; 
  else
      B=A'*A;
+     colunmnormA=diag(B);
  end
 
 
@@ -106,6 +105,7 @@ while ~stopc
     else if strategy==2
          %l=randsrc(1,1,[1:n;prob]);
          l=sum(cumsumpro<rand)+1;
+
         end
     end
    
@@ -132,12 +132,13 @@ while ~stopc
         end
     else
          %%%%%%%%%%%%%% the adaptive Gauss-Seidel method
+
     x(l)=x(l)-(At_r(l))/colunmnormA(l); 
     %% update \|r_k\|^2
     sNresidual_r=sNresidual_r-((At_r(l))^2/colunmnormA(l));
     
     %% storing the residual error
-   % Axberror=[Axberror,sqrt(sNresidual_r)/sqrt(snormb)];
+    Axberror=[Axberror,sqrt(sNresidual_r)/sqrt(snormb)];
    
     %% checking whether the stopping rules is satisfied
   %  if (sNresidual_r/snormb)<TOL | iter>Max_iter

@@ -7,6 +7,9 @@ m = 1000;
 n = 200;
 
 A = 2 * randn(m , n)-1;
+AA=A.*A;
+columua=sum(AA,1);
+A = AA./repmat(columua,m,1);
 b = 2 * rand(m , 1)-1;
 % b=A*ones(n,1);
 x0 = zeros(n , 1);
@@ -34,31 +37,31 @@ fprintf('%s & %g & %g \n','IFM解的目标函数值和梯度  ', norm_rexact, norm_gexact)
 if debug == 0
 x_exact=[];
 end
-options = optimoptions('lsqlin','MaxIterations',5000);
-
-t=clock;
-C=[A,-eye(m)];
-xxx2 = lsqlin(C,b,[],[],[],[],[-Inf*ones(n,1);zeros(m,1)],Inf*ones(n+m,1),[x0;zeros(m,1)],options);
-tf_m=etime(clock,t);
-r = b - A * xxx2(1:n,1);
- r(r<0) = 0;
-r_xxx2 = norm(r);
-g_xxx2 = norm(A'*r);
-fprintf('& %s & %s & %s & %s & %s \\\\\n', 'alg', 'norm(r_+)', 'norm(Ar_+)', 'iteration', 'time');
-fprintf('& %s & %g & %g & %d & %g \\\\\n','lsq2', r_xxx2, g_xxx2,1,tf_m);
-
-
-t=clock;
-AAI=[A,-A,-eye(m)];
-c=[zeros(1,n),zeros(1,n),ones(1,m)];
-xxx = linprog(c,[],[],AAI,b,zeros(2*n+m,1),Inf*ones(2*n+m,1)) ;
-tf_m=etime(clock,t);
-r = b - A * (xxx(1:n,1)-xxx(n+1:2*n,1));
- r(r<0) = 0;
-r_xxx = norm(r);
-g_xxx = norm(A'*r);
-fprintf('& %s & %s & %s & %s & %s \\\\\n', 'alg', 'norm(r_+)', 'norm(Ar_+)', 'iteration', 'time');
-fprintf('& %s & %g & %g & %d & %g \\\\\n','nei', r_xxx, g_xxx,1,tf_m);
+% options = optimoptions('lsqlin','MaxIterations',5000);
+% 
+% t=clock;
+% C=[A,-eye(m)];
+% xxx2 = lsqlin(C,b,[],[],[],[],[-Inf*ones(n,1);zeros(m,1)],Inf*ones(n+m,1),[x0;zeros(m,1)],options);
+% tf_m=etime(clock,t);
+% r = b - A * xxx2(1:n,1);
+%  r(r<0) = 0;
+% r_xxx2 = norm(r);
+% g_xxx2 = norm(A'*r);
+% fprintf('& %s & %s & %s & %s & %s \\\\\n', 'alg', 'norm(r_+)', 'norm(Ar_+)', 'iteration', 'time');
+% fprintf('& %s & %g & %g & %d & %g \\\\\n','lsq2', r_xxx2, g_xxx2,1,tf_m);
+% 
+% 
+% t=clock;
+% AAI=[A,-A,-eye(m)];
+% c=[zeros(1,n),zeros(1,n),ones(1,m)];
+% xxx = linprog(c,[],[],AAI,b,zeros(2*n+m,1),Inf*ones(2*n+m,1)) ;
+% tf_m=etime(clock,t);
+% r = b - A * (xxx(1:n,1)-xxx(n+1:2*n,1));
+%  r(r<0) = 0;
+% r_xxx = norm(r);
+% g_xxx = norm(A'*r);
+% fprintf('& %s & %s & %s & %s & %s \\\\\n', 'alg', 'norm(r_+)', 'norm(Ar_+)', 'iteration', 'time');
+% fprintf('& %s & %g & %g & %d & %g \\\\\n','nei', r_xxx, g_xxx,1,tf_m);
 %% 参数的设定
 maxit_IFM = 50;
 maxit_LSQR = 3;
@@ -75,16 +78,16 @@ g_IFM = norm(A'*r);
 fprintf('& %s & %s & %s & %s & %s \\\\\n', 'alg', 'norm(r_+)', 'norm(Ar_+)', 'iteration', 'time');
 fprintf('& %s & %g & %g & %d & %g \\\\\n','IFM', r_IFM, g_IFM,iter_IFM,tf_IFM);
 
-%% RFM算法求解问题
-% t=clock;
-% maxit_R =100;
-% [x_RFM,iter_RFM,error_RFM,xA_RFM,index_RFM] = RFM(A, b, x0, maxit_IFM, maxit_R ,tol, x_exact,debug);
-% tf_RFM=etime(clock,t);
-% r = b - A * x_RFM;
-% r(r<0) = 0;
-% r_RFM = norm(r);
-% g_RFM = norm(A'*r);
-% fprintf('& %s & %g & %g & %d & %g \\\\\n','RFM', r_RFM, g_RFM,iter_RFM,tf_RFM);
+% RFM算法求解问题
+t=clock;
+maxit_R =100;
+[x_RFM,iter_RFM,error_RFM,xA_RFM,index_RFM] = RFM(A, b, x0, maxit_IFM, maxit_R ,tol, x_exact,debug);
+tf_RFM=etime(clock,t);
+r = b - A * x_RFM;
+r(r<0) = 0;
+r_RFM = norm(r);
+g_RFM = norm(A'*r);
+fprintf('& %s & %g & %g & %d & %g \\\\\n','RFM', r_RFM, g_RFM,iter_RFM,tf_RFM);
 
 
 %% GaussSeidel
