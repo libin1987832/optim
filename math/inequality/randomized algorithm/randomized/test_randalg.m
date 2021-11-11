@@ -1,13 +1,13 @@
 clear
 clc
-debug = 0;
+debug = 1;
 %% 产生问题矩阵
 % 随机矩阵
 m = 1000;
 n = 100;
 
-A = 2 * rand(m , n)-1;
-b = 2 * rand(m , 1)-1;
+A = 2 * randn(m , n)-1;
+b = 2 * randn(m , 1)-1;
 % b=A*ones(n,1);
 x0 = zeros(n , 1);
 % save('test2.mat','A','b','x0')
@@ -33,8 +33,8 @@ norm_gexact = norm(A'*r);
 fprintf('%s & %g & %g \n','IFM解的目标函数值和梯度  ', norm_rexact, norm_gexact);
 x_exact=[];
 %% 参数的设定
-maxit_IFM = 100;
-maxit_Rand = 100;
+maxit_IFM = 2000;
+
 tol=1e-5;
 tol=[];
 %% IFM算法求解问题
@@ -59,16 +59,25 @@ fprintf('& %s & %g & %g & %d & %g \\\\\n','IFM', r_IFM, g_IFM,iter_IFM,tf_IFM);
 % fprintf('& %s & %g & %g & %d & %g \\\\\n', 'Kaczmarz', r_Kac, g_Kac, iter_Kac, tf_Kac);
 
 %% GaussSeidel
+ mA=sum(A.*A,1);
+Ama=sum(mA);
+alpha=min(mA)/Ama*1000
 t=clock;
-[x_GS,iter_GS,error_GS,xA_GS,index_GS] = randomizedGaussSeidelNE(A, b, x0, maxit_Rand, tol,x_exact,debug);
+%  s=svd(A'*A);
+%  min(s)
+%  min(s)/Ama
+% alpha*min(s)/Ama
+%  1-alpha*min(s)/Ama
+maxit_Rand = 10000;
+[x_GS,iter_GS,error_GS,xA_GS,index_GS] = randomizedGaussSeidelNE(A, b, x0,alpha, maxit_Rand, tol,x_exact,debug);
 tf_GS=etime(clock,t);
 r = b - A * x_GS;
 r(r<0) = 0;
 r_GS = norm(r);
 g_GS = norm(A'*r);
 fprintf('& %s & %g & %g & %d & %g \\\\\n', 'Gauss', r_GS, g_GS, iter_GS, tf_GS);
-[sfactor, r0re, factor, expect] = testSingle(A,norm_r0^2/2,norm_rexact^2/2,iter_GS);
-fprintf('& %s & %g & %g & %g & %g  & %g & %g\\\\\n', 'Gauss theory', sfactor, r0re, factor, expect,  r_GS^2/2,norm_rexact^2/2);
+% [sfactor, r0re, factor, expect] = testSingle(A,norm_r0^2/2,norm_rexact^2/2,iter_GS);
+% fprintf('& %s & %g & %g & %g & %g  & %g & %g\\\\\n', 'Gauss theory', sfactor, r0re, factor, expect,  r_GS^2/2,norm_rexact^2/2);
 %% InexactGaussSeidel
 t=clock;
 [x_In,iter_In,error_In,xA_In,index_In] = randomizedInexactNE(A, b, x0,maxit_Rand,tol,x_exact,debug);
