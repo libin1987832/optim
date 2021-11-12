@@ -69,7 +69,7 @@ t=clock;
 % alpha*min(s)/Ama
 %  1-alpha*min(s)/Ama
 maxit_Rand = 10000;
-[x_GS,iter_GS,error_GS,xA_GS,index_GS] = randomizedGaussSeidelNE(A, b, x0,alpha, maxit_Rand, tol,x_exact,debug);
+[x_GS,iter_GS,error_GS,xA_GS,index_GS] = randomizedGaussSeidelNE(A, b, x0,1, maxit_Rand, tol,x_exact,debug);
 tf_GS=etime(clock,t);
 r = b - A * x_GS;
 r(r<0) = 0;
@@ -88,7 +88,16 @@ r_In = norm(r);
 g_In = norm(A'*r);
 fprintf('& %s & %g & %g & %d & %g \\\\\n','Inexact', r_In, g_In,iter_In, tf_In);
 
-
+%%%
+maxit_Rand = 1000;
+t=clock;
+[x_WGS,iter_WGS,error_WGS,xA_WGS,index_WGS] = wrandomizedGaussSeidelNE(A, b, x0,20,10, maxit_Rand, tol,x_exact,debug);
+tf_WGS=etime(clock,t);
+r = b - A * x_WGS;
+r(r<0) = 0;
+r_WGS = norm(r);
+g_WGS = norm(A'*r);
+fprintf('& %s & %g & %g & %d & %g \\\\\n', 'wegiht Gauss', r_WGS, g_WGS, iter_WGS, tf_WGS);
 %% »­Í¼
 if debug
 figure
@@ -97,9 +106,11 @@ h.LineStyle = '--';
 hold on
 h=semilogy(xA_GS, error_GS, 'r+');
 h.LineStyle = '--';
-h=semilogy(xA_In, error_In, 'b*');
+% h=semilogy(xA_In, error_In, 'b*');
+h=semilogy(xA_WGS, error_WGS, 'b*');
+
 h.LineStyle = '--';
-legend('IFM','Gauss Seidel','Inexact');
+legend('IFM','Gauss Seidel','Weight exact');
 xlabel('the iterative numbers');
 ylabel('the norm of the gradient');
 end
