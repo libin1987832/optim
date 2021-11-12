@@ -63,31 +63,24 @@ for i = 1:maxit
     Icolm = Im(:,pickedj);
     maxrcol = max(rs(Icolp)./col(Icolp));
     minrcol = min(rs(Icolm)./col(Icolm));
-    s=sign(col'*r);
-    if minrcol <0 
-        minrcol = 0;
-    end
-    if maxrcol <0
-        maxrcol=0;
-    end
+
     if sum(Icolm)==0
         inc = maxrcol;
-    end
-    if sum(Icolp)==0
+    elseif sum(Icolp)==0
         inc = minrcol;
-    end
-    if maxrcol < minrcol
+    elseif maxrcol < minrcol
         inc = maxrcol;
     else
-        inc = spiecewise(A,b,s*I(:,pickedj),x);
+      %  inc = spiecewise(A,b,s*I(:,pickedj),x);
+      inc = bisect2(minrcol,maxrcol,A,b,x,I(:,pickedj),1e-10);
     end
 
    % inc = alpha*( col' * r ) / Acol(pickedj);
    
 
 
-    x(pickedj) = x(pickedj) + s*inc;
-    rs = rs - s*inc*col;
+    x(pickedj) = x(pickedj) + inc;
+    rs = rs - inc*col;
     
 
      r = rs;
@@ -127,5 +120,32 @@ for i = 1:maxit
         end
     end
 end
-
+function xc=bisect2(a,b,A,Ab,x0,p,tol)
+if sign(f(A,Ab,x0,p,a))*sign(f(A,Ab,x0,p,b)) >= 0
+    error('f(a)f(b)<0 not satisfied!') %ceases execution
+end
+fa=f(A,Ab,x0,p,a);
+fb=f(A,Ab,x0,p,b);
+while (b-a)/2>tol
+    c=(a+b)/2;
+    fc=f(A,Ab,x0,p,c);
+    if fc == 0              %c is a solution, done
+        break
+    end
+    if sign(fc)*sign(fa)<0  %a and c make the new interval
+        b=c;
+        fb=fc;
+    else%c and b make the new interval
+        a=c;
+        fa=fc;
+    end
+end
+xc=(a+b)/2;
+end
+function fx = f(A,b,x0,p,x)
+    x=x0+x*p;
+    r= b-A*x;
+    r(r<0)=0;
+    fx = p'*A'*r;
+end
 end

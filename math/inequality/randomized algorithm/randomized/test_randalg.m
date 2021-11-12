@@ -3,11 +3,11 @@ clc
 debug = 1;
 %% 产生问题矩阵
 % 随机矩阵
-m = 1000;
-n = 100;
+m = 10;
+n = 2;
 
-A = 2 * randn(m , n)-1;
-b = 2 * randn(m , 1)-1;
+A = 2 * rand(m , n)-1;
+b = 2 * rand(m , 1)-1;
 % b=A*ones(n,1);
 x0 = zeros(n , 1);
 % save('test2.mat','A','b','x0')
@@ -89,7 +89,7 @@ g_In = norm(A'*r);
 fprintf('& %s & %g & %g & %d & %g \\\\\n','Inexact', r_In, g_In,iter_In, tf_In);
 
 %%%
-maxit_Rand = 1000;
+maxit_Rand = 3000;
 t=clock;
 %[x_WGS,iter_WGS,error_WGS,xA_WGS,index_WGS] = wrandomizedGaussSeidelNE(A, b, x0,20,10, maxit_Rand, tol,x_exact,debug);
 [x_WGS,iter_WGS,error_WGS,xA_WGS,index_WGS] =  swrandomized(A, b, x0,20,maxit_Rand, tol,x_exact,debug);
