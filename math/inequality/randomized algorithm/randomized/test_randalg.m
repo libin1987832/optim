@@ -91,7 +91,8 @@ fprintf('& %s & %g & %g & %d & %g \\\\\n','Inexact', r_In, g_In,iter_In, tf_In);
 %%%
 maxit_Rand = 1000;
 t=clock;
-[x_WGS,iter_WGS,error_WGS,xA_WGS,index_WGS] = wrandomizedGaussSeidelNE(A, b, x0,20,10, maxit_Rand, tol,x_exact,debug);
+%[x_WGS,iter_WGS,error_WGS,xA_WGS,index_WGS] = wrandomizedGaussSeidelNE(A, b, x0,20,10, maxit_Rand, tol,x_exact,debug);
+[x_WGS,iter_WGS,error_WGS,xA_WGS,index_WGS] =  swrandomized(A, b, x0,20,maxit_Rand, tol,x_exact,debug);
 tf_WGS=etime(clock,t);
 r = b - A * x_WGS;
 r(r<0) = 0;
