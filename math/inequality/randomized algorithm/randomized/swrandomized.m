@@ -61,8 +61,10 @@ for i = 1:maxit
     col = A(:, pickedj);
     Icolp = Ip(:,pickedj);
     Icolm = Im(:,pickedj);
-    maxrcol = max(rs(Icolp)./col(Icolp));
-    minrcol = min(rs(Icolm)./col(Icolm));
+    palpha=rs(Icolp)./col(Icolp);
+    maxrcol = max(palpha);
+    malpha = rs(Icolm)./col(Icolm);
+    minrcol = min(malpha);
 
     if sum(Icolm)==0
         inc = maxrcol;
@@ -71,6 +73,8 @@ for i = 1:maxit
     elseif maxrcol < minrcol
         inc = maxrcol;
     else
+       active1 = plaha(minrcol < plaha);
+       active2 = malpha(malpha < maxrcol);
       %  inc = spiecewise(A,b,s*I(:,pickedj),x);
       inc = bisect2(minrcol,maxrcol,A,b,x,I(:,pickedj),1e-10);
     end
