@@ -1,10 +1,10 @@
 clear
 clc
-debug = 1;
+debug = 0;
 %% 产生问题矩阵
 % 随机矩阵
-m = 10;
-n = 2;
+m = 3000;
+n = 200;
 
 A = 2 * rand(m , n)-1;
 b = 2 * rand(m , 1)-1;
@@ -49,35 +49,17 @@ fprintf('& %s & %s & %s & %s & %s \\\\\n', 'alg', 'norm(r_+)', 'norm(Ar_+)', 'it
 fprintf('& %s & %g & %g & %d & %g \\\\\n','IFM', r_IFM, g_IFM,iter_IFM,tf_IFM);
 
 %% Kaczmarz
-% t=clock;
-% [x_Kac,iter_Kac,error_Kac,xA_Kac,index_Kac] = randomizedKaczmarzNE(A, b, x0, maxit_Rand,tol,x_exact,debug);
-% tf_Kac=etime(clock,t);
-% r = b - A * x_Kac;
-% r(r<0) = 0;
-% r_Kac = norm(r);
-% g_Kac = norm(A'*r);
-% fprintf('& %s & %g & %g & %d & %g \\\\\n', 'Kaczmarz', r_Kac, g_Kac, iter_Kac, tf_Kac);
+maxit_Rand = 3000;
+t=clock;
+[x_Kac,iter_Kac,error_Kac,xA_Kac,index_Kac] = swrandKacz(A, b, x0,20, maxit_Rand,tol,x_exact,debug);
+tf_Kac=etime(clock,t);
+r = b - A * x_Kac;
+r(r<0) = 0;
+r_Kac = norm(r);
+g_Kac = norm(A'*r);
+fprintf('& %s & %g & %g & %d & %g \\\\\n', 'Kaczmarz', r_Kac, g_Kac, iter_Kac, tf_Kac);
 
 %% GaussSeidel
- mA=sum(A.*A,1);
-Ama=sum(mA);
-alpha=min(mA)/Ama*1000
-t=clock;
-%  s=svd(A'*A);
-%  min(s)
-%  min(s)/Ama
-% alpha*min(s)/Ama
-%  1-alpha*min(s)/Ama
-maxit_Rand = 10000;
-[x_GS,iter_GS,error_GS,xA_GS,index_GS] = randomizedGaussSeidelNE(A, b, x0,1, maxit_Rand, tol,x_exact,debug);
-tf_GS=etime(clock,t);
-r = b - A * x_GS;
-r(r<0) = 0;
-r_GS = norm(r);
-g_GS = norm(A'*r);
-fprintf('& %s & %g & %g & %d & %g \\\\\n', 'Gauss', r_GS, g_GS, iter_GS, tf_GS);
-% [sfactor, r0re, factor, expect] = testSingle(A,norm_r0^2/2,norm_rexact^2/2,iter_GS);
-% fprintf('& %s & %g & %g & %g & %g  & %g & %g\\\\\n', 'Gauss theory', sfactor, r0re, factor, expect,  r_GS^2/2,norm_rexact^2/2);
 
 %%%
 maxit_Rand = 3000;

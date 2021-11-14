@@ -74,12 +74,21 @@ for i = 1:maxit
     elseif maxrcol < minrcol
         inc = maxrcol;
     else
-       active1 = plaha(minrcol < plaha);
-       active2 = malpha(malpha < maxrcol);
-       active = sort([active1,active2],'ascend');
-       AN_r+r(i)*A(i,:)'-active*A(:,i)'*col
+%        active1 = plaha(minrcol < plaha);
+%        active2 = malpha(malpha < maxrcol);
+%        active = sort([active1,active2],'ascend');
+%        AN_r+r(i)*A(i,:)'-active*A(:,i)'*col
       %  inc = spiecewise(A,b,s*I(:,pickedj),x);
-      inc = bisect2(minrcol,maxrcol,A,b,x,I(:,pickedj),1e-10);
+  %    inc = bisect2(minrcol,maxrcol,rs,col,1e-1);
+             alphSort=sort([minrcol;plaha(minrcol < plaha);malpha(malpha < maxrcol);maxrcol]);
+       for j = 1:size(alphSort,1)
+           rj=b-alphSort(j)*col;
+           df=col'*rj;
+           if df >0
+               inc = 0.5*(alphSort(j)+alphSort(j-1));
+                break;
+           end
+       end
     end
 
    % inc = alpha*( col' * r ) / Acol(pickedj);
@@ -127,15 +136,15 @@ for i = 1:maxit
         end
     end
 end
-function xc=bisect2(a,b,A,Ab,x0,p,tol)
-if sign(f(A,Ab,x0,p,a))*sign(f(A,Ab,x0,p,b)) >= 0
+function xc=bisect2(a,b,r,row,tol)
+fa=f(r,row,a);
+fb=f(r,row,b);    
+if sign(fa)*sign(fb) >= 0
     error('f(a)f(b)<0 not satisfied!') %ceases execution
 end
-fa=f(A,Ab,x0,p,a);
-fb=f(A,Ab,x0,p,b);
 while (b-a)/2>tol
     c=(a+b)/2;
-    fc=f(A,Ab,x0,p,c);
+    fc=f(r,row,c);
     if fc == 0              %c is a solution, done
         break
     end
@@ -149,10 +158,9 @@ while (b-a)/2>tol
 end
 xc=(a+b)/2;
 end
-function fx = f(A,b,x0,p,x)
-    x=x0+x*p;
-    r= b-A*x;
+function fx = f(r,row,x)
+    r= r-x*row;
     r(r<0)=0;
-    fx = p'*A'*r;
+    fx = row'*r;
 end
 end
