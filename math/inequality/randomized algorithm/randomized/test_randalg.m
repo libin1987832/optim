@@ -3,7 +3,7 @@ clc
 debug = 0;
 %% 产生问题矩阵
 % 随机矩阵
-m = 3000;
+m = 30000;
 n = 200;
 
 A = 2 * rand(m , n)-1;
@@ -25,7 +25,7 @@ r(r<0) = 0;
 norm_r0 = norm(r);
 norm_g0 = norm(A'*r);
 fprintf('%s & %g & %g \n','最开始的目标函数和梯度', norm_r0, norm_g0);
-[x_exact, ~, ~, ~, ~] = IFM(A, b, x0,1000, maxit_LSQR , 1e-15,[],debug);
+[x_exact, ~, ~, ~, ~] = IFM(A, b, x0,10, maxit_LSQR , 1e-15,[],debug);
 r = b - A * x_exact;
 r(r<0) = 0;
 norm_rexact = norm(r);
@@ -33,7 +33,7 @@ norm_gexact = norm(A'*r);
 fprintf('%s & %g & %g \n','IFM解的目标函数值和梯度  ', norm_rexact, norm_gexact);
 x_exact=[];
 %% 参数的设定
-maxit_IFM = 2000;
+maxit_IFM = 50;
 
 tol=1e-5;
 tol=[];
@@ -49,23 +49,23 @@ fprintf('& %s & %s & %s & %s & %s \\\\\n', 'alg', 'norm(r_+)', 'norm(Ar_+)', 'it
 fprintf('& %s & %g & %g & %d & %g \\\\\n','IFM', r_IFM, g_IFM,iter_IFM,tf_IFM);
 
 %% Kaczmarz
-maxit_Rand = 3000;
-t=clock;
-[x_Kac,iter_Kac,error_Kac,xA_Kac,index_Kac] = swrandKacz(A, b, x0,20, maxit_Rand,tol,x_exact,debug);
-tf_Kac=etime(clock,t);
-r = b - A * x_Kac;
-r(r<0) = 0;
-r_Kac = norm(r);
-g_Kac = norm(A'*r);
-fprintf('& %s & %g & %g & %d & %g \\\\\n', 'Kaczmarz', r_Kac, g_Kac, iter_Kac, tf_Kac);
+% maxit_Rand = 3000;
+% t=clock;
+% % [x_Kac,iter_Kac,error_Kac,xA_Kac,index_Kac] = swrandKacz(A, b, x0,20, 0.001,maxit_Rand,tol,x_exact,debug);
+% tf_Kac=etime(clock,t);
+% r = b - A * x_Kac;
+% r(r<0) = 0;
+% r_Kac = norm(r);
+% g_Kac = norm(A'*r);
+% fprintf('& %s & %g & %g & %d & %g \\\\\n', 'Kaczmarz', r_Kac, g_Kac, iter_Kac, tf_Kac);
 
 %% GaussSeidel
 
 %%%
-maxit_Rand = 3000;
+maxit_Rand = 100;
 t=clock;
 %[x_WGS,iter_WGS,error_WGS,xA_WGS,index_WGS] = wrandomizedGaussSeidelNE(A, b, x0,20,10, maxit_Rand, tol,x_exact,debug);
-[x_WGS,iter_WGS,error_WGS,xA_WGS,index_WGS] =  swrandomized(A, b, x0,20,maxit_Rand, tol,x_exact,debug);
+[x_WGS,iter_WGS,error_WGS,xA_WGS,index_WGS] =  swrandomized(A, b, x0,20,2,maxit_Rand, tol,x_exact,debug);
 tf_WGS=etime(clock,t);
 r = b - A * x_WGS;
 r(r<0) = 0;

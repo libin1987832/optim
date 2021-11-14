@@ -1,4 +1,4 @@
-function [x,iter,error_k,iter_k,index_k] = swrandKacz(A, b, x0,p,maxit,tol,exactx,debug)
+function [x,iter,error_k,iter_k,index_k] = swrandKacz(A, b, x0,p,inc,maxit,tol,exactx,debug)
 % || (b-Ax)_+ || search weight
 %% 参数设定
 % 输入参数
@@ -50,32 +50,38 @@ index=1:m;
 for i = 1:maxit
     pickedi=sum(cumsumpro<rand)+1;
     AATrow = AAT(:, pickedi);
-    Icolp = AATrow>0;
-    Icolm =  AATrow<0;
-    palpha=rs(Icolp)./AATrow(Icolp);
-    maxrcol = max(palpha);
-    malpha = rs(Icolm)./AATrow(Icolm);
-    minrcol = min(malpha);
-
-    if sum(Icolm)==0
-        inc = maxrcol;
-    elseif sum(Icolp)==0
-        inc = minrcol;
-    elseif maxrcol < minrcol
-        inc = maxrcol;
-    else
-           alphSort=sort([minrcol;palpha(minrcol < palpha);malpha(malpha < maxrcol);maxrcol]);
-       for j = 1:size(alphSort,1)
-           rj=b-alphSort(j)*AATrow;
-           df=AATrow'*rj;
-           if df >0
-               inc = 0.5*(alphSort(j)+alphSort(j-1));
-                break;
-           end
-       end
-      %  inc = spiecewise(A,b,s*I(:,pickedj),x);
-%       inc = bisect2(minrcol,maxrcol,rs,AATrow,1e-1);
-    end
+%     Icolp = AATrow>0;
+%     Icolm =  AATrow<0;
+%     palpha=rs(Icolp)./AATrow(Icolp);
+%     maxrcol = max(palpha);
+%     malpha = rs(Icolm)./AATrow(Icolm);
+%     minrcol = min(malpha);
+% 
+%     if sum(Icolm)==0
+%         inc = maxrcol;
+%     elseif sum(Icolp)==0
+%         inc = minrcol;
+%     elseif maxrcol < minrcol
+%         inc = maxrcol;
+%     else
+%            alphSort=sort([minrcol;palpha(minrcol < palpha);malpha(malpha < maxrcol);maxrcol]);
+% %        for j = 1:size(alphSort,1)
+% %            rj=b-alphSort(j)*AATrow;
+% %            rj(rj<0)=0;
+% %            df=-AATrow'*rj;
+% %            if df >0
+% %                inc = 0.5*(alphSort(j)+alphSort(j-1));
+% %                 break;
+% %            end
+% %        end
+%      Rrepmat = repmat(b,1,size(alphSort,1)) - AATrow*alphSort';
+%      Rrepmat(Rrepmat<0)=0;
+%      df=-AATrow'*Rrepmat;
+%     loc=find(df>0);
+%        inc = 0.5*(alphSort(loc(1))+alphSort(loc(1)-1));
+%       %  inc = spiecewise(A,b,s*I(:,pickedj),x);
+% %       inc = bisect2(minrcol,maxrcol,rs,AATrow,1e-1);
+%     end
     
     
     row = A(pickedi, :);

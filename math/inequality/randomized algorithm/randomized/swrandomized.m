@@ -1,4 +1,4 @@
-function [x,iter,error_k,iter_k,index_k] = swrandomized(A, b, x0,p,maxit,tol,exactx,debug)
+function [x,iter,error_k,iter_k,index_k] = swrandomized(A, b, x0,p,alpha,maxit,tol,exactx,debug)
 % search weight Guass 
 %% 参数设定
 % 输入参数
@@ -19,7 +19,8 @@ iter = 0;
 %% 计算残差
 r = b - A * x;
 rs = r;
-r(r<0) = 0;
+I_old= r>0;
+r=0.5*(r+abs(r));
 norm_Ar = norm(A'*r);
 
 if isempty(exactx)
@@ -35,8 +36,9 @@ index_k=[0];
 iter_test_stop = 1;
 
 
-
-Acol=sum(A.*A,1)';
+ATA=A'*A;
+Acol=diag(ATA);
+%Acol=sum(A.*A,1)';
 
 % weight = Acol/sum(Acol);
 % index=1:n;
@@ -60,50 +62,62 @@ for i = 1:maxit
   %  pickedj=randsample(index,1,true,weight);
     
     col = A(:, pickedj);
-    Icolp = Ip(:,pickedj);
-    Icolm = Im(:,pickedj);
-    palpha=rs(Icolp)./col(Icolp);
-    maxrcol = max(palpha);
-    malpha = rs(Icolm)./col(Icolm);
-    minrcol = min(malpha);
-
-    if sum(Icolm)==0
-        inc = maxrcol;
-    elseif sum(Icolp)==0
-        inc = minrcol;
-    elseif maxrcol < minrcol
-        inc = maxrcol;
-    else
-%        active1 = plaha(minrcol < plaha);
-%        active2 = malpha(malpha < maxrcol);
-%        active = sort([active1,active2],'ascend');
-%        AN_r+r(i)*A(i,:)'-active*A(:,i)'*col
-      %  inc = spiecewise(A,b,s*I(:,pickedj),x);
-  %    inc = bisect2(minrcol,maxrcol,rs,col,1e-1);
-             alphSort=sort([minrcol;plaha(minrcol < plaha);malpha(malpha < maxrcol);maxrcol]);
-       for j = 1:size(alphSort,1)
-           rj=b-alphSort(j)*col;
-           df=col'*rj;
-           if df >0
-               inc = 0.5*(alphSort(j)+alphSort(j-1));
-                break;
-           end
-       end
-    end
-
-   % inc = alpha*( col' * r ) / Acol(pickedj);
-   
+%     Icolp = Ip(:,pickedj);
+%     Icolm = Im(:,pickedj);
+%     palpha=rs(Icolp)./col(Icolp);
+%     maxrcol = max(palpha);
+%     malpha = rs(Icolm)./col(Icolm);
+%     minrcol = min(malpha);
+% 
+%     if sum(Icolm)==0
+%         inc = maxrcol;
+%     elseif sum(Icolp)==0
+%         inc = minrcol;
+%     elseif maxrcol < minrcol
+%         inc = maxrcol;
+%     else
+% %        active1 = plaha(minrcol < plaha);
+% %        active2 = malpha(malpha < maxrcol);
+% %        active = sort([active1,active2],'ascend');
+% %        AN_r+r(i)*A(i,:)'-active*A(:,i)'*col
+%       %  inc = spiecewise(A,b,s*I(:,pickedj),x);
+%   %    inc = bisect2(minrcol,maxrcol,rs,col,1e-1);
+%              alphSort=sort([minrcol;plaha(minrcol < plaha);malpha(malpha < maxrcol);maxrcol]);
+% %        for j = 1:size(alphSort,1)
+% %            rj=b-alphSort(j)*col;
+% %              rj(rj<0)=0;
+% %            df=-col'*rj;
+% %            if df >0
+% %                inc = 0.5*(alphSort(j)+alphSort(j-1));
+% %                 break;
+% %            end
+% %        end
+% %     end
+% 
+%      Rrepmat = repmat(b,1,size(alphSort,1)) - row*alphSort';
+%      Rrepmat(Rrepmat<0)=0;
+%      df=-col'*Rrepmat;
+%      loc=find(df>0);
+%        inc = 0.5*(alphSort(loc)+alphSort(loc-1));
+ inc = alpha*( col' * r ) / Acol(pickedj);
+%     end
 
 
     x(pickedj) = x(pickedj) + inc;
-    rs = rs - inc*col;
-    
-
-     r = rs;
+    rst = rs - inc*col;
+    r=rst;
    %    if mod(iter,100)==0
        % r( r < 0) = 0;
        r=(r+abs(r))/2;
-       At_r = A' * r;
+       I=r>0;
+       Ic = I - I_old;
+       rs(Ic==-1) = -1*rs(Ic==-1);
+       aIc=abs(Ic);
+        At_r = At_r + A(aIc,:)'*rs(aIc);
+        At_r = At_r-A(I,:)'*col(I);
+       rs = rst;
+       I_old=I;
+ %      At_r = A' * r;
    %   end
     pnormAx_b=power((abs(At_r)./sqrt(Acol)),p);
     prob=(pnormAx_b/sum(pnormAx_b));
