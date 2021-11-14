@@ -1,4 +1,5 @@
 function [x,iter,error_k,iter_k,index_k] = WRGS(A, b, x0,maxit,tol,exactx,debug)
+% ||Ax-b|| 概率都没有
 %% 参数设定
 % 输入参数
 % A, b, x0 问题的系数矩阵和右边项 初始值

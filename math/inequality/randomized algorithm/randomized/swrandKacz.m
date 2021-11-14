@@ -1,5 +1,5 @@
-function [x,iter,error_k,iter_k,index_k] = swrandomized(A, b, x0,p,maxit,tol,exactx,debug)
-% search weight Guass 
+function [x,iter,error_k,iter_k,index_k] = swrandKacz(A, b, x0,maxit,tol,exactx,debug)
+% || (b-Ax)_+ || search weight
 %% 参数设定
 % 输入参数
 % A, b, x0 问题的系数矩阵和右边项 初始值
@@ -18,7 +18,6 @@ iter = 0;
 
 %% 计算残差
 r = b - A * x;
-rs = r;
 r(r<0) = 0;
 norm_Ar = norm(A'*r);
 
@@ -31,34 +30,24 @@ else
 end
 
 index_k=[0];
+
 % 因为测试终止条件需要矩阵乘以向量 为了避免每次迭代都去检测终止条件因此周期检测
 iter_test_stop = 1;
 
+alpha = 1;
 
+AAT=A*A';
+Arow=sum(A.*A,2);
 
-Acol=sum(A.*A,1)';
-
-% weight = Acol/sum(Acol);
-% index=1:n;
-% pickedj_a =zeros(1,maxit);
-% for i = 1:maxit
-%  pickedj_a(i) = randsample(index,1,true,weight);
-% end
-% iter_index=1;
-At_r=A'*r;
-pnormAx_b=power((abs(At_r)./sqrt(Acol)),p);
-prob=(pnormAx_b/sum(pnormAx_b));
-cumsumpro=cumsum(prob);
+weight = Arow/sum(Arow);
+index=1:m;
 
 Ip = A>0;
 Im = A<0;
 Ie = abs(A)<1e-15;
 I  = eye(n);
+
 for i = 1:maxit
-    %pickedj=pickedj_a(pickedj_i(i));
-    pickedj=sum(cumsumpro<rand)+1;
-  %  pickedj=randsample(index,1,true,weight);
-    
     col = A(:, pickedj);
     Icolp = Ip(:,pickedj);
     Icolm = Im(:,pickedj);
@@ -77,32 +66,24 @@ for i = 1:maxit
        active1 = plaha(minrcol < plaha);
        active2 = malpha(malpha < maxrcol);
        active = sort([active1,active2],'ascend');
-       AN_r+r(i)*A(i,:)'-active*A(:,i)'*col
+       AN_r+r(i)*A(i,:)' - active*A(:,i)'*col
       %  inc = spiecewise(A,b,s*I(:,pickedj),x);
       inc = bisect2(minrcol,maxrcol,A,b,x,I(:,pickedj),1e-10);
     end
-
-   % inc = alpha*( col' * r ) / Acol(pickedj);
-   
-
-
-    x(pickedj) = x(pickedj) + inc;
-    rs = rs - inc*col;
     
-
-     r = rs;
-   %    if mod(iter,100)==0
-       % r( r < 0) = 0;
-       r=(r+abs(r))/2;
-       At_r = A' * r;
-   %   end
-    pnormAx_b=power((abs(At_r)./sqrt(Acol)),p);
-    prob=(pnormAx_b/sum(pnormAx_b));
-    cumsumpro=cumsum(prob);
+    
+    row = A(pickedi, :);
+    r_pickedi=b(pickedi) - (row * x);
+    if r_pickedi>0
+        x = x + alpha * ( r_pickedi ) / (Arow(pickedi)) * row';
+    end
     iter = iter+1;
+    
     % 主要记录迭代过程中的值 用来调试
     if mod(iter,iter_test_stop)==0
         if ~isempty(tol) || debug
+            r = b - A * x;
+            r(r<0) = 0;
             % 矩阵乘以向量 
             Ar = A'*r;
             e = norm(Ar);
@@ -123,36 +104,10 @@ for i = 1:maxit
                 iter_k =[iter_k i];
             end
             error_k = [error_k,e];
-            index_k = [index_k,pickedj];
+            index_k = [index_k,pickedi];
         end
     end
+    
 end
-function xc=bisect2(a,b,A,Ab,x0,p,tol)
-if sign(f(A,Ab,x0,p,a))*sign(f(A,Ab,x0,p,b)) >= 0
-    error('f(a)f(b)<0 not satisfied!') %ceases execution
-end
-fa=f(A,Ab,x0,p,a);
-fb=f(A,Ab,x0,p,b);
-while (b-a)/2>tol
-    c=(a+b)/2;
-    fc=f(A,Ab,x0,p,c);
-    if fc == 0              %c is a solution, done
-        break
-    end
-    if sign(fc)*sign(fa)<0  %a and c make the new interval
-        b=c;
-        fb=fc;
-    else%c and b make the new interval
-        a=c;
-        fa=fc;
-    end
-end
-xc=(a+b)/2;
-end
-function fx = f(A,b,x0,p,x)
-    x=x0+x*p;
-    r= b-A*x;
-    r(r<0)=0;
-    fx = p'*A'*r;
-end
-end
+
+

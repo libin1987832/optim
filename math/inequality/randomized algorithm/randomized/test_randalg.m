@@ -78,15 +78,6 @@ g_GS = norm(A'*r);
 fprintf('& %s & %g & %g & %d & %g \\\\\n', 'Gauss', r_GS, g_GS, iter_GS, tf_GS);
 % [sfactor, r0re, factor, expect] = testSingle(A,norm_r0^2/2,norm_rexact^2/2,iter_GS);
 % fprintf('& %s & %g & %g & %g & %g  & %g & %g\\\\\n', 'Gauss theory', sfactor, r0re, factor, expect,  r_GS^2/2,norm_rexact^2/2);
-%% InexactGaussSeidel
-t=clock;
-[x_In,iter_In,error_In,xA_In,index_In] = randomizedInexactNE(A, b, x0,maxit_Rand,tol,x_exact,debug);
-tf_In=etime(clock,t);
-r = b - A * x_In;
-r(r<0) = 0;
-r_In = norm(r);
-g_In = norm(A'*r);
-fprintf('& %s & %g & %g & %d & %g \\\\\n','Inexact', r_In, g_In,iter_In, tf_In);
 
 %%%
 maxit_Rand = 3000;
