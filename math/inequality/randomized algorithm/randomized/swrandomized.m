@@ -37,8 +37,7 @@ iter_test_stop = 1;
 
 
 ATA=A'*A;
-Acol=diag(ATA);
-%Acol=sum(A.*A,1)';
+Acol=sum(A.*A,1)';
 
 % weight = Acol/sum(Acol);
 % index=1:n;
@@ -52,10 +51,10 @@ pnormAx_b=power((abs(At_r)./sqrt(Acol)),p);
 prob=(pnormAx_b/sum(pnormAx_b));
 cumsumpro=cumsum(prob);
 
-Ip = A>0;
-Im = A<0;
-Ie = abs(A)<1e-15;
-I  = eye(n);
+% Ip = A>0;
+% Im = A<0;
+% Ie = abs(A)<1e-15;
+% I  = eye(n);
 for i = 1:maxit
     %pickedj=pickedj_a(pickedj_i(i));
     pickedj=sum(cumsumpro<rand)+1;
@@ -104,22 +103,24 @@ for i = 1:maxit
 
 
     x(pickedj) = x(pickedj) + inc;
-    rst = rs - inc*col;
-    r=rst;
+    rs = rs - inc*col;
+    r=rs;
    %    if mod(iter,100)==0
        % r( r < 0) = 0;
        r=(r+abs(r))/2;
-       I=r>0;
-       Ic = I - I_old;
-       rs(Ic==-1) = -1*rs(Ic==-1);
-       aIc=abs(Ic);
-        At_r = At_r + A(aIc,:)'*rs(aIc);
-        At_r = At_r-A(I,:)'*col(I);
-       rs = rst;
-       I_old=I;
- %      At_r = A' * r;
+ %      I=r>0;
+%        Ic = I - I_old;
+%        rs(Ic==-1) = -1*rs(Ic==-1);
+%        aIc=abs(Ic);
+%         At_r = At_r + A(aIc,:)'*rs(aIc);
+%         At_r = At_r-inc*A(I,:)'*col(I);
+%        rs = rst;
+%        I_old=I;
+al=100;
+At_r = At_r - inc*ATA(:,pickedj)-1/al*Ae_r;
+        At_r = A' * r;
    %   end
-    pnormAx_b=power((abs(At_r)./sqrt(Acol)),p);
+   pnormAx_b=power((abs(At_r)./sqrt(Acol)),p);
     prob=(pnormAx_b/sum(pnormAx_b));
     cumsumpro=cumsum(prob);
     iter = iter+1;
