@@ -4,7 +4,7 @@ debug = 0;
 %% 产生问题矩阵
 % 随机矩阵
 m = 10000;
-n = 200;
+n = 30;
 
 A = 2 * randn(m , n)-1;
 b = 2 * randn(m , 1)-1;
@@ -19,13 +19,13 @@ x0 = zeros(n , 1);
 
 
 %% 基于IFM的算法找到一个解
-maxit_LSQR = 3;
+maxit_LSQR = 5;
 r = b - A * x0;
 r(r<0) = 0;
 norm_r0 = norm(r);
 norm_g0 = norm(A'*r);
 fprintf('%s & %g & %g \n','最开始的目标函数和梯度', norm_r0, norm_g0);
-[x_exact, ~, ~, ~, ~] = IFM(A, b, x0,10, maxit_LSQR , 1e-15,[],debug);
+[x_exact, ~, ~, ~, ~] = IFM(A, b, x0,10, maxit_LSQR , 1e-10,[],debug);
 r = b - A * x_exact;
 r(r<0) = 0;
 norm_rexact = norm(r);
@@ -33,9 +33,9 @@ norm_gexact = norm(A'*r);
 fprintf('%s & %g & %g \n','IFM解的目标函数值和梯度  ', norm_rexact, norm_gexact);
 x_exact=[];
 %% 参数的设定
-maxit_IFM = 2000;
+maxit_IFM =200000;
 
-tol=1e-5;
+tol=1e-10;
 tol=[];
 %% IFM算法求解问题
 t=clock;
@@ -62,7 +62,7 @@ fprintf('& %s & %g & %g & %d & %g \\\\\n','IFM', r_IFM, g_IFM,iter_IFM,tf_IFM);
 %% GaussSeidel
 % [U,S,V]=eig(A);
 %%%
-maxit_Rand =100000;
+maxit_Rand =1000000;
 t=clock;
 % [x_WGS,iter_WGS,error_WGS,xA_WGS,index_WGS] = wrandomizedGaussSeidelNE(A, b, x0,20,10, maxit_Rand, tol,x_exact,debug);
 [x_WGS,iter_WGS,error_WGS,xA_WGS,index_WGS] =  swrandomized(A, b, x0,2,2,maxit_Rand, tol,x_exact,debug);
@@ -71,7 +71,7 @@ r = b - A * x_WGS;
 r(r<0) = 0;
 r_WGS = norm(r);
 g_WGS = norm(A'*r);
-fprintf('& %s & %g & %g & %d & %g \\\\\n', 'wegiht Gauss', r_WGS, g_WGS, iter_WGS, tf_WGS);
+fprintf('& %s & %g & %g & %d & %g \\\\\n', 'weight Gauss', r_WGS, g_WGS, iter_WGS, tf_WGS);
 %% 画图
 if debug
 figure
