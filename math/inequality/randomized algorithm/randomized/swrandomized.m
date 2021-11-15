@@ -52,7 +52,7 @@ prob=(pnormAx_b/sum(pnormAx_b));
 cumsumpro=cumsum(prob);
 [U,S,V]=svd(A,'econ');
 sd=diag(S);
-N=20;
+N=1;
 U20=U(:,1:N)';
 
 
