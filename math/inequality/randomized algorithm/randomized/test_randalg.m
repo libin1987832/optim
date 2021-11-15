@@ -3,11 +3,11 @@ clc
 debug = 0;
 %% 产生问题矩阵
 % 随机矩阵
-m = 10000;
-n = 200;
+m = 1000;
+n = 600;
 
-A = 2 * randn(m , n)-1;
-b = 2 * randn(m , 1)-1;
+A = 2 * rand(m , n)-1;
+b = 2 * rand(m , 1)-1;
 % b=A*ones(n,1);
 x0 = zeros(n , 1);
 % save('test2.mat','A','b','x0')
@@ -33,7 +33,7 @@ norm_gexact = norm(A'*r);
 fprintf('%s & %g & %g \n','IFM解的目标函数值和梯度  ', norm_rexact, norm_gexact);
 x_exact=[];
 %% 参数的设定
-maxit_IFM =8000;
+maxit_IFM =6000;
 
 tol=1e-10;
 tol=[];
@@ -62,10 +62,10 @@ fprintf('& %s & %g & %g & %d & %g \\\\\n','IFM', r_IFM, g_IFM,iter_IFM,tf_IFM);
 %% GaussSeidel
 % [U,S,V]=eig(A);
 %%%
-maxit_Rand =180000;
+maxit_Rand =200000;
 t=clock;
 % [x_WGS,iter_WGS,error_WGS,xA_WGS,index_WGS] = wrandomizedGaussSeidelNE(A, b, x0,20,10, maxit_Rand, tol,x_exact,debug);
-[x_WGS,iter_WGS,error_WGS,xA_WGS,index_WGS] =  swrandomized(A, b, x0,2,2,maxit_Rand, tol,x_exact,debug);
+[x_WGS,iter_WGS,error_WGS,xA_WGS,index_WGS] = swrandomized(A, b, x0,2,2,maxit_Rand, tol,x_exact,debug);
 tf_WGS=etime(clock,t);
 r = b - A * x_WGS;
 r(r<0) = 0;
