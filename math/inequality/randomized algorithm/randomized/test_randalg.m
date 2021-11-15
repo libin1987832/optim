@@ -60,12 +60,12 @@ fprintf('& %s & %g & %g & %d & %g \\\\\n','IFM', r_IFM, g_IFM,iter_IFM,tf_IFM);
 % fprintf('& %s & %g & %g & %d & %g \\\\\n', 'Kaczmarz', r_Kac, g_Kac, iter_Kac, tf_Kac);
 
 %% GaussSeidel
-[U,S,V]=eig(A);
+% [U,S,V]=eig(A);
 %%%
-maxit_Rand = 2000;
+maxit_Rand =3000;
 t=clock;
-%[x_WGS,iter_WGS,error_WGS,xA_WGS,index_WGS] = wrandomizedGaussSeidelNE(A, b, x0,20,10, maxit_Rand, tol,x_exact,debug);
-[x_WGS,iter_WGS,error_WGS,xA_WGS,index_WGS] =  swrandomized(A, b, x0,2,2,maxit_Rand, tol,x_exact,debug);
+% [x_WGS,iter_WGS,error_WGS,xA_WGS,index_WGS] = wrandomizedGaussSeidelNE(A, b, x0,20,10, maxit_Rand, tol,x_exact,debug);
+[x_WGS,iter_WGS,error_WGS,xA_WGS,index_WGS] =  swrandomized(A, b, x0,2,3,maxit_Rand, tol,x_exact,debug);
 tf_WGS=etime(clock,t);
 r = b - A * x_WGS;
 r(r<0) = 0;
