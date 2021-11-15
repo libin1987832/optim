@@ -60,7 +60,7 @@ fprintf('& %s & %g & %g & %d & %g \\\\\n','IFM', r_IFM, g_IFM,iter_IFM,tf_IFM);
 % fprintf('& %s & %g & %g & %d & %g \\\\\n', 'Kaczmarz', r_Kac, g_Kac, iter_Kac, tf_Kac);
 
 %% GaussSeidel
-
+[U,S,V]=eig(A);
 %%%
 maxit_Rand = 2000;
 t=clock;
