@@ -51,6 +51,9 @@ pnormAx_b=power((abs(At_r)./sqrt(Acol)),p);
 prob=(pnormAx_b/sum(pnormAx_b));
 cumsumpro=cumsum(prob);
 [U,S,V]=svd(A,'econ');
+sd=diag(S);
+N=20;
+U20=U(:,1:N)';
 
 
 % Ip = A>0;
@@ -121,11 +124,12 @@ for i = 1:maxit
 % al=100;
 % At_r = At_r - inc*ATA(:,pickedj)-1/al*Ae_r*;
 At_r = zeros(n,1);
-for i =1:20
-       svr=S(i,i)*U(:,i)'*r;
-       At_r =At_r+svr*V(:,i);
+svr=U20*r;
+% 
+for i =1:N
+       At_r =At_r+sd(i)*svr(i)*V(:,i);
 end
-    %    At_r = A' * r;
+%       At_r = A' * r;
    %   end
    pnormAx_b=power((abs(At_r)./sqrt(Acol)),p);
     prob=(pnormAx_b/sum(pnormAx_b));
