@@ -116,8 +116,9 @@ for i = 1:maxit
 %         At_r = At_r-inc*A(I,:)'*col(I);
 %        rs = rst;
 %        I_old=I;
-al=100;
-At_r = At_r - inc*ATA(:,pickedj)-1/al*Ae_r;
+% al=100;
+% At_r = At_r - inc*ATA(:,pickedj)-1/al*Ae_r*;
+
         At_r = A' * r;
    %   end
    pnormAx_b=power((abs(At_r)./sqrt(Acol)),p);
