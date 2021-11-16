@@ -54,14 +54,15 @@ for i = 1:maxit
    % pickedj=pickedj_a(pickedj_i(i));
   %  pickedj=randsample(index,1,true,weight);
     
-  col = A(:, pickedj);
+    col = A(:, pickedj);
 %    inc = alpha*( col' * r ) / Acol(pickedj
     inc = alpha*( At_r(pickedj) ) / Acol(pickedj);
     x(pickedj) = x(pickedj) - inc;
     r = r - inc*col;
     
     At_r = At_r - inc*B(:,pickedj);
-    pnormAx_b=power((abs(At_r)./sqrt(Acol)),p);
+    pnormAx_b=((At_r.^2)./Acol);
+    %pnormAx_b=power((abs(At_r)./sqrt(Acol)),p);
     prob=(pnormAx_b/sum(pnormAx_b));
     cumsumpro=cumsum(prob);
     
