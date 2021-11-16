@@ -134,23 +134,27 @@ for i = 1:maxit
 % end
   
         
-        ssign=sum(~xor(rs>tol2, rso>tol2));
-        if ssign==m 
+     %   ssign=sum(~xor(rs>tol2, rso>tol2));
+     %   if ssign==m 
+     if iter >5000
             if first
+                At_r = A' * r;
                 ATNA=A(rs>tol2,:)'*A(rs>tol2,:);
                 first = false;
             end
             At_r=At_r-inc*ATNA(:,pickedj);
+            pnormAx_b=power((abs(At_r)./sqrt(Acol)),p);
+            prob=(pnormAx_b/sum(pnormAx_b));
         else
             first = true;
-            At_r = A' * r;
+  %          At_r = A' * r;
+            prob = Acol/sum(Acol);
         end
+        cumsumpro=cumsum(prob);
+        iter = iter+1;
    %    At_r = A' * r;
    %   end
-   pnormAx_b=power((abs(At_r)./sqrt(Acol)),p);
-    prob=(pnormAx_b/sum(pnormAx_b));
-    cumsumpro=cumsum(prob);
-    iter = iter+1;
+
     % 主要记录迭代过程中的值 用来调试
     if mod(iter,iter_test_stop)==0
         if ~isempty(tol) || debug

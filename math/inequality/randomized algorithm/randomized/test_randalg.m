@@ -3,8 +3,8 @@ clc
 debug = 0;
 %% 产生问题矩阵
 % 随机矩阵
-m = 10000;
-n = 2000;
+m = 1000;
+n = 200;
 
 A = 2 * rand(m , n)-1;
 b = 2 * rand(m , 1)-1;
@@ -62,7 +62,7 @@ x_exact = x_IFM;
 %% GaussSeidel
 % [U,S,V]=eig(A);
 %%%
-maxit_Rand =3000;
+maxit_Rand =300000;
 t=clock;
 % [x_WGS,iter_WGS,error_WGS,xA_WGS,index_WGS] = wrandomizedGaussSeidelNE(A, b, x0,20,10, maxit_Rand, tol,x_exact,debug);
 [x_WGS,iter_WGS,error_WGS,xA_WGS,index_WGS] = swrandomized(A, b, x0,2,2,maxit_Rand, tol,x_exact,debug);

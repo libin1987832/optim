@@ -63,13 +63,17 @@ else
 end
 %%
 x=initialx;
-
+l1=zeros(Max_iter,1);
  if strategy==1
  colunmnormA=sum(A.^2,1);
       pro1=colunmnormA/sum(colunmnormA);
      residualvector=-b;
      cumsumpro=cumsum(pro1)';
-    l1=sum(repmat(cumsumpro,1,Max_iter)<repmat(rand(1,Max_iter),n,1),1)+1; 
+     rmat=rand(Max_iter,1);
+     for i =1 :Max_iter
+      l1(i)=sum(cumsumpro<rmat(i))+1;
+     end
+%     l1=sum(repmat(cumsumpro,1,Max_iter)<repmat(rand(1,Max_iter),n,1),1)+1; 
 %  else
 %      B=A'*A;
 %      colunmnormA=diag(B);
