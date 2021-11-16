@@ -1,10 +1,10 @@
 clear
 clc
-debug = 1;
+debug = 0;
 %% 产生问题矩阵
 % 随机矩阵
-m = 1000;
-n = 200;
+m = 10000;
+n = 2000;
 
 A = 2 * rand(m , n)-1;
 b = 2 * rand(m , 1)-1;
@@ -33,7 +33,7 @@ norm_gexact = norm(A'*r);
 fprintf('%s & %g & %g \n','IFM解的目标函数值和梯度  ', norm_rexact, norm_gexact);
 x_exact=[];
 %% 参数的设定
-maxit_IFM =6000;
+maxit_IFM =100;
 
 tol=1e-10;
 tol=[];
@@ -62,7 +62,7 @@ x_exact = x_IFM;
 %% GaussSeidel
 % [U,S,V]=eig(A);
 %%%
-maxit_Rand =200000;
+maxit_Rand =3000;
 t=clock;
 % [x_WGS,iter_WGS,error_WGS,xA_WGS,index_WGS] = wrandomizedGaussSeidelNE(A, b, x0,20,10, maxit_Rand, tol,x_exact,debug);
 [x_WGS,iter_WGS,error_WGS,xA_WGS,index_WGS] = swrandomized(A, b, x0,2,2,maxit_Rand, tol,x_exact,debug);

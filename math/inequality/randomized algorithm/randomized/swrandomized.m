@@ -22,7 +22,7 @@ rs = r;
 I_old= r>0;
 r=0.5*(r+abs(r));
 norm_Ar = norm(A'*r);
-
+      tol2=1e-15;
 if isempty(exactx)
     error_k = [norm_Ar];
     iter_k =[0];
@@ -32,13 +32,13 @@ else
     rpk=b-A*exactx;
             print = true;
 end
-
+first = true;
 index_k=[0];
 % 因为测试终止条件需要矩阵乘以向量 为了避免每次迭代都去检测终止条件因此周期检测
 iter_test_stop = 1;
 
 
-ATA=A'*A;
+% ATA=A'*A;
 Acol=sum(A.*A,1)';
 
 % weight = Acol/sum(Acol);
@@ -52,10 +52,10 @@ At_r=A'*r;
 pnormAx_b=power((abs(At_r)./sqrt(Acol)),p);
 prob=(pnormAx_b/sum(pnormAx_b));
 cumsumpro=cumsum(prob);
-[U,S,V]=svd(A,'econ');
-sd=diag(S);
-N=20;
-U20=U(:,1:N)';
+% [U,S,V]=svd(A,'econ');
+% sd=diag(S);
+% N=20;
+% U20=U(:,1:N)';
 
 
 % Ip = A>0;
@@ -132,12 +132,18 @@ for i = 1:maxit
 % for i =1:N
 %        At_r =At_r+sd(i)*svr(i)*V(:,i);
 % end
-        tol2=1e-15;
+  
+        
         ssign=sum(~xor(rs>tol2, rso>tol2));
         if ssign==m 
             if first
-                ATNA=A()'
-                
+                ATNA=A(rs>tol2,:)'*A(rs>tol2,:);
+                first = false;
+            end
+            At_r=At_r-inc*ATNA(:,pickedj);
+        else
+            first = true;
+            At_r = A' * r;
         end
    %    At_r = A' * r;
    %   end
