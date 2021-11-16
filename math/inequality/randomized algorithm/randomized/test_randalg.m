@@ -1,10 +1,10 @@
 clear
 clc
-debug = 0;
+debug = 1;
 %% 产生问题矩阵
 % 随机矩阵
 m = 1000;
-n = 600;
+n = 200;
 
 A = 2 * rand(m , n)-1;
 b = 2 * rand(m , 1)-1;
@@ -47,7 +47,7 @@ r_IFM = norm(r);
 g_IFM = norm(A'*r);
 fprintf('& %s & %s & %s & %s & %s \\\\\n', 'alg', 'norm(r_+)', 'norm(Ar_+)', 'iteration', 'time');
 fprintf('& %s & %g & %g & %d & %g \\\\\n','IFM', r_IFM, g_IFM,iter_IFM,tf_IFM);
-
+x_exact = x_IFM;
 %% Kaczmarz
 % maxit_Rand = 3000;
 % t=clock;

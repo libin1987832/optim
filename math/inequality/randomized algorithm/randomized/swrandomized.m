@@ -29,6 +29,8 @@ if isempty(exactx)
 else
     error_k = [norm(x-exactx)];
     iter_k =[x];
+    rpk=b-A*exactx;
+            print = true;
 end
 
 index_k=[0];
@@ -108,6 +110,7 @@ for i = 1:maxit
 
 
     x(pickedj) = x(pickedj) + inc;
+    rso=rs;
     rs = rs - inc*col;
     r=rs;
    %    if mod(iter,100)==0
@@ -124,12 +127,19 @@ for i = 1:maxit
 % al=100;
 % At_r = At_r - inc*ATA(:,pickedj)-1/al*Ae_r*;
  
-At_r = zeros(n,1);
-svr=U20*r;
-for i =1:N
-       At_r =At_r+sd(i)*svr(i)*V(:,i);
-end
-%       At_r = A' * r;
+% At_r = zeros(n,1);
+% svr=U20*r;
+% for i =1:N
+%        At_r =At_r+sd(i)*svr(i)*V(:,i);
+% end
+        tol2=1e-15;
+        ssign=sum(~xor(rs>tol2, rso>tol2));
+        if ssign==m 
+            if first
+                ATNA=A()'
+                
+        end
+   %    At_r = A' * r;
    %   end
    pnormAx_b=power((abs(At_r)./sqrt(Acol)),p);
     prob=(pnormAx_b/sum(pnormAx_b));
@@ -159,6 +169,13 @@ end
             end
             error_k = [error_k,e];
             index_k = [index_k,pickedj];
+            tol2=1e-15;
+        ssign=sum(~xor(rs>tol2, rpk>tol2));
+
+        if ssign==m && print
+            iter
+            print = false;
+        end
         end
     end
 end
