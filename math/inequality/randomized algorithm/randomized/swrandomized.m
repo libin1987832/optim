@@ -123,9 +123,9 @@ for i = 1:maxit
 %        I_old=I;
 % al=100;
 % At_r = At_r - inc*ATA(:,pickedj)-1/al*Ae_r*;
+ 
 At_r = zeros(n,1);
 svr=U20*r;
-% 
 for i =1:N
        At_r =At_r+sd(i)*svr(i)*V(:,i);
 end
