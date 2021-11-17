@@ -35,12 +35,13 @@ index_k=[0];
 % opts.p=2;
 % 
 % opts.lamba = 1+min(n/m,m/n);
-B=A'*A;
-colunmnormA=diag(B);
+
+colunmnormA=sum(A.*A,1);
+Ar=A'*r;
 for i = 1:maxit
     % 用LSQR算法求解子问题的下降方向
   %  u = krylovk(A, r, maxit_R);
-    u=Gauss_Seidel(A, r, maxit_gs,B,colunmnormA,alpha);
+    [u,ru]=Gauss_Seidel(A, r, maxit_gs,colunmnormA,alpha);
     x = x + u;
     r = b - A * x;
     r( r < 0) = 0;
@@ -48,9 +49,9 @@ for i = 1:maxit
     if ~isempty(tol) || debug
         Ar = A'*r;
         e = norm(Ar);
-        normAr = norm(r);
+        normr = norm(r);
         if ~isempty(tol)
-            if normAr < tol  || e < tol
+            if normr < tol  || e < tol
                 break;
             end
         end
@@ -69,7 +70,7 @@ end
 
 
 end
-function x = Gauss_Seidel(A, r, maxit,Acol,alpha)
+function [x, r]= Gauss_Seidel(A, r, maxit,Acol,alpha)
 
 %%
 [m, n] = size(A);
@@ -86,8 +87,7 @@ for i = 1:maxit
     col = A(:, pickedj);
     inc = alpha*( col' * r ) / Acol(pickedj);
   %  inc = alpha*( At_r(pickedj) ) / Acol(pickedj);
-    x(pickedj) = x(pickedj) - inc;
-    r = r - inc*col;
-    
+    x(pickedj) = x(pickedj) + inc;
+    r = r - inc*col;   
 end
 end

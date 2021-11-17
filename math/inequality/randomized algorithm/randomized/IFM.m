@@ -31,7 +31,7 @@ index_k=[0];
 %% 设定子问题中LSQR算法的迭代次数
 
 
-
+Ar=A'*r;
 for i = 1:maxit
     % 用LSQR算法求解子问题的下降方向
     u = krylovk(A, r, maxit_LSQR);
@@ -42,9 +42,9 @@ for i = 1:maxit
     if ~isempty(tol) || debug
         Ar = A'*r;
         e = norm(Ar);
-        normAr = norm(r);
+        normr = norm(r);
         if ~isempty(tol)
-            if normAr < tol  || e < tol
+            if normr < tol  || e < tol
                 break;
             end
         end
