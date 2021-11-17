@@ -9,6 +9,8 @@ n = 200;
 A = 2 * rand(m , n)-1;
 b = 2 * rand(m , 1)-1;
 % b=A*ones(n,1);
+% load('test.mat');
+
 x0 = zeros(n , 1);
 % save('test2.mat','A','b','x0')
 %load('test.mat');

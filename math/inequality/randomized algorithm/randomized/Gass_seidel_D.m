@@ -15,7 +15,7 @@ for i = 1:maxit
     col = A(:, pickedj);
     inc = alpha*( col' * r ) / Acol(pickedj);
   %  inc = alpha*( At_r(pickedj) ) / Acol(pickedj);
-    x(pickedj) = x(pickedj) + inc;
+    x(pickedj) = x(pickedj) - inc;
     r = r - inc*col;
     normr=[normr,norm(A'*r)];
 end
