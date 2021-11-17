@@ -18,7 +18,8 @@ iter = 0;
 r = b - A * x0;
 r(r<0)=0;
 normAr = norm(A'*r);
-error_k = [normAr];
+% error_k = [normAr];
+error_k =[];
 if ~isempty(exactx)
     e = norm(x-exactx);
     iter_k =[x];
@@ -45,6 +46,7 @@ for i = 1:maxit
 %     norm(A*u-r)
     % [u,~]= Gass_seidel_D(A, r, maxit_R,colunmnormA,alpha);
     x = x + u;
+        r0=r;
     r = b - A * x;
     r( r < 0) = 0;
     iter = iter+1;
@@ -65,7 +67,8 @@ for i = 1:maxit
         else
             iter_k =[iter_k i];
         end        
-        error_k = [error_k,e];
+%         error_k = [error_k,e];
+            error_k = [error_k,[norm(r0);norm(A*u-r0);norm(r)]];
     end
     
 end
@@ -84,12 +87,13 @@ x = zeros(n,1);
 pnormAx_b=(((At_r).^2)./Acol);
 prob=(pnormAx_b/sum(pnormAx_b));
 cumsumpro=cumsum(prob);
-
+pickedjA=[];
 for i = 1:maxit
-    pickedj=sum(cumsumpro<rand)+1;
+    rr=rand;
+    pickedj=sum(cumsumpro<rr)+1;
    % pickedj=pickedj_a(pickedj_i(i));
   %  pickedj=randsample(index,1,true,weight);
-    
+    pickedjA=[pickedjA;pickedj prob' rr];
     col = A(:, pickedj);
     inc = alpha*( col' * r ) / Acol(pickedj);
  %   inc = alpha*( At_r(pickedj) ) / Acol(pickedj);
@@ -104,6 +108,6 @@ for i = 1:maxit
     cumsumpro=cumsum(prob);
    
 end
-
+pickedjA
 end
 

@@ -1,10 +1,10 @@
 clear
 clc
-debug = 0;
+debug = 1;
 %% 产生问题矩阵
 % 随机矩阵
-m = 10000;
-n = 2000;
+m = 10;
+n = 2;
 
 A = 2 * rand(m , n)-1;
 b = 2 * rand(m , 1)-1;
@@ -35,20 +35,20 @@ norm_gexact = norm(A'*r);
 fprintf('%s & %g & %g \n','IFM解的目标函数值和梯度  ', norm_rexact, norm_gexact);
 x_exact=[];
 %% 参数的设定
-maxit_IFM =100;
+maxit_IFM =10;
 alpha = 1+n/m;
 tol=1e-10;
 %
 %% IFM算法求解问题
-% t=clock;
-% [x_IFM,iter_IFM,error_IFM,xA_IFM,index_IFM] = IFM(A, b, x0, maxit_IFM, maxit_LSQR ,tol, x_exact,debug);
-% tf_IFM=etime(clock,t);
-% r = b - A * x_IFM;
-% r(r<0) = 0;
-% r_IFM = norm(r);
-% g_IFM = norm(A'*r);
-% fprintf('& %s & %s & %s & %s & %s \\\\\n', 'alg', 'norm(r_+)', 'norm(Ar_+)', 'iteration', 'time');
-% fprintf('& %s & %g & %g & %d & %g \\\\\n','lsqr', r_IFM, g_IFM,iter_IFM,tf_IFM);
+t=clock;
+[x_IFM,iter_IFM,error_IFM,xA_IFM,index_IFM] = IFM(A, b, x0, maxit_IFM, maxit_LSQR ,tol, x_exact,debug);
+tf_IFM=etime(clock,t);
+r = b - A * x_IFM;
+r(r<0) = 0;
+r_IFM = norm(r);
+g_IFM = norm(A'*r);
+fprintf('& %s & %s & %s & %s & %s \\\\\n', 'alg', 'norm(r_+)', 'norm(Ar_+)', 'iteration', 'time');
+fprintf('& %s & %g & %g & %d & %g \\\\\n','lsqr', r_IFM, g_IFM,iter_IFM,tf_IFM);
 %
 
 %% Kaczmarz
@@ -74,8 +74,10 @@ r(r<0) = 0;
 r_WGS = norm(r);
 g_WGS = norm(A'*r);
 fprintf('& %s & %g & %g & %d & %g \\\\\n', 'rand guass seidel', r_WGS, g_WGS, iter_WGS, tf_WGS);
+error_Kac(:,1:10)
+error_WGS(:,1:10)
 %% 画图
-if debug
+if 0
 figure
 h=semilogy(xA_IFM, error_IFM, 'k.');
 h.LineStyle = '--';

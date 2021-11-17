@@ -1,5 +1,6 @@
 function [x,iter,error_k,iter_k,index_k] = DFM(A, b, x0, maxit,alpha,maxit_gs,tol, exactx,debug)
 %% 参数设定
+% Dax 的算法采用 Guass Seidel 求解子问题
 % 输入参数
 % A, b, x0 问题的系数矩阵和右边项 初始值
 % maxit,tol,exactx 最大迭代次数，容忍度，精确解
@@ -18,7 +19,8 @@ iter = 0;
 r = b - A * x0;
 r(r<0)=0;
 normAr = norm(A'*r);
-error_k = [normAr];
+% error_k = [normAr];
+error_k =[];
 if ~isempty(exactx)
     e = norm(x-exactx);
     iter_k =[x];
@@ -49,6 +51,7 @@ for i = 1:maxit
 %  norm(A*u-r)
 % [u,~,~]= Rand_Gauss_Seidel_R(A, r, Ar,maxit_gs,B,colunmnormA',p,alpha);
     x = x + u;
+    r0=r;
     r = b - A * x;
     r( r < 0) = 0;
     iter = iter+1;
@@ -70,7 +73,8 @@ for i = 1:maxit
         else
             iter_k =[iter_k i];
         end        
-        error_k = [error_k,e];
+%         error_k = [error_k,e];
+            error_k = [error_k,[norm(r0);norm(A*u-r0);norm(r)]];
     end
     
 end
