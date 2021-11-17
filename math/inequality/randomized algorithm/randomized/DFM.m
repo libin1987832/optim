@@ -1,4 +1,4 @@
-function [x,iter,error_k,iter_k,index_k] = RFM(A, b, x0, maxit,alpha,maxit_R, tol, exactx,debug)
+function [x,iter,error_k,iter_k,index_k] = DFM(A, b, x0, maxit,alpha,maxit_gs,tol, exactx,debug)
 %% 参数设定
 % 输入参数
 % A, b, x0 问题的系数矩阵和右边项 初始值
@@ -31,16 +31,16 @@ index_k=[0];
 %% 设定子问题中LSQR算法的迭代次数
 
 
-opts.strategy=1;
-opts.p=2;
-opts.Max_iter=maxit_R;
-opts.lamba = 1+min(n/m,m/n);
+% opts.strategy=1;
+% opts.p=2;
+% 
+% opts.lamba = 1+min(n/m,m/n);
 B=A'*A;
 colunmnormA=diag(B);
 for i = 1:maxit
     % 用LSQR算法求解子问题的下降方向
   %  u = krylovk(A, r, maxit_R);
-    u=wrandomizedGaussSeidel(A, r, maxit_R,B,colunmnormA,alpha);
+    u=Gauss_Seidel(A, r, maxit_gs,B,colunmnormA,alpha);
     x = x + u;
     r = b - A * x;
     r( r < 0) = 0;
@@ -66,41 +66,28 @@ for i = 1:maxit
     end
     
 end
-end
 
-function x = wrandomizedGaussSeidel(A, y0, maxit,B,Acol,alpha)
+
+end
+function x = Gauss_Seidel(A, r, maxit,Acol,alpha)
 
 %%
 [m, n] = size(A);
 
 
 %% 计算残差
-r = y0;
 x = zeros(n,1);
-At_r=A'*r;
-%pnormAx_b=power((abs(At_r)./sqrt(Acol)),p);
-pnormAx_b=((At_r.^2)./Acol);
-prob=(pnormAx_b/sum(pnormAx_b));
-cumsumpro=cumsum(prob);
+
 
 for i = 1:maxit
-    pickedj=sum(cumsumpro<rand)+1;
+    pickedj=mod(i-1,n)+1;
    % pickedj=pickedj_a(pickedj_i(i));
   %  pickedj=randsample(index,1,true,weight);
-    
     col = A(:, pickedj);
     inc = alpha*( col' * r ) / Acol(pickedj);
- %   inc = alpha*( At_r(pickedj) ) / Acol(pickedj);
+  %  inc = alpha*( At_r(pickedj) ) / Acol(pickedj);
     x(pickedj) = x(pickedj) - inc;
     r = r - inc*col;
     
-    At_r = At_r - inc*B(:,pickedj);
-    pnormAx_b=((At_r.^2)./Acol);
-    %pnormAx_b=power((abs(At_r)./sqrt(Acol)),p);
-    prob=(pnormAx_b/sum(pnormAx_b));
-    cumsumpro=cumsum(prob);
-   
 end
-
 end
-

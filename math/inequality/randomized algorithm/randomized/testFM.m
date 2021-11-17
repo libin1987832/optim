@@ -52,7 +52,7 @@ x_exact = x_IFM;
 %% Kaczmarz
 maxit_Rand = 3000;
 t=clock;
-[x_Kac,iter_Kac,error_Kac,xA_Kac,index_Kac] = RFM(A, b, x0,20, 0.001,maxit_Rand,tol,x_exact,debug);
+[x_Kac,iter_Kac,error_Kac,xA_Kac,index_Kac] = DFM(A, b, x0,maxit_IFM, 1,maxit_Rand,tol,x_exact,debug);
 tf_Kac=etime(clock,t);
 r = b - A * x_Kac;
 r(r<0) = 0;
@@ -63,9 +63,9 @@ fprintf('& %s & %g & %g & %d & %g \\\\\n', 'guass seidel', r_Kac, g_Kac, iter_Ka
 %% GaussSeidel
 % [U,S,V]=eig(A);
 %%%
-maxit_Rand =300000;
+maxit_Rand =3000;
 t=clock;
-[x_WGS,iter_WGS,error_WGS,xA_WGS,index_WGS] = RFM(A, b, x0,2,2,maxit_Rand, tol,x_exact,debug);
+[x_WGS,iter_WGS,error_WGS,xA_WGS,index_WGS] = RFM(A, b, x0,maxit_IFM,1,maxit_Rand, tol,x_exact,debug);
 tf_WGS=etime(clock,t);
 r = b - A * x_WGS;
 r(r<0) = 0;
