@@ -40,7 +40,9 @@ for i = 1:maxit
   %  u = krylovk(A, r, maxit_R);
 %     u=wrandomizedGaussSeidel(A, r, Ar, maxit_R,B,colunmnormA,sAcol,p,alpha);
     u=wrandomizedGaussSeidel(A, -r, -Ar, maxit_R,B,colunmnormA,p,alpha);
-   % [u,~,~]= Rand_Gauss_Seidel_R(A, r, Ar,maxit_R,B,colunmnormA,p,alpha);
+%    norm(r)
+  % [u,~,~]= Rand_Gauss_Seidel_R(A, -r, -Ar,maxit_R,B,colunmnormA,p,alpha);
+%     norm(A*u-r)
     % [u,~]= Gass_seidel_D(A, r, maxit_R,colunmnormA,alpha);
     x = x + u;
     r = b - A * x;

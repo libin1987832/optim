@@ -4,22 +4,24 @@ debug = 0;
 %% 产生问题矩阵
 % 随机矩阵
 m = 1000;
-n = 20;
+n = 200;
 maxit=n;
-A = 2 * rand(m , n)-1;
-b = 2 * rand(m , 1)-1;
-% load('test.mat');
+% A = 2 * rand(m , n)-1;
+% b = 2 * rand(m , 1)-1;
+ load('test.mat');
 x0=zeros(n,1);
-r=A*x0-b;
-r(r<0)=0;
+% r=A*x0-b;
+% r(r<0)=0;
 B=A'*A;
 Acol = diag(B);
 p=2;
 At_r = A'*r;
 % r=b;
-[x,rr,index]=Rand_Gauss_Seidel_R(A, r, At_r,maxit,B,Acol,p,1);
-[x,rg]=Gass_seidel_D(A, r, maxit,Acol,1);
-
+alpha = 1+n/m;
+[x,rr,index]=Rand_Gauss_Seidel_R(A, -r, -At_r,maxit,B,Acol,p,alpha);
+norm(A*x-r)
+[x,rg]=Gass_seidel_D(A, -r, maxit,Acol,alpha);
+norm(A*x-r)
 figure
 h=semilogy(1:(maxit+1), rg, 'r+');
 h.LineStyle = '--';

@@ -44,7 +44,9 @@ for i = 1:maxit
     % 用LSQR算法求解子问题的下降方向
   %  u = krylovk(A, r, maxit_R);
    u=Gauss_Seidel(A, -r, maxit_gs,colunmnormA,alpha);
-%  [u,~]= Gass_seidel_D(A, r, maxit_gs,colunmnormA,alpha);
+%     norm(r)
+ % [u,~]= Gass_seidel_D(A, -r, maxit_gs,colunmnormA,alpha);
+%  norm(A*u-r)
 % [u,~,~]= Rand_Gauss_Seidel_R(A, r, Ar,maxit_gs,B,colunmnormA',p,alpha);
     x = x + u;
     r = b - A * x;
