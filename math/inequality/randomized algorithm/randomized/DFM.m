@@ -35,13 +35,17 @@ index_k=[0];
 % opts.p=2;
 % 
 % opts.lamba = 1+min(n/m,m/n);
-
+B=A'*A;
+p=2;
+%
 colunmnormA=sum(A.*A,1);
 Ar=A'*r;
 for i = 1:maxit
     % 用LSQR算法求解子问题的下降方向
   %  u = krylovk(A, r, maxit_R);
-    [u,ru]=Gauss_Seidel(A, r, maxit_gs,colunmnormA,alpha);
+   % u=Gauss_Seidel(A, r, maxit_gs,colunmnormA,alpha);
+ %  [u,~]= Gass_seidel_D(A, r, maxit_gs,colunmnormA,alpha);
+ [u,~,~]= Rand_Gauss_Seidel_R(A, r, Ar,maxit_gs,B,colunmnormA',p,alpha);
     x = x + u;
     r = b - A * x;
     r( r < 0) = 0;
@@ -59,6 +63,7 @@ for i = 1:maxit
     if debug
         if ~isempty(exactx)
             e = norm(x-exactx);
+            %iter_k =[iter_k i];
             iter_k =[iter_k x];
         else
             iter_k =[iter_k i];
@@ -70,7 +75,7 @@ end
 
 
 end
-function [x, r]= Gauss_Seidel(A, r, maxit,Acol,alpha)
+function x= Gauss_Seidel(A, r, maxit,Acol,alpha)
 
 %%
 [m, n] = size(A);

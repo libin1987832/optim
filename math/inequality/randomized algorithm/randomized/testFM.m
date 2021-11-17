@@ -1,10 +1,10 @@
 clear
 clc
-debug = 0;
+debug = 1;
 %% 产生问题矩阵
 % 随机矩阵
-m = 10000;
-n = 2000;
+m = 1000;
+n = 200;
 
 A = 2 * rand(m , n)-1;
 b = 2 * rand(m , 1)-1;
@@ -35,7 +35,7 @@ x_exact=[];
 %% 参数的设定
 maxit_IFM =2000;
 
-tol=1e-5;
+tol=1e-6;
 %
 %% IFM算法求解问题
 t=clock;
@@ -47,10 +47,10 @@ r_IFM = norm(r);
 g_IFM = norm(A'*r);
 fprintf('& %s & %s & %s & %s & %s \\\\\n', 'alg', 'norm(r_+)', 'norm(Ar_+)', 'iteration', 'time');
 fprintf('& %s & %g & %g & %d & %g \\\\\n','lsqr', r_IFM, g_IFM,iter_IFM,tf_IFM);
-x_exact = x_IFM;
+%
 
 %% Kaczmarz
-maxit_Rand = 2000;
+maxit_Rand = n;
 t=clock;
 [x_Kac,iter_Kac,error_Kac,xA_Kac,index_Kac] = DFM(A, b, x0,maxit_IFM, 1+n/m,maxit_Rand,tol,x_exact,debug);
 tf_Kac=etime(clock,t);
@@ -63,7 +63,7 @@ fprintf('& %s & %g & %g & %d & %g \\\\\n', 'guass seidel', r_Kac, g_Kac, iter_Ka
 %% GaussSeidel
 % [U,S,V]=eig(A);
 %%%
-maxit_Rand =2000;
+maxit_Rand =n;
 t=clock;
 [x_WGS,iter_WGS,error_WGS,xA_WGS,index_WGS] = RFM(A, b, x0,maxit_IFM,1+n/m,maxit_Rand, tol,x_exact,debug);
 tf_WGS=etime(clock,t);
@@ -78,7 +78,7 @@ figure
 h=semilogy(xA_IFM, error_IFM, 'k.');
 h.LineStyle = '--';
 hold on
-h=semilogy(xA_GS, error_GS, 'r+');
+h=semilogy(xA_Kac, error_Kac, 'r+');
 h.LineStyle = '--';
 % h=semilogy(xA_In, error_In, 'b*');
 h=semilogy(xA_WGS, error_WGS, 'b*');

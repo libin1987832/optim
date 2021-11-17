@@ -31,13 +31,17 @@ index_k=[0];
 %% 设定子问题中LSQR算法的迭代次数
 B=A'*A;
 colunmnormA=diag(B);
+%sAcol = sqrt(colunmnormA);
 p=2;
 % colunmnormA=power(sqrt(colunmnormA),p);
 Ar=A'*r;
 for i = 1:maxit
     % 用LSQR算法求解子问题的下降方向
   %  u = krylovk(A, r, maxit_R);
-    u=wrandomizedGaussSeidel(A, r, Ar, maxit_R,B,colunmnormA,p,alpha);
+%     u=wrandomizedGaussSeidel(A, r, Ar, maxit_R,B,colunmnormA,sAcol,p,alpha);
+  %  u=wrandomizedGaussSeidel(A, r, Ar, maxit_R,B,colunmnormA,p,alpha);
+   % [u,~,~]= Rand_Gauss_Seidel_R(A, r, Ar,maxit_R,B,colunmnormA,p,alpha);
+     [u,~]= Gass_seidel_D(A, r, maxit_R,colunmnormA,alpha);
     x = x + u;
     r = b - A * x;
     r( r < 0) = 0;
@@ -75,11 +79,8 @@ function x = wrandomizedGaussSeidel(A, r, At_r,maxit,B,Acol,p,alpha)
 
 x = zeros(n,1);
 
-%pnormAx_b=power((abs(At_r)./sqrt(Acol)),p);
-
-%pnormAx_b=((At_r.^p)./Acol);
+pnormAx_b=(((At_r).^2)./Acol);
 prob=(pnormAx_b/sum(pnormAx_b));
- pnormAx_b=(abs(At_r)./sAcol);
 cumsumpro=cumsum(prob);
 
 for i = 1:maxit
@@ -92,9 +93,10 @@ for i = 1:maxit
  %   inc = alpha*( At_r(pickedj) ) / Acol(pickedj);
     x(pickedj) = x(pickedj) + inc;
     r = r - inc*col;
-    
+  %  At_r =A'*r;
     At_r = At_r - inc*B(:,pickedj);
-    pnormAx_b=(abs(At_r)./sAcol);
+    pnormAx_b=(((At_r).^2)./Acol);
+%     pnormAx_b=(abs(At_r)./sAcol);
     %pnormAx_b=power((abs(At_r)./sqrt(Acol)),p);
     prob=(pnormAx_b/sum(pnormAx_b));
     cumsumpro=cumsum(prob);
