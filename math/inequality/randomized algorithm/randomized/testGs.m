@@ -50,7 +50,7 @@ tol=[];
 
 
 %% GuassSeidel
-maxit_Rand = 200;
+maxit_Rand =1000;
 t=clock;
  [x_GS,iter_GS,error_GS,xA_GS,index_GS] = GuassSeidelNE(A, b, x0,1,maxit_Rand,tol,x_exact,debug);
 tf_GS=etime(clock,t);
@@ -63,11 +63,11 @@ fprintf('& %s & %g & %g & %d & %g \\\\\n', 'GuassSeidel', r_GS, g_GS, iter_GS, t
 %% GaussSeidel
 % [U,S,V]=eig(A);
 %%%
-maxit_Rand =200;
+maxit_Rand =1000;
 t=clock;
 % [x_WGS,iter_WGS,error_WGS,xA_WGS,index_WGS] = wrandomizedGaussSeidelNE(A, b, x0,20,10, maxit_Rand, tol,x_exact,debug);
-
-[x_WGS,iter_WGS,error_WGS,xA_WGS,index_WGS] = randomizedGaussSeidelNE(A, b, x0,2,maxit_Rand, tol,x_exact,debug);
+ [x_WGS,iter_WGS,error_WGS,xA_WGS,index_WGS] = GuassSeidelNE(A, b, x0,0.8,maxit_Rand,tol,x_exact,debug);
+% [x_WGS,iter_WGS,error_WGS,xA_WGS,index_WGS] = randomizedGaussSeidelNE(A, b, x0,2,maxit_Rand, tol,x_exact,debug);
 
 tf_WGS=etime(clock,t);
 r = b - A * x_WGS;
