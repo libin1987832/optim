@@ -1,10 +1,10 @@
 clear
 clc
-debug = 0;
+debug = 1;
 %% 产生问题矩阵
 % 随机矩阵
-m = 10000;
-n = 2000;
+m = 1000;
+n = 200;
 
 A = 2 * rand(m , n)-1;
 b = 2 * rand(m , 1)-1;
@@ -33,24 +33,24 @@ norm_gexact = norm(A'*r);
 fprintf('%s & %g & %g \n','IFM解的目标函数值和梯度  ', norm_rexact, norm_gexact);
 x_exact=[];
 %% 参数的设定
-maxit_IFM =210;
-
+% maxit_IFM =210;
+% 
 tol=1e-10;
 tol=[];
-
-t=clock;
-[x_IFM,iter_IFM,error_IFM,xA_IFM,index_IFM] = IFM(A, b, x0, maxit_IFM, maxit_LSQR ,tol, x_exact,debug);
-tf_IFM=etime(clock,t);
-r = b - A * x_IFM;
-r(r<0) = 0;
-r_IFM = norm(r);
-g_IFM = norm(A'*r);
-fprintf('& %s & %s & %s & %s & %s \\\\\n', 'alg', 'norm(r_+)', 'norm(Ar_+)', 'iteration', 'time');
-fprintf('& %s & %g & %g & %d & %g \\\\\n','IFM', r_IFM, g_IFM,iter_IFM,tf_IFM);
+% 
+% t=clock;
+% [x_IFM,iter_IFM,error_IFM,xA_IFM,index_IFM] = IFM(A, b, x0, maxit_IFM, maxit_LSQR ,tol, x_exact,debug);
+% tf_IFM=etime(clock,t);
+% r = b - A * x_IFM;
+% r(r<0) = 0;
+% r_IFM = norm(r);
+% g_IFM = norm(A'*r);
+% fprintf('& %s & %s & %s & %s & %s \\\\\n', 'alg', 'norm(r_+)', 'norm(Ar_+)', 'iteration', 'time');
+% fprintf('& %s & %g & %g & %d & %g \\\\\n','IFM', r_IFM, g_IFM,iter_IFM,tf_IFM);
 
 
 %% GuassSeidel
-maxit_Rand = 500000;
+maxit_Rand = 200;
 t=clock;
  [x_GS,iter_GS,error_GS,xA_GS,index_GS] = GuassSeidelNE(A, b, x0,1,maxit_Rand,tol,x_exact,debug);
 tf_GS=etime(clock,t);
@@ -63,7 +63,7 @@ fprintf('& %s & %g & %g & %d & %g \\\\\n', 'GuassSeidel', r_GS, g_GS, iter_GS, t
 %% GaussSeidel
 % [U,S,V]=eig(A);
 %%%
-maxit_Rand =100000;
+maxit_Rand =200;
 t=clock;
 % [x_WGS,iter_WGS,error_WGS,xA_WGS,index_WGS] = wrandomizedGaussSeidelNE(A, b, x0,20,10, maxit_Rand, tol,x_exact,debug);
 
@@ -80,11 +80,11 @@ if debug
 figure
 % h=semilogy(xA_IFM, error_IFM, 'k.');
 % h.LineStyle = '--';
-
-h=semilogy(xA_GS, error_GS, 'r+');
+display=1:1:maxit_Rand;
+h=semilogy(xA_GS(display), error_GS(display), 'r+');
 h.LineStyle = '--';
 hold on
-h=semilogy(xA_WGS, error_WGS, 'b*');
+h=semilogy(xA_WGS(display), error_WGS(display), 'b*');
 h.LineStyle = '--';
 legend('Gauss Seidel','Rand Guass');
 xlabel('the iterative numbers');
