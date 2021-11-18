@@ -1,10 +1,10 @@
 clear
 clc
-debug = 1;
+debug = 0;
 %% 产生问题矩阵
 % 随机矩阵
-m = 1000;
-n = 200;
+m = 10000;
+n = 2000;
 
 A = 2 * rand(m , n)-1;
 b = 2 * rand(m , 1)-1;
@@ -33,11 +33,11 @@ norm_gexact = norm(A'*r);
 fprintf('%s & %g & %g \n','IFM解的目标函数值和梯度  ', norm_rexact, norm_gexact);
 x_exact=[];
 %% 参数的设定
-maxit_IFM =100;
+maxit_IFM =210;
 
 tol=1e-10;
 tol=[];
-%% IFM算法求解问题
+
 t=clock;
 [x_IFM,iter_IFM,error_IFM,xA_IFM,index_IFM] = IFM(A, b, x0, maxit_IFM, maxit_LSQR ,tol, x_exact,debug);
 tf_IFM=etime(clock,t);
@@ -47,26 +47,28 @@ r_IFM = norm(r);
 g_IFM = norm(A'*r);
 fprintf('& %s & %s & %s & %s & %s \\\\\n', 'alg', 'norm(r_+)', 'norm(Ar_+)', 'iteration', 'time');
 fprintf('& %s & %g & %g & %d & %g \\\\\n','IFM', r_IFM, g_IFM,iter_IFM,tf_IFM);
-x_exact = x_IFM;
+
+
 %% GuassSeidel
-maxit_Rand = 30000;
+maxit_Rand = 500000;
 t=clock;
- [x_Kac,iter_Kac,error_Kac,xA_Kac,index_Kac] = GuassSeidelNE(A, b, x0,1,maxit_Rand,tol,x_exact,debug);
-tf_Kac=etime(clock,t);
-r = b - A * x_Kac;
+ [x_GS,iter_GS,error_GS,xA_GS,index_GS] = GuassSeidelNE(A, b, x0,1,maxit_Rand,tol,x_exact,debug);
+tf_GS=etime(clock,t);
+r = b - A * x_GS;
 r(r<0) = 0;
-r_Kac = norm(r);
-g_Kac = norm(A'*r);
-fprintf('& %s & %g & %g & %d & %g \\\\\n', 'GuassSeidel', r_Kac, g_Kac, iter_Kac, tf_Kac);
+r_GS = norm(r);
+g_GS = norm(A'*r);
+fprintf('& %s & %g & %g & %d & %g \\\\\n', 'GuassSeidel', r_GS, g_GS, iter_GS, tf_GS);
 
 %% GaussSeidel
 % [U,S,V]=eig(A);
 %%%
-maxit_Rand =30000;
+maxit_Rand =100000;
 t=clock;
 % [x_WGS,iter_WGS,error_WGS,xA_WGS,index_WGS] = wrandomizedGaussSeidelNE(A, b, x0,20,10, maxit_Rand, tol,x_exact,debug);
-[x_WGS,iter_WGS,error_WGS,xA_WGS,index_WGS] = swrandomized(A, b, x0,2,2,maxit_Rand, tol,x_exact,debug);
-randomizedGaussSeidelNE(A, b, x0,alpha ,maxit,tol,exactx,debug)
+
+[x_WGS,iter_WGS,error_WGS,xA_WGS,index_WGS] = randomizedGaussSeidelNE(A, b, x0,2,maxit_Rand, tol,x_exact,debug);
+
 tf_WGS=etime(clock,t);
 r = b - A * x_WGS;
 r(r<0) = 0;
@@ -76,16 +78,15 @@ fprintf('& %s & %g & %g & %d & %g \\\\\n', 'weight Gauss', r_WGS, g_WGS, iter_WG
 %% 画图
 if debug
 figure
-h=semilogy(xA_IFM, error_IFM, 'k.');
-h.LineStyle = '--';
-hold on
+% h=semilogy(xA_IFM, error_IFM, 'k.');
+% h.LineStyle = '--';
+
 h=semilogy(xA_GS, error_GS, 'r+');
 h.LineStyle = '--';
-% h=semilogy(xA_In, error_In, 'b*');
+hold on
 h=semilogy(xA_WGS, error_WGS, 'b*');
-
 h.LineStyle = '--';
-legend('IFM','Gauss Seidel','Weight exact');
+legend('Gauss Seidel','Rand Guass');
 xlabel('the iterative numbers');
 ylabel('the norm of the gradient');
 end

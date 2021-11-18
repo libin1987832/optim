@@ -52,105 +52,26 @@ At_r=A'*r;
 pnormAx_b=power((abs(At_r)./sqrt(Acol)),p);
 prob=(pnormAx_b/sum(pnormAx_b));
 cumsumpro=cumsum(prob);
-% [U,S,V]=svd(A,'econ');
-% sd=diag(S);
-% N=20;
-% U20=U(:,1:N)';
 
-
-% Ip = A>0;
-% Im = A<0;
-% Ie = abs(A)<1e-15;
-% I  = eye(n);
 for i = 1:maxit
     %pickedj=pickedj_a(pickedj_i(i));
     pickedj=sum(cumsumpro<rand)+1;
-  %  pickedj=randsample(index,1,true,weight);
+
     
     col = A(:, pickedj);
-%     Icolp = Ip(:,pickedj);
-%     Icolm = Im(:,pickedj);
-%     palpha=rs(Icolp)./col(Icolp);
-%     maxrcol = max(palpha);
-%     malpha = rs(Icolm)./col(Icolm);
-%     minrcol = min(malpha);
-% 
-%     if sum(Icolm)==0
-%         inc = maxrcol;
-%     elseif sum(Icolp)==0
-%         inc = minrcol;
-%     elseif maxrcol < minrcol
-%         inc = maxrcol;
-%     else
-% %        active1 = plaha(minrcol < plaha);
-% %        active2 = malpha(malpha < maxrcol);
-% %        active = sort([active1,active2],'ascend');
-% %        AN_r+r(i)*A(i,:)'-active*A(:,i)'*col
-%       %  inc = spiecewise(A,b,s*I(:,pickedj),x);
-%   %    inc = bisect2(minrcol,maxrcol,rs,col,1e-1);
-%              alphSort=sort([minrcol;plaha(minrcol < plaha);malpha(malpha < maxrcol);maxrcol]);
-% %        for j = 1:size(alphSort,1)
-% %            rj=b-alphSort(j)*col;
-% %              rj(rj<0)=0;
-% %            df=-col'*rj;
-% %            if df >0
-% %                inc = 0.5*(alphSort(j)+alphSort(j-1));
-% %                 break;
-% %            end
-% %        end
-% %     end
-% 
-%      Rrepmat = repmat(b,1,size(alphSort,1)) - row*alphSort';
-%      Rrepmat(Rrepmat<0)=0;
-%      df=-col'*Rrepmat;
-%      loc=find(df>0);
-%        inc = 0.5*(alphSort(loc)+alphSort(loc-1));
+
  inc = alpha*( col' * r ) / Acol(pickedj);
-%     end
+
 
 
     x(pickedj) = x(pickedj) + inc;
     rso=rs;
     rs = rs - inc*col;
     r=rs;
-   %    if mod(iter,100)==0
-       % r( r < 0) = 0;
-       r=(r+abs(r))/2;
- %      I=r>0;
-%        Ic = I - I_old;
-%        rs(Ic==-1) = -1*rs(Ic==-1);
-%        aIc=abs(Ic);
-%         At_r = At_r + A(aIc,:)'*rs(aIc);
-%         At_r = At_r-inc*A(I,:)'*col(I);
-%        rs = rst;
-%        I_old=I;
-% al=100;
-% At_r = At_r - inc*ATA(:,pickedj)-1/al*Ae_r*;
- 
-% At_r = zeros(n,1);
-% svr=U20*r;
-% for i =1:N
-%        At_r =At_r+sd(i)*svr(i)*V(:,i);
-% end
-  
-        
-     %   ssign=sum(~xor(rs>tol2, rso>tol2));
-     %   if ssign==m 
-     if iter >5000
-            if first
-                At_r = A' * r;
-                ATNA=A(rs>tol2,:)'*A(rs>tol2,:);
-                first = false;
-            end
-            At_r=At_r-inc*ATNA(:,pickedj);
-            pnormAx_b=power((abs(At_r)./sqrt(Acol)),p);
-            prob=(pnormAx_b/sum(pnormAx_b));
-        else
-            first = true;
-  %          At_r = A' * r;
-            prob = Acol/sum(Acol);
-        end
-        cumsumpro=cumsum(prob);
+    r=(r+abs(r))/2;
+
+    prob = Acol/sum(Acol);
+    cumsumpro=cumsum(prob);
         iter = iter+1;
    %    At_r = A' * r;
    %   end
@@ -179,13 +100,6 @@ for i = 1:maxit
             end
             error_k = [error_k,e];
             index_k = [index_k,pickedj];
-            tol2=1e-15;
-        ssign=sum(~xor(rs>tol2, rpk>tol2));
-
-        if ssign==m && print
-            iter
-            print = false;
-        end
         end
     end
 end
