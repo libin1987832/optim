@@ -1,5 +1,5 @@
 function [x,normr,index]= Rand_Gauss_Seidel_R(A, r, At_r,maxit,B,Acol,p,alpha)
-
+%% Ax=b Ar probilities
 %%
 [m, n] = size(A);
 

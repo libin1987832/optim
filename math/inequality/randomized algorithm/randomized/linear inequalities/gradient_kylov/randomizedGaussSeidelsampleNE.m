@@ -40,21 +40,14 @@ Acol=sum(A.*A,1);
 weight = Acol/sum(Acol);
 index=1:n;
 pickedj_a =zeros(1,maxit);
-% for i = 1:maxit
-%  pickedj_a(i) = randsample(index,1,true,weight);
-% end
-iter_index=1;
-for i=1:n-1
-    k = ceil(weight(i)*maxit);
-    pickedj_a(iter_index:iter_index+k-1)=repmat(i,1,k);
-    iter_index=iter_index+k;
-end
-pickedj_a(iter_index:maxit)=repmat(n,1,maxit-iter_index+1);
-pickedj_i=randperm(maxit);
 for i = 1:maxit
-    pickedj=pickedj_a(pickedj_i(i));
-  %  pickedj=randsample(index,1,true,weight);
-    
+ pickedj_a(i) = randsample(index,1,true,weight);
+end
+iter_index=1;
+
+for i = 1:maxit
+    pickedj=pickedj_a(i);
+
     col = A(:, pickedj);
     inc = alpha*( col' * r ) / Acol(pickedj);
     x(pickedj) = x(pickedj) + inc;
