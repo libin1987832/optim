@@ -51,10 +51,31 @@ for i = 1:maxit
     col = A(:, pickedj);
     inc = alpha*( col' * r ) / Acol(pickedj);
     x(pickedj) = x(pickedj) + inc;
+    N= r>0;
+    rso=rs;
     rs = rs - inc*col;
     r = rs;
+    Nr = r > 0;
     r=(r+abs(r))/2;
-    % At_r = A' * r;
+    DN=Nr-N;
+    if sum(abs(DN))==0
+        At_r = At_r + ATNA(:,pickedj);
+    else
+        DNP = DN>0;
+        if sum(abs(DNP))~=0
+             ADNPT = A(DNP,:)';
+             ATNA = ATNA+ADNPT*ADNPT';
+             At_r = At_r + inc*ADNPT*rso(DNP);
+        end
+        NNP = DN<0;
+        if sum(abs(NNP))~=0
+             ANNPT = A(NNP,:)';
+             ATNA = ATNA-ANNPT*ANNPT';
+             At_r = At_r - inc*ANNPT*rso(NNP);
+        end   
+        At_r = At_r + ATNA(:,pickedj);
+    end
+    At_r_t = A' * r;
    %   end
     pnormAx_b=power((abs(At_r)./sqrt(Acol)),p);
     prob=(pnormAx_b/sum(pnormAx_b));
