@@ -40,7 +40,7 @@ tol=[];
 
 
 %% GuassSeidel
-maxit_Rand =60;
+maxit_Rand =10000;
 t=clock;
  [x_GS,iter_GS,error_GS,xA_GS,index_GS] = GuassSeidelNE(A, b, x0,2.0,maxit_Rand,tol,x_exact,debug);
 tf_GS=etime(clock,t);
@@ -75,7 +75,10 @@ legend('Gauss Seidel','Rand Guass');
 xlabel('the iterative numbers');
 ylabel('the norm of the gradient');
 end
-[index_GS;
-index_WGS]
+Acol=sum(A.*A,1);
+weight = Acol/sum(Acol);
+tabulate(index_GS(2:end))
+tt = tabulate(index_WGS(2:end));
+[tt(:,3) [weight]'*100]
 
 

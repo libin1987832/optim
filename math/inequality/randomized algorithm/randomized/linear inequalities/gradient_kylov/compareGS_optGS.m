@@ -40,7 +40,7 @@ tol=[];
 
 
 %% GuassSeidel
-maxit_Rand =30;
+maxit_Rand =50;
 t=clock;
  [x_GS,iter_GS,error_GS,xA_GS,index_GS] = GuassSeidelNE(A, b, x0,2.0,maxit_Rand,tol,x_exact,debug);
 tf_GS=etime(clock,t);

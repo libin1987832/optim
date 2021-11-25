@@ -40,13 +40,13 @@ Acol=sum(A.*A,1);
 weight = Acol/sum(Acol);
 index=1:n;
 pickedj_a =zeros(1,maxit);
-for i = 1:maxit
- pickedj_a(i) = randsample(index,1,true,weight);
-end
+% for i = 1:maxit
+%  pickedj_a(i) = randsample(index,1,true,weight);
+% end
 iter_index=1;
 
 for i = 1:maxit
-    pickedj=pickedj_a(i);
+    pickedj= randsample(index,1,true,weight);
 
     col = A(:, pickedj);
     inc = alpha*( col' * r ) / Acol(pickedj);

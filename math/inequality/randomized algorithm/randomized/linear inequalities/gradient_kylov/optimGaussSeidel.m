@@ -28,8 +28,8 @@ else
     error_k = [norm(x-exactx)];
     iter_k =[x];
 end
-
-index_k=[zeros(n+1,1)];
+index_k=[0];
+%index_k=[zeros(n+1,1)];
 % 因为测试终止条件需要矩阵乘以向量 为了避免每次迭代都去检测终止条件因此周期检测
 iter_test_stop = 1;
 
@@ -46,14 +46,11 @@ pickedj_a =zeros(1,maxit);
 iter_index=1;
 normr_opt=norm(r);
 for i = 1:maxit
-    if i == 5
-        i
-    end
     pickedj = 1;
     r_orig = r;
     x_orig = x;
     rs_orig = rs;
-    normar = zeros(n,1);
+  %  normar = zeros(n,1);
     for pickedj_f = 1:n
         col = A(:, pickedj_f);
         inc = alpha*( col' * r ) / Acol(pickedj_f);
@@ -62,19 +59,21 @@ for i = 1:maxit
         r = rs;
         r=(r+abs(r))/2;
         normr = norm(r);
-        normar(pickedj_f) = normr;
+       % normar(pickedj_f) = normr;
         if normr<normr_opt
             pickedj = pickedj_f;
             r_opt = r;
             x_opt = x;
-            rs_orig = rs;
+            rs_opt = rs;
             normr_opt = normr;
         end
         r= r_orig;
         x = x_orig;
+        rs = rs_orig;
     end
     r = r_opt;
     x = x_opt;
+    rs = rs_opt;
    %   end
     iter = iter+1;
     % 主要记录迭代过程中的值 用来调试
@@ -100,7 +99,8 @@ for i = 1:maxit
                 iter_k =[iter_k i];
             end
             error_k = [error_k,e];
-            index_k = [index_k,[pickedj;normar]];
+            index_k = [index_k,pickedj];
+         %   index_k = [index_k,[pickedj;normar]];
         end
     end
 end

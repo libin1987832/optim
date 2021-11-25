@@ -1,4 +1,4 @@
-function [x,iter,error_k,iter_k,index_k] = randomizedGaussSeidelArNE(A, b, x0,alpha ,p,maxit,tol,exactx,debug)
+function [x,iter,error_k,iter_k,index_k] = randomizedGaussSeidelNE(A, b, x0,alpha ,p,maxit,tol,exactx,debug)
 %% 参数设定
 % 输入参数
 % A, b, x0 问题的系数矩阵和右边项 初始值
@@ -42,7 +42,8 @@ pnormAx_b=power((abs(At_r)./sqrt(Acol)),p);
 prob=(pnormAx_b/sum(pnormAx_b));
 cumsumpro=cumsum(prob);
 
-
+N=r>0;
+ATNA=A(N,:)'*A(N,:);
 for i = 1:maxit
 
     pickedj=sum(cumsumpro<rand)+1;
@@ -51,9 +52,9 @@ for i = 1:maxit
     inc = alpha*( col' * r ) / Acol(pickedj);
     x(pickedj) = x(pickedj) + inc;
     rs = rs - inc*col;
-     r = rs;
+    r = rs;
     r=(r+abs(r))/2;
-     At_r = A' * r;
+    % At_r = A' * r;
    %   end
     pnormAx_b=power((abs(At_r)./sqrt(Acol)),p);
     prob=(pnormAx_b/sum(pnormAx_b));
