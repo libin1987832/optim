@@ -1,4 +1,4 @@
-function [x,iter,error_k,iter_k,index_k] = randomizedGaussSeidelresNE(A, b, x0,alpha ,maxit,tol,exactx,debug)
+function [x,iter,error_k,iter_k,index_k] = randomizedGaussSeidelressNE(A, b, x0,alpha ,maxit,tol,exactx,debug)
 %% 参数设定
 % 输入参数
 % A, b, x0 问题的系数矩阵和右边项 初始值
@@ -38,14 +38,30 @@ iter_test_stop = 1;
 Acol=sum(A.*A,1)';
 
 p=2;
+r_orig = r;
+x_orig = x;
+rs_orig = rs;
+normar = zeros(n,1);
+for pickedj_f = 1:n
+    col = A(:, pickedj_f);
+    inc = alpha*( col' * r ) / Acol(pickedj_f);
+    x(pickedj_f) = x(pickedj_f) + inc;
+    rs = rs - inc*col;
+    r = rs;
+    r=(r+abs(r))/2;
+    normar(pickedj_f) = norm(r);
+    r= r_orig;
+    x = x_orig;
+    rs = rs_orig;
+end
+ normar = norm(r_orig)-normar;
 At_r=A'*r;
 pnormAx_b=power((abs(At_r)./sqrt(Acol)),p);
 prob=(pnormAx_b/sum(pnormAx_b));
 cumsumpro=cumsum(prob);
-
 for i = 1:maxit
     pickedj=sum(cumsumpro<rand)+1;
-
+    
     col = A(:, pickedj);
     colr = col' * r;
     inc = alpha*( colr ) / Acol(pickedj);
@@ -53,17 +69,17 @@ for i = 1:maxit
     rs = rs - inc*col;
     r = rs;
     r=(r+abs(r))/2;
-
-%     At_r(pickedj)=colr;
+    
+    %     At_r(pickedj)=colr;
     pnormAx_b=power((abs(At_r)./sqrt(Acol)),p);
     prob=(pnormAx_b/sum(pnormAx_b));
     cumsumpro=cumsum(prob);
-   %   end
+    %   end
     iter = iter+1;
     % 主要记录迭代过程中的值 用来调试
     if mod(iter,iter_test_stop)==0
         if ~isempty(tol) || debug
-            % 矩阵乘以向量 
+            % 矩阵乘以向量
             Ar = A'*r;
             e = norm(Ar);
             normAr = norm(r);
