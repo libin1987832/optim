@@ -65,10 +65,11 @@ for i=1:n-1
 end
 pickedj_a(iter_index:maxit)=repmat(n,1,maxit-iter_index+1);
 %pickedj_i=randperm(maxit);
-pickedj_i=randperm(maxit);
+k=ceil(maxit/n);
 for i = 1:maxit
  %   pickedj=sum(cumsumpro<rand)+1;
-   pickedj=pickedj_a(pickedj_i(i));
+ mod(i,n)*k+ceil(i/n)
+   pickedj=pickedj_a((mod(i,n))*k+mod(i,n));
     col = A(:, pickedj);
     colr = col' * r;
     inc = alpha*( colr ) / Acol(pickedj);
