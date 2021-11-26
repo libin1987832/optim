@@ -54,25 +54,33 @@ for pickedj_f = 1:n
     x = x_orig;
     rs = rs_orig;
 end
- normar = norm(r_orig)-normar;
-At_r=A'*r;
-pnormAx_b=power((abs(At_r)./sqrt(Acol)),p);
-prob=(pnormAx_b/sum(pnormAx_b));
+normar = norm(r_orig)-normar;
+prob=(normar/sum(normar));
 cumsumpro=cumsum(prob);
+iter_index = 1;
+for i=1:n-1
+    k = ceil(maxit/n);
+    pickedj_a(iter_index:iter_index+k-1)=repmat(i,1,k);
+    iter_index=iter_index+k;
+end
+pickedj_a(iter_index:maxit)=repmat(n,1,maxit-iter_index+1);
+%pickedj_i=randperm(maxit);
+pickedj_i=randperm(maxit);
 for i = 1:maxit
-    pickedj=sum(cumsumpro<rand)+1;
-    
+ %   pickedj=sum(cumsumpro<rand)+1;
+   pickedj=pickedj_a(pickedj_i(i));
     col = A(:, pickedj);
     colr = col' * r;
     inc = alpha*( colr ) / Acol(pickedj);
     x(pickedj) = x(pickedj) + inc;
     rs = rs - inc*col;
+    normor=norm(r);
     r = rs;
     r=(r+abs(r))/2;
     
-    %     At_r(pickedj)=colr;
-    pnormAx_b=power((abs(At_r)./sqrt(Acol)),p);
-    prob=(pnormAx_b/sum(pnormAx_b));
+    normar(pickedj) = normor-norm(r);
+
+    prob=(normar/sum(normar));
     cumsumpro=cumsum(prob);
     %   end
     iter = iter+1;

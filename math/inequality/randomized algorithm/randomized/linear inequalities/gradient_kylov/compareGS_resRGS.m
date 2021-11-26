@@ -52,7 +52,7 @@ fprintf('& %s & %g & %g & %d & %g \\\\\n', 'GuassSeidel', r_GS, g_GS, iter_GS, t
 
 %maxit_Rand =350000;
 t=clock;
-[x_WGS,iter_WGS,error_WGS,xA_WGS,index_WGS] = randomizedGaussSeidelresNE(A, b, x0,2.0,maxit_Rand,tol,x_exact,debug);
+[x_WGS,iter_WGS,error_WGS,xA_WGS,index_WGS] = randomizedGaussSeidelressNE(A, b, x0,2.0,maxit_Rand,tol,x_exact,debug);
 
 tf_WGS=etime(clock,t);
 r = b - A * x_WGS;
