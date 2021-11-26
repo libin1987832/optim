@@ -45,7 +45,7 @@ cumsumpro=cumsum(prob);
 N=r>0;
 ATNA=A(N,:)'*A(N,:);
 for i = 1:maxit
-
+   
     pickedj=sum(cumsumpro<rand)+1;
     
     col = A(:, pickedj);
@@ -57,25 +57,28 @@ for i = 1:maxit
     r = rs;
     Nr = r > 0;
     r=(r+abs(r))/2;
+    if i >30
     DN=Nr-N;
-    if sum(abs(DN))==0
-        At_r = At_r + ATNA(:,pickedj);
-    else
-        DNP = DN>0;
-        if sum(abs(DNP))~=0
-             ADNPT = A(DNP,:)';
-             ATNA = ATNA+ADNPT*ADNPT';
-             At_r = At_r + inc*ADNPT*rso(DNP);
-        end
-        NNP = DN<0;
-        if sum(abs(NNP))~=0
-             ANNPT = A(NNP,:)';
-             ATNA = ATNA-ANNPT*ANNPT';
-             At_r = At_r - inc*ANNPT*rso(NNP);
-        end   
-        At_r = At_r + ATNA(:,pickedj);
+    sum(abs(DN))
     end
-    At_r_t = A' * r;
+%     if sum(abs(DN))==0
+%         At_r = At_r - inc*ATNA(:,pickedj);
+%     else
+%         DNP = DN>0;
+%         if sum(abs(DNP))~=0
+%              ADNPT = A(DNP,:)';
+%              ATNA = ATNA+ADNPT*ADNPT';
+%              At_r = At_r + ADNPT*rso(DNP);
+%         end
+%         NNP = DN<0;
+%         if sum(abs(NNP))~=0
+%              ANNPT = A(NNP,:)';
+%              ATNA = ATNA-ANNPT*ANNPT';
+%              At_r = At_r - ANNPT*rso(NNP);
+%         end   
+%         At_r = At_r - inc*ATNA(:,pickedj);
+%     end
+     At_r = A' * r;
    %   end
     pnormAx_b=power((abs(At_r)./sqrt(Acol)),p);
     prob=(pnormAx_b/sum(pnormAx_b));

@@ -1,17 +1,17 @@
 clear
 clc
-debug = 1;
+debug = 0;
 %% 产生问题矩阵
 % 随机矩阵
- m = 100;
- n = 20;
+ m = 20;
+ n = 4;
 % 
-% A = 2 * rand(m , n)-1;
-% b = 2 * rand(m , 1)-1;
-% b=A*ones(n,1);
+A = 2 * rand(m , n)-1;
+b = 2 * rand(m , 1)-1;
+b=A*ones(n,1);
 x0 = zeros(n , 1);
 %save('test2.mat','A','b','x0')
- load('test2.mat');
+%  load('test2.mat');
 % 二维矩阵
 % A = -[1,-1;-1,-1;0,1];b=-[0;-1;0];x0=[-1;0];
 % 不一致情况下的正解
@@ -40,15 +40,15 @@ tol=[];
 
 
 %% GuassSeidel
-maxit_Rand =30;
+maxit_Rand =40;
 t=clock;
- [x_GS,iter_GS,error_GS,xA_GS,index_GS] = GuassSeidelNE(A, b, x0,2.0,maxit_Rand,tol,x_exact,debug);
+ [x_GS,iter_GS,error_GS,xA_GS,index_GS] = randomizedGaussSeidelArNE(A, b, x0,2.0,2,maxit_Rand,tol,x_exact,debug);
 tf_GS=etime(clock,t);
 r = b - A * x_GS;
 r(r<0) = 0;
 r_GS = norm(r);
 g_GS = norm(A'*r);
-fprintf('& %s & %g & %g & %d & %g \\\\\n', 'GuassSeidel', r_GS, g_GS, iter_GS, tf_GS);
+fprintf('& %s & %g & %g & %d & %g \\\\\n', 'Ar', r_GS, g_GS, iter_GS, tf_GS);
 
 %maxit_Rand =350000;
 t=clock;
@@ -59,7 +59,7 @@ r = b - A * x_WGS;
 r(r<0) = 0;
 r_WGS = norm(r);
 g_WGS = norm(A'*r);
-fprintf('& %s & %g & %g & %d & %g \\\\\n', 'weight Gauss', r_WGS, g_WGS, iter_WGS, tf_WGS);
+fprintf('& %s & %g & %g & %d & %g \\\\\n', 'recurrent', r_WGS, g_WGS, iter_WGS, tf_WGS);
 %% 画图
 if debug
 figure
