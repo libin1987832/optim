@@ -1,4 +1,4 @@
-function [x,iter,error_k,iter_k,index_k] = randomizedGaussSeidelNE(A, b, x0,alpha ,p,maxit,tol,exactx,debug)
+function [x,iter,error_k,iter_k,index_k] = randomizedGaussSeidelArrNE(A, b, x0,alpha ,p,maxit,tol,exactx,debug)
 %% 参数设定
 % 输入参数
 % A, b, x0 问题的系数矩阵和右边项 初始值
@@ -10,6 +10,7 @@ function [x,iter,error_k,iter_k,index_k] = randomizedGaussSeidelNE(A, b, x0,alph
 % index_k 如果是随机算法则存储随机选择的序列
 % exactx 精确值为空则将iter_k 放每次迭代的x值
 % debug 调试程序
+% recurrent Ar
 %%
 [m, n] = size(A);
 x = x0;

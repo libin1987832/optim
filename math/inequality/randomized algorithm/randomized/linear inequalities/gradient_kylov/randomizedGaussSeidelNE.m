@@ -10,6 +10,7 @@ function [x,iter,error_k,iter_k,index_k] = randomizedGaussSeidelNE(A, b, x0,alph
 % index_k 如果是随机算法则存储随机选择的序列
 % exactx 精确值为空则将iter_k 放每次迭代的x值
 % debug 调试程序
+% probabilities ||a||/||A||
 %%
 [m, n] = size(A);
 x = x0;
