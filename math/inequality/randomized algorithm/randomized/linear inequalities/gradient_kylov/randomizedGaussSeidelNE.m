@@ -74,6 +74,7 @@ for i = 1:maxit
             Ar = A'*r;
             e = norm(Ar);
             normAr = norm(r);
+            e=normAr;
             % 如果有容忍度 即使没有到达最大迭代次数也终止
             if ~isempty(tol)
                 if normAr < tol  || e < tol

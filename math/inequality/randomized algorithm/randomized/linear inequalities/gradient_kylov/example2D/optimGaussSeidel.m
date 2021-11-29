@@ -1,4 +1,4 @@
-function [x,iter,error_k,iter_k,index_k] = GuassSeidelNE(A, b, x0,alpha ,maxit,tol,exactx,debug)
+function [x,iter,error_k,iter_k,index_k] = optimGaussSeidel(A, b, x0,alpha ,maxit,tol,exactx,debug)
 %% 参数设定
 % 输入参数
 % A, b, x0 问题的系数矩阵和右边项 初始值
@@ -28,8 +28,8 @@ else
     error_k = [norm(x-exactx)];
     iter_k =[x];
 end
-
 index_k=[0];
+%index_k=[zeros(n+1,1)];
 % 因为测试终止条件需要矩阵乘以向量 为了避免每次迭代都去检测终止条件因此周期检测
 iter_test_stop = 1;
 
@@ -37,26 +37,43 @@ iter_test_stop = 1;
 
 Acol=sum(A.*A,1);
 
-
+weight = Acol/sum(Acol);
 index=1:n;
 pickedj_a =zeros(1,maxit);
 % for i = 1:maxit
 %  pickedj_a(i) = randsample(index,1,true,weight);
 % end
 iter_index=1;
-
+normr_opt=norm(r);
 for i = 1:maxit
-    pickedj=mod(i-1,n)+1;
-  %  pickedj=randsample(index,1,true,weight);
-    
-    col = A(:, pickedj);
-    inc = alpha*( col' * r ) / Acol(pickedj);
-    x(pickedj) = x(pickedj) + inc;
-    rs = rs - inc*col;
-     r = rs;
-   %    if mod(iter,100)==0
-       % r( r < 0) = 0;
-       r=(r+abs(r))/2;
+    pickedj = 1;
+    r_orig = r;
+    x_orig = x;
+    rs_orig = rs;
+  %  normar = zeros(n,1);
+    for pickedj_f = 1:n
+        col = A(:, pickedj_f);
+        inc = alpha*( col' * r ) / Acol(pickedj_f);
+        x(pickedj_f) = x(pickedj_f) + inc;
+        rs = rs - inc*col;
+        r = rs;
+        r=(r+abs(r))/2;
+        normr = norm(r);
+       % normar(pickedj_f) = normr;
+        if normr<normr_opt
+            pickedj = pickedj_f;
+            r_opt = r;
+            x_opt = x;
+            rs_opt = rs;
+            normr_opt = normr;
+        end
+        r= r_orig;
+        x = x_orig;
+        rs = rs_orig;
+    end
+    r = r_opt;
+    x = x_opt;
+    rs = rs_opt;
    %   end
     iter = iter+1;
     % 主要记录迭代过程中的值 用来调试
@@ -66,7 +83,7 @@ for i = 1:maxit
             Ar = A'*r;
             e = norm(Ar);
             normAr = norm(r);
-            e=normAr;
+            e = normAr;
             % 如果有容忍度 即使没有到达最大迭代次数也终止
             if ~isempty(tol)
                 if normAr < tol  || e < tol
@@ -84,6 +101,7 @@ for i = 1:maxit
             end
             error_k = [error_k,e];
             index_k = [index_k,pickedj];
+         %   index_k = [index_k,[pickedj;normar]];
         end
     end
 end
