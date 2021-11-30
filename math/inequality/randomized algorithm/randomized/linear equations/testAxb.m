@@ -5,14 +5,9 @@ m = 30000;
 n = 2000;
 
 A = 2 * rand(m , n)-1;
-% AA=A.*A;
-% columua=sum(AA,1);
-% A = AA./repmat(columua,m,1);
+
 b = 2 * rand(m , 1)-1;
-% b=A*ones(n,1);
 x0 = zeros(n , 1);
-% xs = A\b;
-% xstart = norm(A*xs-b);
 t=clock;
 xk=krylovk(A,b,80);
 tf_ky=etime(clock,t);

@@ -34,6 +34,7 @@ for j = 1:m
        A(j,k+r+1) =sqrt(w(j))*exp(2*pi*1i*k*t(j));
     end
 end  
+A = 2 * rand(m , n)-1;
 b = A*x;
 x0 = zeros(n,1);
 
