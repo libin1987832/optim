@@ -35,9 +35,17 @@ iter_test_stop = 1;
 
 
 
-Acol=sum(A.*A,1);
+% Acol=sum(A.*A,1);
 
-
+Acol = [];
+index = [];
+% Acol=norm(sum(A.*A,1));
+% 
+% weight = Acol/sum(Acol);
+  for i = 1:n
+    Acol = [Acol,norm(A(:,i))];
+    index = [index,i];
+  end
 index=1:n;
 pickedj_a =zeros(1,maxit);
 % for i = 1:maxit

@@ -1,12 +1,11 @@
 clear
 clc
-debug = 1;
+debug = 0;
 %% 产生问题矩阵
 % 随机矩阵
-m = 100;
-n = 20;
-r = 50;
-m = 700;
+
+r = 500;
+m = 10000;
 n = 2*r+1;
 
 %% generate nodes
@@ -76,7 +75,7 @@ tol=[];
 %% GuassSeidel
 maxit_Rand =10000;
 t=clock;
- [x_GS,iter_GS,error_GS,xA_GS,index_GS] = GuassSeidelNE(A, b, x0,2.0,maxit_Rand,tol,x_exact,debug);
+ [x_GS,iter_GS,error_GS,xA_GS,index_GS] = GuassSeidelNE(A, b, x0,1.0,maxit_Rand,tol,x_exact,debug);
 tf_GS=etime(clock,t);
 r = b - A * x_GS;
 r(r<0) = 0;
@@ -86,7 +85,7 @@ fprintf('& %s & %g & %g & %d & %g \\\\\n', 'GuassSeidel', r_GS, g_GS, iter_GS, t
 
 %maxit_Rand =350000;
 t=clock;
-[x_WGS,iter_WGS,error_WGS,xA_WGS,index_WGS] = randomizedGaussSeidelsampleNE(A, b, x0,2.0,maxit_Rand,tol,x_exact,debug);
+[x_WGS,iter_WGS,error_WGS,xA_WGS,index_WGS] = randomizedGaussSeidelsampleNE(A, b, x0,1.0,maxit_Rand,tol,x_exact,debug);
 
 tf_WGS=etime(clock,t);
 r = b - A * x_WGS;
@@ -113,6 +112,6 @@ Acol=sum(A.*A,1);
 weight = Acol/sum(Acol);
 tabulate(index_GS(2:end))
 tt = tabulate(index_WGS(2:end));
-[tt(:,3) [weight]'*100]
+% [tt(:,3) [weight]'*100]
 
 
