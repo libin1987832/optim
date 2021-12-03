@@ -43,18 +43,16 @@ index = [];
 % 
 % weight = Acol/sum(Acol);
   for i = 1:n
-    Acol = [Acol,norm(A(:,i))];
+    Acol = [Acol,norm(A(:,i))^2];
     index = [index,i];
   end
-index=1:n;
-pickedj_a =zeros(1,maxit);
+
 % for i = 1:maxit
 %  pickedj_a(i) = randsample(index,1,true,weight);
 % end
-iter_index=1;
 
 for i = 1:maxit
-    pickedi = randi(n);
+    pickedj = randi(n);
   %  pickedj=randsample(index,1,true,weight);
     
     col = A(:, pickedj);

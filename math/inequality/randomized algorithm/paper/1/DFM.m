@@ -31,7 +31,12 @@ end
 index_k=[0];
 
 %% 设定子问题中LSQR算法的迭代次数
-colunmnormA=sum(A.*A,1);
+%colunmnormA=sum(A.*A,1);
+colunmnormA=[];
+  for i = 1:n
+    colunmnormA = [colunmnormA,norm(A(:,i))^2];
+
+  end
 for i = 1:maxit
    u=Gass_seidel_D(A, -r, maxit_gs,colunmnormA,alpha);
     x = x + u;

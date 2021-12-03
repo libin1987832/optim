@@ -3,11 +3,12 @@ clc
 debug = 0;
 %% 产生问题矩阵
 % 随机矩阵
-m = 10000;
-n = 2000;
-r = 500;
-m = 10000;
-n = 2*r+1;
+m = 1000;
+n = 200;
+
+% r = 500;
+% m = 10000;
+% n = 2*r+1;
 
 %% generate nodes
 %tj are drawing randomly from a uniform distribution in [0,1]
@@ -50,6 +51,7 @@ x0 = zeros(n , 1);
 % A = -[1,-1;-1,-1;0,1];b=-[0;-1;0];x0=[-1;0];
 % 不一致情况下的正解
 % x_exact=[1/2;1/3];
+tol=[];
 
 
 %% 基于IFM的算法找到一个解
@@ -72,7 +74,7 @@ x_exact=[];
 %% GuassSeidel
 maxit_Rand =25000;
 t=clock;
- [x_GS,iter_GS,error_GS,xA_GS,index_GS] = GuassSeidelNE(A, b, x0,2.0,maxit_Rand,tol,x_exact,debug);
+ [x_GS,iter_GS,error_GS,xA_GS,index_GS] = GuassSeidelNE(A, b, x0,1.0,maxit_Rand,tol,x_exact,debug);
 tf_GS=etime(clock,t);
 r = b - A * x_GS;
 r(r<0) = 0;
@@ -115,7 +117,7 @@ g_GS = norm(A'*r);
 fprintf('& %s & %g & %g & %d & %g \\\\\n', 'han', r_GS, g_GS, iter_GS, tf_GS);
 
 %% 参数的设定
- maxit_IFM = 20;
+ maxit_IFM =50;
 % 
 tol=1e-10;
 tol=[];
@@ -130,7 +132,7 @@ g_IFM = norm(A'*r);
 fprintf('& %s & %g & %g & %d & %g \\\\\n','IFM', r_IFM, g_IFM,iter_IFM,tf_IFM);
 
 %% FM
-maxit = 20;
+maxit = 10000;
 tol=[];
 alpha=1;
 maxit_gs=1;

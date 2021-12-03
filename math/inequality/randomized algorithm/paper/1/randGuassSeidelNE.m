@@ -41,7 +41,7 @@ Acol = [];
 index = [];
 
 for i = 1:n
-    Acol = [Acol,norm(A(:,i))];
+  Acol = [Acol,norm(A(:,i))^2];
     index = [index,i];
 end
 
