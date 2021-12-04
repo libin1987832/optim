@@ -18,6 +18,7 @@ iter = 0;
 r = b - A * x0;
 r(r<0)=0;
 normAr = norm(A'*r);
+norm_r_tol = norm(r)*tol;
 % error_k = [normAr];
 error_k =[];
 if ~isempty(exactx)
@@ -49,7 +50,12 @@ for i = 1:maxit
         r0=r;
     r = b - A * x;
     r( r < 0) = 0;
+    Ar=A'*r;
+    norm_rn = norm(r);
     iter = iter+1;
+    if norm_rn<norm_r_tol || norm_rn < tol
+        break;
+    end
     if ~isempty(tol) || debug
         Ar = A'*r;
         e = norm(Ar);
@@ -87,13 +93,13 @@ x = zeros(n,1);
 pnormAx_b=(((At_r).^2)./Acol);
 prob=(pnormAx_b/sum(pnormAx_b));
 cumsumpro=cumsum(prob);
-pickedjA=[];
+% pickedjA=[];
 for i = 1:maxit
     rr=rand;
     pickedj=sum(cumsumpro<rr)+1;
    % pickedj=pickedj_a(pickedj_i(i));
   %  pickedj=randsample(index,1,true,weight);
-    pickedjA=[pickedjA;pickedj prob' rr];
+%     pickedjA=[pickedjA;pickedj prob' rr];
     col = A(:, pickedj);
     inc = alpha*( col' * r ) / Acol(pickedj);
  %   inc = alpha*( At_r(pickedj) ) / Acol(pickedj);
@@ -108,6 +114,6 @@ for i = 1:maxit
     cumsumpro=cumsum(prob);
    
 end
-pickedjA
+% pickedjA
 end
 

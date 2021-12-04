@@ -19,6 +19,7 @@ iter = 0;
 r = b - A * x0;
 r(r<0)=0;
 normAr = norm(A'*r);
+norm_r = norm(r);
 % error_k = [normAr];
 error_k =[];
 if ~isempty(exactx)
@@ -35,7 +36,6 @@ index_k=[0];
 colunmnormA=[];
   for i = 1:n
     colunmnormA = [colunmnormA,norm(A(:,i))^2];
-
   end
 for i = 1:maxit
    u=Gass_seidel_D(A, -r, maxit_gs,colunmnormA,alpha);
@@ -43,7 +43,12 @@ for i = 1:maxit
     r0=r;
     r = b - A * x;
     r( r < 0) = 0;
+    norm_rn = norm(r);
     iter = iter+1;
+    if abs(norm_rn-norm_r)<tol || norm_rn < tol
+        break;
+    end
+    norm_r = norm_rn;
     if ~isempty(tol) || debug
         Ar = A'*r;
         e = norm(Ar);

@@ -51,7 +51,7 @@ x0 = zeros(n , 1);
 % A = -[1,-1;-1,-1;0,1];b=-[0;-1;0];x0=[-1;0];
 % 不一致情况下的正解
 % x_exact=[1/2;1/3];
-tol=[];
+tol=1e-15;
 
 
 %% 基于IFM的算法找到一个解
@@ -105,22 +105,11 @@ r_GS = norm(r);
 g_GS = norm(A'*r);
 fprintf('& %s & %g & %g & %d & %g \\\\\n', 'randGuassSeidel', r_GS, g_GS, iter_GS, tf_GS);
 
-%% han
-maxIter = 10;
-t=clock;
-[x_GS,rkh,countFMh,countNWh,beginNWh,tfh,vkh,rkArrh]=han(x0,A,b,maxIter);
-tf_GS=etime(clock,t);
-r = b - A * x_GS;
-r(r<0) = 0;
-r_GS = norm(r);
-g_GS = norm(A'*r);
-fprintf('& %s & %g & %g & %d & %g \\\\\n', 'han', r_GS, g_GS, countFMh, tf_GS);
+
 
 %% 参数的设定
- maxit_IFM = 200;
-% 
-tol=1e-10;
-tol=[];
+ maxit_IFM = 100;
+
 
 t=clock;
 [x_IFM,iter_IFM,error_IFM,xA_IFM,index_IFM] = IFM(A, b, x0, maxit_IFM, maxit_LSQR ,tol, x_exact,debug);
@@ -132,8 +121,8 @@ g_IFM = norm(A'*r);
 fprintf('& %s & %g & %g & %d & %g \\\\\n','IFM', r_IFM, g_IFM,iter_IFM,tf_IFM);
 
 %% FM
-maxit =220;
-tol=[];
+maxit =100;
+
 alpha=1;
 maxit_gs=n;
 t=clock;
@@ -144,3 +133,29 @@ r(r<0) = 0;
 r_FM = norm(r);
 g_FM = norm(A'*r);
 fprintf('& %s & %g & %g & %d & %g \\\\\n','FM', r_FM, g_FM,iter_FM,tf_FM);
+
+%% RFM
+% maxit =18;
+% tol=[];
+% alpha=1;
+% maxit_R=n;
+% t=clock;
+% [x_FM,iter_FM,error_k,iter_dFM,index_k] = RFM(A, b, x0, maxit,alpha,maxit_R, tol, x_exact,debug);
+% tf_FM=etime(clock,t);
+% r = b - A * x_FM;
+% r(r<0) = 0;
+% r_FM = norm(r);
+% g_FM = norm(A'*r);
+% fprintf('& %s & %g & %g & %d & %g \\\\\n','RFM', r_FM, g_FM,iter_FM,tf_FM);
+
+
+% %% han
+% maxIter = 1;
+% t=clock;
+% [x_GS,rkh,countFMh,countNWh,beginNWh,tfh,vkh,rkArrh]=han(x0,A,b,maxIter);
+% tf_GS=etime(clock,t);
+% r = b - A * x_GS;
+% r(r<0) = 0;
+% r_GS = norm(r);
+% g_GS = norm(A'*r);
+% fprintf('& %s & %g & %g & %d & %g \\\\\n', 'han', r_GS, g_GS, countFMh, tf_GS);

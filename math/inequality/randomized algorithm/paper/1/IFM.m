@@ -18,6 +18,7 @@ iter = 0;
 r = b - A * x0;
 r(r<0)=0;
 normAr = norm(A'*r);
+norm_r = norm(r);
 error_k = [normAr];
 if ~isempty(exactx)
     e = norm(x-exactx);
@@ -39,7 +40,13 @@ for i = 1:maxit
     r = b - A * x;
     r( r < 0) = 0;
     iter = iter+1;
-    if ~isempty(tol) || debug
+    norm_rn = norm(r);
+    if abs(norm_rn-norm_r)<tol || norm_rn < tol
+        break;
+    end
+    norm_r = norm_rn;
+ %   if ~isempty(tol) || debug
+    if debug
         Ar = A'*r;
         e = norm(Ar);
         normr = norm(r);
@@ -60,6 +67,4 @@ for i = 1:maxit
     end
     
 end
-
-
 end

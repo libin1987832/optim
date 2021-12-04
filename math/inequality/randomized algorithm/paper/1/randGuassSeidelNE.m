@@ -20,7 +20,7 @@ r = b - A * x;
 rs = r;
 r(r<0) = 0;
 norm_Ar = norm(A'*r);
-
+norm_r = norm(r);
 if isempty(exactx)
     error_k = [norm_Ar];
     iter_k =[0];
@@ -31,7 +31,7 @@ end
 
 index_k=[0];
 % 因为测试终止条件需要矩阵乘以向量 为了避免每次迭代都去检测终止条件因此周期检测
-iter_test_stop = 1;
+iter_test_stop = n;
 
 
 
@@ -53,15 +53,20 @@ for i = 1:maxit
     inc = alpha*( col' * r ) / Acol(pickedj);
     x(pickedj) = x(pickedj) + inc;
     rs = rs - inc*col;
-     r = rs;
-   %    if mod(iter,100)==0
-       % r( r < 0) = 0;
-       r=(r+abs(r))/2;
-   %   end
+    r = rs;
+    r=(r+abs(r))/2;
     iter = iter+1;
+    if mod(iter,iter_test_stop)==0
+      norm_rn = norm(r);
+    if abs(norm_rn-norm_r)<tol || norm_rn < tol
+        break;
+    end
+    norm_r = norm_rn;
+    end
     % 主要记录迭代过程中的值 用来调试
     if mod(iter,iter_test_stop)==0
-        if ~isempty(tol) || debug
+ %   if ~isempty(tol) || debug
+    if debug
             % 矩阵乘以向量 
             Ar = A'*r;
             e = norm(Ar);
