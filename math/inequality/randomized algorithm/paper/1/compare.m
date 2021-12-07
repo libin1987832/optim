@@ -43,6 +43,9 @@ n = 4000;
 
  A = 2 * rand(m , n)-1;
 b = 2 * rand(m , 1)-1;
+A=[A;-A];
+b=[b;-b];
+m=2*m;
 % b=A*ones(n,1);
 x0 = zeros(n , 1);
 % save('test2.mat','A','b','x0')
