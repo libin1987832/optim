@@ -76,7 +76,7 @@ x_exact=[];
 %% GuassSeidel
 maxit_Rand =50000;
 t=clock;
- [x_GS,iter_GS1,error_GS1,xA_GS1,index_GS] = GuassSeidelNE(A, b, x0,2.0,maxit_Rand,tol,x_exact,debug);
+ [x_GS,iter_GS1,error_GS1,xA_GS1,index_GS] = GuassSeidelNE(A, b, x0,1.0,maxit_Rand,tol,x_exact,debug);
 tf_GS=etime(clock,t);
 r = b - A * x_GS;
 r(r<0) = 0;
@@ -86,37 +86,47 @@ fprintf('& %s & %g & %g & %d & %g \\\\\n', 'GuassSeidel', r_GS, g_GS, iter_GS1, 
 
 
 %% simpleGuassSeidel
-maxit_Rand =30000;
+maxit_Rand =50000;
 t=clock;
-[x_GS,iter_GS2,error_GS2,xA_GS2,index_GS] = simpleGuassSeidelNE(A, b, x0,2,maxit_Rand,tol,x_exact,debug);
+ [x_GS,iter_GS2,error_GS2,xA_GS2,index_GS] = GuassSeidelNE(A, b, x0,1.0+min(m/n,n/m),maxit_Rand,tol,x_exact,debug);
 tf_GS=etime(clock,t);
 r = b - A * x_GS;
 r(r<0) = 0;
 r_GS = norm(r);
 g_GS = norm(A'*r);
-fprintf('& %s & %g & %g & %d & %g \\\\\n', 'simpleGuassSeidel', r_GS, g_GS, iter_GS2, tf_GS);
+fprintf('& %s & %g & %g & %d & %g \\\\\n', 'GuassSeidel', r_GS, g_GS, iter_GS2, tf_GS);
 
 %% randGuassSeidel
-maxit_Rand =33000;
+maxit_Rand =50000;
 t=clock;
-[x_GS,iter_GS3,error_GS3,xA_GS3,index_GS] = randGuassSeidelNE(A, b, x0,2,maxit_Rand,tol,x_exact,debug);
+ [x_GS,iter_GS3,error_GS3,xA_GS3,index_GS] = GuassSeidelNE(A, b, x0,1.5,maxit_Rand,tol,x_exact,debug);
 tf_GS=etime(clock,t);
 r = b - A * x_GS;
 r(r<0) = 0;
 r_GS = norm(r);
 g_GS = norm(A'*r);
-fprintf('& %s & %g & %g & %d & %g \\\\\n', 'randGuassSeidel', r_GS, g_GS, iter_GS3, tf_GS);
+fprintf('& %s & %g & %g & %d & %g \\\\\n', 'GuassSeidel', r_GS, g_GS, iter_GS3, tf_GS);
 
+maxit_Rand =50000;
+t=clock;
+ [x_GS,iter_GS4,error_GS4,xA_GS4,index_GS] = GuassSeidelNE(A, b, x0,2.0,maxit_Rand,tol,x_exact,debug);
+tf_GS=etime(clock,t);
+r = b - A * x_GS;
+r(r<0) = 0;
+r_GS = norm(r);
+g_GS = norm(A'*r);
+fprintf('& %s & %g & %g & %d & %g \\\\\n', 'GuassSeidel', r_GS, g_GS, iter_GS4, tf_GS);
 
 %% »­Í¼
 if debug
 figure
 % h=semilogy(xA_IFM, error_IFM, 'k.');
 % h.LineStyle = '--';
-% sum = 3000;
-% iter_GS1 = sum;
-% iter_GS2 = sum;
-% iter_GS3 = sum;
+sum = 10000;
+iter_GS1 = sum;
+iter_GS2 = sum;
+iter_GS3 = sum;
+iter_GS4 = sum;
 display=1:1:iter_GS1;
 h=semilogy(xA_GS1(display), error_GS1(display), 'r+');
 h.LineStyle = '--';
@@ -127,7 +137,10 @@ h.LineStyle = '--';
 display=1:1:iter_GS3;
 h=semilogy(xA_GS3(display), error_GS3(display), 'g+');
 h.LineStyle = '--';
-legend('Gauss Seidel','simple Gauss','rand Gauass');
+display=1:1:iter_GS4;
+h=semilogy(xA_GS4(display), error_GS4(display), 'k+');
+h.LineStyle = '--';
+legend('lambd = 1','lambd = 1+min(m/n,m/m)','lambd = 1.5','lambd = 2');
 xlabel('the iterative numbers');
 ylabel('the norm of the gradient');
 end
