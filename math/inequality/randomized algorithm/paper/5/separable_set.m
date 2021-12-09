@@ -1,7 +1,7 @@
 clear
 clc
 gamm = 0.6;
-n = 5000;
+n = 80000;
 w = [1,1]+rand(1,2);
 b = 1+rand(1);
 x = rand( n , 2 );
@@ -53,28 +53,28 @@ source_train = [A1(1:fm1,:);-A1(fm1+1:fm1+fm2,:)];
 label_train = [ones(fm1,1);-1*ones(fm2,1)];
 %label_train = round(rand(fm1+fm2,1));
 
-tic
-SVMModel = fitcsvm(source_train,label_train,'BoxConstraint',600);
-toc
-wsvn = SVMModel.Beta;
-bsvn = SVMModel.Bias;
-
-x0=zeros(size(A1,2),1);
-maxIter = 10;
+% tic
+% SVMModel = fitcsvm(source_train,label_train,'BoxConstraint',600);
+% toc
+% wsvn = SVMModel.Beta;
+% bsvn = SVMModel.Bias;
+% 
+% x0=zeros(size(A1,2),1);
+% maxIter = 10;
 % there are some errors;
 %[xkh1,rkh,countFMh,countNWh,beginNWh,tfh,vkh,rkArrh]=han(x0,A1,b1,maxIter);
 
 
-numberOfbeta=2;
-AL2 = [-A2,-eye(size(A2,1))];
-bL2 = -b2;
-fL2 = [zeros(1, numberOfbeta+1), ones(1, fm1)/fm1, ones(1, fm2)/fm2];
-lbL2 = [-ones(numberOfbeta+1,1)*Inf; zeros(fm1+fm2 , 1)];
-tic
-[xkh2, f2, exit2] = linprog(fL2,AL2,bL2,[],[],lbL2,[],[x0;0]);
-toc
+% numberOfbeta=2;
+% AL2 = [-A2,-eye(size(A2,1))];
+% bL2 = -b2;
+% fL2 = [zeros(1, numberOfbeta+1), ones(1, fm1)/fm1, ones(1, fm2)/fm2];
+% lbL2 = [-ones(numberOfbeta+1,1)*Inf; zeros(fm1+fm2 , 1)];
+% tic
+% [xkh2, f2, exit2] = linprog(fL2,AL2,bL2,[],[],lbL2,[],[x0;0]);
+% toc
 
-
+x0=zeros(size(A1,2),1);
 maxIterA = 0;
 maxIter = 500;
 nf = 3;
@@ -82,7 +82,9 @@ str = ['D','C','R','P','H'];
 steplength = 0;%1/(max(eig(ATA))+0.0001);
 A=A2;
 
-
+tol=1e-100;
+x_exact = [] ;
+debug = 0;
 %% GuassSeidel
 maxit_Rand =2000000;
 t=clock;
@@ -120,8 +122,8 @@ fprintf('& %s & %g & %g & %d & %g \\\\\n', 'randGuassSeidel', r_GS, g_GS, iter_G
 
 
 %% 参数的设定
- maxit_IFM = 200;
-
+ maxit_IFM = 2000;
+maxit_LSQR =3;
 
 t=clock;
 [x_IFM,iter_IFM,error_IFM,xA_IFM,index_IFM] = IFM(A2,b2,[x0;0], maxit_IFM, maxit_LSQR ,tol, x_exact,debug);
@@ -132,19 +134,19 @@ r_IFM = norm(r);
 g_IFM = norm(A'*r);
 fprintf('& %s & %g & %g & %d & %g \\\\\n','IFM', r_IFM, g_IFM,iter_IFM,tf_IFM);
 
-%% FM
+% FM
 % maxit =100;
-
-alpha=1;
-maxit_gs=n;
-t=clock;
-[x_FM,iter_FM,error_k,iter_dFM,index_k] = DFM(A2,b2,[x0;0], maxit_IFM,alpha,maxit_gs,tol, x_exact,debug);
-tf_FM=etime(clock,t);
-r = b - A * x_FM;
-r(r<0) = 0;
-r_FM = norm(r);
-g_FM = norm(A'*r);
-fprintf('& %s & %g & %g & %d & %g \\\\\n','FM', r_FM, g_FM,iter_FM,tf_FM);
+% 
+% alpha=1;
+% maxit_gs=n;
+% t=clock;
+% [x_FM,iter_FM,error_k,iter_dFM,index_k] = DFM(A2,b2,[x0;0], maxit_IFM,alpha,maxit_gs,tol, x_exact,debug);
+% tf_FM=etime(clock,t);
+% r = b - A * x_FM;
+% r(r<0) = 0;
+% r_FM = norm(r);
+% g_FM = norm(A'*r);
+% fprintf('& %s & %g & %g & %d & %g \\\\\n','FM', r_FM, g_FM,iter_FM,tf_FM);
 
 
 
