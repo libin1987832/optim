@@ -19,10 +19,11 @@ iter = 0;
 r = b - A * x;
 rs = r;
 r(r<0) = 0;
-norm_Ar = norm(A'*r);
+% norm_Ar = norm(A'*r);
 norm_r = norm(r);
 if isempty(exactx)
-    error_k = [norm_Ar];
+%    error_k = [norm_Ar];
+error_k = [norm_r];
     iter_k =[0];
 else
     error_k = [norm(x-exactx)];
@@ -35,13 +36,14 @@ iter_test_stop = n;
 
 
 
-% Acol=sum(A.*A,1);
+
 
 Acol = [];
 index = [];
-
+% Acol=sum(A.*A,1);
+% index = 1:n;
 for i = 1:n
-  Acol = [Acol,norm(A(:,i))^2];
+    Acol = [Acol,norm(A(:,i))^2];
     index = [index,i];
 end
 
@@ -59,38 +61,27 @@ for i = 1:maxit
     if mod(iter,iter_test_stop)==0
       norm_rn = norm(r);
     if abs(norm_rn-norm_r)<tol || norm_rn < tol
+%         fprintf('stop condition:%g,%g',abs(norm_rn-norm_r),norm_rn);
         break;
     end
     norm_r = norm_rn;
     end
     % 主要记录迭代过程中的值 用来调试
-    if mod(iter,iter_test_stop)==0
+  %  if mod(iter,iter_test_stop)==0
  %   if ~isempty(tol) || debug
-    if debug
-            % 矩阵乘以向量 
-            Ar = A'*r;
-            e = norm(Ar);
-            normAr = norm(r);
-            e=normAr;
-            % 如果有容忍度 即使没有到达最大迭代次数也终止
-            if ~isempty(tol)
-                if normAr < tol  || e < tol
-                    break;
-                end
-            end
-        end
         % 用来记录迭代信息 可能会影响效率
         if debug
             if ~isempty(exactx)
                 e = norm(x-exactx);
                 iter_k =[iter_k x];
             else
+                e =  norm(r);
                 iter_k =[iter_k i];
             end
             error_k = [error_k,e];
             index_k = [index_k,pickedj];
         end
-    end
+   % end
 end
 
 end

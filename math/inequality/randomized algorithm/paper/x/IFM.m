@@ -17,9 +17,9 @@ iter = 0;
 %% 计算最开始的残差
 r = b - A * x0;
 r(r<0)=0;
-normAr = norm(A'*r);
+% normAr = norm(A'*r);
 norm_r = norm(r);
-error_k = [normAr];
+error_k = [norm_r];
 if ~isempty(exactx)
     e = norm(x-exactx);
     iter_k =[x];
@@ -42,20 +42,11 @@ for i = 1:maxit
     iter = iter+1;
     norm_rn = norm(r);
     if abs(norm_rn-norm_r)<tol || norm_rn < tol
+%                 fprintf('stop condition:%g,%g',abs(norm_rn-norm_r),norm_rn);
         break;
     end
     norm_r = norm_rn;
  %   if ~isempty(tol) || debug
-    if debug
-        Ar = A'*r;
-        e = norm(Ar);
-        normr = norm(r);
-        if ~isempty(tol)
-            if normr < tol  || e < tol
-                break;
-            end
-        end
-    end
     if debug
         if ~isempty(exactx)
             e = norm(x-exactx);

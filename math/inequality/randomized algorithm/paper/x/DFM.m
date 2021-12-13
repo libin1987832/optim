@@ -47,19 +47,11 @@ for i = 1:maxit
     iter = iter+1;
     %terminate condition
     if abs(norm_rn-norm_r)<tol || norm_rn < tol
+%                 fprintf('stop condition:%g,%g',abs(norm_rn-norm_r),norm_rn);
         break;
     end
-    norm_r = norm_rn;
-    if ~isempty(tol) || debug
-%         Ar = A'*r;
-        e = norm(Ar);
-        normr = norm(r);
-        if ~isempty(tol)
-            if normr < tol  || e < tol
-                break;
-            end
-        end
-    end
+     norm_r = norm_rn;
+%     if ~isempty(tol) || debug
     if debug
         if ~isempty(exactx)
             e = norm(x-exactx);
