@@ -1,11 +1,11 @@
 clear
 clc
-debug = 0;
+debug = 1;
 %% 产生问题矩阵
 % 随机矩阵
 
-r = 500;
-m = 10000;
+r = 5;
+m = 100;
 n = 2*r+1;
 
 %% generate nodes
@@ -39,7 +39,7 @@ for j = 1:m
     end
 end  
 
-% A = 2 * rand(m , n)-1;
+A = 2 * rand(m , n)-1;
 b = 2 * rand(m , 1)-1;
 % b=A*ones(n,1);
 x0 = zeros(n , 1);
