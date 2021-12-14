@@ -61,13 +61,13 @@ fprintf('%s & %g & %g \n','最开始的目标函数和梯度', norm_r0, norm_g0);
 %% GuassSeidel
 maxit_Rand =50000;
 t=clock;
- [x_GS,iter_GS,error_GS,xA_GS,index_GS] = GuassSeidelNE(A, b, x0,1.0,maxit_Rand,tol,x_exact,debug);
+ [x_GS,iter_GS,error_GS,xA_GS,index_GS] = GuassSeidelNE(A, b, x0,2.0,maxit_Rand,tol,x_exact,debug);
 tf_GS=etime(clock,t);
 r = b - A * x_GS;
 r(r<0) = 0;
 r_GS = norm(r);
 g_GS = norm(A'*r);
-fprintf('& %s & %g & %g & %d & %g \\\\\n', 'GuassSeidel', r_GS, g_GS, iter_GS, tf_GS);
+fprintf('& %s & %g & %g & %d & %g \\\\\n', 'CGS(\lambda=2)', r_GS, g_GS, iter_GS, tf_GS);
 
 
 %% simpleGuassSeidel
@@ -79,7 +79,7 @@ r = b - A * x_GS;
 r(r<0) = 0;
 r_GS = norm(r);
 g_GS = norm(A'*r);
-fprintf('& %s & %g & %g & %d & %g \\\\\n', 'simpleGuassSeidel', r_GS, g_GS, iter_GS, tf_GS);
+fprintf('& %s & %g & %g & %d & %g \\\\\n', 'SGS(\lambda=2)', r_GS, g_GS, iter_GS, tf_GS);
 
 %% randGuassSeidel
 maxit_Rand =33000;
@@ -90,7 +90,7 @@ r = b - A * x_GS;
 r(r<0) = 0;
 r_GS = norm(r);
 g_GS = norm(A'*r);
-fprintf('& %s & %g & %g & %d & %g \\\\\n', 'randGuassSeidel', r_GS, g_GS, iter_GS, tf_GS);
+fprintf('& %s & %g & %g & %d & %g \\\\\n', 'RGS(\lambda=2)', r_GS, g_GS, iter_GS, tf_GS);
 
 
 %% 参数的设定

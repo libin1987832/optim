@@ -122,7 +122,7 @@ h.LineStyle = '--';
 display=1:1:iter_GS3;
 h=semilogy(xA_GS3(display), error_GS3(display), 'g+');
 h.LineStyle = '--';
-legend('Gauss Seidel','simple Gauss','rand Gauass');
+legend('CGS(\lambda = 2)','SGS(\lambda = 2)','RGS(\lambda = 2)');
 xlabel('the iterative numbers');
 ylabel('the norm of the gradient');
 end

@@ -63,15 +63,15 @@ r(r<0) = 0;
 norm_r0 = norm(r);
 norm_g0 = norm(A'*r);
 fprintf('%s & %g & %g \n','最开始的目标函数和梯度', norm_r0, norm_g0);
-
+tol = 1e-1;
 x_exact=[];
 
-tol = 1e-1;
+
 
 %% GuassSeidel
 maxit_Rand =50000;
 t=clock;
- [x_GS,iter_GS1,error_GS1,xA_GS1,index_GS] = GuassSeidelNE(A, b, x0,1.0,maxit_Rand,tol,x_exact,debug);
+ [x_GS,iter_GS1,error_GS1,xA_GS1,index_GS] = simpleGuassSeidelNE(A, b, x0,1.0,maxit_Rand,tol,x_exact,debug);
 tf_GS=etime(clock,t);
 r = b - A * x_GS;
 r(r<0) = 0;
@@ -83,7 +83,7 @@ fprintf('& %s & %g & %g & %d & %g \\\\\n', 'GuassSeidel', r_GS, g_GS, iter_GS1, 
 %% simpleGuassSeidel
 maxit_Rand =50000;
 t=clock;
- [x_GS,iter_GS2,error_GS2,xA_GS2,index_GS] = GuassSeidelNE(A, b, x0,1.0+min(m/n,n/m),maxit_Rand,tol,x_exact,debug);
+ [x_GS,iter_GS2,error_GS2,xA_GS2,index_GS] = simpleGuassSeidelNE(A, b, x0,1.0+min(m/n,n/m),maxit_Rand,tol,x_exact,debug);
 tf_GS=etime(clock,t);
 r = b - A * x_GS;
 r(r<0) = 0;
@@ -94,7 +94,7 @@ fprintf('& %s & %g & %g & %d & %g \\\\\n', 'GuassSeidel', r_GS, g_GS, iter_GS2, 
 %% randGuassSeidel
 maxit_Rand =50000;
 t=clock;
- [x_GS,iter_GS3,error_GS3,xA_GS3,index_GS] = GuassSeidelNE(A, b, x0,1.5,maxit_Rand,tol,x_exact,debug);
+ [x_GS,iter_GS3,error_GS3,xA_GS3,index_GS] = simpleGuassSeidelNE(A, b, x0,1.5,maxit_Rand,tol,x_exact,debug);
 tf_GS=etime(clock,t);
 r = b - A * x_GS;
 r(r<0) = 0;
@@ -104,7 +104,7 @@ fprintf('& %s & %g & %g & %d & %g \\\\\n', 'GuassSeidel', r_GS, g_GS, iter_GS3, 
 
 maxit_Rand =50000;
 t=clock;
- [x_GS,iter_GS4,error_GS4,xA_GS4,index_GS] = GuassSeidelNE(A, b, x0,2.0,maxit_Rand,tol,x_exact,debug);
+ [x_GS,iter_GS4,error_GS4,xA_GS4,index_GS] = simpleGuassSeidelNE(A, b, x0,2.0,maxit_Rand,tol,x_exact,debug);
 tf_GS=etime(clock,t);
 r = b - A * x_GS;
 r(r<0) = 0;
@@ -135,7 +135,7 @@ h.LineStyle = '--';
 display=1:1:iter_GS4;
 h=semilogy(xA_GS4(display), error_GS4(display), 'k+');
 h.LineStyle = '--';
-legend('lambd = 1','lambd = 1+min(m/n,m/m)','lambd = 1.5','lambd = 2');
+legend('Gauss Seidel(lambd = 1)','Gauss Seidel(lambd = 1+min(m/n,m/m))','Gauss Seidel(lambd = 1.5)','Gauss Seidel(lambd = 2)');
 xlabel('the iterative numbers');
 ylabel('the norm of the gradient');
 end

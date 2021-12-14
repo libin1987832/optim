@@ -63,12 +63,7 @@ r(r<0) = 0;
 norm_r0 = norm(r);
 norm_g0 = norm(A'*r);
 fprintf('%s & %g & %g \n','最开始的目标函数和梯度', norm_r0, norm_g0);
-[x_exact, ~, ~, ~, ~] = IFM(A, b, x0,10, maxit_LSQR , 1e-10,[],debug);
-r = b - A * x_exact;
-r(r<0) = 0;
-norm_rexact = norm(r);
-norm_gexact = norm(A'*r);
-fprintf('%s & %g & %g \n','IFM解的目标函数值和梯度  ', norm_rexact, norm_gexact);
+tol = 1e-1;
 x_exact=[];
 
 
@@ -76,53 +71,53 @@ x_exact=[];
 %% GuassSeidel
 maxit_Rand =50000;
 t=clock;
- [x_GS,iter_GS1,error_GS1,xA_GS1,index_GS] = simpleGuassSeidelNE(A, b, x0,1.0,maxit_Rand,tol,x_exact,debug);
+ [x_GS,iter_GS1,error_GS1,xA_GS1,index_GS] = randGuassSeidelNE(A, b, x0,1.0,maxit_Rand,tol,x_exact,debug);
 tf_GS=etime(clock,t);
 r = b - A * x_GS;
 r(r<0) = 0;
 r_GS = norm(r);
 g_GS = norm(A'*r);
-fprintf('& %s & %g & %g & %d & %g \\\\\n', 'GuassSeidel', r_GS, g_GS, iter_GS1, tf_GS);
+fprintf('& %s & %g & %g & %d & %g \\\\\n', 'RGS(\lambda = 1)', r_GS, g_GS, iter_GS1, tf_GS);
 
 
 %% simpleGuassSeidel
 maxit_Rand =50000;
 t=clock;
- [x_GS,iter_GS2,error_GS2,xA_GS2,index_GS] = simpleGuassSeidelNE(A, b, x0,1.0+min(m/n,n/m),maxit_Rand,tol,x_exact,debug);
+ [x_GS,iter_GS2,error_GS2,xA_GS2,index_GS] = randGuassSeidelNE(A, b, x0,1.0+min(m/n,n/m),maxit_Rand,tol,x_exact,debug);
 tf_GS=etime(clock,t);
 r = b - A * x_GS;
 r(r<0) = 0;
 r_GS = norm(r);
 g_GS = norm(A'*r);
-fprintf('& %s & %g & %g & %d & %g \\\\\n', 'GuassSeidel', r_GS, g_GS, iter_GS2, tf_GS);
+fprintf('& %s & %g & %g & %d & %g \\\\\n', 'RGS(\lambda = 1.0+min(m/n,n/m))', r_GS, g_GS, iter_GS2, tf_GS);
 
 %% randGuassSeidel
 maxit_Rand =50000;
 t=clock;
- [x_GS,iter_GS3,error_GS3,xA_GS3,index_GS] = simpleGuassSeidelNE(A, b, x0,1.5,maxit_Rand,tol,x_exact,debug);
+ [x_GS,iter_GS3,error_GS3,xA_GS3,index_GS] = randGuassSeidelNE(A, b, x0,1.5,maxit_Rand,tol,x_exact,debug);
 tf_GS=etime(clock,t);
 r = b - A * x_GS;
 r(r<0) = 0;
 r_GS = norm(r);
 g_GS = norm(A'*r);
-fprintf('& %s & %g & %g & %d & %g \\\\\n', 'GuassSeidel', r_GS, g_GS, iter_GS3, tf_GS);
+fprintf('& %s & %g & %g & %d & %g \\\\\n', 'RGS(\lambda = 1.5)', r_GS, g_GS, iter_GS3, tf_GS);
 
 maxit_Rand =50000;
 t=clock;
- [x_GS,iter_GS4,error_GS4,xA_GS4,index_GS] = simpleGuassSeidelNE(A, b, x0,2.0,maxit_Rand,tol,x_exact,debug);
+ [x_GS,iter_GS4,error_GS4,xA_GS4,index_GS] = randGuassSeidelNE(A, b, x0,2.0,maxit_Rand,tol,x_exact,debug);
 tf_GS=etime(clock,t);
 r = b - A * x_GS;
 r(r<0) = 0;
 r_GS = norm(r);
 g_GS = norm(A'*r);
-fprintf('& %s & %g & %g & %d & %g \\\\\n', 'GuassSeidel', r_GS, g_GS, iter_GS4, tf_GS);
+fprintf('& %s & %g & %g & %d & %g \\\\\n',  'RGS(\lambda = 2)', r_GS, g_GS, iter_GS4, tf_GS);
 
 %% 画图
 if debug
 figure
 % h=semilogy(xA_IFM, error_IFM, 'k.');
 % h.LineStyle = '--';
-sum = 10000;
+ sum = min([iter_GS1,iter_GS2,iter_GS3,iter_GS4]) ;
 iter_GS1 = sum;
 iter_GS2 = sum;
 iter_GS3 = sum;
@@ -140,7 +135,7 @@ h.LineStyle = '--';
 display=1:1:iter_GS4;
 h=semilogy(xA_GS4(display), error_GS4(display), 'k+');
 h.LineStyle = '--';
-legend('Gauss Seidel(lambd = 1)','Gauss Seidel(lambd = 1+min(m/n,m/m))','Gauss Seidel(lambd = 1.5)','Gauss Seidel(lambd = 2)');
+legend('lambd = 1','lambd = 1+min(m/n,m/m)','lambd = 1.5','lambd = 2');
 xlabel('the iterative numbers');
 ylabel('the norm of the gradient');
 end
