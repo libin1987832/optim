@@ -3,8 +3,8 @@ clc
 debug = 1;
 %% 产生问题矩阵
 % 随机矩阵
- m = 1000;
- n = 200;
+ m = 100;
+ n = 10;
 
  A = 2 * rand(m , n)-1;
 % A = [A;-A];
@@ -24,7 +24,7 @@ x_exact=[];
 %% GuassSeidel
 maxit_Rand =500000;
 t=clock;
- [x_GS,iter_GS1,error_GS1,xA_GS1,index_GS] = GuassSeidelNE(A, b, x0,2.0,maxit_Rand,tol,x_exact,debug);
+ [x_GS,iter_GS1,error_GS1,xA_GS1,index_GS1] = GuassSeidelNE(A, b, x0,2.0,maxit_Rand,tol,x_exact,debug);
 tf_GS=etime(clock,t);
 r = b - A * x_GS;
 r(r<0) = 0;
@@ -36,7 +36,7 @@ fprintf('& %s & %g & %g & %d & %g \\\\\n', 'CGS(\lambda = 2)', r_GS, g_GS, iter_
 %% simpleGuassSeidel
 % maxit_Rand =30000;
 t=clock;
-[x_GS,iter_GS2,error_GS2,xA_GS2,index_GS] = simpleGuassSeidelNE(A, b, x0,2,maxit_Rand,tol,x_exact,debug);
+[x_GS,iter_GS2,error_GS2,xA_GS2,index_GS2] = simpleGuassSeidelNE(A, b, x0,2,maxit_Rand,tol,x_exact,debug);
 tf_GS=etime(clock,t);
 r = b - A * x_GS;
 r(r<0) = 0;
@@ -47,7 +47,7 @@ fprintf('& %s & %g & %g & %d & %g \\\\\n', 'SGS(\lambda = 2)', r_GS, g_GS, iter_
 %% randGuassSeidel
 % maxit_Rand =33000;
 t=clock;
-[x_GS,iter_GS3,error_GS3,xA_GS3,index_GS] = randGuassSeidelNE(A, b, x0,2,maxit_Rand,tol,x_exact,debug);
+[x_GS,iter_GS3,error_GS3,xA_GS3,index_GS3] = randGuassSeidelNE(A, b, x0,2,maxit_Rand,tol,x_exact,debug);
 tf_GS=etime(clock,t);
 r = b - A * x_GS;
 r(r<0) = 0;
@@ -62,7 +62,7 @@ figure
 % h=semilogy(xA_IFM, error_IFM, 'k.');
 % h.LineStyle = '--';
  sum = min([iter_GS1,iter_GS2,iter_GS3]) ;
- sum = 50;
+ sum = 20;
  iter_GS1 = sum;
  iter_GS2 = sum;
  iter_GS3 = sum;
@@ -81,6 +81,10 @@ xlabel('the iterative numbers');
 ylabel('the norm of the gradient');
 end
 
+error=[error_GS1(display);index_GS1(display);
+    error_GS2(display);index_GS2(display);
+    error_GS3(display);index_GS3(display)];
 
-
+error1=[error([1,3,5],2:end) [0;0;0]]-error([1,3,5],1:end);
+error=[error;[[0;0;0] error1(:,2:end)]];
 
