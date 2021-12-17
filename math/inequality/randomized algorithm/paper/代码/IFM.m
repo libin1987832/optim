@@ -52,6 +52,7 @@ for i = 1:maxit
             e = norm(x-exactx);
             iter_k =[iter_k x];
         else
+            e = norm(r);
             iter_k =[iter_k i];
         end        
         error_k = [error_k,e];

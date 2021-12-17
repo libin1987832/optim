@@ -19,7 +19,7 @@ x0 = zeros(n , 1);
 % 不一致情况下的正解
 % x_exact=[1/2;1/3];
 
-tol=1e-3;
+tol=1e-20;
 x_exact=[];
 %% GuassSeidel
 maxit_Rand =500000;
@@ -57,34 +57,54 @@ fprintf('& %s & %g & %g & %d & %g \\\\\n', 'RGS(\lambda = 2)', r_GS, g_GS, iter_
 
 
 %% 画图
-if debug
-figure
-% h=semilogy(xA_IFM, error_IFM, 'k.');
+% if debug
+% figure
+% % h=semilogy(xA_IFM, error_IFM, 'k.');
+% % h.LineStyle = '--';
+%  sum = min([iter_GS1,iter_GS2,iter_GS3]) ;
+%  sum = 20;
+%  iter_GS1 = sum;
+%  iter_GS2 = sum;
+%  iter_GS3 = sum;
+% display=1:1:iter_GS1;
+% h=semilogy(xA_GS1(display), error_GS1(display), 'r+');
 % h.LineStyle = '--';
- sum = min([iter_GS1,iter_GS2,iter_GS3]) ;
- sum = 20;
- iter_GS1 = sum;
- iter_GS2 = sum;
- iter_GS3 = sum;
-display=1:1:iter_GS1;
-h=semilogy(xA_GS1(display), error_GS1(display), 'r+');
-h.LineStyle = '--';
-hold on
-display=1:1:iter_GS2;
-h=semilogy(xA_GS2(display), error_GS2(display), 'b+');
-h.LineStyle = '--';
-display=1:1:iter_GS3;
-h=semilogy(xA_GS3(display), error_GS3(display), 'g+');
-h.LineStyle = '--';
-legend('CGS(\lambda = 2)','SGS(\lambda = 2)','RGS(\lambda = 2)');
-xlabel('the iterative numbers');
-ylabel('the norm of the gradient');
-end
+% hold on
+% display=1:1:iter_GS2;
+% h=semilogy(xA_GS2(display), error_GS2(display), 'b+');
+% h.LineStyle = '--';
+% display=1:1:iter_GS3;
+% h=semilogy(xA_GS3(display), error_GS3(display), 'g+');
+% h.LineStyle = '--';
+% legend('CGS(\lambda = 2)','SGS(\lambda = 2)','RGS(\lambda = 2)');
+% xlabel('the iterative numbers');
+% ylabel('the norm of the gradient');
+% end
 
-error=[error_GS1(display);index_GS1(display);
-    error_GS2(display);index_GS2(display);
-    error_GS3(display);index_GS3(display)];
+% error=[error_GS1(display);index_GS1(display);
+%     error_GS2(display);index_GS2(display);
+%     error_GS3(display);index_GS3(display)];
+% 
+% error1=error([1,3,5],1:end) -[error([1,3,5],2:end) [0;0;0]];
+% error=[error;[[0;0;0] error1(:,1:end-1)]];
 
-error1=[error([1,3,5],2:end) [0;0;0]]-error([1,3,5],1:end);
-error=[error;[[0;0;0] error1(:,2:end)]];
 
+ maxit_IFM = 200;
+maxit_LSQR=3;
+tol=1e-50;
+t=clock;
+[x_IFM,iter_IFM,~,~,~] = IFM(A, b, x0, maxit_IFM, maxit_LSQR ,tol, x_exact,debug);
+tf_IFM=etime(clock,t);
+r = b - A * x_IFM;
+r(r<0) = 0;
+r_IFM = norm(r);
+g_IFM = norm(A'*r);
+fprintf('& %s & %g & %g & %d & %g \\\\\n','IFM', r_IFM, g_IFM,iter_IFM,tf_IFM);
+error_GS1=[error_GS1 r];
+error_GS2=[error_GS2 r];
+error_GS3=[error_GS3 r];
+[i11 i12] = findFace(error_GS1,r) ;
+[i21 i22] = findFace(error_GS2,r) ;
+[i31 i32] = findFace(error_GS3,r) ;
+[i11 i21 i31]
+[i12 i22 i32]

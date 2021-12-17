@@ -22,8 +22,9 @@ r(r<0) = 0;
 % norm_Ar = norm(A'*r);
 norm_r = norm(r);
 if isempty(exactx)
-%     error_k = [norm_Ar];
-    error_k = [norm_r];
+% %     error_k = [norm_Ar];
+%     error_k = [norm_r];
+error_k = [r];
     iter_k =[0];
 else
     error_k = [norm(x-exactx)];
@@ -79,7 +80,8 @@ for i = 1:maxit
                 e = norm(x-exactx);
                 iter_k =[iter_k x];
             else
-                e =  norm(r);
+               % e =  norm(r);
+                            e = r;
                 iter_k =[iter_k i];
             end
             error_k = [error_k,e];
