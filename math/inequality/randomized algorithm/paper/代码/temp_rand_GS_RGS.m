@@ -19,7 +19,7 @@ x0 = zeros(n , 1);
 % 不一致情况下的正解
 % x_exact=[1/2;1/3];
 
-tol=1e-20;
+tol=1e-10;
 x_exact=[];
 %% GuassSeidel
 maxit_Rand =500000;
@@ -103,8 +103,10 @@ fprintf('& %s & %g & %g & %d & %g \\\\\n','IFM', r_IFM, g_IFM,iter_IFM,tf_IFM);
 error_GS1=[error_GS1 r];
 error_GS2=[error_GS2 r];
 error_GS3=[error_GS3 r];
-[i11 i12] = findFace(error_GS1,r) ;
-[i21 i22] = findFace(error_GS2,r) ;
-[i31 i32] = findFace(error_GS3,r) ;
-[i11 i21 i31]
-[i12 i22 i32]
+% [i11 i12] = findFace(error_GS1,r) ;
+% [i21 i22] = findFace(error_GS2,r) ;
+% [i31 i32] = findFace(error_GS3,r) ;
+% [i11 i21 i31]
+% [i12 i22 i32]
+
+
