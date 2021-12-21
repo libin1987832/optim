@@ -15,4 +15,8 @@ det2=inc;
 Nr1=r0-2*det1*rp0-inc*(eye(m)-N0)*A(:,1);
 Nr1(Nr1<0)=0;
 norm(Nr1-er1)
+AA=A(:,1)*A(:,1)';
+AAr1=r0-2*AA/norm_a*rp0;
+AAr1(AAr1<0)=0;
+norm(AAr1-er1)
 % norm(inc*(eye(m)-N0)*A(:,1))
