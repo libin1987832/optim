@@ -8,7 +8,7 @@ debug = 0;
 randone= rand(1,n)<0.5;
 
  A = 2 * rand(m , n)-1;
-% A(:,randone)=A(:,randone)*1000;
+A(:,randone)=A(:,randone)/1000;
 b = 2 * rand(m , 1)-1;
 A=[A;-A];
 b=[b;-b];
