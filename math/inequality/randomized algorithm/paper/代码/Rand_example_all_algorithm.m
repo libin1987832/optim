@@ -5,10 +5,10 @@ debug = 0;
 % Ëæ»ú¾ØÕó
  m = 5000;
  n = 2000;
+randone= rand(1,n)<0.5;
 
  A = 2 * rand(m , n)-1;
- A(:,2)=A(:,2)*100;
- 
+% A(:,randone)=A(:,randone)*1000;
 b = 2 * rand(m , 1)-1;
 A=[A;-A];
 b=[b;-b];
