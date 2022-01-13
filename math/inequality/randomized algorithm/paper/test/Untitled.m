@@ -6,8 +6,9 @@ N=diag([1,0,1]);
 for i=1:3
     x1(i)=x1(i)+A(:,i)'*N*(b-A*x1)/(A(:,i)'*A(:,i));
 end
-ATA=A'*N*A;
+ATA=A'*A;
 D=diag(diag(ATA));
+ATA=A'*N*A;
 U=triu(ATA,1);
 L=tril(ATA,-1);
 DL=D+L;
