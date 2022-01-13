@@ -7,10 +7,11 @@ for i=1:3
     x1(i)=x1(i)+A(:,i)'*N*(b-A*x1)/(A(:,i)'*A(:,i));
 end
 ATA=A'*A;
-D=diag(diag(ATA));
+D1=diag(diag(ATA));
 ATA=A'*N*A;
+D2=diag(diag(ATA));
 U=triu(ATA,1);
 L=tril(ATA,-1);
-DL=D+L;
-x01=-inv(DL)*U*x00+inv(DL)*A'*N*b
+DL=D1+L;
+x01=-inv(DL)*(U+D2-D1)*x00+inv(DL)*A'*N*b
 x1
