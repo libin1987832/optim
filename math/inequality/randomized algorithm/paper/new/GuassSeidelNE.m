@@ -60,9 +60,9 @@ for i = 1:maxit
     iter = iter+1;
     if mod(iter,iter_test_stop)==0
         norm_rn = norm(r);
-        if abs(norm_rn-norm_r)<tol*n*n || norm_rn < tol
-                    abs(norm_rn-norm_r)
-        norm_rn < tol
+        if abs(norm_rn-norm_r)<tol || norm_rn < 1e-10
+%                     abs(norm_rn-norm_r)
+%         norm_rn
             break;
         end
         norm_r = norm_rn;

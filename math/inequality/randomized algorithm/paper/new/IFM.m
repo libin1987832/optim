@@ -41,9 +41,7 @@ for i = 1:maxit
     r( r < 0) = 0;
     iter = iter+1;
     norm_rn = norm(r);
-    if abs(norm_rn-norm_r)<tol || norm_rn < tol
-                abs(norm_rn-norm_r)
-        norm_rn < tol
+    if abs(norm_rn-norm_r)<tol || norm_rn < 1e-10
         break;
     end
     norm_r = norm_rn;
@@ -59,7 +57,7 @@ for i = 1:maxit
                 iter_k =[iter_k i];
             end
             error_k = [error_k,e];
-            index_k = [index_k,pickedj];
+            index_k = [index_k,i];
     end
     
 end

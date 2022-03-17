@@ -1,6 +1,6 @@
 clear
 clc
-debug = 0;
+debug = 1;
 %% 产生问题矩阵
 % 随机矩阵
 % m = 500;
@@ -49,7 +49,7 @@ fprintf('& %s & %g & %g & %d & %g \\\\\n', 'GuassSeidel', r_GS, g_GS, iter_GS, t
 %% simpleGuassSeidel
 % maxit_Rand =1000000;
 t=clock;
-[x_GS,iter_GS,error_GS,xA_GS,index_GS] = simpleGuassSeidelNE(A, b, x0,2.0,maxit_Rand,tol,x_exact,debug);
+[x_GS,iter_GS,error_SGS,xA_GS,index_GS] = simpleGuassSeidelNE(A, b, x0,2.0,maxit_Rand,tol,x_exact,debug);
 tf_GS=etime(clock,t);
 r = b - A * x_GS;
 r(r<0) = 0;
@@ -60,7 +60,7 @@ fprintf('& %s & %g & %g & %d & %g \\\\\n', 'simpleGuassSeidel', r_GS, g_GS, iter
 %% randGuassSeidel
 % maxit_Rand =630000;
 t=clock;
-[x_GS,iter_GS,error_GS,xA_GS,index_GS] = randGuassSeidelNE(A, b, x0,2.0,maxit_Rand,tol,x_exact,debug);
+[x_GS,iter_GS,error_RGS,xA_GS,index_GS] = randGuassSeidelNE(A, b, x0,2.0,maxit_Rand,tol,x_exact,debug);
 tf_GS=etime(clock,t);
 r = b - A * x_GS;
 r(r<0) = 0;
@@ -123,6 +123,15 @@ r_GS = norm(r);
 g_GS = norm(A'*r);
 fprintf('& %s & %g & %g & %d & %g \\\\\n', 'han', r_GS, g_GS, countFMh, tf_GS);
 
+
+semilogy(error_GS, 'r') % Matrix A
+xlabel('Iterations') 
+ylabel('Error') 
+hold on 
+semilogy(error_SGS, 'k') % Matrix M
+semilogy(error_RGS, 'g') % Matrix M
+semilogy(error_IFM, 'b') % Matrix M
+legend('CCD', 'UCD', 'RCD','IFM' )
 
 %%%%%%%%%%%%
 % 矩阵维数 & 8000 & 1401 
