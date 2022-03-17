@@ -6,54 +6,14 @@ debug = 0;
 % m = 500;
 % n = 200;
 
-r = 700;
-m = 8000;
-n = 2*r+1;
 
-%% generate nodes
-%tj are drawing randomly from a uniform distribution in [0,1]
-t = rand(m,1);
-
-%then ordering by magnitude (since they are all positive, just sort)
-t = sort(t);
-% just to assign the size
-w = zeros(m,1); 
-x = zeros(n,1);
-%% generate x 
-realx = randn(n,1);
-imgx = randn(n,1);
-for l = 1:n
-   x(l) = realx(l)+1i*imgx(l);
-end  
-%% generate A and b
-A = zeros(m,n);
-for j = 1:m
-    % dealing with special cases when reach the endpoints(nodes)
-    if j == 1
-        w(j) = (t(2)-t(end)-1)/2;
-    elseif j == m
-            w(j) = (t(1)+1-t(m-1))/2;
-        else
-            w(j) = (t(j+1)-t(j-1))/2;
-    end              
-    for k = -r:r
-       A(j,k+r+1) =sqrt(w(j))*exp(2*pi*1i*k*t(j));
-    end
-end  
-
-%  A = 2 * rand(m , n)-1;
+m = 5000;
+n = 500;
+A = rand(m,n);
 b = 2 * rand(m , 1)-1;
-% A=[A;-A];
-% b=[b;-b];
-% m=2*m;
-% b=A*ones(n,1);
+
 x0 = zeros(n , 1);
-% save('test2.mat','A','b','x0')
-%load('test.mat');
-% 二维矩阵
-% A = -[1,-1;-1,-1;0,1];b=-[0;-1;0];x0=[-1;0];
-% 不一致情况下的正解
-% x_exact=[1/2;1/3];
+
 tol=1e-1;
 
 fprintf('%s & %d & %d \n','矩阵维数', m, n);
@@ -75,7 +35,7 @@ x_exact=[];
 
 
 %% GuassSeidel
-maxit_Rand =2000000;
+maxit_Rand =20000;
 t=clock;
  [x_GS,iter_GS,error_GS,xA_GS,index_GS] = GuassSeidelNE(A, b, x0,1.0,maxit_Rand,tol,x_exact,debug);
 tf_GS=etime(clock,t);

@@ -106,18 +106,18 @@ g_GS = norm(A'*r);
 fprintf('& %s & %g & %g & %d & %g \\\\\n', 'randGuassSeidel', r_GS, g_GS, iter_GS, tf_GS);
 
 %% han
-maxIter = 2;
-t=clock;
-[x_GS,rkh,countFMh,countNWh,beginNWh,tfh,vkh,rkArrh]=han(x0,A,b,maxIter);
-tf_GS=etime(clock,t);
-r = b - A * x_GS;
-r(r<0) = 0;
-r_GS = norm(r);
-g_GS = norm(A'*r);
-fprintf('& %s & %g & %g & %d & %g \\\\\n', 'han', r_GS, g_GS, countFMh, tf_GS);
+% maxIter = 2;
+% t=clock;
+% [x_GS,rkh,countFMh,countNWh,beginNWh,tfh,vkh,rkArrh]=han(x0,A,b,maxIter);
+% tf_GS=etime(clock,t);
+% r = b - A * x_GS;
+% r(r<0) = 0;
+% r_GS = norm(r);
+% g_GS = norm(A'*r);
+% fprintf('& %s & %g & %g & %d & %g \\\\\n', 'han', r_GS, g_GS, countFMh, tf_GS);
 
 %% 参数的设定
- maxit_IFM = 200;
+ maxit_IFM = 50;
 % 
 tol=1e-10;
 tol=[];
@@ -132,7 +132,7 @@ g_IFM = norm(A'*r);
 fprintf('& %s & %g & %g & %d & %g \\\\\n','IFM', r_IFM, g_IFM,iter_IFM,tf_IFM);
 
 %% FM
-maxit =220;
+maxit =50;
 tol=[];
 alpha=1;
 maxit_gs=n;
