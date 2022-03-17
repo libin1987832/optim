@@ -7,14 +7,14 @@ debug = 0;
 % n = 200;
 
 
-m = 500;
-n = 200;
-A = rand(m,n);
-b = 2 * rand(m , 1)-1;
+m = 5000;
+n = 500;
+  A = 2 * rand(m , n)-1;
+   b = 2 * rand(m , 1)-1;
 
 x0 = zeros(n , 1);
 
-tol=1e-5;
+tol=1e-20;
 
 fprintf('%s & %d & %d \n','矩阵维数', m, n);
 %% 基于IFM的算法找到一个解
@@ -35,7 +35,7 @@ fprintf('%s & %g & %g \n','最开始的目标函数和梯度', norm_r0, norm_g0);
 
 
 %% GuassSeidel
-maxit_Rand =20000;
+maxit_Rand =200000;
 t=clock;
  [x_GS,iter_GS,error_GS,xA_GS,index_GS] = GuassSeidelNE(A, b, x0,1.0,maxit_Rand,tol,x_exact,debug);
 tf_GS=etime(clock,t);
@@ -113,15 +113,15 @@ fprintf('& %s & %g & %g & %d & %g \\\\\n','FM', r_FM, g_FM,iter_FM,tf_FM);
 
 
 % %% han
-% maxIter = 1;
-% t=clock;
-% [x_GS,rkh,countFMh,countNWh,beginNWh,tfh,vkh,rkArrh]=han(x0,A,b,maxIter);
-% tf_GS=etime(clock,t);
-% r = b - A * x_GS;
-% r(r<0) = 0;
-% r_GS = norm(r);
-% g_GS = norm(A'*r);
-% fprintf('& %s & %g & %g & %d & %g \\\\\n', 'han', r_GS, g_GS, countFMh, tf_GS);
+maxIter = 5;
+t=clock;
+[x_GS,rkh,countFMh,countNWh,beginNWh,tfh,vkh,rkArrh]=han(x0,A,b,maxIter);
+tf_GS=etime(clock,t);
+r = b - A * x_GS;
+r(r<0) = 0;
+r_GS = norm(r);
+g_GS = norm(A'*r);
+fprintf('& %s & %g & %g & %d & %g \\\\\n', 'han', r_GS, g_GS, countFMh, tf_GS);
 
 
 % semilogy(error_GS, 'r') % Matrix A

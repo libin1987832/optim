@@ -15,7 +15,7 @@ for j = 1:count
    x0 = zeros(n , 1);
    maxIter = 300;
    nf = 5;
-   str = ['''D','C','R','P'];
+   str = ['D','C','R','P'];
 % for the solution so here
 % debug = 1;
 % if debug
@@ -28,10 +28,11 @@ for j = 1:count
     fprintA=zeros(1,8);
     steplengthOrk = 3;
     fprintf('\\hline \n \\multirow{4}{*}{$ %d\\times %d $}',m,n);
+    tol=1e-10;
 % there are four methods to run
     for i=1:4
         type = str(i);
-        [xkD,flag,relres,iter,resvec,arvec,itersm,tfD]=hybridA(A,b,x0,steplengthOrk,maxIter,nf,[type,'HA']);
+        [xkD,flag,relres,iter,resvec,arvec,itersm,tfD]=hybridA(A,b,x0,steplengthOrk,maxIter,nf,[type,'HA'],tol);
   %      [rk, rkD, dD, gD] = residual(A,b,xkD);
         resvec = arvec;
 % check the solution
