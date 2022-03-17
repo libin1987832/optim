@@ -7,14 +7,14 @@ debug = 0;
 % n = 200;
 
 
-m = 5000;
-n = 500;
+m = 8000;
+n = 5000;
   A = 2 * rand(m , n)-1;
    b = 2 * rand(m , 1)-1;
 
 x0 = zeros(n , 1);
 
-tol=1e-20;
+tol=1e-10;
 
 fprintf('%s & %d & %d \n','矩阵维数', m, n);
 %% 基于IFM的算法找到一个解
@@ -31,11 +31,19 @@ fprintf('%s & %g & %g \n','最开始的目标函数和梯度', norm_r0, norm_g0);
 % norm_gexact = norm(A'*r);
 % fprintf('%s & %g & %g \n','IFM解的目标函数值和梯度  ', norm_rexact, norm_gexact);
  x_exact=[];
-
-
+%% 参数的设定
+ maxit_IFM = 500;
+t=clock;
+[x_IFM,iter_IFM,error_IFM,xA_IFM,index_IFM] = IFM(A, b, x0, maxit_IFM, maxit_LSQR ,tol, x_exact,debug);
+tf_IFM=etime(clock,t);
+r = b - A * x_IFM;
+r(r<0) = 0;
+r_IFM = norm(r);
+g_IFM = norm(A'*r);
+fprintf('& %s & %g & %g & %d & %g \\\\\n','IFM', r_IFM, g_IFM,iter_IFM,tf_IFM);
 
 %% GuassSeidel
-maxit_Rand =200000;
+maxit_Rand =3000000;
 t=clock;
  [x_GS,iter_GS,error_GS,xA_GS,index_GS] = GuassSeidelNE(A, b, x0,1.0,maxit_Rand,tol,x_exact,debug);
 tf_GS=etime(clock,t);
@@ -70,32 +78,24 @@ fprintf('& %s & %g & %g & %d & %g \\\\\n', 'RCD', r_GS, g_GS, iter_GS, tf_GS);
 
 
 
-%% 参数的设定
- maxit_IFM = 500;
 
 
-t=clock;
-[x_IFM,iter_IFM,error_IFM,xA_IFM,index_IFM] = IFM(A, b, x0, maxit_IFM, maxit_LSQR ,tol/50, x_exact,debug);
-tf_IFM=etime(clock,t);
-r = b - A * x_IFM;
-r(r<0) = 0;
-r_IFM = norm(r);
-g_IFM = norm(A'*r);
-fprintf('& %s & %g & %g & %d & %g \\\\\n','IFM', r_IFM, g_IFM,iter_IFM,tf_IFM);
+
+
 
 %% FM
 % maxit =100;
 
-alpha=1;
-maxit_gs=n;
-t=clock;
-[x_FM,iter_FM,error_k,iter_dFM,index_k] = DFM(A, b, x0, maxit_IFM,alpha,maxit_gs,tol/50, x_exact,debug);
-tf_FM=etime(clock,t);
-r = b - A * x_FM;
-r(r<0) = 0;
-r_FM = norm(r);
-g_FM = norm(A'*r);
-fprintf('& %s & %g & %g & %d & %g \\\\\n','FM', r_FM, g_FM,iter_FM,tf_FM);
+% alpha=1;
+% maxit_gs=n;
+% t=clock;
+% [x_FM,iter_FM,error_k,iter_dFM,index_k] = DFM(A, b, x0, maxit_IFM,alpha,maxit_gs,tol/50, x_exact,debug);
+% tf_FM=etime(clock,t);
+% r = b - A * x_FM;
+% r(r<0) = 0;
+% r_FM = norm(r);
+% g_FM = norm(A'*r);
+% fprintf('& %s & %g & %g & %d & %g \\\\\n','FM', r_FM, g_FM,iter_FM,tf_FM);
 
 %% RFM
 % maxit =18;
@@ -113,15 +113,15 @@ fprintf('& %s & %g & %g & %d & %g \\\\\n','FM', r_FM, g_FM,iter_FM,tf_FM);
 
 
 % %% han
-maxIter = 5;
-t=clock;
-[x_GS,rkh,countFMh,countNWh,beginNWh,tfh,vkh,rkArrh]=han(x0,A,b,maxIter);
-tf_GS=etime(clock,t);
-r = b - A * x_GS;
-r(r<0) = 0;
-r_GS = norm(r);
-g_GS = norm(A'*r);
-fprintf('& %s & %g & %g & %d & %g \\\\\n', 'han', r_GS, g_GS, countFMh, tf_GS);
+% maxIter = 5;
+% t=clock;
+% [x_GS,rkh,countFMh,countNWh,beginNWh,tfh,vkh,rkArrh]=han(x0,A,b,maxIter);
+% tf_GS=etime(clock,t);
+% r = b - A * x_GS;
+% r(r<0) = 0;
+% r_GS = norm(r);
+% g_GS = norm(A'*r);
+% fprintf('& %s & %g & %g & %d & %g \\\\\n', 'han', r_GS, g_GS, countFMh, tf_GS);
 
 
 % semilogy(error_GS, 'r') % Matrix A

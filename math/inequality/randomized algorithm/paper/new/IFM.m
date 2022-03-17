@@ -41,7 +41,7 @@ for i = 1:maxit
     r( r < 0) = 0;
     iter = iter+1;
     norm_rn = norm(r);
-    if abs(norm_rn-norm_r)<tol || norm_rn < 1e-10
+    if abs(norm_rn-norm_r)<tol || norm_rn < 1e-6
         break;
     end
     norm_r = norm_rn;
