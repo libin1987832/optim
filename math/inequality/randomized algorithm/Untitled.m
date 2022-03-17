@@ -18,7 +18,7 @@ for k = 1:numRuns
 %     A(1000,:) = zeros(1,n); %uncomment to do inconsistent 
     b = randn(n,1); 
     y = A*b;  
-    y = y + sigma*randn(m,1);
+   y = y + sigma*randn(m,1);
     b = A\y;
     
     %Bernoulli 

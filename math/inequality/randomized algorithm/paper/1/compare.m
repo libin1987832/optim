@@ -6,8 +6,8 @@ debug = 0;
 % m = 500;
 % n = 200;
 
-r = 2000;
-m = 10000;
+r = 700;
+m = 8000;
 n = 2*r+1;
 
 %% generate nodes
@@ -43,9 +43,9 @@ end
 
 %  A = 2 * rand(m , n)-1;
 b = 2 * rand(m , 1)-1;
-A=[A;-A];
-b=[b;-b];
-m=2*m;
+% A=[A;-A];
+% b=[b;-b];
+% m=2*m;
 % b=A*ones(n,1);
 x0 = zeros(n , 1);
 % save('test2.mat','A','b','x0')
@@ -56,7 +56,7 @@ x0 = zeros(n , 1);
 % x_exact=[1/2;1/3];
 tol=1e-1;
 
-
+fprintf('%s & %d & %d \n','矩阵维数', m, n);
 %% 基于IFM的算法找到一个解
 maxit_LSQR = 3;
 r = b - A * x0;
