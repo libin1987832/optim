@@ -50,7 +50,7 @@ for i=1:maxit
     r=rpk;
     r(r<0)=0;
         norm_rn = norm(r);
-        if abs(norm_rn-norm_r)/norm_r<tol || norm_rn < 1e-6
+        if norm(A'*r)<tol || norm_rn < 1e-6
             break;
         end
         norm_r = norm_rn;
