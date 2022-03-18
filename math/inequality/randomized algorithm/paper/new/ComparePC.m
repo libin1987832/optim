@@ -1,14 +1,14 @@
 clear
 clc
-debug = 0;
+debug = 1;
 %% 产生问题矩阵
-m = 10000;
-n = 2000;
+m = 1000;
+n = 200;
 A = 2 * rand(m , n)-1;
 b = 2 * rand(m , 1)-1;
 
 x0 = zeros(n , 1);
-tol=1e-3;
+tol=1e-10;
 fprintf('%s & %d & %d tol=%g\n','矩阵维数', m, n, tol);
 %% 基于IFM的算法找到一个解
 maxit_LSQR = 3;
@@ -71,22 +71,23 @@ g_GS = norm(A'*r);
 fprintf('& %s & %g & %g & %d & %g \\\\\n', 'RCD', r_GS, g_GS, iter_GS, tf_GS);
 
 % 
-% figure (1)
-% semilogy(1:iter_PC,error_PC(1:iter_PC),'k--');
-% title('比较坐标下降算法和投影收缩算法的性能差异')
-% ylabel('梯度的范数') 
-% xlabel('迭代次数（对于坐标下降法，每n次迭代算一次迭代）') 
-% hold on
-% iters=10;
-% semilogy(1:iters,error_GS(1:iters),'b--');
-% semilogy(1:iters,error_SGS(1:iters),'r--');
-% semilogy(1:iters,error_RGS(1:iters),'g--');
-% 
-% % semilogy(1:size(error_GS,2),error_GS,'b--');
-% % semilogy(1:size(error_SGS,2),error_SGS,'r--');
-% % semilogy(1:size(error_RGS,2),error_RGS,'g--');
-% hold off
-% legend('PC','CCD','UCD','RCD')
+figure (1)
+iters=10;
+semilogy(1:iters,error_PC(1:iters),'k--');
+title('比较坐标下降算法和投影收缩算法的性能差异')
+ylabel('梯度的范数') 
+xlabel('迭代次数（对于坐标下降法，每n次迭代算一次迭代）') 
+hold on
+
+semilogy(1:iters,error_GS(1:iters),'b--');
+semilogy(1:iters,error_SGS(1:iters),'r--');
+semilogy(1:iters,error_RGS(1:iters),'g--');
+
+% semilogy(1:size(error_GS,2),error_GS,'b--');
+% semilogy(1:size(error_SGS,2),error_SGS,'r--');
+% semilogy(1:size(error_RGS,2),error_RGS,'g--');
+hold off
+legend('PC','CCD','UCD','RCD')
 
 
 % 矩阵维数 & 1000 & 200 tol=1e-10
