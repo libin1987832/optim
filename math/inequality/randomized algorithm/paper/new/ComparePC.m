@@ -2,13 +2,13 @@ clear
 clc
 debug = 0;
 %% 产生问题矩阵
-m = 1000;
-n = 200;
+m = 10000;
+n = 2000;
 A = 2 * rand(m , n)-1;
 b = 2 * rand(m , 1)-1;
 
 x0 = zeros(n , 1);
-tol=1e-10;
+tol=1e-3;
 fprintf('%s & %d & %d tol=%g\n','矩阵维数', m, n, tol);
 %% 基于IFM的算法找到一个解
 maxit_LSQR = 3;
@@ -25,7 +25,7 @@ fprintf('%s & %g & %g \n','最开始的目标函数和梯度', norm_r0, norm_g0);
 % fprintf('%s & %g & %g \n','IFM解的目标函数值和梯度  ', norm_rexact, norm_gexact);
  x_exact=[];
 %% 参数的设定
-maxit_PC = 10000;
+maxit_PC = 100000;
 z0=zeros(m,1);
 t=clock;
 [x_PC,z_PC,iter_PC,error_PC,index_PC]=PC(x0,z0,A,b,maxit_PC,tol,x_exact,debug);
@@ -37,7 +37,7 @@ g_PC = norm(A'*r);
 fprintf('& %s & %g & %g & %d & %g \\\\\n','PC', r_PC, g_PC,iter_PC,tf_PC);
 
 %% GuassSeidel
-maxit_Rand =6000;
+maxit_Rand =10000;
 t=clock;
  [x_GS,iter_GS,error_GS,xA_GS,index_GS] = GuassSeidelNE(A, b, x0,2.0,maxit_Rand,tol,x_exact,debug);
 tf_GS=etime(clock,t);
@@ -125,26 +125,37 @@ fprintf('& %s & %g & %g & %d & %g \\\\\n', 'RCD', r_GS, g_GS, iter_GS, tf_GS);
 % & CCD & 10.2512 & 0.00022609 & 5200 & 0.021 \\
 % & UCD & 10.2512 & 0.0382373 & 5200 & 0.031 \\
 % & RCD & 10.2512 & 0.0520124 & 5200 & 0.034 \\
-[0.005 0.31 0.505 1.152]
-[0.004 0.008 0.013 0.021]
-[0.004 0.01 0.017 0.031]
-[0.006 0.012 0.02 0.034]
-x=
-figure (1)
-semilogy(1:iter_PC,error_PC(1:iter_PC),'k--');
-title('比较坐标下降算法和投影收缩算法的性能差异')
-ylabel('梯度的范数') 
-xlabel('迭代次数（对于坐标下降法，每n次迭代算一次迭代）') 
-hold on
-iters=10;
-semilogy(1:iters,error_GS(1:iters),'b--');
-semilogy(1:iters,error_SGS(1:iters),'r--');
-semilogy(1:iters,error_RGS(1:iters),'g--');
-
-% semilogy(1:size(error_GS,2),error_GS,'b--');
-% semilogy(1:size(error_SGS,2),error_SGS,'r--');
-% semilogy(1:size(error_RGS,2),error_RGS,'g--');
-hold off
-legend('PC','CCD','UCD','RCD')
-set(gca,'yscale','log')
-set(gca,'xscale','log')
+% y1=[0.005 0.31 0.505 1.152];
+% y2=[0.004 0.008 0.013 0.021];
+% y3=[0.004 0.01 0.017 0.031];
+% y4=[0.006 0.012 0.02 0.034];
+% x1=[69.4224,10.4459,3.68011,0.161184];
+% x2=[73.3405,2.74816,0.0271003,0.00022609];
+% x3=[72.8916,10.3931,1.12242,0.0382373 ];
+% x4=[73.6909,15.2416,0.776219,0.0520124];
+% x1=[0.005 0.31 0.505 1.152];
+% x2=[0.004 0.008 0.013 0.021];
+% x3=[0.004 0.01 0.017 0.031];
+% x4=[0.006 0.012 0.02 0.034];
+% y1=[69.4224,10.4459,3.68011,0.161184];
+% y2=[73.3405,2.74816,0.0271003,0.00022609];
+% y3=[72.8916,10.3931,1.12242,0.0382373 ];
+% y4=[73.6909,15.2416,0.776219,0.0520124];
+% figure (1)
+% semilogy(x1,y1,'k--');
+% title('比较坐标下降算法和投影收缩算法的精度和时间关系')
+% ylabel('梯度的范数') 
+% xlabel('运行的时间') 
+% hold on
+% iters=10;
+% semilogy(x2,y2,'b--');
+% semilogy(x3,y3,'r--');
+% semilogy(x4,y4,'g--');
+% 
+% % semilogy(1:size(error_GS,2),error_GS,'b--');
+% % semilogy(1:size(error_SGS,2),error_SGS,'r--');
+% % semilogy(1:size(error_RGS,2),error_RGS,'g--');
+% hold off
+% legend('PC','CCD','UCD','RCD')
+% set(gca,'yscale','log')
+% set(gca,'xscale','log')

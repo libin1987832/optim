@@ -1,5 +1,5 @@
 % pina hybrid algorithm
-function [xk,rk,countFM,countNW,beginNW,tf,vk,rkArr]=han(x0,A,b,maxIter)
+function [xk,rk,countFM,error_k,beginNW,tf,vk,rkArr]=han(x0,A,b,maxIter,exactx,debug)
 t=clock;
 tol=1e-15;
 %compute hybrid uIter
@@ -9,8 +9,8 @@ rkArr=zeros(2*maxIter);
 r0=b-A*x0;
 r0(r0<0)=0;
 %condition for terminate
-Ar=norm(A'*r0);
-rn=norm(r0);
+norm_Ar=norm(A'*r0);
+norm_r=norm(r0);
 am=max(max(A));
 ee=1e-15;% computer floating point arithmetic
 delt=am*m*n*10*ee;
@@ -18,20 +18,27 @@ delt=am*m*n*10*ee;
 countFM=0;
 countNW=0;
 beginNW=0;
-
+if isempty(exactx)
+    error_k = [norm_Ar];
+    iter_k =[0];
+else
+    error_k = [norm(x-exactx)];
+    iter_k =[x];
+end
 % AII=AI'*AI;
 % bII=AI'*(r(I));
 % sparse for svds densy for svd
 % [U,S,V]=svds(AII);
 
-if Ar<delt*rn || rn<delt
+if norm_Ar<delt*norm_r || norm_r<delt
     xk=x0;
     rk=r0;
     fk=0.5*(r0'*r0);
     disp('input x is satisfied all constrain!(Ar<delt*rn|| rn<delt)') %ceases execution
 end
 %||A'(r)+||<=delt||(r)+|| ||(r)+||<=de
-while Ar>delt*rn && rn>delt
+
+while 1
     countFM=countFM+1;
     I=find(r0>=tol);
     %提取子矩阵判断是否正定
@@ -49,8 +56,23 @@ while Ar>delt*rn && rn>delt
     r0=rk;
     x0=xk;
     Ar=norm(A'*rk);
-    rn=norm(rk);
-    rkArr(countFM)=rn;
+    norm_rn=norm(rk);
+    rkArr(countFM)=norm_rn;
+     if abs(norm_rn-norm_r)<tol || norm_rn < 1e-6
+
+            break;
+     end
+     norm_r=norm_rn;
+     if debug
+        if ~isempty(exactx)
+            e = norm(x-exactx);
+            iter_k =[iter_k x];
+        else
+            e = Ar;
+            iter_k =[iter_k i];
+        end
+        error_k = [error_k,e];
+    end
     if maxIter < countFM
         break;
     end
