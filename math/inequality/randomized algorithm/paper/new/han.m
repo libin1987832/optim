@@ -1,7 +1,7 @@
 % pina hybrid algorithm
-function [xk,rk,countFM,error_k,beginNW,tf,vk,rkArr]=han(x0,A,b,maxIter,exactx,debug)
+function [xk,rk,countFM,error_k,beginNW,tf,vk,rkArr]=han(x0,A,b,maxIter,tol,exactx,debug)
 t=clock;
-tol=1e-15;
+
 %compute hybrid uIter
 [m,n]=size(A);
 rkArr=zeros(2*maxIter);
@@ -58,7 +58,7 @@ while 1
     Ar=norm(A'*rk);
     norm_rn=norm(rk);
     rkArr(countFM)=norm_rn;
-     if abs(norm_rn-norm_r)<tol || norm_rn < 1e-6
+     if Ar<tol || norm_rn < 1e-6
 
             break;
      end
