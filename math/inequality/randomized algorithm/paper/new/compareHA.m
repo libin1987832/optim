@@ -2,8 +2,8 @@ clear
 clc
 debug = 0;
 %% 产生问题矩阵
-m = 2000;
-n = 200;
+m = 4000;
+n = 400;
 A = 2 * rand(m , n)-1;
 b = 2 * rand(m , 1)-1;
 
@@ -27,17 +27,24 @@ fprintf('%s & %g & %g \n','最开始的目标函数和梯度', norm_r0, norm_g0);
 %% 参数的设定
 maxit_Han = 50;
 z0=zeros(m,1);
+nf=3;
+maxIter = 100;
+steplengthOrk=0;
+for i=1:5
+       str = ['D','U','C','R','P'];
+               type = str(i);
+tol=1e-15;
 t=clock;
-[x_Han,r_Han,countFM_Han,error_Han,beginNW_Han,tf_Han,vk_Han,rkArr_Han]=Hybrid(x0,A,b,maxit_Han,1e-11,x_exact,debug);
-tf_PC=etime(clock,t);
-r = b - A * x_Han;
+[x_HA,flag,iter_HA,error_k,indexsm] = hybridA(A,b,x0,maxIter,nf,[type,'HA'],tol,x_exact,debug);
+tf_HA=etime(clock,t);
+r = b - A * x_HA;
 r(r<0) = 0;
-r_PC = norm(r);
-g_PC = norm(A'*r);
-fprintf('& %s & %g & %g & %d & %g \\\\\n','Han', r_PC, g_PC,countFM_Han,tf_PC);
-
+r_HA = norm(r);
+g_HA = norm(A'*r);
+fprintf('& %s & %g & %g & (%d,%d) & %g \\\\\n',[type,'HA'], r_HA, g_HA,iter_HA,indexsm,tf_HA);
+end
 %% GuassSeidel
-maxit_Rand =5000;
+maxit_Rand =10000;
 t=clock;
  [x_GS,iter_GS,error_GS,xA_GS,index_GS] = GuassSeidelNE(A, b, x0,2.0,maxit_Rand*2,tol,x_exact,debug);
 tf_GS=etime(clock,t);
