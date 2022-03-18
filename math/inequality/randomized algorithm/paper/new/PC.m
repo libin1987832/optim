@@ -17,8 +17,10 @@ else
 end
 index_k=[0];
 for i = 1:maxit
-    e1=-A'*(r+z1);
     z=-r;
+    e1=A'*(z-z1);
+  %  e1=A'*(A*x1-z1-b);
+  %  z=A*x1-b;
     z(z<0)=0;
     e2=z1-z;
     sum=e1'*e1+e2'*e2;
@@ -26,12 +28,12 @@ for i = 1:maxit
     p=(sum)/(sum+ae'*ae);
     xk=x1-p*e1;
     zk=z1-p*e2;
-    Ax1=A*xk;
-    r=b-Ax1;
+    x1=xk;
+    r=b-A*x1;
+    z1=zk;
     rp=r;
     rp(rp<0)=0;
     norm_rn=norm(rp);
-    z1=zk;
     iter=iter+1;
     
     if abs(norm_rn-norm_r)<tol || norm_rn < 1e-6
@@ -44,7 +46,7 @@ for i = 1:maxit
             e = norm(x-exactx);
             iter_k =[iter_k x];
         else
-            Ar = A'*r;
+            Ar = A'*rp;
             e = norm(Ar);
             iter_k =[iter_k i];
         end
