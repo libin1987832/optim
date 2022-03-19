@@ -2,17 +2,17 @@ clear
 clc
 debug = 1;
 %% 产生问题矩阵
-m = 8000;
-n = 800;
+m = 10000;
+n = 1000;
 A = 2 * rand(m , n)-1;
 b = 2 * rand(m , 1)-1;
 
 x0 = zeros(n , 1);
 tol=1e-10-1;
-maxit_Rand =500000;
-maxit_PC = 50;
-maxit_Han = 50;
- maxit_IFM =1000;
+maxit_Rand =0;
+maxit_PC = 100000;
+maxit_Han = 0;
+ maxit_IFM =0;
 fprintf('%s & %d & %d tol=%g\n','矩阵维数', m, n, tol);
 %% 基于IFM的算法找到一个解
 maxit_LSQR = 3;
@@ -44,13 +44,13 @@ fprintf('& %s & %g & %g & %d & %g \\\\\n','PC', r_PC, g_PC,iter_PC,tf_PC);
 
 z0=zeros(m,1);
 t=clock;
-[x_Han,r_Han,countFM_Han,error_Han,beginNW_Han,tf_Han,vk_Han,rkArr_Han]=han(x0,A,b,maxit_Han,1e-11,x_exact,debug);
+%[x_Han,r_Han,countFM_Han,error_Han,beginNW_Han,tf_Han,vk_Han,rkArr_Han]=han(x0,A,b,maxit_Han,1e-11,x_exact,debug);
 tf_PC=etime(clock,t);
-r = b - A * x_Han;
-r(r<0) = 0;
-r_PC = norm(r);
-g_PC = norm(A'*r);
-fprintf('& %s & %g & %g & %d & %g \\\\\n','Han', r_PC, g_PC,countFM_Han,tf_PC);
+% r = b - A * x_Han;
+% r(r<0) = 0;
+% r_PC = norm(r);
+% g_PC = norm(A'*r);
+% fprintf('& %s & %g & %g & %d & %g \\\\\n','Han', r_PC, g_PC,countFM_Han,tf_PC);
 
 %% 参数的设定
 
@@ -182,3 +182,18 @@ fprintf('& %s & %g & %g & %d & %g \\\\\n', 'UCD', r_GS, g_GS, iter_GS, tf_GS);
 % & Han & 28.0009 & 5.77107e-13 & 4 & 24.633 \\
 % & IFM & 28.0009 & 3.95972e-13 & 1000 & 17.885 \\
 % & CCD & 28.0009 & 7.71999e-11 & 400000 & 13.603 \\
+% 矩阵维数 & 8000 & 800 tol=-1
+% 最开始的目标函数和梯度 & 36.2718 & 593.987 
+% & PC & 34.5236 & 403.327 & 50 & 0.813 \\
+% & Han & 32.4907 & 8.30937e-13 & 4 & 56.902 \\
+% & IFM & 32.4907 & 6.10234e-13 & 1000 & 33.194 \\
+% & CCD & 32.4907 & 9.99068e-11 & 500000 & 20.057 \\
+% & UCD & 32.4907 & 7.83818e-11 & 500000 & 20.395 \\
+
+% 矩阵维数 & 10000 & 1000 tol=-1
+% 最开始的目标函数和梯度 & 40.6723 & 714.204 
+% & PC & 38.8147 & 497.512 & 50 & 1.21 \\
+% & Han & 36.5978 & 1.27767e-12 & 4 & 111.541 \\
+% & IFM & 36.5978 & 8.98498e-13 & 1000 & 50.443 \\
+% & CCD & 36.5978 & 1.20519e-10 & 500000 & 25.06 \\
+% & UCD & 36.5978 & 9.47624e-11 & 500000 & 25.36 \\
