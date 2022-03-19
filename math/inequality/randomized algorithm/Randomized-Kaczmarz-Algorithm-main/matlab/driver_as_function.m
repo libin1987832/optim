@@ -1,7 +1,7 @@
 function [classical_iter_or_error,simple_iter_or_error,rand_iter_or_error] = driver_as_function(iter,tol)
 %% set the dimention
-r = 50;
-m = 700;
+r = 5;
+m = 7;
 n = 2*r+1;
 
 %% generate nodes

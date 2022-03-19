@@ -6,8 +6,8 @@ debug = 1;
 % m = 500;
 % n = 200;
 
-r = 5;
-m = 7;
+r = 50;
+m = 700;
 n = 2*r+1;
 
 %% generate nodes
@@ -45,11 +45,20 @@ end
 b = 2 * rand(m , 1)-1;
 %clear
 % load('dd')
-A=abs(A);
+%A=real(A);
 debug = 1;
-% A=[A;-A];
+ A=[A;-A];
+ realx = randn(n,1);
+imgx = randn(n,1);
+x=zeros(n,1);
+for l = 1:n
+   x(l) = realx(l)+1i*imgx(l);
+end  
+b=A*x;
 % b=[b;-b];
-% m=2*m;
+ m=2*m;
+ A=2*rand(m,n)-1;
+ b=2*rand(m,1)-1;
 % b=A*ones(n,1);
 x0 = zeros(n , 1);
 % save('test2.mat','A','b','x0')
@@ -58,7 +67,7 @@ x0 = zeros(n , 1);
 % A = -[1,-1;-1,-1;0,1];b=-[0;-1;0];x0=[-1;0];
 % 不一致情况下的正解
 % x_exact=[1/2;1/3];
-tol=1e-3;
+tol=1e-5;
 
 fprintf('%s & %d & %d \n','矩阵维数', m, n);
 %% 基于IFM的算法找到一个解
@@ -81,7 +90,7 @@ x_exact=[];
 %% GuassSeidel
 maxit_Rand =2000000;
 t=clock;
- [x_GS,iter_GS,error_GS,xA_GS,index_GS] = GuassSeidelNE(A, b, x0,1.0,maxit_Rand,tol,x_exact,debug);
+ [x_GS,iter_GS,error_GS,xA_GS,index_GS] = GuassSeidelNE(A, b, x0,2.0,maxit_Rand,tol,x_exact,debug);
 tf_GS=etime(clock,t);
 r = b - A * x_GS;
 r(r<0) = 0;
@@ -133,3 +142,10 @@ title('三种指标选择模式对算法的影响')
 % & randGuassSeidel & 4.64761 & 0.883935 & 25218 & 2.868 \\
 % & IFM & 4.02986 & 0.623185 & 29 & 5.687 \\
 % & FM & 9.11728 & 4.12671 & 33 & 4.011 \\
+
+% 矩阵维数 & 700 & 101 
+% 最开始的目标函数和梯度 & 10.7863 & 6.7381 
+% IFM解的目标函数值和梯度   & 2.99591 & 0.633142 
+% & GuassSeidel & 0.209602 & 0.00789479 & 28886 & 0.131 \\
+% & simpleGuassSeidel & 0.368795 & 0.0146253 & 16766 & 0.156 \\
+% & randGuassSeidel & 0.258481 & 0.00952142 & 19897 & 0.164 \\
