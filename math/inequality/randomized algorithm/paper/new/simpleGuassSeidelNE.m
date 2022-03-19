@@ -58,10 +58,14 @@ for i = 1:maxit
     x(pickedj) = x(pickedj) + inc;
     rs = rs - inc*col;
     r = rs;
-    r=(r+abs(r))/2;
+    %r=(r+abs(r))/2;
+    r(r<0)=0;
     iter = iter+1;
     if mod(iter,iter_test_stop)==0
         norm_rn = norm(r);
+%         if norm_rn > norm_r
+%             fprintf('%d',pickedj)
+%         end
         if abs(norm_rn-norm_r)<tol || norm_rn < 1e-6
             break;
         end

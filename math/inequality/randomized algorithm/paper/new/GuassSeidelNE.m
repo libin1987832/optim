@@ -60,7 +60,7 @@ for i = 1:maxit
     iter = iter+1;
     if mod(iter,iter_test_stop)==0
         norm_rn = norm(r);
-        if abs(norm_rn-norm_r)/norm_r<tol || norm_rn < 1e-6
+        if abs(norm_rn-norm_r)<tol || norm_rn < 1e-6
 %                      abs(norm_rn-norm_r)
 %                      abs(norm_rn-norm_r)/norm_r
              break;
