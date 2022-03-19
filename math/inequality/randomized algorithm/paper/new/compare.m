@@ -43,7 +43,7 @@ g_IFM = norm(A'*r);
 fprintf('& %s & %g & %g & %d & %g \\\\\n','IFM', r_IFM, g_IFM,iter_IFM,tf_IFM);
 
 %% GuassSeidel
-maxit_Rand =5000000;
+maxit_Rand =8000000;
 t=clock;
  [x_GS,iter_GS,error_GS,xA_GS,index_GS] = GuassSeidelNE(A, b, x0,2.0,maxit_Rand,tol,x_exact,debug);
 tf_GS=etime(clock,t);
