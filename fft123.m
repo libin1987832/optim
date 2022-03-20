@@ -1,0 +1,10 @@
+m = [1,2];
+n = [5,6];
+a = conv2(m, n, 'full');
+a = conv2(m, n)
+m(1,3) = 0; %æÿ’Û¿©≥‰°£
+n(1,3) = 0;
+fft_m = fft2(m);
+fft_n = fft2(n);
+b = fft_m .* fft_n;
+ifft_b = ifft2(b)
