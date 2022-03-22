@@ -29,13 +29,22 @@ b=[-x2-0.15;x2-0.15;zeros(64,1);-ones(64,1)*12];
 x0=zeros(64,1);
 maxIter = 30;
 [xkh,rkh,countFMh,countNWh,beginNWh,tfh,vkh,rkArrh]=han(x0,A,b,maxIter);
+[xpp,arr]=project(L,x2,x0,100,0.15,0,12,0);
 subplot(413)
 plot(t,xkh','b');
- title('重构信号')
+title('重构信号')
 subplot(414)
-plot(t,x,'g',t,x2,'r',t,xkh,'b')
+% plot(t,x,'g',t,x2,'r',t,xkh,'b')
+ plot(t,xpp,'b')
 legend('原始信号','接收信号','重构信号')
- title('三种信号对比')
+title('三种信号对比')
+
+r=b-A*xkh;
+r(r<0)=0;
+r'*r
+r=b-A*xpp;
+r(r<0)=0;
+r'*r
  
  %%%%%2
 %  x=zeros(1,64);
