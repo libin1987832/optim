@@ -34,8 +34,8 @@ subplot(413)
 plot(t,xkh','b');
 title('重构信号')
 subplot(414)
-% plot(t,x,'g',t,x2,'r',t,xkh,'b')
- plot(t,xpp,'b')
+plot(t,x,'g',t,x2,'r',t,xkh,'b')
+%  plot(t,xpp,'b')
 legend('原始信号','接收信号','重构信号')
 title('三种信号对比')
 
