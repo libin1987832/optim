@@ -38,14 +38,30 @@ plot(t,x,'g',t,x2,'r',t,xkh,'b')
 %  plot(t,xpp,'b')
 legend('原始信号','接收信号','重构信号')
 title('三种信号对比')
+SNRdB = @(s,n)( 10*log10(sum(s(:).^2)/sum((n(:)-s(:)).^2)) ); 
+% SNRdB = @(s,n)( 10*log10((sum((n(:).^2)-sum((s(:).^2))))/sum(s(:).^2))); 
+SNRdB(x,x2)
+SNRdB(x,xkh)
+SNRdB(x,xpp)
+SNR_singlech(x,x)
 
-r=b-A*xkh;
-r(r<0)=0;
-r'*r
-r=b-A*xpp;
-r(r<0)=0;
-r'*r
- 
+
+% function y = add_gaussian_noise_snr_db(signal, snr)
+% x = signal(:)';
+% power_of_signal = (x*x')/length(x);
+% power_of_noise = power_of_signal/(10^(snr/10)); % the std of the noise is the power of the noise
+% noise0 = randn(size(x));
+% noise1 = (noise0 - mean(noise0))/std(noise0 - mean(noise0));
+% y = sqrt(power_of_noise)*noise1+ x;
+% end
+
+% r=b-A*xkh;
+% r(r<0)=0;
+% r'*r
+% r=b-A*xpp;
+% r(r<0)=0;
+% r'*r
+%  
  %%%%%2
 %  x=zeros(1,64);
 %  x=0:2*pi/64:2*pi;   %开始：步长：终止数值
