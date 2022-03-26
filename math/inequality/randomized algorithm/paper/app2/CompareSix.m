@@ -43,7 +43,7 @@ b=[-x2-delt;x2-delt;zeros(N,1);-ones(N,1)*xu];
 x0=zeros(N,1);
 
 maxIter=30;
-iter = 100;
+iter = 50;
 nf = 10;
 xst=zeros(1,4);
 t=clock;
