@@ -5,7 +5,7 @@
 % x(1,280) = 7;
 % x(1,380) = 2.1;
 % x(1,450:550) = ones(1,11)*3.8;
-N=640;
+N=6400;
 x=zeros(1,N);
 x(1,60:170) = 5:(6-5)/110:6;
 x(1,230:300) = 9;
@@ -16,7 +16,7 @@ N = length(x);%求取抽样点数
 t = (0:N-1);%显示实际时间
 
 % gausFilter = fspecial('gaussian',[1 3],3);
-m=10;
+m=20;
  gausFilter = fspecial('gaussian',[1 m],3);
  L=zeros(N,N);
  for i = 1:m
@@ -43,7 +43,7 @@ b=[-x2-delt;x2-delt;zeros(N,1);-ones(N,1)*xu];
 x0=zeros(N,1);
 
 maxIter=30;
-iter = 900;
+iter = 100;
 nf = 10;
 xst=zeros(1,4);
 t=clock;
