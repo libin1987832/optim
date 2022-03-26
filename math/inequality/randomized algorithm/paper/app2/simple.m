@@ -6,13 +6,17 @@ function [xkA,rpk] = simple(A,b,xk,n,Q,R,rpk,nf,type)
 xkA = zeros(n,nf);
 
         for i = 1 : nf
-            
+                         y = rpk;
+            y(y<0) = 0;
+            uk=krylovk(A,y,3);
+
+
 %             r = rpk;
 %             r(r<0) = 0;
 %             Qr = Q' * r;
 %             % compute min increase
 %             uk = R \ Qr;
-%             xk = xk+uk;
-%             rpk = b - A * xk;
-%             xkA(:,i) = xk;
+            xk = xk+uk;
+            rpk = b - A * xk;
+            xkA(:,i) = xk;
         end        

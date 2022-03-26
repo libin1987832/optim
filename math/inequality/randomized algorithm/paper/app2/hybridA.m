@@ -29,14 +29,15 @@ arvec(1) = normAr;
 indexsm = 0;
 % flag 0-4 return lsqr flag
 flag = 5;
-% [Q,R]=qr(A);
-% Qn=Q(:,1:n);
+[Q,R]=qr(A);
+Qn=Q(:,1:n);
 
 % [xfA,rpk] = fmnf(A,b,x0,n,Q,R,rpk,nf);
 %while normAr > tol * normA * normr && normr > tol
-while normAr > tol  && normr > tol
+%while normAr > tol  && normr > tol
+while 1
     iter = iter + 1;
-  %  [xfA,rpk] = simple(A,b,x0,n,Q,R,rpk,nf,type);
+    [xfA,rpk] = simple(A,b,x0,n,Q,R,rpk,nf,type);
     isSub = strategies(A,b,Qn,type,iter,nf,rpk,xfA);
     if isSub
         xf = xfA(:, end);
