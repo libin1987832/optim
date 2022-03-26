@@ -6,7 +6,7 @@
 % x(1,380) = 2.1;
 % x(1,450:550) = ones(1,11)*3.8;
 N=64000;
-x=zeros(1,N);
+x=spalloc(1,N,N);
 x(1,600:1700) = 5:(6-5)/1100:6;
 x(1,2300:3000) = 9;
 x(1,3800:4200) = 7;
@@ -18,7 +18,7 @@ t = (0:N-1);%显示实际时间
 % gausFilter = fspecial('gaussian',[1 3],3);
 m=50;
  gausFilter = fspecial('gaussian',[1 m],3);
- L=zeros(N,N);
+ L=spalloc(N,N,);
  for i = 1:m
    v1=  ones(1,N-i+1) * gausFilter(i);
    L1 = diag(v1,i-1);
