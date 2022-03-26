@@ -8,7 +8,7 @@ isSub = false;
 eIter = 2;
 con1 = 0.95;
 con2 = 0.2;
-diff = 100*eps;
+diff = 1000000*eps;
 tol = 1e-13;
 Daxiter = floor(max(33,(m+n)/4)/nf);
 switch upper(type)

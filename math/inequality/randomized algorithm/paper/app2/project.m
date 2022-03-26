@@ -18,19 +18,12 @@ for i=1:iter
 x=max(l,x);
 x=min(u,x);
 if debug
-    suminc = 0;
-     for j=1:m
-        Ajx=A(j,:)*x;
-        inc = 0;
-        if Ajx > b(j)+d
-            inc=-(b(j)+d-Ajx);
-        end
-        if Ajx < b(j)-d
-            inc=(b(j)-d-Ajx);
-        end
-        suminc=suminc+inc*inc;
-    end
-    arr(1,i)=suminc;
+    Ax=A*x;
+    r1=b-Ax-d;
+    r1(r1<0)=0;
+    r2=-b-d+Ax;
+    r2(r2<0)=0;
+    arr(1,i)=norm([r1; r2]);
 end
 end
 
