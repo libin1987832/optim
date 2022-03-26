@@ -5,18 +5,18 @@
 % x(1,280) = 7;
 % x(1,380) = 2.1;
 % x(1,450:550) = ones(1,11)*3.8;
-N=6400;
+N=64000;
 x=zeros(1,N);
-x(1,60:170) = 5:(6-5)/110:6;
-x(1,230:300) = 9;
-x(1,380:420) = 7;
-x(1,430) = 2.1;
-x(1,450:550) = ones(1,101)*3.8;
+x(1,600:1700) = 5:(6-5)/1100:6;
+x(1,2300:3000) = 9;
+x(1,3800:4200) = 7;
+x(1,4300) = 2.1;
+x(1,4500:5500) = ones(1,1001)*3.8;
 N = length(x);%求取抽样点数
 t = (0:N-1);%显示实际时间
 
 % gausFilter = fspecial('gaussian',[1 3],3);
-m=20;
+m=50;
  gausFilter = fspecial('gaussian',[1 m],3);
  L=zeros(N,N);
  for i = 1:m
@@ -42,33 +42,34 @@ A=[-L;L;eye(N);-eye(N)];
 b=[-x2-delt;x2-delt;zeros(N,1);-ones(N,1)*xu];
 x0=zeros(N,1);
 
-maxIter=10000000;
+maxIter=100000;
 iter = 20;
 nf = 10;
+tol = 1e-5;
 xst=zeros(1,4);
 t=clock;
 [x1,arr]=project(L,x2,x0,iter,delt,0,xu,0);
 xst(1)=etime(clock,t);
 t=clock;
-[x2,iter,error_k,iter_k,index_k] = GuassSeidelNE(A, b, x0,2 ,maxIter,10-5,[],0);
+[x2,iter,error_k,iter_k,index_k] = GuassSeidelNE(A, b, x0,2 ,maxIter,tol,[],0);
 xst(2)=etime(clock,t);
 t=clock;
-[x3,iter,error_k,iter_k,index_k] = simpleGuassSeidelNE(A, b, x0,2 ,maxIter,10-5,[],0);
+[x3,iter,error_k,iter_k,index_k] = simpleGuassSeidelNE(A, b, x0,2 ,maxIter,tol,[],0);
 xst(3)=etime(clock,t);
 t=clock;
-[x4,iter,error_k,iter_k,index_k] = randGuassSeidelNE(A, b, x0,2 ,maxIter,10-5,[],0);
+[x4,iter,error_k,iter_k,index_k] = randGuassSeidelNE(A, b, x0,2 ,maxIter,tol,[],0);
 xst(4)=etime(clock,t);
 
 xs=[x1 x2 x3 x4];
 
 SNRdB = @(s,n)( 10*log10(sum(s(:).^2)/sum((n(:)-s(:)).^2)) ); 
-str=['P','R','P','C'];
+str=['P','C','U','R'];
 for i = 1:4
 r = b - A * xs(:,i);
 r(r<0) = 0;
 r_GS = norm(r);
 g_GS = norm(A'*r);
-fprintf('& %sHA &%g &%g & %g & %g \\\\\n', str(i), SNRdB(x,xs(:,i)),r_GS, g_GS, xst(i));
+fprintf('& %sCD &%g &%g & %g & %g \\\\\n', str(i), SNRdB(x,xs(:,i)),r_GS, g_GS, xst(i));
 end
 
 
