@@ -4,17 +4,7 @@
 % rpk is b-Ax
 function [xkA,rpk] = simple(A,b,xk,n,Q,R,rpk,nf,type)
 xkA = zeros(n,nf);
-switch upper(type)
-    case 'GHA'
-        for i = 1 : nf
-            r = rpk;
-            r(r<0) = 0;
-            d = A' * r;
-            xk = xk + R * d;
-            rpk = b - A * xk;
-            xkA(:,i) = xk;
-        end                
-    otherwise 
+
         for i = 1 : nf
             r = rpk;
             r(r<0) = 0;
@@ -25,4 +15,3 @@ switch upper(type)
             rpk = b - A * xk;
             xkA(:,i) = xk;
         end        
-end

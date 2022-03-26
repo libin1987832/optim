@@ -8,31 +8,31 @@ AA = (rpk>tol);
 AI = A(AA,:);
 bI = rpk(AA);
 
-[u,flag,relres,iter,resvec,lsvec,out] = lsqrm(AI,bI,lsqrTol,maxIter,[],[],zeros(n,1),A,b,x0,AA);
-if ~out
-    xs = x0 + u;
-    len = iter;
-    rpk = b - A * xs;
-else
-  %  u = AI\bI;
-    u = lsqminnorm(AI,bI);
+% [u,flag,relres,iter,resvec,lsvec,out] = lsqrm(AI,bI,lsqrTol,maxIter,[],[],zeros(n,1),A,b,x0,AA);
+% if ~out
+%     xs = x0 + u;
+%     len = iter;
+%     rpk = b - A * xs;
+% else
+    u = AI\bI;
+%    u = lsqminnorm(AI,bI);
     aa = spiecewise(A,b,u,x0);
     xs = x0 + aa * u;
     rpk = b - A * xs;
     x0=xs;
   %  for i=1:6
-        I = find(rpk>=tol);
-        AI = A(I,:);
-        hk = lsqminnorm(AI,rpk(I));
- %       hk = AI \ rpk(I);
-        aa = spiecewise(A,b,hk,x0);
-        xs = x0 + aa * hk;
-        x0 = xs;
-        rpk = b - A * x0;
+%         I = find(rpk>=tol);
+%         AI = A(I,:);
+%         hk = lsqminnorm(AI,rpk(I));
+%  %       hk = AI \ rpk(I);
+%         aa = spiecewise(A,b,hk,x0);
+%         xs = x0 + aa * hk;
+%         x0 = xs;
+%         rpk = b - A * x0;
  %   end
     len = aa;
-    flag = flag + 6;
-end
+    flag = 6;
+
 %rpk = b - A * xs;
 %semilogy(1:iter,resvec(1:iter),'b.');
 % if flag == 0 && ~out

@@ -12,16 +12,6 @@ diff = 100*eps;
 tol = 1e-13;
 Daxiter = floor(max(33,(m+n)/4)/nf);
 switch upper(type)
-    case 'GHA'
-        rk=rkp;
-        AA=find(rk>1e-15);
-        qrkn=A(AA,:)'*rk(AA);
-        qrkn=A*qrkn;
-        rkn=rkp-eIter*Qn*qrkn;
-        ssign=sum(~xor(rk>tol, rkn>tol));
-        if ssign==m 
-            isSub = true;
-        end
     case 'DHA'
         if mod(iter,Daxiter) == 0
             isSub = true;

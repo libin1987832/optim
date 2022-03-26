@@ -26,30 +26,31 @@ x0=zeros(64,1);
 
 maxIter=100;
 iter = 1000;
-
+nf = 5;
 xst=zeros(1,4);
 t=clock;
 [x1,arr]=project(L,b,x0,iter,delt,0,xu,0);
 xst(1)=etime(clock,t);
 t=clock;
-[x2,rkh,countFMh,countNWh,beginNWh,tfh,vkh,rkArrh]=hybridA(x0,A,b,maxIter);
+[x2,rkh,countFMh,countNWh,beginNWh,tfh,vkh,rkArrh]=hybridA(A,b,x0,maxIter,nf,'RHA');
 xst(2)=etime(clock,t);
 t=clock;
-[x3,rkh,countFMh,countNWh,beginNWh,tfh,vkh,rkArrh]=hybridA(x0,A,b,maxIter);
+[x3,rkh,countFMh,countNWh,beginNWh,tfh,vkh,rkArrh]=hybridA(A,b,x0,maxIter,nf,'PHA');
 xst(3)=etime(clock,t);
 t=clock;
-[x4,rkh,countFMh,countNWh,beginNWh,tfh,vkh,rkArrh]=hybridA(x0,A,b,maxIter);
+[x4,rkh,countFMh,countNWh,beginNWh,tfh,vkh,rkArrh]=hybridA(A,b,x0,maxIter,nf,'CHA');
 xst(4)=etime(clock,t);
 
 xs=[x1 x2 x3 x4];
 
 SNRdB = @(s,n)( 10*log10(sum(s(:).^2)/sum((n(:)-s(:)).^2)) ); 
+str=["Proj","RHA",'PHA','CHA'];
 for i = 1:4
-r = b - A * x_GS;
+r = b - A * xs(:,i);
 r(r<0) = 0;
 r_GS = norm(r);
 g_GS = norm(A'*r);
-fprintf('& %s & %g & %g & %d & %g \\\\\n', 'CCD', r_GS, g_GS, iter_GS, tf_GS);
+fprintf('& %s & %g & %g & %g \\\\\n', cell2str(str(i)), r_GS, g_GS, xst(i));
 end
 
 
