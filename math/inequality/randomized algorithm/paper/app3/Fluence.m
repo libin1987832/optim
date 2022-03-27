@@ -1,16 +1,18 @@
-function [x]=Fluence(A,B,l,u,k,r,maxIter)
+function [x]=Fluence(A,B,u,l,k,r,maxIter,nnls)
 [m1,n]=size(A);
 [m2,n]=size(B);
 H=[1/sqrt(m2)*B;sqrt(r/m1)*A];
 w=0;
+iter=0;
 while 1
+    iter=iter+1;
 dw=[1/sqrt(m2)*l;sqrt(r/m1)*(u+w)];
 f = -H'*dw;
 HTH=H'*H;
 x0=zeros(n,1);
 lb=zeros(n,1);
-ub=INF*ones(n,1);
-if strcmp(prob.nnls,'quadprog')
+ub=inf*ones(n,1);
+if strcmp(nnls,'quadprog')
     options = optimoptions(@quadprog,'Display','off');
     x = quadprog(HTH,f,[],[],[],[],lb,ub,[],options);
 else
@@ -22,7 +24,7 @@ end
 
 res=A*x - u;
 wPrev = w;
-wStep = wPrev + (r/m_2)*(res - wPrev);
+wStep = wPrev + (r/m2)*(res - wPrev);
 
 idxPos = wStep > 0;
 if sum(idxPos) > k

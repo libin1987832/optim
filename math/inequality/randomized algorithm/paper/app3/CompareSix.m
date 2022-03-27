@@ -1,3 +1,5 @@
+clear
+clc
 m1=600;
 m2=450;
 n=80;
@@ -20,7 +22,7 @@ x0=zeros(n,1);
 maxIter=100;
 iter = 800;
 nf = 20;
-xst=zeros(1,4);
+xst=zeros(1,5);
 t=clock;
 [x1,alpha,beta,flag]=ablp(A1,A2,u,d2,0.5,0.5,0.1,0.1);
 xst(1)=etime(clock,t);
@@ -33,13 +35,15 @@ xst(3)=etime(clock,t);
 t=clock;
 [x4,rkh,countFMh,countNWh,beginNWh,tfh,vkh,rkArrh]=hybridA(H,b,x0,maxIter,nf,'CHA');
 xst(4)=etime(clock,t);
-maxIter=100;
-[x]=Fluence(A1,A2,l,u,dn,10,maxIter);
+maxIter=200;
+t=clock;
+[x5]=Fluence(A1,A2,u,l,dn,10,maxIter,'quadprog');
+xst(5)=etime(clock,t);
 
-xs=[x1 x2 x3 x4];
+xs=[x1 x2 x3 x4 x5];
 [alpha,beta]
-str=['P','R','P','C'];
-for i = 1:4
+str=['P','R','P','C','N'];
+for i = 1:5
 r = -u + A1 * xs(:,i);
 rnum1=sum(r>0);
 r = l - A2 * xs(:,i);
