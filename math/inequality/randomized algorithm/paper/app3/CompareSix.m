@@ -33,6 +33,8 @@ xst(3)=etime(clock,t);
 t=clock;
 [x4,rkh,countFMh,countNWh,beginNWh,tfh,vkh,rkArrh]=hybridA(H,b,x0,maxIter,nf,'CHA');
 xst(4)=etime(clock,t);
+maxIter=100;
+[x]=Fluence(A1,A2,l,u,dn,10,maxIter);
 
 xs=[x1 x2 x3 x4];
 [alpha,beta]
