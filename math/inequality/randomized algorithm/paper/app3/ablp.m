@@ -13,8 +13,8 @@ b=[zeros(m1,1);-l;m1*(1+alpha*beta)];
 lb=zeros(m1+n,1);
 ub=[Inf*ones(n,1);(1+beta)*ones(m1,1)];
 [x,fval,flag] = linprog(c,A,b,[],[],lb,ub);
-x=x(1:n,1);
 if flag==1
+    x=x(1:n,1);
     break;
 end
 r=beta+db;
@@ -27,6 +27,7 @@ else
         alpha=r;
     else
         flag=2;
+        x=zeros(n,1);
         break;
     end
 end

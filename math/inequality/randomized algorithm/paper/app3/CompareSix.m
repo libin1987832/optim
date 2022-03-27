@@ -10,13 +10,14 @@ d1=A1*x;
 d2=A2*x;
 dn=floor(m1*al);
 u=d1;
-u(1:dn,:)=u(1:dn,:)+be*rand(dn,1).*u(1:dn,:);
+u(1:dn,:)=u(1:dn,:)-be*rand(dn,1).*u(1:dn,:);
+
 l=d2;
 H=[-A1;A2;eye(n)];
-b=[-u;d2;zeros(n,1)];
+b=[-u;l;zeros(n,1)];
 x0=zeros(n,1);
 
-maxIter=20;
+maxIter=100;
 iter = 800;
 nf = 20;
 xst=zeros(1,4);
