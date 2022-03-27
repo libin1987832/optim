@@ -1,4 +1,4 @@
-function [x,arr]=ablp(A1,A2,l,u,amax,bmax,da,db,debug)
+function [x,alpha,beta,flag]=ablp(A1,A2,l,u,amax,bmax,da,db)
 [m1,n]=size(A1);
 [m2,n]=size(A2);
 c=zeros(m1+n,1);
@@ -19,8 +19,14 @@ end
 r=beta+db;
 if r<=bmax
    beta=r;
-end
-if r>bmax
+else 
     beta=beta0;
-    
+    r=alpha+da;
+    if r<=amax
+        alpha=r;
+    else
+        flag=2;
+        break;
+    end
+end
 end
