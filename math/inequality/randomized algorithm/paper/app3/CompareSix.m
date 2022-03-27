@@ -4,13 +4,15 @@ n=100;
 a=0.3;
 A1=rand(m1,n);
 A2=rand(m2,n);
-x=rand(x,0);
+x=rand(n,0);
 d1=A1*x;
 d2=A2*x;
 dn=floor(m1*a);
 u=d1;
-u(1:dn,:)=u(1:dn,:)+rand(1:dn,:);
+u(1:dn,:)=u(1:dn,:)+rand(dn,1);
 
+H=[-A1;A2;eye(n)];
+b=[-d1;u;zeros(n,1)];
 x0=zeros(n,1);
 
 maxIter=20;
@@ -21,7 +23,7 @@ t=clock;
 [x,alpha,beta,flag]=ablp(A1,A2,u,d2,0.5,0.5,0.1,0.1);
 xst(1)=etime(clock,t);
 t=clock;
-[x2,rkh,countFMh,countNWh,beginNWh,tfh,vkh,rkArrh]=hybridA(A,b,x0,maxIter,nf,'RHA');
+[x2,rkh,countFMh,countNWh,beginNWh,tfh,vkh,rkArrh]=hybridA(H,b,x0,maxIter,nf,'RHA');
 xst(2)=etime(clock,t);
 t=clock;
 [x3,rkh,countFMh,countNWh,beginNWh,tfh,vkh,rkArrh]=hybridA(A,b,x0,maxIter,nf,'PHA');
@@ -32,14 +34,15 @@ xst(4)=etime(clock,t);
 
 xs=[x1 x2 x3 x4];
 
-SNRdB = @(s,n)( 10*log10(sum(s(:).^2)/sum((n(:)-s(:)).^2)) ); 
 str=['P','R','P','C'];
 for i = 1:4
-r = b - A * xs(:,i);
-r(r<0) = 0;
+r = -l + A1 * xs(:,i);
+rnum1=sum(r>0);
+r = u - A2 * xs(:,i);
+rnum2=sum(r);
+r=b-H*xs(:,i);
 r_GS = norm(r);
-g_GS = norm(A'*r);
-fprintf('& %sHA &%g &%g & %g & %g \\\\\n', str(i), SNRdB(x,xs(:,i)),r_GS, g_GS, xst(i));
+fprintf('& %sHA &%d &%d & %g & %g \\\\\n', str(i), rnum1,rnum2,r_GS, xst(i));
 end
 
 
