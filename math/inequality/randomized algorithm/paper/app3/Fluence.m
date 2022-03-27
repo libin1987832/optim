@@ -13,25 +13,35 @@ f = -A'*d;
 
         
         
-        function wDiff = updateW(prob,ii,jj)
+        function wDiff = updateW(w,k,step,weight)
             % UPDATEW Update proxy variable.
             
             % Grab variables
-            s = strcmp(prob.structs{ii}.terms{jj}.type,'ldvc');
-            k = prob.structs{ii}.terms{jj}.k;
+            
+           
             step = prob.structs{ii}.terms{jj}.step;
-            weight = prob.structs{ii}.terms{jj}.weight;
             nVoxels = prob.structs{ii}.nVoxels;
             coeff = step*weight/nVoxels;
             
             % Calculate gradient step
-            dose = prob.structs{ii}.A*prob.x;
-            res = (-1)^s*(dose - prob.structs{ii}.terms{jj}.d);
-            wPrev = prob.structs{ii}.terms{jj}.w;
+%             dose = prob.structs{ii}.A*prob.x;
+            %res = (-1)^s*(H*x - d);
+            res=H*x - d;
+            wPrev = w;
             wStep = wPrev + coeff*(res - wPrev);
             
             % Project onto set ||(w)_+||_0 <= k
-            wProj = FluenceMapOpt.projW(wStep,k);
+            wProj = projW(wStep,k);
             wDiff = norm(wProj - wPrev)/step;
-            prob.structs{ii}.terms{jj}.w = wProj;
+            w = wProj;
+        end
+         function w = projW(w,k)
+            % PROJW Project w onto the set satisfying ||max(0,w)||_0 <= k.
+            idxPos = w > 0;
+            if sum(idxPos) > k
+                wPos = w(idxPos);
+                [~,idxSort] = sort(wPos,'descend');
+                wPos(idxSort(k+1:end)) = 0;
+                w(idxPos) = wPos;
+            end
         end
