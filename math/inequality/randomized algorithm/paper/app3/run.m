@@ -38,9 +38,9 @@ prob.calcBeams();
 
 % Plot dose-volume histogram
 prob.plotDVH();
-
+prob.plotDosePaper();
 % Plot beamlet intensities
-prob.plotBeams();
+%prob.plotBeams();
 
 % Plot dose
-prob.plotDose();
+%prob.plotDose();

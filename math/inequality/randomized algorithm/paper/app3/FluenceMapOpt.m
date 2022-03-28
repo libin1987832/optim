@@ -68,7 +68,7 @@ classdef FluenceMapOpt < handle
     properties
         x0              % Initial beamlet intensities
         x               % Final beamlet intensities
-        tol = 1e-3;     % Stopping tolerance
+        tol = 1e-2;     % Stopping tolerance
         maxIter = 30; % Maximum number of iterations
     end
     
@@ -656,7 +656,7 @@ classdef FluenceMapOpt < handle
             idx2 = 23:152;
             
             % Get CT slice
-            ct = dicomread('Prostate_Dicom/CT.2.16.840.1.113662.2.12.0.3173.1271873797.276');
+            ct = dicomread('../../../../../../FluenceMapOpt/Prostate_Dicom/CT.2.16.840.1.113662.2.12.0.3173.1271873797.276');
             ct = double(imresize(ct,[184,184]));
             ct50 = ct(idx1,idx2);
             ctShift = ct50 - min(ct50(:));
@@ -679,6 +679,28 @@ classdef FluenceMapOpt < handle
             for i = 1:length(prob.mask)-1
                contour(prob.mask{i}(idx1,idx2,50),1,'k','LineWidth',2); 
             end
+          
+            
+            xRemain = prob.x;
+            for ii = 1:1
+                % Get beamlet intensities
+                [idx,nX,nY] = FluenceMapOpt.getBeamCoords(prob.angles(ii));
+                xCurrent = xRemain(1:length(idx));
+                xRemain = xRemain(length(idx)+1:end);
+                beam = zeros(nX,nY);
+                beam(idx) = xCurrent;
+                beam = beam';
+%                 
+%                 % Plot beamlet intensities
+%                 subplot(1,prob.nAngles,ii)
+                imagesc(0,0,beam), colormap  spring
+                beamAngle = sprintf('%d^\\circ',prob.angles(ii));
+               % title(beamAngle,'Interpreter','tex')
+              %  caxis([0 max(prob.x)])
+               % axis square
+            end
+%             
+%             
             
             % Annotations
             caxis([min(Dose50(:)) max(Dose50(:))]);
