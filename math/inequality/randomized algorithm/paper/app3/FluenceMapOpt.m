@@ -69,7 +69,7 @@ classdef FluenceMapOpt < handle
         x0              % Initial beamlet intensities
         x               % Final beamlet intensities
         tol = 1e-3;     % Stopping tolerance
-        maxIter = 1000; % Maximum number of iterations
+        maxIter = 30; % Maximum number of iterations
     end
     
     methods
@@ -215,7 +215,14 @@ classdef FluenceMapOpt < handle
             HHY=[-prob.structs{2}.A;prob.structs{1}.A;eye(prob.nBeamlets)];
             b=[-prob.structs{2}.terms{1}.d;prob.structs{1}.terms{1}.d;zeros(prob.nBeamlets,1)];
             nf=10;
-            [x2,rkh,countFMh,countNWh,beginNWh,tfh,vkh,rkArrh]=hybridA(HHY,b,prob.x0,prob.nIter,nf,'RHA');
+            nHyIter=20;
+            [x2,xvec,rkh,countFMh,countNWh,beginNWh,tfh,vkh,rkArrh]=hybridA(HHY,b,prob.x0,nHyIter,nf,'RHA');
+            [~,nsum]=size(xvec);
+            for i=1:nsum
+                 prob.x=xvec(:,i);
+                 prob.updateW(2,1);
+                 prob.calcObj(i,print);
+            end
             prob.x = x2;
             prob.time = toc;
         end
@@ -414,9 +421,10 @@ classdef FluenceMapOpt < handle
             end
                 
             % Annotations
-            legend(legendHandles,legendNames,'Location','northeastoutside')
-            xlabel('Dose (Gy)')
-            ylabel('Relative Volume (%)')
+           % legend('正常组织','病变组织')
+           legend(legendHandles,'病变组织','正常组织')
+            xlabel('剂量(戈瑞)')
+            ylabel('体素百分比(%)')
             ax = gca;
             ax.XLim = [0 doses(end)];
             ax.YLim = [0 100];
@@ -542,7 +550,7 @@ classdef FluenceMapOpt < handle
                 beam = beam';
                 
                 % Plot beamlet intensities
-                subplot(1,prob.nAngles,ii)
+                subplot(3,3,ii)
                 imagesc(beam), colormap gray
                 beamAngle = sprintf('%d^\\circ',prob.angles(ii));
                 title(beamAngle,'Interpreter','tex')
@@ -1420,7 +1428,7 @@ classdef FluenceMapOpt < handle
         
         function [idx,nX,nY] = getBeamCoords(angle)
             % GETBEAMCOORDS Get beamlet coordinates.
-            load(['PROSTATE/Gantry' int2str(angle) '_Couch0_BEAMINFO.mat']);
+            load(['../../../../../../FluenceMapOpt/PROSTATE/Gantry' int2str(angle) '_Couch0_BEAMINFO.mat']);
             xIdx = x - min(x) + 1;
             yIdx = y - min(y) + 1;
             nX = max(xIdx);

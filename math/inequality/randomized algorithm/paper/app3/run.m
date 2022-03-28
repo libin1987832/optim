@@ -34,13 +34,13 @@ prob = FluenceMapOpt(structs);
 prob.calcBeamsHY();
 
 % Plot objective function
-prob.plotObj();
+%prob.plotObj();
 
 % Plot dose-volume histogram
 prob.plotDVH();
 
 % Plot beamlet intensities
-%prob.plotBeams();
+prob.plotBeams();
 
 % Plot dose
 prob.plotDose();

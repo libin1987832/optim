@@ -1,4 +1,4 @@
-function [xk,flag,relres,iter,resvec,arvec,itersm,tf] = hybridA(A,b,x0,maxit,nf,type)
+function [xk,xvec,flag,relres,iter,resvec,arvec,itersm,tf] = hybridA(A,b,x0,maxit,nf,type)
 t=clock;
 
 % stop criterion
@@ -24,6 +24,8 @@ resvec = zeros(1,maxit + 1);
 arvec = zeros(1,maxit + 1);
 % subspace minization
 itersm = zeros(1,maxit + 1);
+xvec = zeros(n,maxit+1);
+xvec(:,1)=x0;
 resvec(1) = normr;
 arvec(1) = normAr;
 indexsm = 0;
@@ -31,7 +33,9 @@ indexsm = 0;
 flag = 5;
 % [Q,R]=qr(A);
 % Qn=Q(:,1:n);
-
+Q=0;
+R=0;
+Qn=0;
 % [xfA,rpk] = fmnf(A,b,x0,n,Q,R,rpk,nf);
 %while normAr > tol * normA * normr && normr > tol
 %while normAr > tol  && normr > tol
@@ -51,6 +55,7 @@ while 1
         itersm(iter + 1) = -1;
         x0 = xfA(:, end);
     end
+    xvec(:,iter + 1)=x0;
     r = rpk;
     r(r<0) = 0;
     normAr = norm(A' * r);
@@ -59,7 +64,7 @@ while 1
     resvec(iter + 1) = normr;
     % record the value of the gradient function
     arvec(iter + 1) = normAr;
-    if iter > maxit || flag == 0
+    if iter > maxit %|| flag == 0
         break;
     end
     if flag < 5 || flag > 6 
