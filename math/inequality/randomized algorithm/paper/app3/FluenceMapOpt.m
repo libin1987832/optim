@@ -422,6 +422,7 @@ classdef FluenceMapOpt < handle
                 
             % Annotations
            % legend('正常组织','病变组织')
+           title('剂量-体素比积分图')
            legend(legendHandles,'病变组织','正常组织')
             xlabel('剂量(戈瑞)')
             ylabel('体素百分比(%)')
@@ -538,7 +539,9 @@ classdef FluenceMapOpt < handle
         
         function plotBeams(prob)
             %PLOTBEAMS Plot beamlet intensities.
-            figure()
+            fig=figure()
+           
+%             set(fig,'Position','Eastoutside');
             xRemain = prob.x;
             for ii = 1:prob.nAngles
                 % Get beamlet intensities
@@ -552,17 +555,18 @@ classdef FluenceMapOpt < handle
                 % Plot beamlet intensities
                 subplot(3,3,ii)
                 imagesc(beam), colormap gray
-                beamAngle = sprintf('%d^\\circ',prob.angles(ii));
+                beamAngle = sprintf('%d^\\circ的辐射束',prob.angles(ii));
                 title(beamAngle,'Interpreter','tex')
                 caxis([0 max(prob.x)])
                 axis square
             end
-            
             % Add colorbar
-            pos = get(subplot(1,prob.nAngles,ii),'Position');
+            pos = get(subplot(3,3,[8,9]),'Position');
+          % title('辐射束在七个角度不同的角度的能量图');
             cb = colorbar;
-            cb.Label.String = 'Beamlet Intensity (MU)';
-            set(subplot(1,prob.nAngles,ii),'Position',pos);
+             cb.Label.String = '辐射束(MU)';
+             set(cb,'Position',pos);
+             axis off
         end
         
         function plotBeamsPaper(prob)
@@ -627,22 +631,22 @@ classdef FluenceMapOpt < handle
             end
             
             % Annotations
-            title(sprintf('z = %d',z))
+            title(sprintf('模拟辐射束照射人体的剂量图（第%d层切面）',z))
             if nargin == 1
                 caxis([min(dose(:)) max(dose(:))]);
                 cb = colorbar;
-                cb.Label.String = 'Dose (Gy)';
+                cb.Label.String = '剂量(戈瑞)';
                 threshold = false;
             end
-            axis equal
-            axis off
-            hold off
+%             axis equal
+%             axis off
+%             hold off
             
             % Add slider
-            uicontrol('Style','slider',...
-                'Min',1,'Max',90,'Value',z,...
-                'Position',[200 20 120 20],...
-                'Callback',{@prob.updateZ,hax,dose,threshold}); 
+%             uicontrol('Style','slider',...
+%                 'Min',1,'Max',90,'Value',z,...
+%                 'Position',[200 20 120 20],...
+%                 'Callback',{@prob.updateZ,hax,dose,threshold}); 
         end
         
         function plotDosePaper(prob)
