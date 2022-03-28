@@ -652,9 +652,11 @@ classdef FluenceMapOpt < handle
         function plotDosePaper(prob)
             % PLOTDOSEPAPER Plot dose at z = 50.
             figure()
-            idx1 = 40:126;
-            idx2 = 23:152;
-            
+%             idx1 = 40:126;
+%             idx2 = 23:152;
+%
+            idx1 = 30:146;
+            idx2 = 13:162;
             % Get CT slice
             ct = dicomread('../../../../../../FluenceMapOpt/Prostate_Dicom/CT.2.16.840.1.113662.2.12.0.3173.1271873797.276');
             ct = double(imresize(ct,[184,184]));
@@ -662,7 +664,9 @@ classdef FluenceMapOpt < handle
             ctShift = ct50 - min(ct50(:));
             ctShiftScale = ctShift/max(ctShift(:));
             CT50 = repmat(ctShiftScale,[1 1 3]);
-            
+            CT50(CT50<0.35)=1;
+             CT50(100:end,:,:)=1;
+           % CT50(1:120,80:end,:)=1;
             % Get Dose
             Dose = reshape(prob.D*prob.x,184,184,90);
             Dose50 = Dose(idx1,idx2,50);
@@ -673,16 +677,17 @@ classdef FluenceMapOpt < handle
             
             % Plot dose
             imagesc(Dose50,'AlphaData',0.3*(body50~=0))
-            contour(Dose50,0:10:100,'LineWidth',2);
+            contour(Dose50,0:20:100,'LineWidth',2);
             
             % Plot organ contours
             for i = 1:length(prob.mask)-1
                contour(prob.mask{i}(idx1,idx2,50),1,'k','LineWidth',2); 
             end
           
-            
+            xinds=[0,0,70,130,136,50,90];
+            yinds=[0,65,0,0,70,100,100];
             xRemain = prob.x;
-            for ii = 1:1
+            for ii = 1:7
                 % Get beamlet intensities
                 [idx,nX,nY] = FluenceMapOpt.getBeamCoords(prob.angles(ii));
                 xCurrent = xRemain(1:length(idx));
@@ -690,10 +695,12 @@ classdef FluenceMapOpt < handle
                 beam = zeros(nX,nY);
                 beam(idx) = xCurrent;
                 beam = beam';
+               % beam = imresize(beam',1);
 %                 
 %                 % Plot beamlet intensities
 %                 subplot(1,prob.nAngles,ii)
-                imagesc(0,0,beam), colormap  spring
+                imagesc(xinds(ii),yinds(ii),beam)%, colormap  prism
+                
                 beamAngle = sprintf('%d^\\circ',prob.angles(ii));
                % title(beamAngle,'Interpreter','tex')
               %  caxis([0 max(prob.x)])
@@ -708,8 +715,8 @@ classdef FluenceMapOpt < handle
             axis off
             
             % Colorbar
-            colorbar('southoutside','Ticks',0:20:100,'TickLabels',{},...
-                'LineWidth',2)
+%             colorbar('southoutside','Ticks',0:20:100,'TickLabels',{},...
+%                 'LineWidth',2)
         end
         
         function plotObjPaper(prob)
