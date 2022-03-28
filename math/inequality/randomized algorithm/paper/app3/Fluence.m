@@ -34,7 +34,7 @@ if sum(idxPos) > k
     wStep(idxPos) = wPos;
 end
 w=wStep;
-if iter<maxIter
+if iter>maxIter
     break;
 end
 end
