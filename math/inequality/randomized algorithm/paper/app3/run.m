@@ -1,6 +1,6 @@
 % Example for setting up problem with FluenceMapOpt
 clear all; close all; clc;
-
+addpath('minConf')
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % For each organ included in the plan, create a structure containing the
 % following fields:
@@ -16,7 +16,7 @@ clear all; close all; clc;
 %       specified dose value
 %   weight: weight in objective function
 %
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%c
 
 % PTV - prostate
 ptv.name = 'PTV_68';
@@ -31,7 +31,7 @@ structs = {ptv,oar};
 prob = FluenceMapOpt(structs);
 
 % Calculate beamlet intensities
-prob.calcBeams();
+prob.calcBeamsHY();
 
 % Plot objective function
 prob.plotObj();
@@ -40,7 +40,7 @@ prob.plotObj();
 prob.plotDVH();
 
 % Plot beamlet intensities
-prob.plotBeams();
+%prob.plotBeams();
 
 % Plot dose
 prob.plotDose();

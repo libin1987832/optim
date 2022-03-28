@@ -37,7 +37,7 @@ classdef FluenceMapOpt < handle
         angles = 0:52:358;    % Gantry angles
         overlap = false;      % Allow overlaps in structures
         lambda = 1e-8;        % L2 regularization coefficient
-        nnls = 'minConf_TMP'; % Method to compute NNLS problem
+        nnls = 'quadprog'; % Method to compute NNLS problem
         nStructs              % Number of body structures
         nDVC                  % Number of dose-volume constraints
         nAngles               % Number of angles
@@ -185,6 +185,41 @@ classdef FluenceMapOpt < handle
             prob.x = prob.projX('full');
             prob.time = toc;
         end
+        
+%        function calcBeamsCD(prob,print)
+%             % CALCBEAMLETS Calculate beamlet intensities.
+%             if nargin == 1
+%                 print = true;
+%             end
+%             
+%             % Fluence map optimization
+%             tic;
+%             prob.initProb(print);
+%            
+%             
+% 
+%                 % Update x and w vectors
+%                 
+%             prob.x = prob.projX('full');
+%             prob.time = toc;
+%         end 
+        function calcBeamsHY(prob,print)
+            % CALCBEAMLETS Calculate beamlet intensities.
+            if nargin == 1
+                print = true;
+            end
+            
+            % Fluence map optimization
+            tic;
+            prob.initProb(print);
+            HHY=[-prob.structs{2}.A;prob.structs{1}.A;eye(prob.nBeamlets)];
+            b=[-prob.structs{2}.terms{1}.d;prob.structs{1}.terms{1}.d;zeros(prob.nBeamlets,1)];
+            nf=10;
+            [x2,rkh,countFMh,countNWh,beginNWh,tfh,vkh,rkArrh]=hybridA(HHY,b,prob.x0,prob.nIter,nf,'RHA');
+            prob.x = x2;
+            prob.time = toc;
+        end
+%         
         
         function calcBeamsConvex(prob,print)
             % CONVRELAX Approach inspired by Fu paper.
@@ -1241,7 +1276,7 @@ classdef FluenceMapOpt < handle
             % GETD Get full beamlet-to-voxel matrix.
             temp = [];
             for ii = angles
-                load(['PROSTATE/Gantry' int2str(ii) '_Couch0_D.mat']);
+                load(['../../../../../../FluenceMapOpt/PROSTATE/Gantry' int2str(ii) '_Couch0_D.mat']);
                 temp = [temp D];
             end
             D = temp;
@@ -1253,7 +1288,7 @@ classdef FluenceMapOpt < handle
             nDVC = 0;
             vPrev = [];
             for ii = 1:nStructs
-                load(['PROSTATE/' structs{ii}.name '_VOILIST.mat']);
+                load(['../../../../../../FluenceMapOpt/PROSTATE/' structs{ii}.name '_VOILIST.mat']);
                 if ~overlap
                     [v,vPrev] = FluenceMapOpt.removeOverlap(v,vPrev); 
                 end
@@ -1304,14 +1339,14 @@ classdef FluenceMapOpt < handle
             % GETMASKSTRUCT Get body structure contours for all organs.
             vPrev = [];
             for ii = 1:length(names)
-               load(['PROSTATE/' names{ii} '_VOILIST.mat']);
+               load(['../../../../../../FluenceMapOpt/PROSTATE/' names{ii} '_VOILIST.mat']);
                if ~overlap
                    [v,vPrev] = FluenceMapOpt.removeOverlap(v,vPrev); 
                end
                mask{ii} = FluenceMapOpt.getMask(v);
             end
             if ~any(strcmp(names,'BODY'))
-                load('PROSTATE/BODY_VOILIST.mat');
+                load('../../../../../../FluenceMapOpt/PROSTATE/BODY_VOILIST.mat');
                 mask{ii+1} = FluenceMapOpt.getMask(v);
             end
         end
