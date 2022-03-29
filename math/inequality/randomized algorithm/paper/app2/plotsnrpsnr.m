@@ -42,7 +42,7 @@ imshow(uint8(f));
 opts.lam = 1.5;
 opts.rho = 1.3;
 opts.tol = 1e-5;
-opts.Nit = 200;
+opts.Nit = 20;
 opts.Nosnr = 1;
 out1 = FM_DeblurTV(f,Img,K,sigma,opts);
 out2 = ADMM_DeblurTV(f,Img,K,opts);
@@ -62,10 +62,10 @@ plot(1:opts.Nit,out1.ssimError,1:opts.Nit,out2.ssimError);
 xlabel('迭代次数')
 ylabel('结构相似性(SSIM)')
 legend('最小二乘意义下线性不等式方程组','全变分模型')
-figure
-imshow(uint8(out1.sol))
-figure
-imshow(uint8(out2.sol))
+% figure
+% imshow(uint8(out1.sol))
+% figure
+% imshow(uint8(out2.sol))
 % psnr_fun=psnr(out1.sol,double(Img));
 % ssim_index=ssim(out1.sol,double(Img));
 

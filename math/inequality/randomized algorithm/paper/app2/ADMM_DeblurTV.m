@@ -4,7 +4,7 @@ lam = opts.lam;
 rho = opts.rho; 
 tol = opts.tol; 
 Nit = opts.Nit;
-
+nosnr = opts.Nosnr;
 %theta= 0.09;
 
 relError        = zeros(Nit,1);
@@ -36,11 +36,12 @@ eigDtD      = abs(fft2([1 -1], row, col)).^2 + abs(fft2([1 -1]', row, col)).^2;
 [Dux, Duy] = D(u);
 
     for k = 1:Nit
+        if nosnr
         psnr_fun=psnr(u,double(Img));
         ssim_index=ssim(u,double(Img));
         psnrError(k)=psnr_fun;
         ssimError(k)=ssim_index(1);
-                 
+        end 
       %*** solve v - subproblem ***  
       x1          =  Dux + (1/rho)*mu1;
       x2          =  Duy + (1/rho)*mu2;

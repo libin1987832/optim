@@ -47,9 +47,11 @@ KD=eigKtK+eigDtD;
         r4(r4<0)=0;
      
         r1f = imfilter(r1,-K,'circular');
-        r2f = imfilter(r2,K,'circular');
-        r3f = imfilter(r3,-1,'circular');
-        r4f = imfilter(r4,1,'circular');
+         r2f = imfilter(r2,K,'circular');
+        r3f = -r3;
+        r4f = r4;
+%         r3f = imfilter(r3,-1,'circular');
+%         r4f = imfilter(r4,1,'circular');
         r14f=r1f+r2f+r3f+r4f;
         du=fft2(-r14f)./KD;
         du = real(ifft2(du));

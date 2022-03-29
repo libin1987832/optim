@@ -9,7 +9,7 @@ clear all;
 ImgA={'Lena','male','mandril'};
 name=['1','2','3'];
 
-for i=1:1
+for i=1:3
 
 set(gcf,'position',[100,100, 700, 600]);
 
@@ -20,13 +20,13 @@ if size(Img,3) > 1
 end
 % ImgA{i}=Img;
 
-K     =   fspecial('average',3); % For denoising
+K     =   fspecial('average',20); % For denoising
 f = imfilter(Img,K,'circular');
 
 f = double(f);
 
-BSNR = 30;
-sigma = BSNR2WGNsigma(f, BSNR)*20;
+BSNR = 20;
+sigma = BSNR2WGNsigma(f, BSNR);
 
 f = f +  sigma * rand(size(Img)); %Add a little noise
 
@@ -76,6 +76,6 @@ end                   % plot(out.relativeError)
 
 fdata = getframe(gcf);
 figure
-imshow(fdata.cdata(:,10:420,:))
+imshow(fdata.cdata(:,5:425,:))
 %imwrite(f.cdata(:,10:420,:), 'imagediff.fig');
 %imwrite(f.cdata(:,10:420,:), 'imagediff.eps');
