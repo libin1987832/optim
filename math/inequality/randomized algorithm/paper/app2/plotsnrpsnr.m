@@ -13,13 +13,13 @@ if size(Img,3) > 1
     Img = rgb2gray(Img);
 end
 
-K     =   fspecial('average',3); % For denoising
+K     =   fspecial('average',5); % For denoising
 f = imfilter(Img,K,'circular');
 
 f = double(f);
 
 BSNR = 20;
-sigma = BSNR2WGNsigma(f, BSNR)*8;
+sigma = BSNR2WGNsigma(f, BSNR)*2;
 f = f +  sigma * rand(size(Img));
 imshow(uint8(f));
 u=Img;
