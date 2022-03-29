@@ -4,12 +4,12 @@ lam = opts.lam;
 rho = opts.rho; 
 tol = opts.tol; 
 Nit = opts.Nit;
-
+nosnr = opts.Nosnr;
 %theta= 0.09;
 
 relError        = zeros(Nit,1);
-snrError      =relError;
 psnrError      =relError;
+ssimError      =relError;
 [row, col]  = size(f);
 u           = f;
 
@@ -28,15 +28,16 @@ KD=eigKtK+eigDtD;
         relr4=-255+u;
         relr4(relr4<0)=0;
         relError(k)= norm(relr1)^2+norm(relr2)^2+norm(relr3)^2+norm(relr4)^2;   
-
+        if nosnr
         psnr_fun=psnr(u,double(Img));
         ssim_index=ssim(u,double(Img));
-        snrError(k)=psnr_fun;
-        psnrError(k)
+        psnrError(k)=psnr_fun;
+        ssimError(k)=ssim_index(1);
+        end
         u_old=u;
        % Ku=imfilter(u,K,'circular');
-       Ku=relKu; 
-       r1=f-sigma-Ku;
+        Ku=relKu; 
+        r1=f-sigma-Ku;
         r1(r1<0)=0;
         r2=-f+Ku;
         r2(r2<0)=0;
@@ -69,7 +70,8 @@ KD=eigKtK+eigDtD;
     
     out.sol                 = u;
     out.relativeError       = relError(1:k);
-
+    out.psnrError = psnrError;
+    out.ssimError = ssimError;
 end
 
 

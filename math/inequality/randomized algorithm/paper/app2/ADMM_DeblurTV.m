@@ -1,23 +1,4 @@
 function out = ADMM_DeblurTV(f,Img,K,opts)
-% Created on 12/12/2017 by Tarmizi Adam
-% ADMM for deblurring
-%
-%The following code solves the following optimization problem
-%
-%         minimize_u lam/2||Ku - f ||_2^2 + ||Du||_1 + I(u)
-%
-% where I(u) is the indicator function (for box constraint).
-%%
-%  Input:
-%             f  : Noisy & Blurred image (corrupted by additive Gaussian noise)
-%            Img : Original Image
-%             K  : Point spread function (Convolution kernel)
-%           opts : Options i.e., rho, regularization parameter, No of iterations etc.
-%
-%  Output   
-%           out.sol      : Denoised image
-%           out.relError : relative error 
-%%
 
 lam = opts.lam; 
 rho = opts.rho; 
@@ -27,6 +8,8 @@ Nit = opts.Nit;
 %theta= 0.09;
 
 relError        = zeros(Nit,1);
+psnrError      =relError;
+ssimError      =relError;
 
 [row, col]  = size(f);
 u           = f;
@@ -53,7 +36,11 @@ eigDtD      = abs(fft2([1 -1], row, col)).^2 + abs(fft2([1 -1]', row, col)).^2;
 [Dux, Duy] = D(u);
 
     for k = 1:Nit
-          
+        psnr_fun=psnr(u,double(Img));
+        ssim_index=ssim(u,double(Img));
+        psnrError(k)=psnr_fun;
+        ssimError(k)=ssim_index(1);
+                 
       %*** solve v - subproblem ***  
       x1          =  Dux + (1/rho)*mu1;
       x2          =  Duy + (1/rho)*mu2;
@@ -92,7 +79,8 @@ eigDtD      = abs(fft2([1 -1], row, col)).^2 + abs(fft2([1 -1]', row, col)).^2;
     
     out.sol                 = u;
     out.relativeError       = relError(1:k);
-
+ out.psnrError = psnrError;
+    out.ssimError = ssimError;
 end
 
 

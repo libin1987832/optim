@@ -5,13 +5,16 @@
 
 clc;
 clear all;
-close all;
 
-Img = imread('Lena_std.tif');
+ImgA={'Lena','male','mad'};
+name=['1','2','3','4'];
+for i=1:4
+Img = imread([name(i) '.tif']);
 
 if size(Img,3) > 1
     Img = rgb2gray(Img);
 end
+% ImgA{i}=Img;
 
 K     =   fspecial('average',3); % For denoising
 f = imfilter(Img,K,'circular');
@@ -19,9 +22,9 @@ f = imfilter(Img,K,'circular');
 f = double(f);
 
 BSNR = 20;
-sigma = BSNR2WGNsigma(f, BSNR)
+sigma = BSNR2WGNsigma(f, BSNR);
 
-f = f +  sigma * randn(size(Img)); %Add a little noise
+f = f +  sigma * rand(size(Img)); %Add a little noise
 
 %*** ADMM algorithm parameter set up ***
 
@@ -29,22 +32,7 @@ opts.lam = 1.5;
 opts.rho = 1.3;
 opts.tol = 1e-5;
 opts.Nit = 100;
-
-out1 = FM_DeblurTV(f,K,sigma/2,opts);
-%out = ADMM_DeblurTV(f,Img,K,opts);
-figure;
-imshow(uint8(f));
-psnr_fun=psnr(out.sol,double(Img));
-ssim_index=ssim(out.sol,double(Img));
-figure;
-imshow(uint8(out.sol))
-title(sprintf('ADMM-TV Deblurred (PSNR = %3.3f dB,SSIM = %3.3f) ',...
-                       psnr_fun,ssim_index(1)));
-figure;
-psnr_fun=psnr(out1.sol,double(Img));
-ssim_index=ssim(out1.sol,double(Img));
-imshow(uint8(out1.sol))
-title(sprintf('ADMM-TV Deblurred (PSNR = %3.3f dB,SSIM = %3.3f) ',...
-                       psnr_fun,ssim_index(1)));
-
-                   % plot(out.relativeError)
+opts.Nosnr=0;
+out1 = FM_DeblurTV(f,Img,K,sigma,opts);
+out2 = ADMM_DeblurTV(f,Img,K,opts);
+end                   % plot(out.relativeError)
