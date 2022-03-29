@@ -678,17 +678,18 @@ classdef FluenceMapOpt < handle
             % Plot dose
             imagesc(Dose50,'AlphaData',0.3*(body50~=0))
             contour(Dose50,0:20:100,'LineWidth',2);
-            text(65,65,'前列腺','Color','r','Fontsize',10)
-            text(65,75,'直肠','Color','g','Fontsize',10)
+            text(67,62,'病变组织','Color','r','Fontsize',10)
+            text(70,72,'正常组织','Color','g','Fontsize',10)
             
             % Plot organ contours
             for i = 1:length(prob.mask)-1
                contour(prob.mask{i}(idx1,idx2,50),1,'k','LineWidth',2); 
             end
-            xadd=[20,0, -30,-20, 0,0];
-            yadd=[20,-8, 5,  20,  -10,-10];
+            xadd=[20,  0, -30, -20, -5,  -1,  -1];
+            yadd=[20, -8,   5,  20,   -5, -5,-5];
             xinds=[0,0,70,130,136,50,90];
             yinds=[0,65,0,0,70,100,100];
+            
             xRemain = prob.x;
             for ii = 1:7
                 % Get beamlet intensities
@@ -703,8 +704,14 @@ classdef FluenceMapOpt < handle
 %                 % Plot beamlet intensities
 %                 subplot(1,prob.nAngles,ii)
                 imagesc(xinds(ii),yinds(ii),beam)%, colormap  prism
+                if ii==1
                 beamAngle = sprintf('%d^\\circ辐射束',prob.angles(ii));
-                text(xinds(ii)+xadd(ii),yinds(ii)+yadd(ii),beamAngle,'Color','g','Fontsize',10)
+                elseif ii==2
+                beamAngle = sprintf('%d^\\circ辐射束',prob.angles(7));
+                else
+                beamAngle = sprintf('%d^\\circ辐射束',prob.angles(ii-1));
+                end
+                text(xinds(ii)+xadd(ii),yinds(ii)+yadd(ii),beamAngle,'Color','k','Fontsize',10)
                 
                % title(beamAngle,'Interpreter','tex')
               %  caxis([0 max(prob.x)])

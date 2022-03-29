@@ -31,8 +31,8 @@ structs = {ptv,oar};
 prob = FluenceMapOpt(structs);
 
 % Calculate beamlet intensities
-%prob.calcBeamsHY();
-prob.calcBeams();
+prob.calcBeamsHY();
+%prob.calcBeams();
 % Plot objective function
 %prob.plotObj();
 
