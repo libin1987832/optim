@@ -70,12 +70,12 @@ title('全变分图像重构')
 subplot('position',[0+x,0,.2,.2]);
 % set(gca,'DataAspectRatio',[3,4,1]);  
 imshow(uint8(out1.sol))
-title('线性方程组图像重构')
+title('不等式图像重构')
 
 end                   % plot(out.relativeError)
 
 fdata = getframe(gcf);
 figure
-imshow(fdata.cdata(:,5:425,:))
+imshow(fdata.cdata(:,2:425,:))
 %imwrite(f.cdata(:,10:420,:), 'imagediff.fig');
 %imwrite(f.cdata(:,10:420,:), 'imagediff.eps');
