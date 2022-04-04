@@ -1,7 +1,7 @@
 clear
 clc
 gamm = 0.6;
-n = 5000;
+n = 200000;
 w = [1,1]+rand(1,2);
 b = 1+rand(1);
 x = rand( n , 2 );
@@ -17,29 +17,6 @@ p2 = x(~y1&y2,:);
 p1 = [p1;p3(1:row,:)];
 p2 = [p2;p3(row+1:end,:)];
 
-%% guass nosise
-% y = (x*w'-b*ones(n,1) >0);
-% 
-% p1 = x(y,:);
-% p2 = x(~y,:);
-% p1= p1 + mvnrnd([0,0],[0.005,0;0,0.005],size(p1,1)); 
-% p2= p2 + mvnrnd([0,0],[0.005,0;0,0.005],size(p2,1));
-
-%% inconsistent data
-% y = (x(:,1)>0.5) | (x(:,2)>0.5); 
-% p1 = x(y,:);
-% p2 = x(~y,:);
-
-%% consistent data 
-% y = (x*w'-b*ones(n,1) >0);
-% 
-% p1 = x(y,:);
-% p2 = x(~y,:);
-
-%% test data
-% px1 = 0:0.2:1;
-% p1 = [px1' -px1'+1.5];
-% p2 = [px1' -px1'+0.5];
 
 %%
 fm1 = size(p1,1);
@@ -53,47 +30,53 @@ source_train = [A1(1:fm1,:);-A1(fm1+1:fm1+fm2,:)];
 label_train = [ones(fm1,1);-1*ones(fm2,1)];
 %label_train = round(rand(fm1+fm2,1));
 
-% tic
-% SVMModel = fitcsvm(source_train,label_train,'BoxConstraint',600);
-% toc
-% wsvn = SVMModel.Beta;
-% bsvn = SVMModel.Bias;
-% 
-% x0=zeros(size(A1,2),1);
-% maxIter = 10;
-% there are some errors;
-%[xkh1,rkh,countFMh,countNWh,beginNWh,tfh,vkh,rkArrh]=han(x0,A1,b1,maxIter);
-
-
-% numberOfbeta=2;
-% AL2 = [-A2,-eye(size(A2,1))];
-% bL2 = -b2;
-% fL2 = [zeros(1, numberOfbeta+1), ones(1, fm1)/fm1, ones(1, fm2)/fm2];
-% lbL2 = [-ones(numberOfbeta+1,1)*Inf; zeros(fm1+fm2 , 1)];
-% tic
-% [xkh2, f2, exit2] = linprog(fL2,AL2,bL2,[],[],lbL2,[],[x0;0]);
-% toc
 
 x0=zeros(size(A1,2),1);
 maxIterA = 0;
-maxIter = 500;
-nf = 3;
+maxIter = 2000;
+nf = 5;
 str = ['D','C','R','P','H'];
 steplength = 0;%1/(max(eig(ATA))+0.0001);
-A=A2;
-
+% A=A2;
+% 
 tol=-1;
-x_exact = [] ;
-debug = 0;
+ x_exact = [] ;
+ debug = 0;
+% x1=[x0;0];
+% t=clock;
+% [x2,rkh,countFMh,countNWh,beginNWh,tfh,vkh,rkArrh]=hybridA(A2,b2,[x0;0],maxIter,nf,'RHA');
+% xst(2)=etime(clock,t);
+% t=clock;
+% % % [x3,rkh,countFMh,countNWh,beginNWh,tfh,vkh,rkArrh]=hybridA(A,b,x1,maxIter,nf,'PHA');
+% % xst(3)=etime(clock,t);
+% % t=clock;
+% % % [x4,rkh,countFMh,countNWh,beginNWh,tfh,vkh,rkArrh]=hybridA(A,b,x1,maxIter,nf,'CHA');
+% % xst(4)=etime(clock,t);
+% % 
+%  xs=[x2 x2 x2 x2];
+% % 
+% str=['P','R','P','C'];
+% for i = 2:2
+% r = b - A * xs(:,i);
+% r(r<0) = 0;
+% r_GS = norm(r);
+% g_GS = norm(A'*r);
+% fprintf('& %sHA  &%g & %g & %g \\\\\n', str(i),r_GS, g_GS, xst(i));
+% end
+
+
+
+
+
 %% GuassSeidel
-maxit_Rand =2;
+maxit_Rand =20000;
 t=clock;
  [x_GS,iter_GS,error_GS,xA_GS,index_GS] = GuassSeidelNE(A2,b2,[x0;0],2.0,maxit_Rand,tol,x_exact,debug);
 tf_GS=etime(clock,t);
-r = b - A * x_GS;
+r = b2 - A2 * x_GS;
 r(r<0) = 0;
 r_GS = norm(r);
-g_GS = norm(A'*r);
+g_GS = norm(A2'*r);
 fprintf('& %s & %g & %g & %d & %g \\\\\n', 'GuassSeidel', r_GS, g_GS, iter_GS, tf_GS);
 
 
@@ -102,10 +85,10 @@ fprintf('& %s & %g & %g & %d & %g \\\\\n', 'GuassSeidel', r_GS, g_GS, iter_GS, t
 t=clock;
 [x_GS,iter_GS,error_GS,xA_GS,index_GS] = simpleGuassSeidelNE(A2,b2,[x0;0],2.0,maxit_Rand,tol,x_exact,debug);
 tf_GS=etime(clock,t);
-r = b - A * x_GS;
+r = b2 - A2 * x_GS;
 r(r<0) = 0;
 r_GS = norm(r);
-g_GS = norm(A'*r);
+g_GS = norm(A2'*r);
 fprintf('& %s & %g & %g & %d & %g \\\\\n', 'simpleGuassSeidel', r_GS, g_GS, iter_GS, tf_GS);
 
 %% randGuassSeidel
@@ -113,25 +96,25 @@ fprintf('& %s & %g & %g & %d & %g \\\\\n', 'simpleGuassSeidel', r_GS, g_GS, iter
 t=clock;
 [x_GS,iter_GS,error_GS,xA_GS,index_GS] = randGuassSeidelNE(A2,b2,[x0;0],2.0,maxit_Rand,tol,x_exact,debug);
 tf_GS=etime(clock,t);
-r = b - A * x_GS;
+r = b2 - A2 * x_GS;
 r(r<0) = 0;
 r_GS = norm(r);
-g_GS = norm(A'*r);
+g_GS = norm(A2'*r);
 fprintf('& %s & %g & %g & %d & %g \\\\\n', 'randGuassSeidel', r_GS, g_GS, iter_GS, tf_GS);
 
 
 
 %% 参数的设定
- maxit_IFM = 15000;
-maxit_LSQR =8;
+ maxit_IFM = 2000;
+maxit_LSQR =3;
 
 t=clock;
 [x_IFM,iter_IFM,error_IFM,xA_IFM,index_IFM] = IFM(A2,b2,[x0;0], maxit_IFM, maxit_LSQR ,tol, x_exact,debug);
 tf_IFM=etime(clock,t);
-r = b - A * x_IFM;
+r = b2 - A2 * x_IFM;
 r(r<0) = 0;
 r_IFM = norm(r);
-g_IFM = norm(A'*r);
+g_IFM = norm(A2'*r);
 fprintf('& %s & %g & %g & %d & %g \\\\\n','IFM', r_IFM, g_IFM,iter_IFM,tf_IFM);
 
 % FM
