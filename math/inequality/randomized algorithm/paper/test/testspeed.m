@@ -4,31 +4,31 @@ A = 2*rand(m,n)-1;
 b = 2*rand(m,1)-1;
 %  load('test1')
 x00 = zeros(n,1);
-maxiter = 300;
-normr=zeros(6,maxiter);
-normrow=[];
-index=[];
- for i = 1:n
-   normrow = [normrow,A(:,i)'*A(:,i)];
-   index = [index,i];
-end
-weight = normrow/sum(normrow);
-x1=x00;
-Arr=[];
-for k = 1:maxiter
-    i = randsample(index,1,true,weight);
-    Arr=[Arr,i];
-    r=b-A*x1;
-    r(r<0)=0;
-    normr(1,k)=r'*r;
-    x1(i)=x1(i)+lambda*A(:,i)'*r/(A(:,i)'*A(:,i));
-end
-Ar1=norm(A'*r)
-N1=diag(r>0);
-sr1=sum(r>0)
-Ie=eye(m);
-skpp=computerMSE(A,N1,lambda,0);
-lam1=sqrt(max(eig(skpp)))
+% maxiter = 300;
+% normr=zeros(6,maxiter);
+% normrow=[];
+% index=[];
+%  for i = 1:n
+%    normrow = [normrow,A(:,i)'*A(:,i)];
+%    index = [index,i];
+% end
+% weight = normrow/sum(normrow);
+% x1=x00;
+% Arr=[];
+% for k = 1:maxiter
+%     i = randsample(index,1,true,weight);
+%     Arr=[Arr,i];
+%     r=b-A*x1;
+%     r(r<0)=0;
+%     normr(1,k)=r'*r;
+%     x1(i)=x1(i)+lambda*A(:,i)'*r/(A(:,i)'*A(:,i));
+% end
+% Ar1=norm(A'*r)
+% N1=diag(r>0);
+% sr1=sum(r>0)
+% Ie=eye(m);
+% skpp=computerMSE(A,N1,lambda,0);
+% lam1=sqrt(max(eig(skpp)))
 % x1=x00;
 % for k = 1:maxiter
 %     i=Arr(k);
