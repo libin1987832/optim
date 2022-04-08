@@ -4,8 +4,11 @@ x00=rand(3,1);
 x1=x00;
 N=diag([1,0,1,0,1]);
 lambda = 1.1;
+rx0=b-A*x00;
 for i=1:3
     x1(i)=x1(i)+lambda*A(:,i)'*N*(b-A*x1)/(A(:,i)'*A(:,i));
+    rx1=b-A*x1
+    rx1t=(eye(5)-lambda*(N*A(:,i))*(N*A(:,i))'/(A(:,i)'*A(:,i)))*rx0
 end
 ATA=A'*A;
 D1=diag(diag(ATA));
@@ -19,14 +22,18 @@ x01=-inv(DL)*(lambda*U+lambda*D2-D1)*x00+lambda*inv(DL)*A'*N*b;
 x02=-inv(DL)*(lambda*U+lambda*D2-D1)*x01+lambda*inv(DL)*A'*N*b;
 r01=b-A*x01;
 r00=b-A*x00;
-r02=b-A*x02;
- lambda*A'*N*r00
- [U,S,V]=svd((N*A)');
- n1=(N*r00)'*V(1,:)'
-  n2=(N*r01)'*V(1,:)'
-   n3= (N*r02)'*V(1,:)'
-   n2/n1
-   n3/n2
+r02=b-A*x02
+B=DL*pinv(A);
+C=eye(5)-lambda*pinv(B)*A'*N;
+r11=C*r00;
+r12=C*r11
+%  lambda*A'*N*r00
+%  [U,S,V]=svd((N*A)');
+%  n1=(N*r00)'*V(1,:)'
+%   n2=(N*r01)'*V(1,:)'
+%    n3= (N*r02)'*V(1,:)'
+%    n2/n1
+%    n3/n2
 %  (D1+lambda*L)*(x00-x1)
 % [U,S,V]=svd(A);
 % U=U(:,1:3);
