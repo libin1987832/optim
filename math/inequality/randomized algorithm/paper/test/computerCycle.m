@@ -1,4 +1,4 @@
-function skp=computerCycle(A,N,type)
+function skp=computerCycle(A,N,lambda,type)
 [m,n]=size(A);
 NA=N*A;
 if type == 1
