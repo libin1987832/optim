@@ -34,7 +34,7 @@ for k = 1:maxiter
     r=b-A*x1;
     r(r<0)=0;
     if normr(3,k)==1
-        
+          rn(rn<0)=0;
         normr(2,k) = rn;
     else
         normr(2,k)=r'*r;
@@ -67,6 +67,7 @@ for k = 1:maxiter
     r=b-A*x2;
     r(r<0)=0;
     if normr(6,k)==1 & i == 1 & k+n<maxiter
+        rn(rn<0)=0;
         normr(5,k) = rn'*rn;
     else
         normr(5,k)=r'*r;
