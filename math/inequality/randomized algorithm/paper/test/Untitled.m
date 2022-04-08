@@ -27,9 +27,9 @@ B=DL*pinv(A)
 pinv(B)
 A*pinv(DL)
 C=eye(5)-lambda*pinv(B)*A'*N
-C1=eye(5)-A*pinv(1/lambda*D1+L)*A'*N
-r11=C*r00;
-r12=C*r11;
+C1=eye(5)-(N*A)*pinv(1/lambda*D1+L)*(N*A)'
+r12=C1*N*r00
+r11=C*r00
 %  lambda*A'*N*r00
 %  [U,S,V]=svd((N*A)');
 %  n1=(N*r00)'*V(1,:)'
