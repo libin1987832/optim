@@ -23,13 +23,15 @@ x02=-inv(DL)*(lambda*U+lambda*D2-D1)*x01+lambda*inv(DL)*A'*N*b;
 r01=b-A*x01;
 r00=b-A*x00;
 r02=b-A*x02
+pinv(A'*A)*A'
+A*pinv(A)
 B=DL*pinv(A)
 pinv(B)
 A*pinv(DL)
-C=eye(5)-lambda*pinv(B)*A'*N
-C1=eye(5)-(N*A)*pinv(1/lambda*D1+L)*(N*A)'
-r12=C1*N*r00
-r11=C*r00
+% C=eye(5)-lambda*pinv(B)*A'*N
+% C1=eye(5)-(N*A)*pinv(1/lambda*D1+L)*(N*A)'
+% r12=C1*N*r00
+% r11=C*r00
 %  lambda*A'*N*r00
 %  [U,S,V]=svd((N*A)');
 %  n1=(N*r00)'*V(1,:)'
