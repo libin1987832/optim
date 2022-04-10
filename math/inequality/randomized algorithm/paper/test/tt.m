@@ -2,9 +2,9 @@
 % inv(A)
 m=10;
 n=3;
-A=rand(m,n);
-Ac=diag(sqrt(sum(A.*A,1)));
+A=rand(m,n)*100;
+Aci=diag(1./sqrt(sum(A.*A,1)));
 minAc=min(sum(A.*A,1));
-B=A*Ac;
+B=A*Aci;
 min(eig(A'*A))
 minAc*min(eig(B'*B))
