@@ -18,7 +18,7 @@ f = imfilter(Img,K,'circular');
 
 f = double(f);
 
-BSNR = 20;
+BSNR = 2;
 sigma = BSNR2WGNsigma(f, BSNR)*2;
 f = f +  sigma * rand(size(Img));
 imshow(uint8(f));
@@ -39,8 +39,8 @@ imshow(uint8(f));
 
 %*** ADMM algorithm parameter set up ***
 
-opts.lam = 1.5;
-opts.rho = 1.3;
+opts.lam = 0.5;
+opts.rho = 0.8;
 opts.tol = 1e-5;
 opts.Nit = 20;
 opts.Nosnr = 1;
