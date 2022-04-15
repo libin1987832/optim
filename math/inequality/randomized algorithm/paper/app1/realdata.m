@@ -1,8 +1,8 @@
 
 gamm1 = 0.5;
 % read data A1 b1 positive A2 b2 non positive fm1 fm2 
-[A1,b1,A2,b2,At1, At2, fm1, fm2, AL1, bL1, AL2, bL2] = readBreast(gamm1);
- %[A1,b1,A2,b2,At1, At2, fm1, fm2, AL1, bL1, AL2, bL2] = readHeart(gamm1);
+%[A1,b1,A2,b2,At1, At2, fm1, fm2, AL1, bL1, AL2, bL2] = readBreast(gamm1);
+[A1,b1,A2,b2,At1, At2, fm1, fm2, AL1, bL1, AL2, bL2] = readHeart(gamm1);
 numberOfbeta = size(A1,2);
 maxIter = 900;
 str = ['D','C','R','P'];
@@ -92,9 +92,20 @@ tsumerror = terrorcount1 + terrorcount2;
 xw=[xw [SVMModel.Beta;SVMModel.Bias]];
 output(3,:) = [sumerror,sumcount,1-sumerror/sumcount,tsumerror,fm1+fm2,1-tsumerror/(fm1+fm2),0,0,0,0,0,0];
 
+heart=[-0.08272769  0.18974514  0.42688792  0.33055823  0.24806426 -0.28768016 ...
+   0.09175626 -0.21943122  0.29202567  0.08903626  0.33698311  0.82610174 0.60667718];
+heart=abs(heart);
+bar(heart/sum(heart))
 
  output
- xw
+ xw=abs([xw(1:end-1,:) heart']);
+ sxw=sum(xw,1);
+ dsxw=diag(1./sxw);
+ dsxwn=xw*dsxw;
+ figure
+ bar(abs(dsxwn))
+ 
+ 
  %output(3,:) = [0,0,0,sumerror,sumcount,1-sumerror/sumcount,0,0,0,tsumerror,fm1+fm2,1-tsumerror/(fm1+fm2)]
 %xw = [xw [SVMModel.Beta;SVMModel.Bias]]'
 %beta = xw(:,1:end-1);
