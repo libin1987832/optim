@@ -47,11 +47,13 @@ for i = 1:n
     index = [index,i];
 end
 
-
+colrs=0;
 for i = 1:maxit
     pickedj=mod(i-1,n)+1;
     col = A(:, pickedj);
-    inc = alpha*( col' * r ) / Acol(pickedj);
+     colr=col' * r;
+    colrs=colrs+colr*colr;
+    inc = alpha*(  colr ) / Acol(pickedj);
     x(pickedj) = x(pickedj) + inc;
     rs = rs - inc*col;
     r = rs;
@@ -59,13 +61,17 @@ for i = 1:maxit
     r=(r+abs(r))/2;
     iter = iter+1;
     if mod(iter,iter_test_stop)==0
-        norm_rn = norm(r);
-        if abs(norm_rn-norm_r)<tol || norm_rn < 1e-6
-%                      abs(norm_rn-norm_r)
-%                      abs(norm_rn-norm_r)/norm_r
+%         norm_rn = norm(r);
+%         if abs(norm_rn-norm_r)<tol || norm_rn < 1e-6
+% %                      abs(norm_rn-norm_r)
+% %                      abs(norm_rn-norm_r)/norm_r
+%              break;
+%         end
+%         norm_r = norm_rn;
+         if colrs <tol
              break;
-        end
-        norm_r = norm_rn;
+         end
+         colrs=0;
     end
     % 主要记录迭代过程中的值 用来调试
     if debug

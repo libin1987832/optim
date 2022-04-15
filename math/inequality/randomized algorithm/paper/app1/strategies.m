@@ -5,10 +5,10 @@
 function isSub = strategies(A,b,Qn,type,iter,nf,rkp,xA)
 [m,n] = size(A);
 isSub = false;
-eIter = 3;
+eIter = 8;
 con1 = 0.99999;
-con2 = 0.2;
-diff = 100000*eps;
+con2 = 0.5;
+diff = 10*eps;
 tol = 1e-13;
 delt = 0.95; 
 Daxiter = floor(max(33,(m+n)/4)/nf);

@@ -50,10 +50,12 @@ end
 % for i = 1:maxit
 %  pickedj_a(i) = randsample(index,1,true,weight);
 % end
-
+colrs=0;
 for i = 1:maxit
     pickedj = randi(n);
     col = A(:, pickedj);
+    colr=col' * r;
+    colrs=colrs+colr*colr;
     inc = alpha*( col' * r ) / Acol(pickedj);
     x(pickedj) = x(pickedj) + inc;
     rs = rs - inc*col;
@@ -61,15 +63,20 @@ for i = 1:maxit
     %r=(r+abs(r))/2;
     r(r<0)=0;
     iter = iter+1;
+
     if mod(iter,iter_test_stop)==0
-        norm_rn = norm(r);
+  %     norm_rn = norm(r);
 %         if norm_rn > norm_r
 %             fprintf('%d',pickedj)
 %         end
-        if abs(norm_rn-norm_r)<tol || norm_rn < 1e-6
-            break;
-        end
-        norm_r = norm_rn;
+%         if abs(norm_rn-norm_r)<tol || abs(norm_rn) < tol
+%             break;
+%         end
+%         norm_r = norm_rn;
+         if colrs <tol
+             break;
+         end
+         colrs=0;
     end
     % 主要记录迭代过程中的值 用来调试
     if debug

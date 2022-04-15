@@ -44,25 +44,31 @@ for i = 1:n
   Acol = [Acol,norm(A(:,i))^2];
   index = [index,i];
 end
-
+colrs=0;
 prob=(Acol/sum(Acol));
 cumsumpro=cumsum(prob);
 for i = 1:maxit
     pickedj=sum(cumsumpro<rand)+1;
     col = A(:, pickedj);
-    inc = alpha*( col' * r ) / Acol(pickedj);
+       colr=col' * r;
+    colrs=colrs+colr*colr;
+    inc = alpha*(  colr ) / Acol(pickedj);
     x(pickedj) = x(pickedj) + inc;
     rs = rs - inc*col;
     r = rs;
      %r=(r+abs(r))/2;
     r(r<0)=0;
     iter = iter+1;
-    if mod(iter,iter_test_stop)==0
-        norm_rn = norm(r);
-        if abs(norm_rn-norm_r)<tol || norm_rn <1e-6
-            break;
-        end
-        norm_r = norm_rn;
+     if mod(iter,iter_test_stop)==0
+%         norm_rn = norm(r);
+%         if abs(norm_rn-norm_r)<tol || norm_rn <1e-6
+%             break;
+%         end
+%         norm_r = norm_rn;
+         if colrs <tol
+             break;
+         end
+         colrs=0;
     end
     % 主要记录迭代过程中的值 用来调试
     if debug
@@ -71,7 +77,8 @@ for i = 1:maxit
                 e = norm(x-exactx);
                 iter_k =[iter_k x];
             else
-                Ar = A'*r;
+%                 Ar = A'*r;
+                Ar=norm(r);
                 e = norm(Ar);
                 iter_k =[iter_k i];
             end
