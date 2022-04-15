@@ -1,8 +1,8 @@
 
 gamm1 = 0.5;
 % read data A1 b1 positive A2 b2 non positive fm1 fm2 
- %[A1,b1,A2,b2,At1, At2, fm1, fm2, AL1, bL1, AL2, bL2] = readBreast(gamm1);
- [A1,b1,A2,b2,At1, At2, fm1, fm2, AL1, bL1, AL2, bL2] = readHeart(gamm1);
+[A1,b1,A2,b2,At1, At2, fm1, fm2, AL1, bL1, AL2, bL2] = readBreast(gamm1);
+ %[A1,b1,A2,b2,At1, At2, fm1, fm2, AL1, bL1, AL2, bL2] = readHeart(gamm1);
 numberOfbeta = size(A1,2);
 maxIter = 900;
 str = ['D','C','R','P'];
@@ -89,11 +89,14 @@ sumerror = errorcount1 + errorcount2;
 terrorcount1 = sum(tans1 < 0.5);
 terrorcount2 = sum(tans2 > 0.5);
 tsumerror = terrorcount1 + terrorcount2;
+xw=[xw [SVMModel.Beta;SVMModel.Bias]];
+output(3,:) = [sumerror,sumcount,1-sumerror/sumcount,tsumerror,fm1+fm2,1-tsumerror/(fm1+fm2),0,0,0,0,0,0];
 
 
-% output
- output(3,:) = [0,0,0,sumerror,sumcount,1-sumerror/sumcount,0,0,0,tsumerror,fm1+fm2,1-tsumerror/(fm1+fm2)]
-xw = [xw [SVMModel.Beta;SVMModel.Bias]]'
+ output
+ xw
+ %output(3,:) = [0,0,0,sumerror,sumcount,1-sumerror/sumcount,0,0,0,tsumerror,fm1+fm2,1-tsumerror/(fm1+fm2)]
+%xw = [xw [SVMModel.Beta;SVMModel.Bias]]'
 %beta = xw(:,1:end-1);
 %norms=repmat(sqrt(sum(beta.^2,2)),1,numberOfbeta);
 %beta = beta./norms;
