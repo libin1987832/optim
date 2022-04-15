@@ -7,8 +7,8 @@ numberOfbeta = size(A1,2);
 maxIter = 900;
 str = ['D','C','R','P'];
 x0=zeros(size(A1,2),1);
-[xkh1,rkh,countFMh,countNWh,beginNWh,tfh,vkh,rkArrh]=han(x0,A1,b1,maxIter);
-[xkh2,rkh,countFMh,countNWh,beginNWh,tfh,vkh,rkArrh]=han([x0;0],A2,b2,maxIter);
+[xkh1,rkh,countFMh,countNWh,beginNWh,tfh,vkh,rkArrh]=han(x0,A1,b1,maxIter);%不优化gamma
+[xkh2,rkh,countFMh,countNWh,beginNWh,tfh,vkh,rkArrh]=han([x0;0],A2,b2,maxIter);%优化gamma
 xkh = [xkh1 xkh2(1:end-1)];
 gamm = [gamm1,xkh2(end,1)];
 output = zeros(3,6*2);
@@ -92,8 +92,8 @@ tsumerror = terrorcount1 + terrorcount2;
 
 
 % output
-% output(3,:) = [0,0,0,sumerror,sumcount,1-sumerror/sumcount,0,0,0,tsumerror,fm1+fm2,1-tsumerror/(fm1+fm2)]
-%xw = [xw [SVMModel.Beta;SVMModel.Bias]]'
+ output(3,:) = [0,0,0,sumerror,sumcount,1-sumerror/sumcount,0,0,0,tsumerror,fm1+fm2,1-tsumerror/(fm1+fm2)]
+xw = [xw [SVMModel.Beta;SVMModel.Bias]]'
 %beta = xw(:,1:end-1);
 %norms=repmat(sqrt(sum(beta.^2,2)),1,numberOfbeta);
 %beta = beta./norms;
