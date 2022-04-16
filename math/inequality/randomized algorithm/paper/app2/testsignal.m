@@ -4,7 +4,10 @@ x(1,6:17) = 0.5:0.5:6;
 x(1,23) = 9;
 x(1,28) = 7;
 x(1,38) = 2.1;
-x(1,45:55) = ones(1,11)*3.8;
+% x(1,45:50) = ones(1,6)*3.8;
+x(1,45) = 7.8;
+x(1,50) = 8.8;
+x(1,55) = 5.8;
 N = length(x);%求取抽样点数
 t = (0:N-1);%显示实际时间
 hold on
@@ -19,17 +22,35 @@ L2 = diag(v2);
 v3 = ones(1,63)*gausFilter(3);
 L3 = diag(v3,-1);
 L = L1 + L2 + L3;
-u = rand(1,64)*0.15;
+ur=0.3;
+u = rand(1,64)*ur;
 x2 = L*x'+ u';
 subplot(412)
 plot(t,x2,'r');
 title('接收信号')
 A=[-L;L;eye(64);-eye(64)];
-b=[-x2-0.15;x2-0.15;zeros(64,1);-ones(64,1)*12];
+b=[-x2-ur;x2-ur;zeros(64,1);-ones(64,1)*12];
 x0=zeros(64,1);
-maxIter = 30;
-[xkh,rkh,countFMh,countNWh,beginNWh,tfh,vkh,rkArrh]=hybridA(x0,A,b,maxIter);
-[xpp,arr]=project(L,x2,x0,100,0.15,0,12,0);
+maxIter = 100;
+nf=5;
+[xkh,rkh,countFMh,countNWh,beginNWh,tfh,vkh,rkArrh]=hybridA(A,b,x0,maxIter,nf,'PHA');
+rr=b-A*xkh;
+rr(rr<0)=0;
+Ar=A'*rr;
+norm(Ar)
+rr=b-A*x';
+rr(rr<0)=0;
+Ar=A'*rr;
+norm(Ar)
+rr=b-A*x2;
+rr(rr<0)=0;
+Ar=A'*rr;
+norm(Ar)
+[xpp,arr]=project(L,x2,x0,1000,ur,0,12,0);
+rr=b-A*xpp;
+rr(rr<0)=0;
+Ar=A'*rr;
+norm(Ar)
 subplot(413)
 plot(t,xkh','b');
 title('重构信号')
@@ -40,10 +61,10 @@ legend('原始信号','接收信号','重构信号')
 title('三种信号对比')
 SNRdB = @(s,n)( 10*log10(sum(s(:).^2)/sum((n(:)-s(:)).^2)) ); 
 % SNRdB = @(s,n)( 10*log10((sum((n(:).^2)-sum((s(:).^2))))/sum(s(:).^2))); 
-SNRdB(x,x2)
-SNRdB(x,xkh)
-SNRdB(x,xpp)
-SNR_singlech(x,x)
+% SNRdB(x,x2)
+% SNRdB(x,xkh)
+% SNRdB(x,xpp)
+% SNR_singlech(x,x)
 
 
 % function y = add_gaussian_noise_snr_db(signal, snr)
