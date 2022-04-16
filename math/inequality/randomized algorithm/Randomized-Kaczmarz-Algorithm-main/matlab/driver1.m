@@ -1,8 +1,9 @@
 %driver 
 
 %% experiment 1 (presentation) comparing rate of convergence among 3 versions with maxit = 15000 (same experiment as from the original paper)
-[error1,error2,error3] = driver_as_function(15000,[]);
-maxit = 15000;
+maxit = 500;
+[error1,error2,error3] = driver_as_function(maxit,[]);
+
 figure (1)
 semilogy(1:maxit,error1,'k--');
 title('comparing rate of convergence among 3 versions with maxit = 15000')

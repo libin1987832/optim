@@ -62,7 +62,7 @@ title(sprintf('添加噪声\\sigma=%g',sigma),'Interpreter','tex')
 subplot('position',[0+x,0.25,.2,.2]);
 % set(gca,'DataAspectRatio',[3,4,1]);  
 imshow(uint8(out2.sol))
-title('全变分图像重构')
+title('全变分图像重构') 
 % subfig=subplot(4,3,i+9)
 %  RemoveFigMarginArea(subfig)
 % set(subfig,'LooseInset',get(subfig,'TightInset'))
