@@ -2,58 +2,39 @@
 
 %% experiment 1 (presentation) comparing rate of convergence among 3 versions with maxit = 15000 (same experiment as from the original paper)
 maxit = 200;
-m=150;
-n=20;
+
+m = 150;
+n = 10;
 A = 2 * rand(m , n)-1;
-x=rand(n,1);
-b = A*x;
-x0 = zeros(n,1);
-SP=eye(n^2);
-sumA=sum(A.*A,2);
-Bn=diag(1./sumA)*A;
-for i=1:m
-    B=Bn(i,:);
-    P=eye(n)-B'*B;
-    kp=kron(P,P);
-    SP=SP*kp;
-end
-max(eig(SP))
-SP=zeros(n^2,n^2);
-for i=1:m
-    B=Bn(i,:);
-    P=eye(n)-B'*B;
-    p=1/m;
-    kp=p*kron(P,P);
-    SP=SP+kp;
-end
-max(eig(SP))^m
-SP=zeros(n^2,n^2);
-normrow = [];
- for i = 1:m
-    normrow = [normrow,norm(A(i,:))];
- end  
-  weight = normrow/sum(normrow);
-for i=1:m
-    B=Bn(i,:);
-    P=eye(n)-B'*B;
-    p= weight(i);
-    kp=p*kron(P,P);
-    SP=SP+kp;
-end
-max(eig(SP))^m
+b = 2 * rand(m , 1)-1;
+
+x0 = zeros(n , 1);
+
+ x_exact=[];
+nf=3;
+maxIter = 100;
+tol=1e-20;
+[x_HA,flag,iter_HA,error_k,indexsm] = hybridA(A,b,x0,maxIter,nf,'PHA',tol,x_exact,0);
+r = b - A * x_HA;
+r(r<0) = 0;
+r_GS = r'*r;
+g_GS = norm(A'*r)
+
+
 figure (1)
-iter=20;
+iter=100;
+maxit=50;
 errors=zeros(3,iter);
 for i = 1:iter
-[error1,error2,error3] = driver_as_function(A,b,x0,x,maxit,[]);
+[error1,error2,error3] = driver_as_function(A,b,x0,r_GS,maxit,[]);
 
-semilogy(1:maxit,error1,'k--');
+semilogy(1:maxit+1,error1,'k--');
 % title('comparing rate of convergence among 3 versions with maxit = 15000')
 % ylabel('Least squares error') 
 % xlabel('Number of iterations') 
 hold on
-% semilogy(1:maxit,error2,'b--');
- semilogy(1:maxit,error2,'r--');
+ semilogy(1:maxit+1,error2,'b--');
+%  semilogy(1:maxit+1,error3,'r--');
 % legend('classical kaczmarz','simple randomized kaczmarz','randomized kaczmarz')
 errors(:,i)=[error1(1,maxit);error2(1,maxit);error3(1,maxit)];
 end
