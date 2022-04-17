@@ -23,21 +23,26 @@ g_GS = norm(A'*r)
 
 figure (1)
 iter=100;
-maxit=50;
+maxit=50、;
 errors=zeros(3,iter);
+% title('comparing rate of convergence among 3 versions with maxit = 15000')
+
 for i = 1:iter
 [error1,error2,error3] = driver_as_function(A,b,x0,r_GS,maxit,[]);
 
-semilogy(1:maxit+1,error1,'k--');
+semilogy(1:maxit+1,error1/2,'k--','LineWidth',3);
 % title('comparing rate of convergence among 3 versions with maxit = 15000')
 % ylabel('Least squares error') 
 % xlabel('Number of iterations') 
 hold on
- semilogy(1:maxit+1,error2,'b--');
+ semilogy(1:maxit+1,error2/2,'b--');
 %  semilogy(1:maxit+1,error3,'r--');
 % legend('classical kaczmarz','simple randomized kaczmarz','randomized kaczmarz')
 errors(:,i)=[error1(1,maxit);error2(1,maxit);error3(1,maxit)];
 end
+ ylabel('F(x^k)-F^*') 
+ xlabel('迭代次数') 
+legend('循环模式','均匀概率')
 hold off
 % figure(2)
 % hist(errors(1,:),10)

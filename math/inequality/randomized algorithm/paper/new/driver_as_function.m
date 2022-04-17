@@ -39,9 +39,9 @@ function [classical_iter_or_error,simple_iter_or_error,rand_iter_or_error] = dri
 % x0 = zeros(n,1);
 [m,n]=size(A);
 
-[x1,iter1,error1,~,~]= GuassSeidelNE(A, b, x0,1 ,maxit,-1,r_exact,1);
-[x2,iter2,error2,~,~]=  simpleGuassSeidelNE(A, b, x0,1 ,maxit,-1,r_exact,1);
-[x3,iter3,error3,~,~] = randGuassSeidelNE(A, b, x0,1 ,maxit,-1,r_exact,1);
+[x1,iter1,error1,~,~]= GuassSeidelNE(A, b, x0,2 ,maxit,-1,r_exact,1);
+[x2,iter2,error2,~,~]=  simpleGuassSeidelNE(A, b, x0,2 ,maxit,-1,r_exact,1);
+[x3,iter3,error3,~,~] = randGuassSeidelNE(A, b, x0,2 ,maxit,-1,r_exact,1);
 if isempty(tol)
     classical_iter_or_error = error1;
     simple_iter_or_error = error2;
