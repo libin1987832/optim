@@ -90,11 +90,20 @@ terrorcount1 = sum(tans1 < 0.5);
 terrorcount2 = sum(tans2 > 0.5);
 tsumerror = terrorcount1 + terrorcount2;
 xw=[xw [SVMModel.Beta;SVMModel.Bias]];
-output(3,:) = [sumerror,sumcount,1-sumerror/sumcount,tsumerror,fm1+fm2,1-tsumerror/(fm1+fm2),0,0,0,0,0,0];
-
+%output(3,:) = [sumerror,sumcount,1-sumerror/sumcount,tsumerror,fm1+fm2,1-tsumerror/(fm1+fm2),0,0,0,0,0,0];
+output(3,:) = [0,0,0,sumerror,sumcount,1-sumerror/sumcount,0,0,0,tsumerror,fm1+fm2,1-tsumerror/(fm1+fm2)];
 heart=[-0.08272769  0.18974514  0.42688792  0.33055823  0.24806426 -0.28768016 ...
    0.09175626 -0.21943122  0.29202567  0.08903626  0.33698311  0.82610174 0.60667718];
-heart=abs(heart);
+breast=[ 0.534585 
+ -0.004881 
+ 0.321647 
+ 0.330319 
+ 0.096345 
+ 0.383102 
+ 0.446566 
+ 0.212896 
+ 0.534026 ]';
+heart=abs(breast);
 bar(heart/sum(heart))
 
  output
