@@ -11,7 +11,7 @@ ATAi=inv(ATA)
 ATABA=ATAi*A'*N*A
 ATABA2=Ai*N*A
 [V,D]=eig(ATABA)
-eig(V)
+V*D*pinv(V)
 % V*D
 % ATABA*V
 % V'*V
