@@ -75,4 +75,3 @@ semilogy(error_SGS, 'g') % Matrix M
 semilogy(error_RGS, 'b') % Matrix M
 legend('CCD', 'UCD', 'RCD' )
 
-Pi=eye(m)-

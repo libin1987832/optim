@@ -1,11 +1,11 @@
 clear
 clc
-m=5000;
-n=500;
+m=500;
+n=50;
 A=2*rand(m,n)-1;
 b=2*rand(m,1)-1;
 tol=1e-5;
-maxit_Rand =2000000;
+maxit_Rand =20000;
 alphaA=[0.5,1,1.5,2];
 error=zeros(4,100000);
 x_exact=[];
@@ -31,6 +31,6 @@ hold on
 semilogy(error(2,1:iter), 'k') % Matrix M
 semilogy(error(3,1:iter), 'g') % Matrix M
 semilogy(error(4,1:iter), 'b') % Matrix M
-legend('\alpha=0.5', '\alpha=1', '\alpha=1.5', '\alpha=2' )
+legend('\lambda=0.5', '\lambda=1', '\lambda=1.5', '\lambda=2' )
 title('步长对算法的影响(CCD算法求解均匀矩阵构造线性不等式方程组)')
 
