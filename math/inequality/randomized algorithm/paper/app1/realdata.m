@@ -107,14 +107,16 @@ heart=abs(breast);
 bar(heart/sum(heart))
 
  output
- xw=abs([xw(1:end-1,:) heart']);
+ xw=abs([xw(1:end-1,:) heart'])
  sxw=sum(xw,1);
  dsxw=diag(1./sxw);
  dsxwn=xw*dsxw;
  figure
  bar(abs(dsxwn))
  
- 
+ xwo=[xw(:,2) xw(:,4) xw(:,5)]';
+ dsw=diag(1./sum(xwo,2))*xwo;
+ dsw'
  %output(3,:) = [0,0,0,sumerror,sumcount,1-sumerror/sumcount,0,0,0,tsumerror,fm1+fm2,1-tsumerror/(fm1+fm2)]
 %xw = [xw [SVMModel.Beta;SVMModel.Bias]]'
 %beta = xw(:,1:end-1);

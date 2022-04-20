@@ -16,9 +16,9 @@ x4=imread('DHA2.tif');
  
  x5 = [x1 x2 ;
      x3 x4];
-  imshow(x5)
+%  imshow(x5)
 %   imwrite(x5,'tt.eps')
-%  imshow(imresize(x5,0.3))
+  imshow(imresize(x5,0.9))
  % copyobj(get(get(h1,'Children'),'Children'),s1)
  % s2=subplot(212);
  % copyobj(get(get(h2,'Children'),'Children'),s2)
