@@ -58,8 +58,8 @@ for i = 1:maxit
     x(pickedj) = x(pickedj) + inc;
     rs = rs - inc*col;
     r = rs;
-    %r=(r+abs(r))/2;
-    r(r<0)=0;
+    r=(r+abs(r))/2;
+%     r(r<0)=0;
     iter = iter+1;
     if mod(iter,iter_test_stop)==0
         norm_rn = norm(r);

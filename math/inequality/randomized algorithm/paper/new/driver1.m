@@ -5,8 +5,8 @@ maxit = 200;
 
 % m = 150;
 % n = 10;
-r = 100;
-m = 1000;
+r = 5;
+m = 100;
 n = 2*r+1;
 
 % generate nodes
@@ -39,16 +39,18 @@ for j = 1:m
        A(j,k+r+1) =sqrt(w(j))*exp(2*pi*1i*k*t(j));
     end
 end  
-% A = 2 * rand(m , n)-1;
+ A = 2 * rand(m , n)-1;
+%A=real(A);
 b = 2 * rand(m , 1)-1;
 
 x0 = zeros(n , 1);
 
  x_exact=[];
 nf=10;
-maxIter = 200;
+maxIter = 2000;
 tol=1e-20;
-[x_HA,flag,iter_HA,error_k,indexsm] = hybridA(A,b,x0,maxIter,nf,'PHA',tol,x_exact,0);
+%[x_HA,flag,iter_HA,error_k,indexsm] = hybridA(A,b,x0,maxIter,nf,'PHA',tol,x_exact,0);
+[x_HA, ~, ~, ~, ~] = IFM(A, b, x0,maxIter, nf , 1e-10,[],0);
 r = b - A * x_HA;
 r(r<0) = 0;
 r_GS = r'*r;
@@ -56,8 +58,8 @@ g_GS = norm(A'*r)
 
 
 figure (1)
-iter=500;
-maxit=58;
+iter=50;
+maxit=390;
 errors=zeros(3,iter);
 % title('comparing rate of convergence among 3 versions with maxit = 15000')
 

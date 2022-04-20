@@ -7,14 +7,48 @@ debug = 0;
 % n = 200;
 
 
-m = 10000;
-n = 2000;
-  A = 2 * rand(m , n)-1;
+
+r = 700;
+m = 15000;
+n = 2*r+1;
+% generate nodes
+%tj are drawing randomly from a uniform distribution in [0,1]
+t = rand(m,1);
+
+%then ordering by magnitude (since they are all positive, just sort)
+t = sort(t);
+%just to assign the size
+w = zeros(m,1); 
+x = zeros(n,1);
+% generate x 
+realx = randn(n,1);
+imgx = randn(n,1);
+for l = 1:n
+   x(l) = realx(l)+1i*imgx(l);
+end  
+% generate A and b
+A = zeros(m,n);
+for j = 1:m
+%    dealing with special cases when reach the endpoints(nodes)
+    if j == 1
+        w(j) = (t(2)-t(end)-1)/2;
+    elseif j == m
+            w(j) = (t(1)+1-t(m-1))/2;
+        else
+            w(j) = (t(j+1)-t(j-1))/2;
+    end              
+    for k = -r:r
+       A(j,k+r+1) =sqrt(w(j))*exp(2*pi*1i*k*t(j));
+    end
+end  
+
+A=real(A);
+
    b = 2 * rand(m , 1)-1;
 
 x0 = zeros(n , 1);
 
-tol=1e-10;
+tol=1e-2;
 
 fprintf('%s & %d & %d \n','矩阵维数', m, n);
 %% 基于IFM的算法找到一个解
@@ -32,9 +66,10 @@ fprintf('%s & %g & %g \n','最开始的目标函数和梯度', norm_r0, norm_g0);
 % fprintf('%s & %g & %g \n','IFM解的目标函数值和梯度  ', norm_rexact, norm_gexact);
  x_exact=[];
 %% 参数的设定
- maxit_IFM = 1000;
+ maxit_IFM = 5000;
 t=clock;
-[x_IFM,iter_IFM,error_IFM,xA_IFM,index_IFM] = IFM(A, b, x0, maxit_IFM, maxit_LSQR ,tol, x_exact,debug);
+
+[x_IFM,iter_IFM,error_IFM,xA_IFM,index_IFM] = IFM(A, b, x0, maxit_IFM, maxit_LSQR ,tol/10, x_exact,debug);
 tf_IFM=etime(clock,t);
 r = b - A * x_IFM;
 r(r<0) = 0;
@@ -43,7 +78,7 @@ g_IFM = norm(A'*r);
 fprintf('& %s & %g & %g & %d & %g \\\\\n','IFM', r_IFM, g_IFM,iter_IFM,tf_IFM);
 
 %% GuassSeidel
-maxit_Rand =8000000;
+maxit_Rand =500000;
 t=clock;
  [x_GS,iter_GS,error_GS,xA_GS,index_GS] = GuassSeidelNE(A, b, x0,2.0,maxit_Rand,tol,x_exact,debug);
 tf_GS=etime(clock,t);
@@ -239,3 +274,21 @@ fprintf('& %s & %g & %g & %d & %g \\\\\n', 'RCD', r_GS, g_GS, iter_GS, tf_GS);
 % & UCD & 68.223 & 0.00801527 & 300000 & 24.827 \\
 % & RCD & 68.223 & 0.00779252 & 294000 & 28.046 \\
 
+% 矩阵维数 & 6000 & 601 
+% 最开始的目标函数和梯度 & 31.9219 & 19.1749 
+% & IFM & 0.759325 & 0.0275302 & 606 & 7.816 \\
+% & CCD & 1.30584 & 0.0700874 & 66110 & 1.551 \\
+% & UCD & 1.14373 & 0.0542146 & 68514 & 2.8 \\
+% & RCD & 1.60922 & 0.0903438 & 31853 & 1.35 \\
+%矩阵维数 & 10000 & 1001 
+%最开始的目标函数和梯度 & 41.0165 & 24.9397 
+%& IFM & 0.882377 & 0.0296899 & 928 & 39.024 \\
+%& CCD & 0.43119 & 0.0134421 & 500000 & 17.671 \\
+%& UCD & 0.45638 & 0.0145409 & 500000 & 18.324 \\
+%& RCD & 0.348757 & 0.0101935 & 471471 & 18.417 \\
+%矩阵维数 & 10000 & 1001 
+%最开始的目标函数和梯度 & 40.8849 & 25.6149 
+%& IFM & 0.801303 & 0.0282923 & 784 & 33.012 \\
+%& CCD & 1.57176 & 0.077961 & 145145 & 5.167 \\
+%& UCD & 1.67711 & 0.094864 & 100100 & 3.723 \\
+%& RCD & 1.88807 & 0.0959638 & 92092 & 3.624 \\
