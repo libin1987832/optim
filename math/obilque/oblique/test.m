@@ -1,7 +1,7 @@
 clc;clear;close all;
 %初始值
-m=3;n=5;
-A=CreatA(m,n);
+m=300;n=50;
+A=rand(m,n);
 b=rand(m,1);RRE=0.5e-6;x_0=zeros(n,1);
 
 if m>=n
@@ -11,19 +11,17 @@ else
     b_A=b-A'\(A'*b);
 end
 %%
-[x,k,R]=GSO_improve(A,b,n,RRE,x_0,b_A);
-disp('GSO迭代次数:');
-disp(k);
-disp(R);
-subplot(1,3,1);
-plot3(R(1,:),R(2,:),R(3,:))
-subplot(1,3,2);
-[x,y]=meshgrid(-2:0.1:1);
-for j=1:1:n
-    z=(A(1,j)*x+A(2,j)*y)/A(3,j);
-    mesh(x,y,z);
-    hold on;
-end
+debug=1;
+tol=1e-10;
+iter=1e5;
+[xC,errorC]=GSO(A,b,RRE,x_0,tol,iter,b_A,debug);
+[xR,errorR]=RGSO2(A,b,RRE,x_0,tol,iter,b_A,debug);
+[xGS,errorGS] = GS(A, b, RRE,x_0,1,iter,b_A,debug);
+iters=1000;
+semilogy(1:iters,errorC(1:iters),'b.');
+hold on
+semilogy(1:iters,errorR(1:iters),'r.');
+semilogy(1:iters,errorGS(1:iters),'g.');
 
 
 

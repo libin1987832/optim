@@ -1,4 +1,4 @@
-function [x,error]=GSO(A,b,RRE,x0,tol,iter,b_A,debug)
+function [x,error]=RGSO2(A,b,RRE,x0,tol,iter,b_A,debug)
 [~,n]=size(A);
 %b_A=b-(A'\(A'*b));
 RRE=RRE*norm(b,2)^(2);
@@ -18,8 +18,10 @@ alpha=A(:,1)'*r/N(1);
 x(1)=x(1)+alpha;
 r=r-alpha*A(:,1);
 i_1=1;
+factor=ones(1,n)*1/n;
+cumsumpro=cumsum(factor);
 for k=1:1:iter
-    i_2=mod(k,n)+1;
+    i_2=sum(cumsumpro<rand)+1;
     G=A(:,i_1)'*A(:,i_2);
     g=N(i_2)-G^2/N(i_1);
     if g>tol
