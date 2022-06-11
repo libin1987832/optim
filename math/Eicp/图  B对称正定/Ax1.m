@@ -6,6 +6,8 @@ n=100;
 C=importdata('C2.txt');
 a=100;
 b=1;
+z1=0:(a-b)/(n-1):1;
+z1=z1+b;
 for i=1:n
     z(i)=b+((i-1)*(a-b))/(n-1);
 end
