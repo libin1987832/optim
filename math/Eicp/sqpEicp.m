@@ -6,20 +6,44 @@ if debug
 end
 k = 0;
 method = 1;
-if norm(diag(D) - M) == 0
+typeM = 0;
+typeB = 0;
+if isdiag(M)
     method = 2;
+    M = diag(M);
+end
+if isequal( A, M )
+    typeM = 1;
+end 
+if isdiag( M - A )
+    typeM = 2;
+    MA = diag( M - A );
+end
+if isdiag( B )
+    typeB = 1;
+    DB = diag(B);
 end
 maxe = sigma0;
 while 1
-    xB = x' * B;   
+    if typeB
+        xB  = x .* B;
+    else
+        xB = x' * B;
+    end
     Ax = A * x;
     tao = 1 - 0.5 * xB * x;  
     % compute the dirction
-    d = searchdir(Ax, xB, tao, x, method, bisectEps);
+    [d, lambda, dAx, Md] = searchdir(M, Ax, xB, tao, x, method, bisectEps);
     if norm( d ) < eps || k > maxIT
         break;
     end
-    Ad = A * d;
+    if typeM == 1
+        Ad = Md;
+    elseif typeM == 2
+        Ad = Md - MA .* d;
+    else
+        Ad = A * d;
+    end
     dAd = d' * Ad;
     Bd = B * d;
     c = 0.5 * d' * Bd;
@@ -27,8 +51,8 @@ while 1
     if e > maxe
         sigma = e;
     end
-    z= - ( Ax' * d + tao * sigma ) / ( dAd + 2 * c * sigma );
-    u= ( - tao + sqrt( tao^2 + 4 * c * tao ) ) / ( 2 * c );
+    z= - ( dAx + tao * sigma ) / ( dAd + 2 * c * sigma );
+    u= - ( tao - sqrt( tao^2 + 4 * c * tao ) ) / ( 2 * c );
     % compute steplength
     alpha = searchstep(tao, z, u);
     x = x + alpha * d;

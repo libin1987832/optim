@@ -1,4 +1,4 @@
-function [d, lambda] = searchdir(M, Ax, xB, tao, x, method, tol)
+function [d, lambda, dAx, Md] = searchdir(M, Ax, xB, tao, x, method, tol)
     xBx = xB' * x;
     if method == 1
        [d,fval,exitflag,output,lambda]=quadprog(M, Ax, [], [], xB, tao, -x, []);
@@ -9,21 +9,22 @@ function [d, lambda] = searchdir(M, Ax, xB, tao, x, method, tol)
        dBx = d' * xB';
        lambda = ( xMd + xAx + dMd + dAx )/( xBx + dBx);
     elseif method == 2
-         D = M;
          Bx = xB';
-         Dx = D .* x;
-         invD = 1 ./ D;
+         Mx = M .* x;
+         invM = 1 ./ M;
          c = 0.5 * xBx -1;
          Bx2 = Bx .^ 2;
-         Lam1 =  ( invD .* Bx * Ax - c ) / ( invD' * Bx2 );  
-         Lam2 = max((Ax - Dx) ./ Bx);
-         Lam3 = invD' * ( abs( Bx ) .* abs( Ax ) ) - c /min( invD .* Bx2 ); 
+         Lam1 =  ( ( invM .* Bx )' * Ax - c ) / ( invM' * Bx2 );  
+         Lam2 = max((Ax - Mx) ./ Bx);
+         Lam3 = invM' * ( abs( Bx ) .* abs( Ax ) ) - c /min( invM .* Bx2 ); 
          lambdaUpper = max(Lam1, Lam2, Lam3);
          grt0Bx = Bx > 0;
-         lambdaLower = min( Ax( grt0Bx ) - Dx( grt0Bx ) ./ Bx( grt0Bx ));
-         funDir = @(lam) Bx' * directionByD(lam, Bx, Ax, Dx) + c;
+         lambdaLower = min( Ax( grt0Bx ) - Mx( grt0Bx ) ./ Bx( grt0Bx ));
+         funDir = @(lam) Bx' * directionByD(lam, Bx, Ax, Mx) + c;
          lambda=bisect(funDir, lambdaUpper, lambdaLower, tol);
-         d = directionByD(lambda, Bx, Ax, Dx);
+         d = directionByD(lambda, Bx, Ax, Mx);
+         dAx = d' * Ax;
+         Md = M .* d;
     end
 end
 function dir = directionByD(lambda, Bx, Ax, Dx)
