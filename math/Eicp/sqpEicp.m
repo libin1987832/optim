@@ -1,4 +1,4 @@
-function [x, error] = sqpEicp(A, B, M, x0, sigma0, eps, bisectEps, maxIT, debug)
+function [x, error] = sqpEicp(A, B, M, x0, sigma0, dsigma, eps, bisectEps, maxIT, debug)
 error = 0;
 x = x0;
 if debug
@@ -10,7 +10,9 @@ typeM = 0;
 typeB = 0;
 if isdiag(M)
     method = 2;
+    typeM = 2;
     M = diag(M);
+    MA = M - diag(A);
 end
 if isequal( A, M )
     typeM = 1;
@@ -37,7 +39,7 @@ while 1
     dAd = d' * Ad;
     Bd = computexB(B, d, typeB);
     c = 0.5 * d' * Bd;
-    e=abs(lambda)+0.01;
+    e=abs(lambda)+dsigma;
     if e > sigma
         sigma = e;
     end

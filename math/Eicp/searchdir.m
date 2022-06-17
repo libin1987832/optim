@@ -22,17 +22,17 @@ function [d, lambda, dAx, Md] = searchdir(M, Ax, xB, tao, x, method, tol)
         lambdaUpper = Lam1;
          grt0Bx = Bx > 0;
          lambdaLower = min( ( Ax( grt0Bx ) - Mx( grt0Bx ) ) ./ Bx( grt0Bx ));
-         funDir = @(lam) Bx' * directionByD(lam, x, Bx, Ax, Mx) + c;
+         funDir = @(lam) Bx' * directionByD(lam, x, Bx, Ax, Mx, invM) + c;
          lambda=bisect(funDir, lambdaLower, lambdaUpper, tol);
-         d = directionByD(lambda, Bx, Ax, Mx);
+         d = directionByD(lambda, x, Bx, Ax, Mx, invM);
          dAx = d' * Ax;
          Md = M .* d;
     end
 end
-function dir = directionByD(lambda, x, Bx, Ax, Dx)
+function dir = directionByD(lambda, x, Bx, Ax, Dx, invM)
          lBx = lambda * Bx;
          lBxAx = lBx - Ax;
-         grt0lBAx = lBxAx > Dx; 
+         grt0lBAx = lBxAx > -Dx; 
          dir = -x;
-         dir( grt0lBAx ) = lBxAx( grt0lBAx );
+         dir( grt0lBAx ) = invM( grt0lBAx ) .* lBxAx( grt0lBAx );
 end
