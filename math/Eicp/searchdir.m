@@ -1,12 +1,13 @@
 function [d, lambda, dAx, Md] = searchdir(M, Ax, xB, tao, x, method, tol)
-    xBx = xB' * x;
+    xBx = xB * x;
     if method == 1
        [d,fval,exitflag,output,lambda]=quadprog(M, Ax, [], [], xB, tao, -x, []);
        Md = M * d;
        xMd = x' * Md;
-       dMd = d * Md;
+       dMd = d' * Md;
        dAx = d' * Ax;
-       dBx = d' * xB';
+       dBx = xB * d;
+       xAx = x' * Ax;
        lambda = ( xMd + xAx + dMd + dAx )/( xBx + dBx);
     elseif method == 2
          Bx = xB';

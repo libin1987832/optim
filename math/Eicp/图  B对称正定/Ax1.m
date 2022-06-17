@@ -31,7 +31,8 @@ x1=m; %初始向量x1
 % x1=unidrnd(2,n,1)
 %% 调用所有函数
 [iG]=SQPGB(A,x1,B,n,I); %调用SQP(G)函数，输出时间和迭代次数
-[iD]=SSQPDB(A,x1,B,n,I); %调用SSQP(D)函数，输出时间和迭代次数
-[i]=bas1B(A,x1,B,n); %调用BAS函数，输出时间和迭代次数
-[iI]=SSQPIB(A,x1,B,n); %调用SSQP(I)函数，输出时间和迭代次数
-[xk,i,h,lamdab]=SPL(A,B,x1,n);
+
+% [iD]=SSQPDB(A,x1,B,n,I); %调用SSQP(D)函数，输出时间和迭代次数
+% [i]=bas1B(A,x1,B,n); %调用BAS函数，输出时间和迭代次数
+% [iI]=SSQPIB(A,x1,B,n); %调用SSQP(I)函数，输出时间和迭代次数
+% [xk,i,h,lamdab]=SPL(A,B,x1,n);

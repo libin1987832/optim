@@ -15,7 +15,7 @@ end
 if isequal( A, M )
     typeM = 1;
 end 
-if isdiag( M - A )
+if typeM==0 && isdiag( M - A )
     typeM = 2;
     MA = diag( M - A );
 end
@@ -23,13 +23,9 @@ if isdiag( B )
     typeB = 1;
     DB = diag(B);
 end
-maxe = sigma0;
+maxe = 0;
 while 1
-    if typeB
-        xB  = x .* B;
-    else
-        xB = x' * B;
-    end
+    xB = computexB(B, x, typeB)';
     Ax = A * x;
     tao = 1 - 0.5 * xB * x;  
     % compute the dirction
@@ -37,15 +33,9 @@ while 1
     if norm( d ) < eps || k > maxIT
         break;
     end
-    if typeM == 1
-        Ad = Md;
-    elseif typeM == 2
-        Ad = Md - MA .* d;
-    else
-        Ad = A * d;
-    end
+    Ad = computeAd(A, d, Md, typeM);
     dAd = d' * Ad;
-    Bd = B * d;
+    Bd = computexB(B, d, typeB);
     c = 0.5 * d' * Bd;
     e=abs(lambda)+0.01;
     if e > maxe
@@ -59,5 +49,22 @@ while 1
     k = k + 1;
     if debug
         error(1,k) = 0.5 * x' * A * x;
+    end
+end
+end
+function Bx = computexB(B, x, typeB)
+   if typeB
+        Bx  = B .* x;
+    else
+        Bx = B * x;
+   end
+end
+function Ad = computeAd(A, d, Md, typeM)
+    if typeM == 1
+        Ad = Md;
+    elseif typeM == 2
+        Ad = Md - MA .* d;
+    else
+        Ad = A * d;
     end
 end
