@@ -15,15 +15,15 @@ end
 if isequal( A, M )
     typeM = 1;
 end 
-if typeM==0 && isdiag( M - A )
+if typeM==0 && method == 1 && isdiag( M - A )
     typeM = 2;
-    MA = diag( M - A );
+    MA = diag( M - A);
 end
 if isdiag( B )
     typeB = 1;
     DB = diag(B);
 end
-maxe = 0;
+sigma = 0;
 while 1
     xB = computexB(B, x, typeB)';
     Ax = A * x;
@@ -33,12 +33,12 @@ while 1
     if norm( d ) < eps || k > maxIT
         break;
     end
-    Ad = computeAd(A, d, Md, typeM);
+    Ad = computeAd(A, d, Md, MA, typeM);
     dAd = d' * Ad;
     Bd = computexB(B, d, typeB);
     c = 0.5 * d' * Bd;
     e=abs(lambda)+0.01;
-    if e > maxe
+    if e > sigma
         sigma = e;
     end
     z= - ( dAx + tao * sigma ) / ( dAd + 2 * c * sigma );
@@ -48,7 +48,7 @@ while 1
     x = x + alpha * d;
     k = k + 1;
     if debug
-        error(1,k) = 0.5 * x' * A * x;
+        error(1,k) = 0.5 * x' * Ax;
     end
 end
 end
@@ -59,7 +59,7 @@ function Bx = computexB(B, x, typeB)
         Bx = B * x;
    end
 end
-function Ad = computeAd(A, d, Md, typeM)
+function Ad = computeAd(A, d, Md, MA, typeM)
     if typeM == 1
         Ad = Md;
     elseif typeM == 2
