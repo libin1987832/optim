@@ -1,10 +1,11 @@
 %%  BAS本程序目的：求出当A为对称（正定）矩阵，B为单位矩阵的特征值互补问题.
-function [x, iter, fun] = spBas(A, B, x0, beta, etaMin, eps, maxIt, debug)
+function [x, iter, error] = spBas(A, B, x0, beta, etaMin, eps, maxIt, debug)
 iter = 0;
 %Etamin=unifrnd (0,1);
 etaMax=1/etaMin;
+error = 0;
 if debug
-    fun = zeros(1, maxIt + 1);
+    error = zeros(1, maxIt + 1);
 end
 typeB = 1;
 if size(B,2) == 1
@@ -20,13 +21,13 @@ while 1
     xAx = x' * Ax;
     xBx = x' * Bx;
     if debug
-        fun( iter + 1 ) = - xAx/xBx;
+        error( iter + 1 ) = - xAx/xBx;
     end
     invxBx = 1 / xBx;
     df = 2 * invxBx * ( xAx * invxBx * Bx - Ax);
     
      if iter == 0 
-        eta = rand(0,1) * etaMax;
+        eta = rand(1) * etaMax;
     else
         s = x - xp;
         w = df - dfp;
@@ -42,7 +43,7 @@ while 1
     %L = x <= beta * df;
     d = -x;
     %etabeta = max(eta, beta);
-    Fg = x >= eta * df && x > beta * df;
+    Fg = (x >= (eta * df)) & (x > (beta * df));
     d( Fg ) = -eta * df( Fg );
     
     if norm( d ) <= eps || iter > maxIt  %判断精度终止
