@@ -45,7 +45,12 @@ R1=max(abs(eig(A)))+0.01;
  M=A+R1*I;%A对称非正定
 %  M=A; %A对称正定
 M=diag(diag(M));
-[x, error] = sqpEicp(A, B, M, x1, sigma0, 0.1, 1e-5, 1e-12, 10000, 0);
+[x,  iter, error] = sqpEicp(A, B, M, x1, sigma0, 0.1, 1e-5, 1e-12, 10000, 0);
+lambda = (x' * A * x) / (x' * B * x);
+disp(['lambda=' num2str(lambda) ', ninfx=' num2str(sum(x<0)) ',ninfy='  num2str(sum((A - lambda * B) * x < -1e-3))])
+[x, iter, error]=SPL(A, B, x1, 10000,  1e-5, 1e-12, 0);
+lambda = (x' * A * x) / (x' * B * x);
+disp(['lambda=' num2str(lambda) ', ninfx=' num2str(sum(x<0)) ',ninfy='  num2str(sum((A - lambda * B) * x < -1e-3))])
 % [i]=bas1B(A,x1,B,n); %调用BAS函数，输出时间和迭代次数
 % [iI]=SSQPIB(A,x1,B,n); %调用SSQP(I)函数，输出时间和迭代次数
 % [xk,i,h,lamdab]=SPL(A,B,x1,n);

@@ -1,10 +1,10 @@
-function [x, error] = sqpEicp(A, B, M, x0, sigma0, dsigma, eps, bisectEps, maxIT, debug)
+function [x, iter, error] = sqpEicp(A, B, M, x0, sigma0, dsigma, eps, bisectEps, maxIT, debug)
 error = 0;
 x = x0;
 if debug
     error = zeros(1, maxIT);
 end
-k = 0;
+iter = 0;
 method = 1;
 typeM = 0;
 typeB = 0;
@@ -23,16 +23,16 @@ if typeM==0 && method == 1 && isdiag( M - A )
 end
 if isdiag( B )
     typeB = 1;
-    DB = diag(B);
 end
 sigma = 0;
 while 1
+    iter = iter + 1;
     xB = computexB(B, x, typeB)';
     Ax = A * x;
     tao = 1 - 0.5 * xB * x;  
     % compute the dirction
     [d, lambda, dAx, Md] = searchdir(M, Ax, xB, tao, x, method, bisectEps);
-    if norm( d ) < eps || k > maxIT
+    if norm( d ) < eps || iter > maxIT
         break;
     end
     Ad = computeAd(A, d, Md, MA, typeM);
@@ -48,9 +48,8 @@ while 1
     % compute steplength
     alpha = searchstep(tao, z, u);
     x = x + alpha * d;
-    k = k + 1;
     if debug
-        error(1,k) = 0.5 * x' * Ax;
+        error(1,iter) = 0.5 * x' * Ax;
     end
 end
 end
