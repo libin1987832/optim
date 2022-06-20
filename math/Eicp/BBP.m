@@ -29,13 +29,9 @@ while 1
         testwx( 1 : n ) = x;
         testwx( n+1 : 2 * n ) = v( 1 : n );
     end
-    if iter == 1
-        ninf1 = sum( z( F ) < 0 | v( T ) < 0  );
-    else
-        ninf = sum( z( F ) < 0 | v( T ) < 0  );
-        if ninf < ninf1
-            break;
-        end
+    ninf = sum( z( F ) < 0 | v( T ) < 0  );
+    if ninf < ninf1
+         break;
     end
     if iter > maxIt
         break;

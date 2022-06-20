@@ -18,20 +18,25 @@ while 1
     if iter == 0
         F = 1 : n;
     end
-    [x, F, iter, ninf, ~] = BBP(A, yk, F, p, ninf0, epssub, 0, debug);
-    
+    while ninf >0
+        [x, F, iter, ninf, ~] = BBP(A, yk, F, p, ninf0, epssub, 0, debug);
+        if iter == p
+            [x, F, iter, ninf, ~] = BBP(A, yk, F, p, ninf0, epssub, 1, debug);
+        end
+        ninf0 = ninf;
+    end
     d = x1 - x;
     if norm( d ) <= eps
         break
-    end     
+    end
     x = x1 ; %µü´ú¸üÐÂ
     iter = iter + 1;
- end 
+end
 end
 function Bx = computexBx(B, x, typeB)
-   if typeB
-        Bx  = B .* x;
-    else
-        Bx = B * x;
-   end
+if typeB
+    Bx  = B .* x;
+else
+    Bx = B * x;
+end
 end
