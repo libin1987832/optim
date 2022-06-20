@@ -23,23 +23,23 @@ while 1
     z = zeros( n + 1 , 1 );
     v = zeros( n + 1 , 1 );
     z( Fn ) = - MFF \ hF;
-    v( T ) = hT + MTF * zF;
+    v( T ) = hT + MTF *  z( Fn );
     x = z( 1 : n , 1 );
+    ninf = sum( z(F) < -eps ) + sum( v(T) < -eps  );
     if debug 
         testwx( 1 : n ) = x;
         testwx( n+1 : 2 * n ) = v( 1 : n );
     end
-    ninf = sum( z( F ) < 0 | v( T ) < 0  );
     if ninf < ninf1
          break;
     end
-    if iter > maxIt
+    if iter == maxIt
         break;
     end
-    if sum( z( F ) >= -eps ) == 0 && sum( v( T ) >= -eps) == 0 
+    if ninf == 0
         break;
     elseif strategy == 1
-        U = union( z( F ) < 0, v( T ) < 0 );
+        U = union( F( z(F) < -eps ), T( v( T ) < -eps ) );
         r = min( U );
         if ismember(r, F)
             F = setdiff( F, r );
@@ -47,9 +47,7 @@ while 1
             F = union( F, r );
         end
     else
-        F1 = setdiff( F , z < -eps );
-        F2 = v( T ) <= eps;
-        F = union( F1, F2 );
+        F = union( setdiff(N, F( z(F) < -eps )), T( v( T ) <= eps) );
     end
 end
 end

@@ -23,11 +23,12 @@ while 1
     if iter == 1
         F = 1 : n;
     end
-    ninf = 2 * n;
-    while ninf >0
+    ninf0 = 2 * n;
+    while ninf0 >0
+        Fold = F;
         [x, F, iter, ninf, ~] = BBP(A, yk, F, p, ninf0, epssub, 0, debug);
         if iter == p
-            [x, F, iter, ninf, ~] = BBP(A, yk, F, p, ninf0, epssub, 1, debug);
+            [x, F, iter, ninf, ~] = BBP(A, yk, Fold, p, ninf0, epssub, 1, debug);
         end
         ninf0 = ninf;
     end
