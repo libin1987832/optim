@@ -8,10 +8,8 @@ iter = 0;  %µü´ú´ÎÊý
 M = [ A -ones( m , 1 ); ones( 1 , m ) 0 ]; % M¾ØÕó
 h = [ b ; -1 ];
 N = 1 : n;
-% N=N';
-F = N;
-
 while 1
+    iter = iter + 1;
     T = setdiff( N , F );
     Fn = union( F,  n + 1  );
     MFF = M( Fn , Fn );
@@ -23,18 +21,31 @@ while 1
     z( Fn ) = - MFF \ hF;
     v( T ) = hT + MTF * zF;
     x = z( 1 : n , 1 );
+    if iter == 1
+        ninf1 = sum( z( F ) < 0 | v( T ) < 0  );
+    else
+        ninf = sum( z( F ) < 0 | v( T ) < 0  );
+        if ninf < ninf1
+            break;
+        end
+    end
     if iter > maxIt
         break;
     end
     if sum( z( F ) >= -eps ) == 0 && sum( v( T ) >= -eps) == 0 
-        break
+        break;
     elseif strategy == 1
-        
+        U = union( z( F ) < 0, v( T ) < 0 );
+        r = min( U );
+        if ismember(r, F)
+            F = setdiff( F, r );
+        else
+            F = union( F, r );
+        end
     else
         F1 = setdiff( F , z < -eps );
         F2 = v( T ) <= eps;
-        F = union(F1, F2);
+        F = union( F1, F2 );
     end
-    iter = iter + 1;
 end
 end
