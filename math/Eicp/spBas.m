@@ -24,7 +24,7 @@ while 1
         error( iter + 1 ) = - xAx/xBx;
     end
     invxBx = 1 / xBx;
-    df = 2 * invxBx * ( xAx * invxBx * Bx - Ax);
+    df = - 2 * invxBx * ( xAx * invxBx * Bx - Ax);
     
      if iter == 0 
         eta = rand(1) * etaMax;
