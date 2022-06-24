@@ -56,7 +56,7 @@ lambda = (x' * A * x) / (x' * B * x);
 disp(['lambda=' num2str(lambda) ', ninfx=' num2str(sum(x<0)) ',ninfy='  num2str(sum((A - lambda * B) * x < -1e-3)) ',iter=' num2str(iter)])
 x1 = rand(n ,1);
 x1 = x1 ./ sum(x1);
-tic;x = FqpEicp(A, B, x1, 500, 1e-30);toc
+tic;x = FqpEicp(B, A, x1, 20, 1e-30);toc
 lambda = (x' * A * x) / (x' * B * x);
 disp(['lambda=' num2str(lambda) ', ninfx=' num2str(sum(x<0)) ',ninfy='  num2str(sum((A - lambda * B) * x < -1e-3)) ',iter=' num2str(iter)])
 
