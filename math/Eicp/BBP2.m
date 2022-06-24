@@ -5,7 +5,7 @@
 function [x, F, iter, ninf, testwx] = BBP2(Ax, B, a, xAx, maxIt, ninf1, eps, strategy, debug) % epsilon2表示误差，e表示分量全为1的横向量，e0表示表示分量全为0的横向量，options为了不输出 quadprog中间的计算过程
 iter = 0;  %迭代次数
 [ m, n ] = size(B);
-M = [ B -ones( m , 1 ) -Ax; ones( 1 , m ) 0 0; Ax' 0 0 ]; % M矩阵
+M = [ B -ones( n , 1 ) -Ax; ones( 1 , n ) 0 0; Ax' 0 0 ]; % M矩阵
 h = [ -Ax / a ; -1 ; -xAx];
 N = 1 : n;
 testwx = 0;
