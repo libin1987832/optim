@@ -8,9 +8,9 @@ eps = 1e-5;
 ninf1 = 2 * n;
 maxIt = 1000;
 if strategy == 1
-    x = BBP2(Ax0, B, a, xAx, maxIt, ninf1, eps, 1, 0);
+    [x, F, iter, ninf, testwx] = BBP2(Ax0, B, a, xAx, maxIt, ninf1, eps, 1, 0);
 else
-    [x,fval,exitflag,output,lambda] = quadprog(B, -Ax / a, -Ax', -xAx , ones(1, n), 1, zeros(n, 1), [ ]);
+    [x,fval,exitflag,output,lambda] = quadprog(B, -Ax0 / a, -Ax0', -xAx , ones(1, n), 1, zeros(n, 1), [ ]);
 end
 % Ax0 = A * x0;
 % xAx = 0.5 *x0' * Ax0;

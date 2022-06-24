@@ -27,7 +27,7 @@ while 1
     v = zeros( n + 2 , 1 );
     z( Fn ) = - MFF \ hF;
     v( T ) = hT + MTF *  z( Fn );
-    x = z( 1 : n , 1 );
+    x = z( 1 : n , 1 ); 
     ninf = sum( z(F) < -eps ) + sum( v(T) < -eps  );
     if debug 
         testwx( 1 : n ) = x;
