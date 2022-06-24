@@ -8,9 +8,12 @@ a0 = a + 10;
 maxIt = 1000;
 epssub = 1e-5;
 ninf1 = 2 * n;
-fun = @(x) -(2 * Ax0' * x - xAx) / (x' * B * x);
+fun = @(x) (2 * Ax0' * x - xAx) / (x' * B * x);
 %opts = optimoptions('fminunc','Display','none','Algorithm','quasi-newton');
 x = fmincon(fun,x0,-Ax0', -xAx ,ones(1, n), 1, zeros(n, 1), inf(n,1));
+% fun(x)
+% fun(x0)
+% fun(x+rand(n,1)*0.01)
 % while abs(a - a0) > eps && abs(a) > eps
 % a0 = a;
 % if strategy == 1

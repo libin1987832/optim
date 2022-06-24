@@ -9,7 +9,7 @@ if e < eps || iter > maxIt
     break;
 else
     x0 = x;
-    lambda = (x' * A * x) / (x' * B * x)
+%     lambda = (x' * A * x) / (x' * B * x)
 end
 iter = iter + 1;
 end
