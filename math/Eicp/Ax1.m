@@ -54,6 +54,12 @@ disp(['lambda=' num2str(lambda) ', ninfx=' num2str(sum(x<0)) ',ninfy='  num2str(
 tic;[x, iter, fun] = spBas(A, B, x1, 1e-5, unifrnd (0,1), 1e-5, 10000, 0);toc
 lambda = (x' * A * x) / (x' * B * x);
 disp(['lambda=' num2str(lambda) ', ninfx=' num2str(sum(x<0)) ',ninfy='  num2str(sum((A - lambda * B) * x < -1e-3)) ',iter=' num2str(iter)])
+x1 = rand(n ,1);
+x1 = x1 ./ sum(x1);
+tic;x = FqpEicp(A, B, x1, 1e-15);toc
+lambda = (x' * A * x) / (x' * B * x);
+disp(['lambda=' num2str(lambda) ', ninfx=' num2str(sum(x<0)) ',ninfy='  num2str(sum((A - lambda * B) * x < -1e-3)) ',iter=' num2str(iter)])
+
 [i]=bas1B(A,x1,B,n); %调用BAS函数，输出时间和迭代次数
 % [iI]=SSQPIB(A,x1,B,n); %调用SSQP(I)函数，输出时间和迭代次数
 % [xk,i,h,lamdab]=SPL(A,B,x1,n);
