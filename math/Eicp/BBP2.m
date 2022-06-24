@@ -2,7 +2,7 @@
 %求解  min f(x)=1/2x'*A*x+yk'*x
 %      st. e'*x=1
 %          x>=0
-function [x, F, iter, ninf, testwx] = BBP2(A, b, F, x0, maxIt, ninf1, eps, strategy, debug) % epsilon2表示误差，e表示分量全为1的横向量，e0表示表示分量全为0的横向量，options为了不输出 quadprog中间的计算过程
+function [x, F, iter, ninf, testwx] = BBP2(A, B, x0, maxIt, ninf1, eps, strategy, debug) % epsilon2表示误差，e表示分量全为1的横向量，e0表示表示分量全为0的横向量，options为了不输出 quadprog中间的计算过程
 iter = 0;  %迭代次数
 [ m, n ] = size(A);
 x = x0;
@@ -18,7 +18,7 @@ while 1
     Fn = union( F,  n + 1  );
     Ax = A * x;
     Ax2 = 2 * Ax;
-    M = [ A -ones( m , 1 ) -Ax2; ones( 1 , m ) 0 0; Ax2' 0 -1 ]; % M矩阵
+    M = [ B -ones( m , 1 ) -Ax2; ones( 1 , m ) 0 0; Ax2' 0 -1 ]; % M矩阵
     xAx = x * Ax;
     h = [ b ; -1 ; xAx];
     MFF = M( Fn , Fn );
