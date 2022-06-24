@@ -8,12 +8,12 @@ a0 = a + 10;
 maxIt = 1000;
 epssub = 1e-5;
 ninf1 = 2 * n;
-while abs(a - a0) > eps
+while abs(a - a0) > eps && abs(a) > eps
 a0 = a;
 if strategy == 1
     [x, F, iter, ninf, testwx] = BBP2(Ax0, B, n, a, xAx, maxIt, ninf1, epssub, 1, 0);
 else
-    [x,fval,exitflag,output,lambda] = quadprog(B, -Ax0 / a, -Ax0', -xAx , ones(1, n), 1, zeros(n, 1), [ ]);
+    [x,fval,exitflag,output,lambda] = quadprog(-B, Ax0 / a, -Ax0', -xAx , ones(1, n), 1, zeros(n, 1), [ ]);
 end
 % Ax0 = A * x;
  Bx0 = B * x;
