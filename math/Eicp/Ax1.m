@@ -14,8 +14,11 @@ end
 Q=diag(z);% 在区间（a，b）内产生均匀分布的n维向量
 A=C'*Q*C; %初始矩阵A
 
-I=eye(n);
+
 B=importdata('B3.txt'); %初始矩阵B
+A = 0.5 * (A + A');
+B = 0.5 * (B + B');
+ I=eye(n);
 %% 计算初始向量
 r=zeros(n,1);
 for i=1:n
@@ -24,6 +27,7 @@ for i=1:n
   disp('该矩阵不需要')
  end
 end 
+warning off 
 s=find(r==max(r));
 m=zeros(n,1);
 m(s)=1;
@@ -43,20 +47,21 @@ R=max(abs(eig(O))); %A的谱半径
 sigma0 = R + 0.01;
 R1=max(abs(eig(A)))+0.01;
 M=A+R1*I;%A对称非正定
+M = 0.5 * (M+M');
 %  M=A; %A对称正定
-M=diag(diag(M));
+%M=diag(diag(M));
 tic;[x,  iter, error] = sqpEicp(A, B, M, x1, sigma0, 0.1, 1e-5, 1e-12, 10000, 0);toc
 lambda = (x' * A * x) / (x' * B * x);
 disp(['lambda=' num2str(lambda) ', ninfx=' num2str(sum(x<0)) ',ninfy='  num2str(sum((A - lambda * B) * x < -1e-3)) ',iter=' num2str(iter)])
 tic;[x, iter, error]=SPL(A, B, x1, 10000,  1e-5, 1e-12, 0);toc
 lambda = (x' * A * x) / (x' * B * x);
 disp(['lambda=' num2str(lambda) ', ninfx=' num2str(sum(x<0)) ',ninfy='  num2str(sum((A - lambda * B) * x < -1e-3)) ',iter=' num2str(iter)])
-tic;[x, iter, fun] = spBas(A, B, x1, 1e-5, unifrnd (0,1), 1e-5, 10000, 0);toc
+tic;[x, iter, fun] = spBas(A, B, x1, 1e-8, unifrnd (0,1), 1e-8, 10000, 0);toc
 lambda = (x' * A * x) / (x' * B * x);
 disp(['lambda=' num2str(lambda) ', ninfx=' num2str(sum(x<0)) ',ninfy='  num2str(sum((A - lambda * B) * x < -1e-3)) ',iter=' num2str(iter)])
 x1 = rand(n ,1);
 x1 = x1 ./ sum(x1);
-tic;x = FqpEicp(B, A, x1, 20, 1e-30);toc
+tic;[x,iter] = FqpEicp(B, A, x1, 10, 1e-30);toc
 lambda = (x' * A * x) / (x' * B * x);
 disp(['lambda=' num2str(lambda) ', ninfx=' num2str(sum(x<0)) ',ninfy='  num2str(sum((A - lambda * B) * x < -1e-3)) ',iter=' num2str(iter)])
 
