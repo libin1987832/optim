@@ -2,11 +2,11 @@
 %求解  min f(x)=1/2x'*A*x+yk'*x
 %      st. e'*x=1
 %          x>=0
-function [x, F, iter, ninf, testwx] = BBP2(Ax, B, xAx, maxIt, ninf1, eps, strategy, debug) % epsilon2表示误差，e表示分量全为1的横向量，e0表示表示分量全为0的横向量，options为了不输出 quadprog中间的计算过程
+function [x, F, iter, ninf, testwx] = BBP2(Ax, B, a, xAx, maxIt, ninf1, eps, strategy, debug) % epsilon2表示误差，e表示分量全为1的横向量，e0表示表示分量全为0的横向量，options为了不输出 quadprog中间的计算过程
 iter = 0;  %迭代次数
 [ m, n ] = size(B);
 M = [ B -ones( m , 1 ) -Ax; ones( 1 , m ) 0 0; Ax' 0 0 ]; % M矩阵
-h = [ -Ax ; -1 ; -xAx];
+h = [ -Ax / a ; -1 ; -xAx];
 N = 1 : n;
 testwx = 0;
 if debug 
@@ -34,9 +34,9 @@ while 1
         testwx( n+1 : 2 * n ) = v( 1 : n );
         testwx( 2 * n + 1 : 2 * n + 1 ) = v( n + 2: n + 2 );
     end
-    if ninf < ninf1
-         break;
-    end
+    %if ninf < ninf1
+    %     break;
+   % end
     if iter == maxIt
         break;
     end
