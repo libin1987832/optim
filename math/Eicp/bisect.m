@@ -3,10 +3,19 @@
 %        and tolerance tol
 %Output: Approximate solution xc
 function xc=bisect(f,a,b,tol)
-if sign(f(a))*sign(f(b)) >= 0
+fa = f(a);
+fb = f(b);
+if abs(fa) < tol
+    xc = a;
+    return;
+end
+if abs(fb)< tol
+    xc = b;
+    return;
+end
+if sign(fa)*sign(fb) >= 0
     error('f(a)f(b)<0 not satisfied!') %ceases execution
 end
-fa=f(a);
 while (b-a)/2>tol
     c=(a+b)/2;
     fc=f(c);

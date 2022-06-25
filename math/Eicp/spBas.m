@@ -27,7 +27,8 @@ while 1
     df = - 2 * invxBx * ( xAx * invxBx * Bx - Ax);
     
      if iter == 0 
-        eta = rand(1) * etaMax;
+        %eta = rand(1) * etaMax;
+         eta = 1;
     else
         s = x - xp;
         w = df - dfp;

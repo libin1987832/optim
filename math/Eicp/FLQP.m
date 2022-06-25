@@ -1,4 +1,4 @@
-function x = FLQP(x0, A, B, n, strategy, eps)
+function x = FLQP(x0, A, B, n, strategy, maxIt, maxItsub, eps, epsbbp)
 Ax0 = A * x0;
 Bx0 = B * x0;
 xBx = x0' * Bx0;
@@ -6,16 +6,16 @@ xAx = x0' * Ax0;
 %a = - (xAx - Ax0' * x0) / xBx;
 a = xBx / ( 2 * Ax0' * x0 - xAx);
 a0 = a + 10;
-maxIt = 1000;
-epssub = 1e-7;
+iter = 0;
 ninf1 = 2 * n;
 %fun = @(x) -(2 * Ax0' * x - xAx) / (x' * B * x);
 %opts = optimoptions('fminunc','Display','none','Algorithm','quasi-newton');
 %x = fmincon(fun,x0,-Ax0', -xAx ,ones(1, n), 1, zeros(n, 1), inf(n,1));
- while abs(a - a0) > eps && abs(a) > eps
+ while abs(a - a0) > eps && abs(a) > eps && iter < maxIt
 a0 = a;
+iter = iter + 1;
 if strategy == 1
-    [x, F, iter, ninf, testwx] = BBP2(Ax0, B, n, a, 0.5 * xAx, maxIt, ninf1, epssub, 1, 0);
+    [x, F, iter, ninf, testwx] = BBP2(Ax0, B, n, a, 0.5 * xAx, maxItsub, ninf1, epsbbp, 0, 0);
 else
     opts = optimset('Display','off');
     [x,fval,exitflag,output,lambda] = quadprog(B, -a * Ax0, -Ax0', -0.5*xAx , ones(1, n), 1, zeros(n, 1), [ ], [], opts);
