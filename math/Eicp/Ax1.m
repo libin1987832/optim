@@ -2,8 +2,10 @@
 %% 随机生成n阶初始矩阵A和B
 clc
 clear
-n=100;
-C=importdata('C2.txt');
+n=1000;
+C=unidrnd(10,n,n);
+%C = load('C');
+[C,Y]=qr(C,0);
 a=100;
 b=1;
 z1=0:(a-b)/(n-1):1;
@@ -14,10 +16,10 @@ end
 Q=diag(z);% 在区间（a，b）内产生均匀分布的n维向量
 A=C'*Q*C; %初始矩阵A
 
-
-B=importdata('B3.txt'); %初始矩阵B
-A = 0.5 * (A + A');
-B = 0.5 * (B + B');
+I=eye(n);
+B=I+C'*C; %importdata('B3.txt'); %初始矩阵B
+A = 0.5 * ( A + A' );
+B = 0.5 * ( B + B' );
  I=eye(n);
 %% 计算初始向量
 r=zeros(n,1);
@@ -49,7 +51,7 @@ R1=max(abs(eig(A)))+0.01;
 M=A+R1*I;%A对称非正定
 M = 0.5 * (M+M');
 %  M=A; %A对称正定
-%M=diag(diag(M));
+M=diag(diag(M));
 tic;[x,  iter, error] = sqpEicp(A, B, M, x1, sigma0, 0.1, 1e-5, 1e-12, 10000, 0);toc
 lambda = (x' * A * x) / (x' * B * x);
 disp(['sqp:lambda=' num2str(lambda) ', ninfx=' num2str(sum(x<0)) ',ninfy='  num2str(sum((A - lambda * B) * x < -1e-4)) ',iter=' num2str(iter)])

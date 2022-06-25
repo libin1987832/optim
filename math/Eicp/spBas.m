@@ -68,13 +68,15 @@ while 1
     %%Deltak¸³Öµ
     detaf1 = detaf(1) ;
     detafdeta1 = detaf(deta1);
-   % detafdeta2 = detaf(deta2);
-    if deta2 < 0 || deta1 >1 
+    detafdeta2 = detaf(deta2);
+    if  deta2 < 0 || deta1 >1 || ( deta2 > 1 && deta1 < 0) ...
+        || (detaf1 < detafdeta1 && deta2 > 1) || ...
+        (detaf1 < detafdeta2 && deta1 < 0)
         deta = 1;
-    elseif detaf1 < detafdeta1
-        deta = 1;
-    else
+    elseif deta2 > 1 || detafdeta1 < detafdeta2
         deta = deta1;
+    else
+        deta =deta2;
     end
     xp = x;
     dfp = df;

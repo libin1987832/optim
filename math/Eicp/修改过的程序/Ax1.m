@@ -3,9 +3,9 @@
 clc
 clear
 n=1000;
-%C=unidrnd(10,n,n);
-C = load('C');
-[C,Y]=qr(C.C,0);
+C=unidrnd(10,n,n);
+%C = load('C');
+[C,Y]=qr(C,0);
 a=100;
 b=1;
 z1=0:(a-b)/(n-1):1;
@@ -48,7 +48,7 @@ sigma0 = R + 0.01;
 R1=max(abs(eig(A)))+0.01;
 % M=A+R1*I;%A对称非正定
   M=A; %A对称正定
-% M=diag(diag(M));
+ M=diag(diag(M));
 tic;[x,  iter, error] = sqpEicp(A, B, M, x1, sigma0, 0.1, 1e-5, 1e-6, 100, 0);toc
  lambda = (x' * A * x) / (x' * B * x);
  disp(['lambda=' num2str(lambda) ', ninfx=' num2str(sum(x<0)) ',ninfy='  num2str(sum((A - lambda * B) * x < -1e-3)) ',iter=' num2str(iter)])

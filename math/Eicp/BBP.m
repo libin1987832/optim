@@ -39,7 +39,7 @@ while 1
     if ninf == 0
         break;
     elseif strategy == 1
-        U = union( setdiff(F, F( z(F) < -eps )), T( v( T ) < -eps ) );
+         U = union( F( z(F) < -eps ), T( v( T ) < -eps ) );
         r = min( U );
         if ismember(r, F)
             F = setdiff( F, r );
