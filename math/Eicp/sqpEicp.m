@@ -1,6 +1,7 @@
 function [x, iter, error] = sqpEicp(A, B, M, x0, sigma0, dsigma, eps, bisectEps, maxIT, debug)
 error = 0;
 x = x0;
+[m, n] = size(M);
 if debug
     error = zeros(1, maxIT);
 end
@@ -8,6 +9,7 @@ iter = 0;
 method = 1;
 typeM = 0;
 typeB = 0;
+MA = zeros(n,1);
 if isdiag(M)
     method = 2;
     typeM = 2;
@@ -16,7 +18,13 @@ if isdiag(M)
 end
 if isequal( A, M )
     typeM = 1;
-end 
+end
+if isequal(M, eye(n))
+    typeM = 4;
+end
+if isequal(B, eye(n))
+    typeB = 2;
+end
 if typeM==0 && method == 1 && isdiag( M - A )
     typeM = 3;
     MA = diag( M - A);
@@ -55,9 +63,11 @@ while 1
 end
 end
 function Bx = computexB(B, x, typeB)
-   if typeB
+   if typeB == 1
         Bx  = B .* x;
-    else
+   elseif typeB == 2
+       Bx = x;
+   else
         Bx = B * x;
    end
 end

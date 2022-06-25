@@ -1,8 +1,8 @@
 function [d, lambda, dAx, Md] = searchdir(M, Ax, xB, tao, x, method, tol)
     xBx = xB * x;
     if method == 1
-        opts = optimset('Display','off');
-       [d,fval,exitflag,output,lambda]=quadprog(M, Ax, [], [], xB, tao, -x, [], [], opts);
+        opts = optimoptions('quadprog','Display','off');
+       d=quadprog(M, Ax, [], [], xB, tao, -x, [], [], opts);
        Md = M * d;
        xMd = x' * Md;
        dMd = d' * Md;

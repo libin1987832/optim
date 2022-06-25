@@ -34,13 +34,23 @@ R=max(abs(eig(A)));    %AµÄÆ×°ë¾¶                                          %ÓÃAµ
 e=zeros(n,1);
 e(1)=R+0.01;
 I=eye(n);
-% M=A;%A¶Ô³ÆÕý¶¨
+M=A;%A¶Ô³ÆÕý¶¨
 M=A+(R+0.01)*I;
 M = diag(diag(M));
-sigma0 = 0;
+ sigma0 = 0;
+epsx = 0;
+ epsxlambda = -1e-3;
+% tic;[x,  iter, error] = sqpEicp(A, B, M, x1, sigma0, 0.1, 1e-5, 1e-12, 10000, 0);toc
+% lambda = (x' * A * x) / (x' * B * x);
+% disp(['sqp:lambda=' num2str(lambda) ', ninfx=' num2str(sum(x<epsx)) ',ninfy='  num2str(sum((A - lambda * B) * x < epsxlambda)) ',iter=' num2str(iter)])
+% [iI]=SSQPI(A,x1,n); %µ÷ÓÃSSQP(I)º¯Êý£¬Êä³öÊ±¼äºÍµü´ú´ÎÊý
+% tic;[x,  iter, error] = sqpEicp(A, B, I, x1, sigma0, 0.1, 1e-5, 1e-12, 10000, 0);toc
+% lambda = (x' * A * x) / (x' * B * x);
+% disp(['sqp:lambda=' num2str(lambda) ', ninfx=' num2str(sum(x<epsx)) ',ninfy='  num2str(sum((A - lambda * B) * x < epsxlambda)) ',iter=' num2str(iter)])
+[iG]=SQPG(A,x1,n); %µ÷ÓÃSQP(G)º¯Êý£¬Êä³öÊ±¼äºÍµü´ú´ÎÊý
+M=A+(R+0.01)*I ;  %A¶Ô³Æ·ÇÕý¶¨
+M=(M+M')/2;
 tic;[x,  iter, error] = sqpEicp(A, B, M, x1, sigma0, 0.1, 1e-5, 1e-12, 10000, 0);toc
 lambda = (x' * A * x) / (x' * B * x);
 disp(['sqp:lambda=' num2str(lambda) ', ninfx=' num2str(sum(x<epsx)) ',ninfy='  num2str(sum((A - lambda * B) * x < epsxlambda)) ',iter=' num2str(iter)])
-[iI]=SSQPI(A,x1,n); %µ÷ÓÃSSQP(I)º¯Êý£¬Êä³öÊ±¼äºÍµü´ú´ÎÊý
-[iG]=SQPG(A,x1,n); %µ÷ÓÃSQP(G)º¯Êý£¬Êä³öÊ±¼äºÍµü´ú´ÎÊý
 [i]=bas1(A,x1,n); %µ÷ÓÃBASº¯Êý£¬Êä³öÊ±¼äºÍµü´ú´ÎÊý
