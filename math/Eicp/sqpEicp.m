@@ -18,11 +18,12 @@ if isequal( A, M )
     typeM = 1;
 end 
 if typeM==0 && method == 1 && isdiag( M - A )
-    typeM = 2;
+    typeM = 3;
     MA = diag( M - A);
 end
 if isdiag( B )
     typeB = 1;
+    B = diag(B);
 end
 sigma = 0;
 while 1
@@ -63,7 +64,7 @@ end
 function Ad = computeAd(A, d, Md, MA, typeM)
     if typeM == 1
         Ad = Md;
-    elseif typeM == 2
+    elseif typeM == 3
         Ad = Md - MA .* d;
     else
         Ad = A * d;

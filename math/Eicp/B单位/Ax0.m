@@ -2,6 +2,7 @@
 %% 随机生成n阶初始矩阵A和B
 clc
 clear
+addpath('../')
 n=50;
 C=unidrnd(10,n,n);
 [C,Y]=qr(C,0);
@@ -28,9 +29,18 @@ x1=m; %初始向量x1
 
 
 [xk,i,h,lamdab]=SPL(A,B,x1,n);
-
 [iD]=SSQPD(A,x1,n); %调用SSQP(D)函数，输出时间和迭代次数
-
+R=max(abs(eig(A)));    %A的谱半径                                          %用A的1范数来近似A的谱（代价会不会太大了）
+e=zeros(n,1);
+e(1)=R+0.01;
+I=eye(n);
+% M=A;%A对称正定
+M=A+(R+0.01)*I;
+M = diag(diag(M));
+sigma0 = 0;
+tic;[x,  iter, error] = sqpEicp(A, B, M, x1, sigma0, 0.1, 1e-5, 1e-12, 10000, 0);toc
+lambda = (x' * A * x) / (x' * B * x);
+disp(['sqp:lambda=' num2str(lambda) ', ninfx=' num2str(sum(x<epsx)) ',ninfy='  num2str(sum((A - lambda * B) * x < epsxlambda)) ',iter=' num2str(iter)])
 [iI]=SSQPI(A,x1,n); %调用SSQP(I)函数，输出时间和迭代次数
 [iG]=SQPG(A,x1,n); %调用SQP(G)函数，输出时间和迭代次数
 [i]=bas1(A,x1,n); %调用BAS函数，输出时间和迭代次数
