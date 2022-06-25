@@ -1,4 +1,4 @@
-function [i]=bas1B(A,x1,B,n)
+function [i]=bas1B(A,x1,B,n,Etamin)
 e=ones(n,1);      %生成n维的1向量
 Beta=10^(-5);
 Etak=1;
@@ -6,7 +6,6 @@ varepsilon=10^(-5);%精度
 %%  开始循环
 tic                %开始计算时间
 k=0;
-Etamin=unifrnd (0,1);
 Etamax=1/Etamin;
 L1=x1'*B*x1;
 L3=x1'*A*x1;

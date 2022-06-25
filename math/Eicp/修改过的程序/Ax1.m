@@ -2,9 +2,10 @@
 %% 随机生成n阶初始矩阵A和B
 clc
 clear
-n=100;
-C=unidrnd(10,n,n);
-[C,Y]=qr(C,0);
+n=1000;
+%C=unidrnd(10,n,n);
+C = load('C');
+[C,Y]=qr(C.C,0);
 a=100;
 b=1;
 z1=0:(a-b)/(n-1):1;
@@ -17,6 +18,8 @@ A=C'*Q*C; %初始矩阵A
 
 I=eye(n);
 B=I+C'*C; %importdata('B3.txt'); %初始矩阵B
+A = 0.5 * ( A + A' );
+B = 0.5 * ( B + B' );
 %% 计算初始向量
 r=zeros(n,1);
 for i=1:n
@@ -45,16 +48,17 @@ sigma0 = R + 0.01;
 R1=max(abs(eig(A)))+0.01;
 % M=A+R1*I;%A对称非正定
   M=A; %A对称正定
- M=diag(diag(M));
-tic;[x,  iter, error] = sqpEicp(A, B, M, x1, sigma0, 0.1, 1e-5, 1e-6, 10000, 0);toc
+% M=diag(diag(M));
+tic;[x,  iter, error] = sqpEicp(A, B, M, x1, sigma0, 0.1, 1e-5, 1e-6, 100, 0);toc
  lambda = (x' * A * x) / (x' * B * x);
  disp(['lambda=' num2str(lambda) ', ninfx=' num2str(sum(x<0)) ',ninfy='  num2str(sum((A - lambda * B) * x < -1e-3)) ',iter=' num2str(iter)])
 tic;[x, iter, error]=SPL(A, B, x1, 10000,  1e-5, 1e-6, 0);toc
 lambda = (x' * A * x) / (x' * B * x);
 disp(['lambda=' num2str(lambda) ', ninfx=' num2str(sum(x<0)) ',ninfy='  num2str(sum((A - lambda * B) * x < -1e-3)) ',iter=' num2str(iter)])
-tic;[x, iter, fun] = spBas(A, B, x1, 1e-5, unifrnd (0,1), 1e-5, 10000, 0);toc
+etamax = 0.8;
+tic;[x, iter, fun] = spBas(A, B, x1, 1e-5, etamax, 1e-8, 10000, 0);toc
 lambda = (x' * A * x) / (x' * B * x);
 disp(['lambda=' num2str(lambda) ', ninfx=' num2str(sum(x<0)) ',ninfy='  num2str(sum((A - lambda * B) * x < -1e-3)) ',iter=' num2str(iter)])
-[i]=bas1B(A,x1,B,n); %调用BAS函数，输出时间和迭代次数
+[i]=bas1B(A,x1,B,n,etamax); %调用BAS函数，输出时间和迭代次数
 % [iI]=SSQPIB(A,x1,B,n); %调用SSQP(I)函数，输出时间和迭代次数
 % [xk,i,h,lamdab]=SPL(A,B,x1,n);
