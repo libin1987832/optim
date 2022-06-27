@@ -2,23 +2,25 @@
 %% 随机生成n阶初始矩阵A和B
 clc
 clear
-n=100;
-C=unidrnd(10,n,n);
-%C = load('C');
-%[C,Y]=qr(C.C,0);
-[C,Y]=qr(C,0);
-a=100;
-b=1;
-z1=0:(a-b)/(n-1):1;
-z1=z1+b;
-for i=1:n
-    z(i)=b+((i-1)*(a-b))/(n-1);
-end
-Q=diag(z);% 在区间（a，b）内产生均匀分布的n维向量
-A=C'*Q*C; %初始矩阵A
-
+% n=100;
+% C=unidrnd(10,n,n);
+% %C = load('C');
+% %[C,Y]=qr(C.C,0);
+% [C,Y]=qr(C,0);
+% a=100;
+% b=1;
+% z1=0:(a-b)/(n-1):1;
+% z1=z1+b;
+% for i=1:n
+%     z(i)=b+((i-1)*(a-b))/(n-1);
+% end
+% Q=diag(z);% 在区间（a，b）内产生均匀分布的n维向量
+% A=C'*Q*C; %初始矩阵A
+% B=I+C'*C; %importdata('B3.txt'); %初始矩阵B
+n = 4;
 I=eye(n);
-B=I+C'*C; %importdata('B3.txt'); %初始矩阵B
+A=[5 7 6 5;7 10 8 7;6 8 10 9;5 7 9 10];
+B = I;
 A = 0.5 * ( A + A' );
 B = 0.5 * ( B + B' );
  I=eye(n);
