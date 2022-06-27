@@ -3,7 +3,7 @@ Ax0 = A * x0;
 Bx0 = B * x0;
 xBx = x0' * Bx0;
 xAx = x0' * Ax0;
-%a = - (xAx - Ax0' * x0) / xBx;
+%a = (xAx) / xBx;
 a = xBx / ( 2 * Ax0' * x0 - xAx);
 a0 = a + 10;
 iter = 0;
@@ -24,6 +24,7 @@ end
  Bx0 = B * x;
  xBx = x' * Bx0;
  a = xBx / ( 2 * Ax0' * x0 - xAx);
+ %a  = ( 2 * Ax0' * x0 - xAx) / xBx;
 end
 % Ax0 = A * x0;
 % xAx = 0.5 *x0' * Ax0;
