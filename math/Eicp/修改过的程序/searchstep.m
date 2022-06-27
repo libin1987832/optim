@@ -7,4 +7,5 @@ function alpha = searchstep(tao, z, u)
     if tao > 0 && z < 1 && z <u  
         alpha = u;
     end
+    
 end
