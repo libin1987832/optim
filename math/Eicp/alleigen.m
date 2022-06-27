@@ -11,23 +11,25 @@ charA = '1111';
 alli = [];
 allv = [];
 alld = [];
-for iter = 1 : 2^4-1
+ for iter = 1 : 2^4-1
+% for iter = 8:8
     F = dec2bin(iter, 4) == charA;
     AF = A(F, F);
     [v,d] = eig(AF);
     [m,n] = size(d);
     Fn = sum(F);
     for i = 1:n
-        if sum(d(:,i) >= 0) == Fn
-            d1 = zeros(4, 1);
-            d1(F) = d(:,i);
+        if sum(v(:,i) >= 0) == Fn
+            v1 = zeros(4, 1);
+            v1(F) = v(:,i);
             alli = [alli, iter];
-            allv = [allv v(i)];
-            alld = [alld d1];
+            alld = [alld d(i,i)];
+            allv = [allv v1];
             
         end
     end
 end
-[alli;allv;alld]
-min(abs(allv))
+[alli;alld;allv]
+min(abs(alld))
+max(abs(alld))
     

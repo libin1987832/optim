@@ -33,7 +33,7 @@ if isdiag( B )
     typeB = 1;
     B = diag(B);
 end
-sigma = 0;
+sigma = sigma0;
 while 1
     iter = iter + 1;
     xB = computexB(B, x, typeB)';
