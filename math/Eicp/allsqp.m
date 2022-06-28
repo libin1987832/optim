@@ -14,7 +14,17 @@ for iter_i = 1 : np
     O=inv(BF)*AF;
     R=max(abs(eig(O))); %AµÄÆ×°ë¾¶  
     sigma0 = R + 0.01;
-    [x1,  iter1, error1] = sqpEicp(AF, BF, MF, xF, sigma0, dsigma, eps, bisectEps, maxIT, debug);
+    [xmin,  itermin, errormin] = sqpEicp(AF, BF, MF, xF, sigma0, dsigma, eps, bisectEps, maxIT, debug);
+    [xmax,  itermax, errormax] = sqpEicp(BF, AF, MF, xF, sigma0, dsigma, eps, bisectEps, maxIT, debug);
+    if sum(xmin > 0) == sum(F)
+        x1 = xmin;
+        iter1 = itermin;
+        error1 = errormin;
+    else
+        x1 = xmax;
+        iter1 = itermax;
+        error1 = errormax;
+    end
     x(F, iter_i) = x1;
     iter(1, iter_i) = iter1;
     error(1, iter_i) = error1;

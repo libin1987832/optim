@@ -55,5 +55,13 @@ M = 0.5 * (M+M');
 M=diag(diag(M));
 epsx = 0;
 epsxlambda = -1e-3;
-[x, iter, error] = allsqp(A, B, M, x1, sigma0, 0.1, 1e-5, 1e-12, 10000, 0);
-x
+[xa, iter, error] = allsqp(A, B, M, x1, sigma0, 0.1, 1e-5, 1e-12, 10000, 0);
+nx = size(xa,2);
+xd = []
+for i = 1 : nx
+    x = xa(:,i) ./ sum(xa(:,i));
+lambda = (x' * A * x) / (x' * B * x);
+xd = [xd [lambda; x]];
+%disp(['FQP_QUAD:lambda=' num2str(lambda) ', ninfx=' num2str(sum(x<epsx)) ',ninfy='  num2str(sum((A - lambda * B) * x < epsxlambda))])
+end
+ xd
