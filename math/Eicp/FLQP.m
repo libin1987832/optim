@@ -4,7 +4,7 @@ Bx0 = B * x0;
 xBx = x0' * Bx0;
 xAx = x0' * Ax0;
 %a = (xAx) / xBx;
-a = xBx / ( 2 * Ax0' * x0 - xAx);
+a = xBx / xAx;
 a0 = a + 10;
 iter = 0;
 ninf1 = 2 * n;
@@ -23,7 +23,7 @@ else
 end
  Bx0 = B * x;
  xBx = x' * Bx0;
- a = xBx / ( 2 * Ax0' * x0 - xAx);
+ a = xBx / ( 2 * Ax0' * x - xAx);
  %a  = ( 2 * Ax0' * x0 - xAx) / xBx;
 end
 % Ax0 = A * x0;
