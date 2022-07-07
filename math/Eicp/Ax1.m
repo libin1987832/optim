@@ -29,7 +29,7 @@ B = 0.5 * ( B + B' );
 
 warning off 
 %x1=[0.46;0.63;0.61;0]; %初始向量x1
-x1=sparse(ones(n,1)./n);
+x1=sparse(ones(n,1)./(n+1));
 %% 调用所有函数
 % [iG]=SQPGB(A,x1,B,n,I); %调用SQP(G)函数，输出时间和迭代次数
 % M=A;%A对称正定
@@ -56,10 +56,10 @@ epsxlambda = -1e-3;
 %tic;[x,  iter, error] = sqpEicp(A, B, M, x1, sigma0, 0.1, 1e-5, 1e-12, 10000, 0);toc
 %lambda = (x' * A * x) / (x' * B * x);
 %disp(['sqp:lambda=' num2str(lambda) ', ninfx=' num2str(sum(x<epsx)) ',ninfy='  num2str(sum((A - lambda * B) * x < epsxlambda)) ',iter=' num2str(iter)])
-tic;[x, iter, error]=SPL(B, A, x1, 10000,  1e-6, 1e-6, 0);toc
-lambda = (x' * A * x) / (x' * B * x);
-w = A * x - lambda * B * x; 
-disp(['spl:lambda=' num2str(lambda) ', ninfx=' num2str(sum(x<epsx)) ',dualfeasible='  num2str(min(w)) ',iter=' num2str(iter)])
+tic;[x,eta, iter, error]=SPL(A, B, x1, 1,  1e-6, 1e-16, 0);toc
+lambda = (x' * A * x) / (x' * x);
+w = A * x - lambda * B * x - eta * sparse(ones(n,1)); 
+disp(['spl:lambda=' num2str(lambda) ',dualfeasible='  num2str(min(w)) ',iter=' num2str(iter)])
 tic;[x, iter, fun] = spBas(A, B, x1, 1e-8, unifrnd (0,1), 1e-8, 1000, 0);toc
 lambda = (x' * A * x) / (x' * B * x);
 disp(['BAS:lambda=' num2str(lambda) ', ninfx=' num2str(sum(x<epsx)) ',ninfy='  num2str(sum((A - lambda * B) * x < epsxlambda)) ',iter=' num2str(iter)])

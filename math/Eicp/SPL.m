@@ -1,5 +1,5 @@
 %% SPL（别人的算法）
-function [x, iters, error]=SPL(A, B, x0, maxIT, eps, epssub, debug)
+function [x, eta, iters, error]=SPL(A, B, x0, maxIT, eps, epssub, debug)
 [m, n] = size(A);
 x = x0;
 iters =0;
@@ -26,18 +26,21 @@ while 1
     ninf0 = 2 * n;
     while ninf0 >0
         Fold = F;
-        [x1, F, iter, ninf, ~] = BBP(A, yk, F, p, ninf0, epssub, 0, debug);
+        [xeta1, F, iter, ninf, ~] = BBP(A, yk, F, p, ninf0, epssub, 0, debug);
         if iter == p
-            [x1, F, iter, ninf, ~] = BBP(A, yk, Fold, p, ninf0, epssub, 1, debug);
+            [xeta1, F, iter, ninf, ~] = BBP(A, yk, Fold, p, ninf0, epssub, 1, debug);
         end
         ninf0 = ninf;
     end
+    x1 = xeta1(1:n);
+    eta = xeta1(n+1);
     d = x1 - x;
     x = x1 ; %迭代更新
     if debug
         error(iters) = - xAx / xBx;
     end
-    if norm( d ) <= eps || iters > maxIT
+    w = Ax - lamdab * Bx;
+    if norm( d ) <= eps || iters > maxIT || min(w) >= -eps
         break
     end
 end
