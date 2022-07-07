@@ -56,7 +56,7 @@ epsxlambda = -1e-3;
 %tic;[x,  iter, error] = sqpEicp(A, B, M, x1, sigma0, 0.1, 1e-5, 1e-12, 10000, 0);toc
 %lambda = (x' * A * x) / (x' * B * x);
 %disp(['sqp:lambda=' num2str(lambda) ', ninfx=' num2str(sum(x<epsx)) ',ninfy='  num2str(sum((A - lambda * B) * x < epsxlambda)) ',iter=' num2str(iter)])
-tic;[x, iter, error]=SPL(B, A, x1, 10000,  1e-14, 1e-8, 0);toc
+tic;[x, iter, error]=SPL(B, A, x1, 10000,  1e-20, 1e-10, 0);toc
 lambda = (x' * A * x) / (x' * B * x);
 disp(['spl:lambda=' num2str(lambda) ', ninfx=' num2str(sum(x<epsx)) ',ninfy='  num2str(sum((A - lambda * B) * x < epsxlambda)) ',iter=' num2str(iter)])
 tic;[x, iter, fun] = spBas(A, B, x1, 1e-8, unifrnd (0,1), 1e-8, 1000, 0);toc

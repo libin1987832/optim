@@ -20,8 +20,10 @@ while 1
     MTF = M( T , Fn );
     hF = h( Fn );
     hT = h( T );
-    z = zeros( n + 1 , 1 );
-    v = zeros( n + 1 , 1 );
+  %  z = zeros( n + 1 , 1 );
+  %  v = zeros( n + 1 , 1 );
+  z=sparse( n + 1 , 1) ;
+   v=sparse( n + 1 , 1) ;
     z( Fn ) = - MFF \ hF;
     v( T ) = hT + MTF *  z( Fn );
     x = z( 1 : n , 1 );
