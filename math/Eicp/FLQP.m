@@ -1,10 +1,10 @@
-function [x, iter] = FLQP(x0, A, B, n, strategy, maxIt, maxItsub, eps, epsbbp)
-Ax0 = A * x0;
-Bx0 = B * x0;
-xBx = x0' * Bx0;
-xAx = x0' * Ax0;
+function [x, iter] = FLQP(a, B, Ax0, xAx, n, strategy, maxIt, maxItsub, eps, epsbbp)
+%Ax0 = A * x0;
+%Bx0 = B * x0;
+%xBx = x0' * Bx0;
+%xAx = x0' * Ax0;
 %a = (xAx) / xBx;
-a = xBx / xAx;
+%a = xBx / xAx;
 a0 = a + 10;
 iter = 0;
 ninf1 = 2 * n;
