@@ -1,4 +1,4 @@
-function [x, iter, Abpp] = FLQP(a, B, Ax0, xAx, n, strategy, maxIt, maxItsub, eps, epsbbp)
+function [x, iter, Abpp,error] = FLQP(a, B, Ax0, xAx, n, strategy, maxIt, maxItsub, eps, epsbbp, debug)
 %Ax0 = A * x0;
 %Bx0 = B * x0;
 %xBx = x0' * Bx0;
@@ -11,13 +11,17 @@ ninf1 = 2 * n;
 %fun = @(x) -(2 * Ax0' * x - xAx) / (x' * B * x);
 %opts = optimoptions('fminunc','Display','none','Algorithm','quasi-newton');
 %x = fmincon(fun,x0,-Ax0', -xAx ,ones(1, n), 1, zeros(n, 1), inf(n,1));
+if debug
+fun = @(x) (x'* Ax0)/(x' * B * x);
+error=zeros(1,maxIt);
+end
 F = 1:n;
 nitBBs = 0;
  while abs(a - a0) > eps && abs(a) > eps && iter < maxIt
 a0 = a;
 iter = iter + 1;
 if strategy == 1
-    [x, F, ~, ninf, testwx] = BBP2(Ax0, B, n, a, 0.5 * xAx, maxItsub, ninf1, epsbbp, 0, 0);
+    [x, F, ~, ninf, testwx] = BBP2(Ax0, B, n, a, 0.5 * xAx, maxItsub, ninf1, epsbbp, 0, debug);
     Bx0 = B * x;
     xBx = x' * Bx0;
     a = xBx / ( 2 * Ax0' * x - xAx);
@@ -33,10 +37,13 @@ else
     a = xBx / ( 2 * Ax0' * x - xAx);
  %   x = fmincon(fun,x0,-Ax0', -xAx ,ones(1, n), 1, zeros(n, 1), inf(n,1));
 end
-Abpp = nitBBs / iter;
+if debug
+error(iter) = fun(x);
+end
 
  %a  = ( 2 * Ax0' * x0 - xAx) / xBx;
-end
+ end
+Abpp = nitBBs / iter;
 % Ax0 = A * x0;
 % xAx = 0.5 *x0' * Ax0;
 % d =  Ax0 / a;
