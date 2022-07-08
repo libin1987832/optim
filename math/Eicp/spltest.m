@@ -1,13 +1,13 @@
 str = 'bcsstk02.mtx bcsstk04.mtx';
 strindex = [1 12; 14 25];
-iter = [2,1];
+iter = [20,200];
 for i = 1:size(strindex,1)
 [A,rows,cols,entries,rep,field,symm] = mmread(str(1,strindex(i,1):strindex(i,2)));
 n=cols;
 B=speye(n);
 x1=sparse(ones(n,1)./n);
 t=clock;
-[x,crit, iters, nitBB, error]=SPL(A, B, x1, iter(i),  1e-8, 1e-6, 1e-9, 0);
+[x,crit, iters, nitBB, error]=SPL(A, B, x1, iter(i),  1e-8, 1e-6, 1e-9, 0, 0);
 tf=etime(clock,t);
 lambda = (x' * A * x) / (x' * x);
 w = A * x - lambda * x;

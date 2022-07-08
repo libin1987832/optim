@@ -1,4 +1,4 @@
-function x = FLQP(x0, A, B, n, strategy, maxIt, maxItsub, eps, epsbbp)
+function [x, iter] = FLQP(x0, A, B, n, strategy, maxIt, maxItsub, eps, epsbbp)
 Ax0 = A * x0;
 Bx0 = B * x0;
 xBx = x0' * Bx0;
@@ -15,7 +15,7 @@ ninf1 = 2 * n;
 a0 = a;
 iter = iter + 1;
 if strategy == 1
-    [x, F, iter, ninf, testwx] = BBP2(Ax0, B, n, a, 0.5 * xAx, maxItsub, ninf1, epsbbp, 0, 0);
+    [x, F, ~, ninf, testwx] = BBP2(Ax0, B, n, a, 0.5 * xAx, maxItsub, ninf1, epsbbp, 0, 0);
 else
     opts = optimset('Display','off');
     [x,fval,exitflag,output,lambda] = quadprog(B, -a * Ax0, -Ax0', -0.5*xAx , ones(1, n), 1, zeros(n, 1), [ ], [], opts);
