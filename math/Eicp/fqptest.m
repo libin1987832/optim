@@ -2,7 +2,7 @@ clc
 clear
 str = 'bcsstk02.mtx bcsstk04.mtx';
 strindex = [1 12; 14 25];
-iterstr = [98 30;984 973];
+iterstr = [160 30;1984 3];
 for i = 1:size(strindex,1) 
 [A,rows,cols,entries,rep,field,symm] = mmread(str(1,strindex(i,1):strindex(i,2)));
 n=cols;
@@ -14,7 +14,7 @@ t=clock;
 % semilogy(1:iters,error(1:iters));
 tfsql=etime(clock,t);
 lambdasql = (x' * A * x) / (x' * B * x);
-wsql = - A * x + lambdasql * B * x;
+wsql = (- A  + lambdasql * B ) * x;
 disp(['spl:lambda=' num2str(lambdasql)  ',iter=' num2str(iters) ',dualfeasible='...
     num2str(min(wsql)) ',nitBB=' num2str(nitBB) ',nLsyst=' num2str(iters*nitBB) ',Crit=' num2str(crit) ',Cpu=' num2str(tfsql)])
 t=clock;
