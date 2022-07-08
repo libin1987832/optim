@@ -12,7 +12,7 @@ a = xBx / xAx;
 while 1  
 iter = iter + 1;
 %[x, itflqp] = FLQP(x0, A, B, n, strategy, maxItflqp, maxItsub, epsflqp, epsbbp);
-[x, itflqp] = FLQP(a, B, Ax0, xAx, n, strategy, maxIt, maxItsub, eps, epsbbp);
+[x, itflqp,~] = FLQP(a, B, Ax0, xAx, n, strategy, maxIt, maxItsub, eps, epsbbp,0);
 itflqps = itflqps + itflqp;
 e = norm(x - x0);
 if e < eps || iter > maxIt-1
