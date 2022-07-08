@@ -26,7 +26,7 @@ xAx = x0' * Ax0;
 a = xBx / xAx;
 ai = 1./a;
 BAx = ai * Bx0 - Ax0;
-if e < eps || iter > maxIt-1
+if min(BAx) >= -eps
     break;
 end
 end
