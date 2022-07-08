@@ -13,7 +13,7 @@ if debug
     testwx = zeros( 2 * n, 1 );
 end
 while 1
-    iter = iter + 1;
+        iter = iter + 1;
     T = setdiff( N , F );
     Fn = union( F,  n + 1  );
     MFF = M( Fn , Fn );
@@ -27,15 +27,20 @@ while 1
     z( Fn ) = - MFF \ hF;
     v( T ) = hT + MTF *  z( Fn );
     x = z( 1 : (n+1) , 1 );
-    ninf = sum( z(F) < -eps ) + sum( v(T) < -eps  );
+    %ninf = sum( z(F) < -eps ) + sum( v(T) < -eps  );
+    ter = sum( z(F) < -eps ) + sum( v(T) < -eps  );
+    ninf = sum( z(F) < 0 ) + sum( v(T) < 0  );
     if debug 
         testwx( 1 : n ) = x;
         testwx( n+1 : 2 * n ) = v( 1 : n );
     end
+    if ter == 2 * n
+        break;
+    end
     if ninf < ninf1
          break;
     end
-    if iter == maxIt
+    if strategy == 0 && iter == maxIt
         break;
     end
     if ninf == 0
@@ -51,5 +56,6 @@ while 1
     else
         F = union( setdiff(F, F( z(F) < -eps )), T( v( T ) <= eps) );
     end
+
 end
 end

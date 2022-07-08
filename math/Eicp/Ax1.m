@@ -47,10 +47,10 @@ epsxlambda = -1e-7;
 %lambda = (x' * A * x) / (x' * B * x);
 %disp(['sqp:lambda=' num2str(lambda) ', ninfx=' num2str(sum(x<epsx)) ',ninfy='  num2str(sum((A - lambda * B) * x < epsxlambda)) ',iter=' num2str(iter)])
 
-tic;[x,eta, iter, error]=SPL(A, B, x1, 1,  1e-6, 1e-16, 0);toc
+tic;[x,eta, iter, nitBB, error]=SPL(A, B, x1, 2,  1e-6, 1e-9, 0);toc
 lambda = (x' * A * x) / (x' * x);
-w = A * x - lambda * B * x - eta * sparse(ones(n,1)); 
-disp(['spl:lambda=' num2str(lambda) ',dualfeasible='  num2str(min(w)) ',iter=' num2str(iter)])
+w = A * x - lambda * B * x; 
+disp(['spl:lambda=' num2str(lambda)  ',iter=' num2str(iter) ',dualfeasible='  num2str(min(w)) ',nitBB=' num2str(nitBB)])
 
 tic;[x, iter, fun] = spBas(A, B, x1, 1e-8, unifrnd (0,1), 1e-8, 1000, 0);toc
 lambda = (x' * A * x) / (x' * B * x);
