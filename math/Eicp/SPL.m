@@ -9,7 +9,7 @@ if size( B, 2 ) == 1
 end
 error = 0;
 if debug
-    error = zeros(maxIts, 1);
+    error = zeros(maxIT, 1);
 end
 p = min(n, 20);
 while 1
@@ -35,9 +35,10 @@ while 1
     d = x1 - x;
     x = x1 ; %µü´ú¸üÐÂ
     if debug
-        error(iters) = - xAx / xBx;
+        error(iters) =  xAx / xBx;
     end
-    if norm( d ) <= eps || iters > maxIT
+    eta = Ax - lamdab * Bx;
+    if norm( d ) <= eps || iters > maxIT || sum(eta >= -eps) == n 
         break
     end
 end
