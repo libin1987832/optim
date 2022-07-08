@@ -26,19 +26,14 @@ while 1
    v=sparse( n + 1 , 1) ;
     z( Fn ) = - MFF \ hF;
     v( T ) = hT + MTF *  z( Fn );
-    x = z( 1 : (n+1) , 1 );
-    %ninf = sum( z(F) < -eps ) + sum( v(T) < -eps  );
-    ter = sum( z(F) < -eps ) + sum( v(T) < -eps  );
+    x = z( 1 : n , 1 );
     ninf = sum( z(F) < 0 ) + sum( v(T) < 0  );
     if debug 
         testwx( 1 : n ) = x;
         testwx( n+1 : 2 * n ) = v( 1 : n );
     end
-    if ter == 2 * n
+    if min(z(F) ) >= -eps && min(v(T)) >= -eps
         break;
-    end
-    if ninf < ninf1
-         break;
     end
     if strategy == 0 && iter == maxIt
         break;
@@ -56,6 +51,8 @@ while 1
     else
         F = union( setdiff(F, F( z(F) < -eps )), T( v( T ) <= eps) );
     end
-
+    if ninf < ninf1
+         break;
+    end
 end
 end

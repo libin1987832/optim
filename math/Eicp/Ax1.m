@@ -47,23 +47,26 @@ epsxlambda = -1e-7;
 %lambda = (x' * A * x) / (x' * B * x);
 %disp(['sqp:lambda=' num2str(lambda) ', ninfx=' num2str(sum(x<epsx)) ',ninfy='  num2str(sum((A - lambda * B) * x < epsxlambda)) ',iter=' num2str(iter)])
 
-tic;[x,crit, iter, nitBB, error]=SPL(A, B, x1, 2,  1e-8, 1e-6, 1e-9, 0);toc
+tic;[x,crit, iter, nitBB, error]=SPL(A, B, x1, 100,  1e-15, 1e-10, 1e-9, 0);toc
 lambda = (x' * A * x) / (x' * x);
 w = A * x - lambda * x;
 disp(['spl:lambda=' num2str(lambda)  ',iter=' num2str(iter) ',dualfeasible='...
     num2str(min(w)) ',nitBB=' num2str(nitBB) ',nLsyst=' num2str(iter*nitBB) ',Crit=' num2str(crit)])
-
-tic;[x, iter, fun] = spBas(A, B, x1, 1e-8, unifrnd (0,1), 1e-8, 1000, 0);toc
-lambda = (x' * A * x) / (x' * B * x);
-disp(['BAS:lambda=' num2str(lambda) ', ninfx=' num2str(sum(x<epsx)) ',ninfy='  num2str(sum((A - lambda * B) * x < epsxlambda)) ',iter=' num2str(iter)])
-x1 = rand(n ,1);
-x1 = x1 ./ sum(x1);
-tic;[x,iter] = FqpEicp(A, B, x1, 3, 1000, 200, 0, 1e-16, 1e-10, 1e-8);toc
-lambda = (x' * A * x) / (x' * B * x);
-disp(['FQP_QUAD:lambda=' num2str(lambda) ', ninfx=' num2str(sum(x<epsx)) ',ninfy='  num2str(sum((A - lambda * B) * x < epsxlambda)) ',iter=' num2str(iter)])
-tic;[x,iter] = FqpEicp(A, B, x1, 20,1000, 200, 1, 1e-16, 1e-10, 1e-8);toc
-lambda = (x' * A * x) / (x' * B * x);
-disp(['FQP_BBP:lambda=' num2str(lambda) ', ninfx=' num2str(sum(x<epsx)) ',ninfy='  num2str(sum((A - lambda * B) * x < epsxlambda)) ',iter=' num2str(iter)])
-% [i]=bas1B(A,x1,B,n, unifrnd (0,1)); %调用BAS函数，输出时间和迭代次数
+% [full(x1),full(x)]
+% s = 1:n ~= 3;
+% As = A(s,s);
+% eig(As)
+% tic;[x, iter, fun] = spBas(A, B, x1, 1e-8, unifrnd (0,1), 1e-8, 1000, 0);toc
+% lambda = (x' * A * x) / (x' * B * x);
+% disp(['BAS:lambda=' num2str(lambda) ', ninfx=' num2str(sum(x<epsx)) ',ninfy='  num2str(sum((A - lambda * B) * x < epsxlambda)) ',iter=' num2str(iter)])
+% x1 = rand(n ,1);
+% x1 = x1 ./ sum(x1);
+% tic;[x,iter] = FqpEicp(A, B, x1, 3, 1000, 200, 0, 1e-16, 1e-10, 1e-8);toc
+% lambda = (x' * A * x) / (x' * B * x);
+% disp(['FQP_QUAD:lambda=' num2str(lambda) ', ninfx=' num2str(sum(x<epsx)) ',ninfy='  num2str(sum((A - lambda * B) * x < epsxlambda)) ',iter=' num2str(iter)])
+% tic;[x,iter] = FqpEicp(A, B, x1, 20,1000, 200, 1, 1e-16, 1e-10, 1e-8);toc
+% lambda = (x' * A * x) / (x' * B * x);
+% disp(['FQP_BBP:lambda=' num2str(lambda) ', ninfx=' num2str(sum(x<epsx)) ',ninfy='  num2str(sum((A - lambda * B) * x < epsxlambda)) ',iter=' num2str(iter)])
+%[i]=bas1B(A,x1,B,n, unifrnd (0,1)); %调用BAS函数，输出时间和迭代次数
 % [iI]=SSQPIB(A,x1,B,n); %调用SSQP(I)函数，输出时间和迭代次数
 % [xk,i,h,lamdab]=SPL(A,B,x1,n);
