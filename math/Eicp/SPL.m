@@ -34,7 +34,7 @@ while 1
         F = N ;
     end
     if debug
-        error(iters+1) =  xAx / xBx;
+        error(iters+1) =  xBx / xAx;
     end
     yk = -lamdab * Bx;
    if strategy == 0
