@@ -2,9 +2,10 @@
 %Input:function handle f; a,b such that f(a)*f(b)<0,
 %        and tolerance tol
 %Output: Approximate solution xc
-function xc=bisect(f,a,b,tol)
+function xc=bisect(f,a,b,tol,maxIt)
 fa = f(a);
 fb = f(b);
+iter = 0;
 if abs(fa) < tol
     xc = a;
     return;
@@ -13,10 +14,11 @@ if abs(fb)< tol
     xc = b;
     return;
 end
-if sign(fa)*sign(fb) >= 0
+if sign(fa)*sign(fb) >= 0 || a ==inf || b == inf
     error('f(a)f(b)<0 not satisfied!') %ceases execution
 end
-while (b-a)/2>tol
+while (b-a)/2>tol && iter <maxIt
+    iter = iter +1;
     c=(a+b)/2;
     fc=f(c);
     if fc == 0              %c is a solution, done

@@ -39,7 +39,7 @@ nv = 6;
     end
 end
 %[alli;alld;allv]
-sort(unique(abs(alld)))
+sort(unique(abs(alld)),'descend')'
 % min(abs(alld))
 % max(abs(alld))
     
