@@ -19,13 +19,15 @@ epsxlambda = -1e-10;
 nv = 6;
  for iter = 1 : 2^nv - 1
 % for iter = 8:8
+
     F = dec2bin(iter, nv) == charA;
     AF = A(F, F);
     [v,d] = eig(AF);
     [m,n] = size(d);
+    max(d)
     Fn = sum(F);
     for i = 1:n
-        if sum(v(:,i) >= 0) == Fn
+        if sum(v(:,i) >= -1e-10) == Fn || sum(v(:,i) <= 1e-10) == Fn
             v1 = zeros(nv, 1);
             v1(F) = v(:,i) ./ sum(v(:,i));
             alli = [alli, iter];
@@ -36,7 +38,8 @@ nv = 6;
         end
     end
 end
-[alli;alld;allv]
+%[alli;alld;allv]
+sort(unique(abs(alld)))
 % min(abs(alld))
 % max(abs(alld))
     
