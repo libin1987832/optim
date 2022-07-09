@@ -24,7 +24,8 @@ while 1
   %  v = zeros( n + 1 , 1 );
     z=sparse( n + 1 , 1) ;
     v=sparse( n + 1 , 1) ;
-    z( Fn ) = - MFF \ hF;
+    %z( Fn ) = - MFF \ hF;
+      z( Fn ) = - lsqminnorm(MFF,hF, 1e-15);
     v( T ) = hT + MTF *  z( Fn );
     x = z( 1 : n , 1 );
     eta = z(n+1);
