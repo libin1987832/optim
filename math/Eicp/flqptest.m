@@ -19,8 +19,8 @@ ay = dx / xBx;
 fa = dx - ay * xBx;
 disp(['flqp:it=' num2str(iter) ',a=' num2str(ay) ',fa='...
     num2str(fa) ',abpp=' num2str(Abpp) ',nLsyst=' num2str(Abpp * iter) ',Cpu=' num2str(tf)])
-figure;
-semilogy(1:iter,error(1:iter));
+% figure;
+% semilogy(1:iter,error(1:iter));
 % funxAbx = @(x) -(x'* d)/(x' * B * x);
 % [xf,yval]=fmincon(funxAbx,x1,[],[],ones(1,n),1,zeros(n,1),[],[]);
 % dxf = d'* xf;

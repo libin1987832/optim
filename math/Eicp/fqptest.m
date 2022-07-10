@@ -2,7 +2,7 @@ clc
 clear
 str = 'bcsstk02.mtx bcsstk04.mtx';
 strindex = [1 12; 14 25];
-iterstr = [160 30;1984 3];
+iterstr = [98 422;984 972];
 for i = 1:size(strindex,1) 
 [A,rows,cols,entries,rep,field,symm] = mmread(str(1,strindex(i,1):strindex(i,2)));
 n=cols;
