@@ -7,7 +7,7 @@ typeB = 1;
 if size( B, 2 ) == 1
     typeB = 2;
 end
-if size( B, 2 ) == 2 && (isequal(sparse(ones(n,n)), B) || isequal(ones(n,n), B))
+if size( B, 2 ) == n && (isequal(speye(n), B) || isequal(ones(n,n), B))
     typeB = 3;
 end
 error = 0;

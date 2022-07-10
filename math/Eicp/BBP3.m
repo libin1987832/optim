@@ -25,7 +25,10 @@ while 1
     z=sparse( n + 1 , 1) ;
     v=sparse( n + 1 , 1) ;
     %z( Fn ) = - MFF \ hF;
-      z( Fn ) = - lsqminnorm(MFF,hF, 1e-15);
+ %    z( Fn ) = - lsqminnorm(MFF,hF, 1e-30);
+ %   z( Fn ) = -lsqr(MFF,hF,1e-3,100) ;
+ L = ichol(A,struct('michol','on'));
+[x2,fl2,rr2,it2,rv2] = pcg(A,b,1e-8,100,L,L');
     v( T ) = hT + MTF *  z( Fn );
     x = z( 1 : n , 1 );
     eta = z(n+1);
@@ -33,7 +36,16 @@ while 1
         testwx( 1 : n ) = x;
         testwx( n+1 : 2 * n ) = v( 1 : n );
     end
-    if (min(z(F)) >= -eps && min(v(T)) >= -eps) || iter == maxIt
+    if size(F,2) > 0 && size(T,2) > 0 && min(z(F)) >= -eps && min(v(T)) >= -eps
+        break;
+    end
+     if size(F,2)>0 && size(T,2) == 0 && min(z(F)) >= -eps 
+        break;
+     end
+    if size(T,2)>0 && size(F,2) == 0 && min(v(T)) >= -eps
+        break;
+    end
+    if iter == maxIt
         break;
     end
     F = union( setdiff(F, F( z(F) < -eps )), T( v( T ) <= eps) );
