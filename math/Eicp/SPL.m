@@ -37,8 +37,10 @@ while 1
         error(iters+1) =  xBx / xAx;
     end
     yk = -lamdab * Bx;
+  %yk = -Bx;
    if strategy == 0
-        [x1, ~, F, nitBB, ~] = BBP3(A, yk, F, 20, epssub, debug);
+        [x1, ~, F, nitBB, ~] = BBP3(A./lamdab, -yk, F, 20, epssub, debug);
+        x1
         nitBBs = nitBBs + nitBB;
    else
         ninf0 = sum( x < 0 ) + sum( eta < 0  );

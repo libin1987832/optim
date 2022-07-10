@@ -24,11 +24,13 @@ while 1
   %  v = zeros( n + 1 , 1 );
     z=sparse( n + 1 , 1) ;
     v=sparse( n + 1 , 1) ;
-    %z( Fn ) = - MFF \ hF;
- %    z( Fn ) = - lsqminnorm(MFF,hF, 1e-30);
+    z( Fn ) = - MFF \ hF;
+  %   z( Fn ) = - lsqminnorm(MFF,hF, 1e-30);
  %   z( Fn ) = -lsqr(MFF,hF,1e-3,100) ;
- L = ichol(A,struct('michol','on'));
-[x2,fl2,rr2,it2,rv2] = pcg(A,b,1e-8,100,L,L');
+    %L = ichol(MFF,struct('michol','on'));
+  %  L = ichol(MFF,struct('type','ict','droptol',10));
+%    [x2,fl2,rr2,it2,rv2] = pcg(MFF,hF,1e-8,100,L,L');
+%    z( Fn ) = -x2;
     v( T ) = hT + MTF *  z( Fn );
     x = z( 1 : n , 1 );
     eta = z(n+1);
