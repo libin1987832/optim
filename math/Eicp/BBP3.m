@@ -25,7 +25,7 @@ while 1
     z=sparse( n + 1 , 1) ;
     v=sparse( n + 1 , 1) ;
     z( Fn ) = - MFF \ hF;
-  %   z( Fn ) = - lsqminnorm(MFF,hF, 1e-30);
+  %  z( Fn ) = - lsqminnorm(MFF,hF, 1e-30);
  %   z( Fn ) = -lsqr(MFF,hF,1e-3,100) ;
     %L = ichol(MFF,struct('michol','on'));
   %  L = ichol(MFF,struct('type','ict','droptol',10));

@@ -37,12 +37,11 @@ while 1
         error(iters+1) =  xBx / xAx;
     end
     yk = -lamdab * Bx;
-  %yk = -Bx;
+
    if strategy == 0
-        [x1, ~, F, nitBB, ~] = BBP3(A./lamdab, -yk, F, 20, epssub, debug);
-        x1
+        [x1, ~, F, nitBB, ~] = BBP3(A, yk, F, 20, epssub, debug);
         nitBBs = nitBBs + nitBB;
-   else
+   elseif strategy == 1
         ninf0 = sum( x < 0 ) + sum( eta < 0  );
         while ninf0 >0
             Fold = F;
@@ -53,6 +52,8 @@ while 1
             nitBBs = nitBBs + nitBB;
             ninf0 = ninf;
         end
+   else
+       
    end
     d = x1 - x;
     x = x1 ; %µü´ú¸üÐÂ
