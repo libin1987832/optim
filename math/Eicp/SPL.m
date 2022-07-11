@@ -17,19 +17,19 @@ end
 p = min(n, 20);
 nitBBs = 0;
 N = 1 : n;
-
+yk = 0;
 while 1
     Ax = A * x;
     Bx = computexBx(B, x, typeB);
     xAx = x' * Ax;
     xBx = x' * Bx;
     lamdab = xAx / xBx;
-    eta = Ax - lamdab * Bx;
+    eta = Ax + yk;
     if min(eta) >= -eps2
         crit = 2;
         break;
     end
-    
+
     if iters == 0
         F = N ;
     end
@@ -53,7 +53,9 @@ while 1
             ninf0 = ninf;
         end
    else
-       
+       opts = optimoptions('quadprog','Display','off');
+       [X1,FVAL,EXITFLAG,OUTPUT,LAMBDA] =quadprog(A, yk, [], [], ones(1,n), 1, zeros(n,1), Inf*ones(n,1),x, opts);
+        nitBBs = nitBBs + 1;
    end
     d = x1 - x;
     x = x1 ; %µü´ú¸üÐÂ
