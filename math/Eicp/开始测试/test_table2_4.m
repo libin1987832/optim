@@ -2,7 +2,8 @@
 %% 随机生成n阶初始矩阵A和B
 clc
 clear
-n=6;
+%n=6;
+n = input('Performance of algorithms for solving Test Problems, input n=');
 C=unidrnd(10,n,n);
 [C,Y]=qr(C,0);
 %% 随机生成对称非正定矩阵A
@@ -50,7 +51,7 @@ s=find(r==max(r));
 m=zeros(n,1);
 m(s)=1;
 x0=m; %初始向量x1
- x1=unidrnd(2,n,1)
+ x1=unidrnd(2,n,1);
 %% 给定精度
 eps=1e-5;
 epsbisect=1e-12;
@@ -70,40 +71,36 @@ sigma0 = R + 0.01;
 R1=max(abs(eig(A)))+0.01;%A的谱半径  
 
 %% BAS
-tic;
+t0=clock;
 [x, iter] = spBas(A, B, x0, 1e-5, unifrnd (0,1), eps, maxIt);
-toc
+tf=etime(clock,t0);
 lambda = (x' * A * x) / (x' * B * x);
-disp(['BAS:lambda=' num2str(lambda)  ',Dualfeas='  num2str(min((A - lambda * B) * x ),'%.4e') ',iter=' num2str(iter)])
+disp(['BAS:lambda=' num2str(lambda)  ',Dualfeas='  num2str(min((A - lambda * B) * x ),'%.4e') ',iter=' num2str(iter) ',CPU=' num2str(tf,'%.4e')])
 
 %% SPL
-tic;
+t0=clock;
 A1=A+R1*B;
 [x, iter]=SPL(A1, B, x0, maxIt,  eps, epsbbp);
-toc
+tf=etime(clock,t0);
 lambda = (x' * A * x) / (x' * B * x);
-disp(['spl:lambda=' num2str(lambda)  ',Dualfeas='  num2str(min((A - lambda * B) * x ),'%.4e') ',iter=' num2str(iter)])
+disp(['spl:lambda=' num2str(lambda)  ',Dualfeas='  num2str(min((A - lambda * B) * x ),'%.4e') ',iter=' num2str(iter) ',CPU=' num2str(tf,'%.4e')])
 %% FQP
-tic;
+t0=clock;
 A1=A+R1*B;
 [x,iter] = FqpEicp(B, A1, x0, maxIt, maxItflqp, maxItsub, 1, eps, epsflqp, epsbbp);
-toc
+tf=etime(clock,t0);
 lambda = (x' * A * x) / (x' * B * x);
-disp(['FQP_BBP:lambda=' num2str(lambda)  ',Dualfeas='  num2str(min((A - lambda * B) * x ),'%.4e') ',iter=' num2str(iter)])
-
-
-
-3
+disp(['FQP_BBP:lambda=' num2str(lambda)  ',Dualfeas='  num2str(min((A - lambda * B) * x ),'%.4e') ',iter=' num2str(iter) ',CPU=' num2str(tf,'%.4e')])
 %% SQP(G)
 
 % M=A; %A对称正定
 M=A+R1*I;%A对称非正定
 
-tic;
+t0=clock;
 [x,  iter, error] = sqpEicp(A, B, M, x0, sigma0, 0.1, eps, epsbisect, maxIt, 0);
-toc
+tf=etime(clock,t0);
 lambda = (x' * A * x) / (x' * B * x);
-disp(['sqp1:lambda=' num2str(lambda,'%.4e')  ',Dualfeas='  num2str(min((A - lambda * B) * x ),'%.4e') ',iter=' num2str(iter)])
+disp(['SQP(G):lambda=' num2str(lambda,'%.4e')  ',Dualfeas='  num2str(min((A - lambda * B) * x ),'%.4e') ',iter=' num2str(iter) ',CPU=' num2str(tf,'%.4e')])
 
 
  
@@ -115,16 +112,16 @@ disp(['sqp1:lambda=' num2str(lambda,'%.4e')  ',Dualfeas='  num2str(min((A - lamb
 % [x,  iter, error] = sqpEicp(A, B, M, x0, sigma0, 0.1, eps, epsbisect, maxIt, 0);
 % toc
 % lambda = (x' * A * x) / (x' * B * x);
-% disp(['sqp2:lambda=' num2str(lambda,'%.4e')  ',Dualfeas='  num2str(min((A - lambda * B) * x ),'%.4e') ',iter=' num2str(iter)])
+% disp(['SSQP(D):lambda=' num2str(lambda,'%.4e')  ',Dualfeas='  num2str(min((A - lambda * B) * x ),'%.4e') ',iter=' num2str(iter)])
 
 %% SSQP(I)
 M=I;
 
-tic;
+t0=clock;
 [x,  iter, error] = sqpEicp(A, B, M, x0, sigma0, 0.1, eps, epsbisect, maxIt, 0);
-toc
+tf=etime(clock,t0);
 lambda = (x' * A * x) / (x' * B * x);
-disp(['sqp3:lambda=' num2str(lambda,'%.4e')  ',Dualfeas='  num2str(min((A - lambda * B) * x ),'%.4e') ',iter=' num2str(iter)])
+disp(['SSQP(I):lambda=' num2str(lambda,'%.4e')  ',Dualfeas='  num2str(min((A - lambda * B) * x ),'%.4e') ',iter=' num2str(iter) ',CPU=' num2str(tf,'%.4e')])
 
 %%
 % tic;

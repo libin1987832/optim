@@ -4,6 +4,7 @@ clc
 clear
 %n=20;
 n = input('Performance of algorithms for solving Test Problems, input n=');
+typeB = input('Performance of algorithms for solving Test Problems, input Btype(1:I,other:C^TC+I)=');
 C=unidrnd(10,n,n);
 [C,Y]=qr(C,0);
 %% 矩阵A的特征值随机生成
@@ -15,9 +16,11 @@ A=C'*Q*C; %初始矩阵A
 %% 
 C=-8+22*rand(n,n);
 I=eye(n);
+if typeB == 1
 B=I;
-%B=I+C'*C;  %初始矩阵B
-
+else
+B=I+C'*C;  %初始矩阵B
+end
 A = 0.5 * ( A + A' );
 B = 0.5 * ( B + B' );
 
