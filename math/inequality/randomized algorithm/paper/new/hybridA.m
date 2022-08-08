@@ -38,7 +38,7 @@ for i=1:maxit
         x0 = xfA(:, end);
     end
     if  flag == 0
-       fprintf("error flag");
+       fprintf('error flag');
         break;
     end
     if flag < 5 || flag > 6 

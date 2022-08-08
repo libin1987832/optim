@@ -1,18 +1,69 @@
 %driver 
 
 %% experiment 1 (presentation) comparing rate of convergence among 3 versions with maxit = 15000 (same experiment as from the original paper)
-[error1,error2,error3] = driver_as_function(15000,[]);
-maxit = 15000;
+maxit = 200;
+m=150;
+n=20;
+A = 2 * rand(m , n)-1;
+x=rand(n,1);
+b = A*x;
+x0 = zeros(n,1);
+SP=eye(n^2);
+sumA=sum(A.*A,2);
+Bn=diag(1./sumA)*A;
+for i=1:m
+    B=Bn(i,:);
+    P=eye(n)-B'*B;
+    kp=kron(P,P);
+    SP=SP*kp;
+end
+max(eig(SP))
+SP=zeros(n^2,n^2);
+for i=1:m
+    B=Bn(i,:);
+    P=eye(n)-B'*B;
+    p=1/m;
+    kp=p*kron(P,P);
+    SP=SP+kp;
+end
+max(eig(SP))^m
+SP=zeros(n^2,n^2);
+normrow = [];
+ for i = 1:m
+    normrow = [normrow,norm(A(i,:))];
+ end  
+  weight = normrow/sum(normrow);
+for i=1:m
+    B=Bn(i,:);
+    P=eye(n)-B'*B;
+    p= weight(i);
+    kp=p*kron(P,P);
+    SP=SP+kp;
+end
+max(eig(SP))^m
 figure (1)
+iter=20;
+errors=zeros(3,iter);
+for i = 1:iter
+[error1,error2,error3] = driver_as_function(A,b,x0,x,maxit,[]);
+
 semilogy(1:maxit,error1,'k--');
-title('comparing rate of convergence among 3 versions with maxit = 15000')
-ylabel('Least squares error') 
-xlabel('Number of iterations') 
+% title('comparing rate of convergence among 3 versions with maxit = 15000')
+% ylabel('Least squares error') 
+% xlabel('Number of iterations') 
 hold on
-semilogy(1:maxit,error2,'b--');
-semilogy(1:maxit,error3,'r--');
+% semilogy(1:maxit,error2,'b--');
+ semilogy(1:maxit,error2,'r--');
+% legend('classical kaczmarz','simple randomized kaczmarz','randomized kaczmarz')
+errors(:,i)=[error1(1,maxit);error2(1,maxit);error3(1,maxit)];
+end
 hold off
-legend('classical kaczmarz','simple randomized kaczmarz','randomized kaczmarz')
+% figure(2)
+% hist(errors(1,:),10)
+% figure(3)
+% hist(errors(2,:),10)
+% figure(4)
+% hist(errors(3,:),10)
 % %% experiment 2 (report) Running 100 times with random input and maxit = 5000 - statistical analysis
 % error_c = [];
 % error_s = [];

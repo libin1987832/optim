@@ -25,7 +25,7 @@ if isempty(exactx)
     error_k = [norm_Ar];
     iter_k =[0];
 else
-    error_k = [norm(x-exactx)];
+    error_k = [r'*r-exactx];
     iter_k =[x];
 end
 
@@ -58,8 +58,8 @@ for i = 1:maxit
     x(pickedj) = x(pickedj) + inc;
     rs = rs - inc*col;
     r = rs;
-    %r=(r+abs(r))/2;
-    r(r<0)=0;
+    r=(r+abs(r))/2;
+%     r(r<0)=0;
     iter = iter+1;
     if mod(iter,iter_test_stop)==0
         norm_rn = norm(r);
@@ -73,9 +73,9 @@ for i = 1:maxit
     end
     % 主要记录迭代过程中的值 用来调试
     if debug
-        if mod(iter,iter_test_stop)==0
+%         if mod(iter,iter_test_stop)==0
             if ~isempty(exactx)
-                e = norm(x-exactx);
+                e = r'*r-exactx;
                 iter_k =[iter_k x];
             else
                 Ar = A'*r;
@@ -85,7 +85,7 @@ for i = 1:maxit
             error_k = [error_k,e];
             index_k = [index_k,pickedj];
         end
-    end
+%     end
 end
 end
 
