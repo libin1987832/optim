@@ -7,7 +7,7 @@
            end
        end
        
-              Rrepmat = repmat(b,1,size(alphSort,1)) - row*alphSort';
+       Rrepmat = repmat(b,1,size(alphSort,1)) - row*alphSort';
        Rrepmat(Rrepmat<0)=0
        
        
