@@ -6,9 +6,9 @@
 clc
 clear
 %A=[5 7 6 5;7 10 8 7;6 8 10 9;5 7 9 10];
-A = [0 1 0 1 0 0;1 0 0 1 0 0;0 0 0 1 0 0;1 1 1 0 1 1;0 0 0 1 0 1;0 0 0 1 1 0];
+A =[8 -1 0 0; -1 6 -3 0; 0 -3 4 -2; 0 0 -2 5];
 A = 0.5*(A'+A);
-charA = '111111';
+charA = '1111';
 % B=[2 6 -1 -2;5 -1 2 3;-3 -4 1 10;5 -2 -3 8];
 %[V,D]=eig(A,B)
 alli = [];
@@ -16,7 +16,7 @@ allv = [];
 alld = [];
 epsx  = 0;
 epsxlambda = -1e-10;
-nv = 6;
+nv = 4;
  for iter = 1 : 2^nv - 1
 % for iter = 8:8
 
@@ -38,7 +38,7 @@ nv = 6;
         end
     end
 end
-%[alli;alld;allv]
+[alli;alld;allv]
 sort(unique(abs(alld)),'descend')'
 % min(abs(alld))
 % max(abs(alld))
