@@ -13,7 +13,7 @@ m = size(A,1);
 n = size(A,2);
 
 x = xinit;
-
+maxIterReached=1; 
 
 normrow = [];
 index = [];
