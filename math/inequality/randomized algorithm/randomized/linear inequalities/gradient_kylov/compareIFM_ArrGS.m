@@ -60,5 +60,14 @@ r_GS = norm(r);
 g_GS = norm(A'*r);
 fprintf('& %s & %g & %g & %d & %g \\\\\n', 'GuassSeidel', r_GS, g_GS, iter_GS, tf_GS);
 
-
-
+maxit_FM = 1000;
+alpha = 1;
+maxit_gs = 1;
+t=clock;
+[x_FM,iter_FM,error_k,iter_k,index_k] = DFM(A, b, x0, maxit_FM,alpha,maxit_gs,tol, x_exact,debug);
+tf_FM=etime(clock,t);
+r = b - A * x_FM;
+r(r<0) = 0;
+r_FM = norm(r);
+g_FM = norm(A'*r);
+fprintf('& %s & %g & %g & %d & %g \\\\\n', 'FM', r_FM , g_FM, iter_FM*n, tf_FM);
