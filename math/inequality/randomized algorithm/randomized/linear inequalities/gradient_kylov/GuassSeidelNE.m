@@ -31,7 +31,7 @@ end
 
 index_k=[0];
 % 因为测试终止条件需要矩阵乘以向量 为了避免每次迭代都去检测终止条件因此周期检测
-iter_test_stop = 1;
+iter_test_stop = n;
 
 
 
@@ -43,7 +43,7 @@ index = [];
 % 
 % weight = Acol/sum(Acol);
   for i = 1:n
-    Acol = [Acol,norm(A(:,i))];
+    Acol = [Acol,norm(A(:,i))^2];
     index = [index,i];
   end
 index=1:n;
@@ -74,7 +74,6 @@ for i = 1:maxit
             Ar = A'*r;
             e = norm(Ar);
             normAr = norm(r);
-            e=normAr;
             % 如果有容忍度 即使没有到达最大迭代次数也终止
             if ~isempty(tol)
                 if normAr < tol  || e < tol

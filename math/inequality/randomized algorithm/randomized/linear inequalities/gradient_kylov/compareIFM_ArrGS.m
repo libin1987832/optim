@@ -1,10 +1,10 @@
 clear
 clc
-debug = 0;
+debug = 1;
 %% 产生问题矩阵
 % 随机矩阵
-m = 10000;
-n = 2000;
+m = 3000;
+n = 300;
 
 A = 2 * rand(m , n)-1;
 b = 2 * rand(m , 1)-1;
@@ -33,10 +33,10 @@ norm_gexact = norm(A'*r);
 fprintf('%s & %g & %g \n','IFM解的目标函数值和梯度  ', norm_rexact, norm_gexact);
 x_exact=[];
 %% 参数的设定
- maxit_IFM = 200;
+ maxit_IFM = 150;
 % 
-tol=1e-10;
-tol=[];
+tol=1e-1;
+% tol=[];
 
 t=clock;
 [x_IFM,iter_IFM,error_IFM,xA_IFM,index_IFM] = IFM(A, b, x0, maxit_IFM, maxit_LSQR ,tol, x_exact,debug);
@@ -46,13 +46,13 @@ r(r<0) = 0;
 r_IFM = norm(r);
 g_IFM = norm(A'*r);
 fprintf('& %s & %s & %s & %s & %s \\\\\n', 'alg', 'norm(r_+)', 'norm(Ar_+)', 'iteration', 'time');
-fprintf('& %s & %g & %g & %d & %g \\\\\n','IFM', r_IFM, g_IFM,iter_IFM,tf_IFM);
+fprintf('& %s & %g & %g & %d & %g \\\\\n','IFM', r_IFM, g_IFM,iter_IFM*(m+n)*maxit_LSQR,tf_IFM);
 
 
 %% GuassSeidel
-maxit_Rand =350000;
+maxit_Rand =35000;
 t=clock;
- [x_GS,iter_GS,error_GS,xA_GS,index_GS] = GuassSeidelNE(A, b, x0,2.0,maxit_Rand,tol,x_exact,debug);
+ [x_GS,iter_GS,error_GS,xA_GS,index_GS] = GuassSeidelNE(A, b, x0,1.0,maxit_Rand,tol,x_exact,debug);
 tf_GS=etime(clock,t);
 r = b - A * x_GS;
 r(r<0) = 0;
