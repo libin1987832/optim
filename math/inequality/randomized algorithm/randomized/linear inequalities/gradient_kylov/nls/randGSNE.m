@@ -35,7 +35,7 @@ iter_test_stop = n;
 
 
 
- Acol=sum(A.*A,1);
+Acol=sum(A.*A,1);
 
 % Acol = [];
 % index = [];
