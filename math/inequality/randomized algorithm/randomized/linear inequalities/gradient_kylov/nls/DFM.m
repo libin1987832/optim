@@ -40,7 +40,7 @@ index_k=[0];
 B=A'*A;
 p=2;
 %
-colunmnormA=sum(A.*A,1);
+colunmnormA=sum(A.*conj(A),1);
 Ar=A'*r;
 for i = 1:maxit
     % 用LSQR算法求解子问题的下降方向

@@ -7,7 +7,9 @@ debug = 0;
 r = 100;
 m = 1000;
 n = 2*r+1;
-
+t=n;
+n=m;
+m=t;
 %% generate nodes
 %tj are drawing randomly from a uniform distribution in [0,1]
 t = rand(m,1);
@@ -16,13 +18,7 @@ t = rand(m,1);
 t = sort(t);
 % just to assign the size
 w = zeros(m,1); 
-x = zeros(n,1);
-%% generate x 
-realx = randn(n,1);
-imgx = randn(n,1);
-for l = 1:n
-   x(l) = realx(l)+1i*imgx(l);
-end  
+
 %% generate A and b
 A = zeros(m,n);
 for j = 1:m
@@ -38,9 +34,20 @@ for j = 1:m
        A(j,k+r+1) =sqrt(w(j))*exp(2*pi*1i*k*t(j));
     end
 end  
-A=real(A);
+A = A';
+t=n;
+n=m;
+m=t;
+%A=real(A);
 % A = 2 * rand(m , n)-1;
-b = 2 * rand(m , 1)-1;
+x = zeros(n,1);
+%% generate x 
+realx = randn(n,1);
+imgx = randn(n,1);
+for l = 1:n
+   x(l) = realx(l)+1i*imgx(l);
+end  
+b = A * x;
 % b=A*ones(n,1);
 x0 = zeros(n , 1);
 % save('test2.mat','A','b','x0')

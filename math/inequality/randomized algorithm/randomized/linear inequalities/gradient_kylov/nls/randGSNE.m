@@ -35,19 +35,19 @@ iter_test_stop = n;
 
 
 
-Acol=sum(A.*A,1);
+% Acol=sum(A.*A,1);
 
-% Acol = [];
-% index = [];
+Acol = [];
+index = [];
 
 
-weight = Acol/sum(Acol);
-%   for i = 1:n
-%     Acol = [Acol,norm(A(:,i))^2];
-%     index = [index,i];
-%   end
-index=1:n;
-
+% weight = Acol/sum(Acol);
+  for i = 1:n
+    Acol = [Acol,norm(A(:,i))^2];
+    index = [index,i];
+  end
+% % index=1:n;
+ weight = Acol/sum(Acol);
 % for i = 1:maxit
 %  pickedj_a(i) = randsample(index,1,true,weight);
 % end
