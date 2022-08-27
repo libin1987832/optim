@@ -7,9 +7,9 @@ debug = 0;
 r = 100;
 m = 1000;
 n = 2*r+1;
-t=n;
-n=m;
-m=t;
+% t=n;
+% n=m;
+% m=t;
 %% generate nodes
 %tj are drawing randomly from a uniform distribution in [0,1]
 t = rand(m,1);
@@ -34,10 +34,10 @@ for j = 1:m
        A(j,k+r+1) =sqrt(w(j))*exp(2*pi*1i*k*t(j));
     end
 end  
-A = A';
-t=n;
-n=m;
-m=t;
+% A = A';
+% t=n;
+% n=m;
+% m=t;
 %A=real(A);
 % A = 2 * rand(m , n)-1;
 x = zeros(n,1);
@@ -65,12 +65,12 @@ r(r<0) = 0;
 norm_r0 = norm(r);
 norm_g0 = norm(A'*r);
 fprintf('%s & %g & %g \n','最开始的目标函数和梯度', norm_r0, norm_g0);
-[x_exact, ~, ~, ~, ~] = IFM(A, b, x0,10, maxit_LSQR , 1e-10,[],debug);
-r = b - A * x_exact;
-r(r<0) = 0;
-norm_rexact = norm(r);
-norm_gexact = norm(A'*r);
-fprintf('%s & %g & %g \n','IFM解的目标函数值和梯度  ', norm_rexact, norm_gexact);
+% [x_exact, ~, ~, ~, ~] = IFM(A, b, x0,10, maxit_LSQR , 1e-10,[],debug);
+% r = b - A * x_exact;
+% r(r<0) = 0;
+% norm_rexact = norm(r);
+% norm_gexact = norm(A'*r);
+% fprintf('%s & %g & %g \n','IFM解的目标函数值和梯度  ', norm_rexact, norm_gexact);
 x_exact=[];
 %% 参数的设定
  maxit_IFM = 150;
@@ -116,12 +116,23 @@ fprintf('& %s & %g & %g & %d & %g \\\\\n', 'FM', r_FM , g_FM, iter_FM*n, tf_FM);
 maxit_Rand =35000;
 t=clock;
 [x_RGS,iter_RGS,error_RGS,xA_RGS,index_RGS] = randGSNE(A, b, x0,1.0,maxit_Rand,tol,x_exact,debug);
-tf_GS=etime(clock,t);
+tf_RGS=etime(clock,t);
 r = b - A * x_RGS;
 r(r<0) = 0;
 r_RGS = norm(r);
 g_RGS = norm(A'*r);
-fprintf('& %s & %g & %g & %d & %g \\\\\n', 'RGS', r_GS, g_GS, iter_GS, tf_GS);
-
-
+fprintf('& %s & %g & %g & %d & %g \\\\\n', 'RGS', r_RGS, g_RGS, iter_RGS, tf_RGS);
+maxit_Rand =35000;
+t=clock;
+[x_UGS,iter_UGS,error_UGS,xA_UGS,index_UGS] = urandGSNE(A, b, x0,1.0,maxit_Rand,tol,x_exact,debug);
+tf_UGS=etime(clock,t);
+r = b - A * x_UGS;
+r(r<0) = 0;
+r_UGS = norm(r);
+g_UGS = norm(A'*r);
+fprintf('& %s & %g & %g & %d & %g \\\\\n', 'UGS', r_UGS, g_UGS, iter_UGS, tf_UGS);
+% & IFM & 0.21412 & 0.0872205 & 25221 & 0.089 \\
+% & GuassSeidel & 0.0346303 & 0.0161252 & 35000 & 1.521 \\
+% & FM & 0.149585 & 0.0727871 & 34170 & 0.653 \\
+% & RGS & 0.0224331 & 0.0125938 & 4623 & 0.288 \\
 

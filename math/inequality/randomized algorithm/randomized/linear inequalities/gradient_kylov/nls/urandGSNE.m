@@ -1,4 +1,4 @@
-function [x,iter,error_k,iter_k,index_k] = randGSNE(A, b, x0,alpha ,maxit,tol,exactx,debug)
+function [x,iter,error_k,iter_k,index_k] = urandGSNE(A, b, x0,alpha ,maxit,tol,exactx,debug)
 %% 参数设定
 % 输入参数
 % A, b, x0 问题的系数矩阵和右边项 初始值
@@ -33,6 +33,8 @@ index_k=[0];
 % 因为测试终止条件需要矩阵乘以向量 为了避免每次迭代都去检测终止条件因此周期检测
 iter_test_stop = n;
 
+
+
 % Acol=sum(A.*A,1);
 
 Acol = [];
@@ -45,7 +47,7 @@ index = [];
     index = [index,i];
   end
 % % index=1:n;
- weight = Acol/sum(Acol);
+ weight = ones(1,n)*(1/n);
 % for i = 1:maxit
 %  pickedj_a(i) = randsample(index,1,true,weight);
 % end
@@ -54,7 +56,6 @@ iter_index=1;
 for i = 1:maxit
   %  pickedj=mod(i-1,n)+1;
     pickedj=randsample(index,1,true,weight);
-    
     col = A(:, pickedj);
     inc = alpha*( col' * r ) / Acol(pickedj);
     x(pickedj) = x(pickedj) + inc;
@@ -62,7 +63,7 @@ for i = 1:maxit
      r = rs;
    %    if mod(iter,100)==0
         r( r < 0) = 0;
-   %    r=(r+abs(r))/2;
+    %   r=(r+abs(r))/2;
    %   end
     iter = iter+1;
     % 主要记录迭代过程中的值 用来调试

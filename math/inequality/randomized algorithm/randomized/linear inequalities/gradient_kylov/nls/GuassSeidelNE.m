@@ -63,8 +63,8 @@ for i = 1:maxit
     rs = rs - inc*col;
      r = rs;
    %    if mod(iter,100)==0
-       % r( r < 0) = 0;
-       r=(r+abs(r))/2;
+        r( r < 0) = 0;
+      % r=(r+abs(r))/2;
    %   end
     iter = iter+1;
     % 主要记录迭代过程中的值 用来调试
