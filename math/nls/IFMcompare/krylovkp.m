@@ -1,5 +1,5 @@
 % 用LSQR算法计算子问题 argmin F（u） = || Au + Ax_k-b-z_k || = || Au -y_k ||
-function xk=krylovk(A,y,k)
+function xk=krylovkp(A,y,k)
 u1=0;
 
 beta1=norm(y);q1=y/beta1;v1=A'*q1;alph1=norm(v1);v1=v1/alph1;
