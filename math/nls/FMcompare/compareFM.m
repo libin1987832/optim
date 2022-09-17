@@ -4,8 +4,8 @@ debug = 0;
 %% 产生问题矩阵
 % 随机矩阵
 
-r = 800;
-m = 8000;
+r = 500;
+m = 5000;
 n = 2*r+1;
 % t=n;
 % n=m;
@@ -49,17 +49,19 @@ x0 = zeros(n , 1);
 
 x_exact=[];
 %% 参数的设定
- maxit_IFM = 150;
-maxit_LSQR = 3;
+ maxit_FM = 1000;
+maxit_gs = 1;
 tol=1e-1;
 % tol=[];
-maxit_GS =70000;
+alpha = 1;
 t=clock;
- [x_GS,iter_GS,error_GS,xA_GS,index_GS] = GuassSeidelNE(A, b, x0,1.0,maxit_GS,tol,x_exact,debug);
-tf_GS=etime(clock,t);
-r = b - A * x_GS;
+[x_FM,iter_FM,error_k,iter_k,index_k] = DFM(A, b, x0, maxit_FM,alpha,maxit_gs,tol, x_exact,debug);
+tf_FM = etime(clock,t);
+r = b - A * x_FM;
 r(r<0) = 0;
-r_GS = norm(r);
-g_GS = norm(A'*r);
-fprintf('& %s & %g & %g & %d & %g \\\\\n', 'GuassSeidel', r_GS, g_GS, iter_GS, tf_GS);
+r_FM = norm(r);
+g_FM = norm(A'*r);
+fprintf('& %s & %s & %s & %s & %s \\\\\n', 'alg', 'norm(r_+)', 'norm(Ar_+)', 'iteration', 'time');
+fprintf('& %s & %g & %g & %d & %g \\\\\n','FM', r_FM, g_FM, iter_FM*(m+n)*maxit_gs, tf_FM);
+
 
