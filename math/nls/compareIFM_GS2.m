@@ -79,7 +79,7 @@ tol=1e-1;
 % tol=[];
 
 t=clock;
-[x_IFM,iter_IFM,error_IFM,xA_IFM,index_IFM] = IFM(A, b, x0, maxit_IFM, maxit_LSQR ,tol, x_exact,debug);
+[x_IFM,iter_IFM,error_IFM,xA_IFM,index_IFM] = IFMs(A, b, x0, maxit_IFM, maxit_LSQR ,tol, x_exact,debug);
 tf_IFM=etime(clock,t);
 r = b - A * x_IFM;
 r(r<0) = 0;
