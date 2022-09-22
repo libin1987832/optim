@@ -4,7 +4,7 @@ debug = 0;
 %% 产生问题矩阵
 % 随机矩阵
 
-r = 800;
+r = 500;
 m = 10000;
 n = 2*r+1;
 % t=n;
@@ -49,7 +49,7 @@ x0 = zeros(n , 1);
 maxit_GS =70000;
 x_exact=[];
 %% 参数的设定
- maxit_FM = 1000;
+ maxit_FM = 600;
 maxit_gs = 1;
 tol=1e-1;
 % tol=[];
@@ -72,7 +72,8 @@ r(r<0) = 0;
 r_GS = norm(r);
 g_GS = norm(A'*r);
 fprintf('& %s & %g & %g & %d & %g \\\\\n', 'GuassSeidel', r_GS, g_GS, iter_GS, tf_GS);
-
+maxit_IFM=50;
+maxit_LSQR = 3;
 t=clock;
 [x_IFMp,iter_IFMp,error_IFMp,xA_IFMp,index_IFMp] = IFMs(A, b, x0, maxit_IFM, maxit_LSQR ,tol, x_exact,debug);
 tf_IFMp=etime(clock,t);
