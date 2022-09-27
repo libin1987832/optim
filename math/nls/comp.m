@@ -44,10 +44,10 @@ debug = 0;
 % end  
 % b = A * x;
 
-m=20000;
-n=800;
-A = 2*randi(m,n);
-b = 2*randi(m,1);
+m=20;
+n=2;
+A = 2*rand(m,n);
+b = 2*rand(m,1);
 x0 = zeros(n , 1);
 
 
