@@ -44,10 +44,17 @@ debug = 0;
 % end  
 % b = A * x;
 
-m=20;
-n=2;
-A = 2*rand(m,n);
-b = 2*rand(m,1);
+% m=20;
+% n=2;
+% A = 2*rand(m,n);
+% b = 2*rand(m,1);
+gamm1 = 0.7;
+
+ [A1,b1,A2,b2,At1, At2, fm1, fm2, AL1, bL1, AL2, bL2] = readBreast(gamm1);
+% [A1,b1,A2,b2,At1, At2, fm1, fm2, AL1, bL1, AL2, bL2] = readHeart(gamm1); 
+ A = A1;
+  b = b1;
+ [m,n] = size(A);
 x0 = zeros(n , 1);
 
 
